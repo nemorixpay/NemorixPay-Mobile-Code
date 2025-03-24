@@ -1,6 +1,8 @@
-# nemorixpay
+# NemorixPay
 
-A new Flutter project.
+Initial repository of the open-source project NemorixPay, which provides financial aid to underserved communities in Venezuela and Mexico. This code is freely accessible and is licensed under **Apache 2.0**. For more details, please refer to the LICENSE section.
+
+You can view NemorixPay's initial design here:
 
 ## Getting Started
 
