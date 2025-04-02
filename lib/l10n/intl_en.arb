@@ -2,5 +2,9 @@
   "helloWorld": "Hello World!",
     "@language":{
     "description": "helloWorld"
+  },
+  "appName": "NemorixPay - En",
+    "@language":{
+    "description": "NemorixPay"
   }
 }
