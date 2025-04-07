@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nemorixpay/config/theme/nemorix_colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/core/utils/image_url.dart';
+import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/custom_text_form_field.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/rounded_elevated_button.dart';
 
@@ -56,14 +57,14 @@ class _LoginPageState extends State<LoginPage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Welcome Back",
+                    AppLocalizations.of(context)!.welcomeBack,
                     style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   ),
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "You have been missed",
+                    AppLocalizations.of(context)!.youHaveBeenMissed,
                     style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                 ),
@@ -74,16 +75,20 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       CustomTextFormField(
                         controller: _emailController,
-                        hintText: "Email address",
+                        hintText: AppLocalizations.of(context)!.emailAddress,
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Email is required";
+                            return AppLocalizations.of(
+                              context,
+                            )!.emailIsRequired;
                           }
                           if (!RegExp(
                             r'^[^@\s]+@[^@\s]+\.[^@\s]+',
                           ).hasMatch(value)) {
-                            return "Enter a valid email";
+                            return AppLocalizations.of(
+                              context,
+                            )!.enterValidEmail;
                           }
                           return null;
                         },
@@ -91,15 +96,19 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(height: 20),
                       CustomTextFormField(
                         controller: _passwordController,
-                        hintText: "Password",
+                        hintText: AppLocalizations.of(context)!.password,
                         obscureText: !_isPasswordVisible,
                         keyboardType: TextInputType.text,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Password is required";
+                            return AppLocalizations.of(
+                              context,
+                            )!.passwordIsRequired;
                           }
                           if (value.length < 6) {
-                            return "Password must be at least 6 characters";
+                            return AppLocalizations.of(
+                              context,
+                            )!.passwordAtLeast6Characters;
                           }
                           return null;
                         },
@@ -126,14 +135,14 @@ class _LoginPageState extends State<LoginPage> {
                   child: TextButton(
                     onPressed: () {},
                     child: Text(
-                      "Forgot Password?",
+                      "${AppLocalizations.of(context)!.forgotPassword}?",
                       style: TextStyle(color: NemorixColors.primaryColor),
                     ),
                   ),
                 ),
                 SizedBox(height: 20),
                 RoundedElevatedButton(
-                  text: "Sign In",
+                  text: AppLocalizations.of(context)!.signIn,
                   onPressed: () {}, // Flutter bloc action
                   color: NemorixColors.primaryColor,
                   textColor: Colors.black,
@@ -144,14 +153,14 @@ class _LoginPageState extends State<LoginPage> {
                     Expanded(child: Divider()),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text("OR"),
+                      child: Text(AppLocalizations.of(context)!.or),
                     ),
                     Expanded(child: Divider()),
                   ],
                 ),
                 SizedBox(height: 30),
                 RoundedElevatedButton(
-                  text: "Continue with Google",
+                  text: AppLocalizations.of(context)!.continueWithGoogle,
                   onPressed: () {},
                   color: NemorixColors.greyLevel1,
                   textColor: Colors.white,
@@ -164,11 +173,13 @@ class _LoginPageState extends State<LoginPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Don't have an account? "),
+                        Text(
+                          "${AppLocalizations.of(context)!.dontHaveAnAccount}?",
+                        ),
                         TextButton(
                           onPressed: () {},
                           child: Text(
-                            "Sign Up",
+                            AppLocalizations.of(context)!.signUp,
                             style: TextStyle(color: NemorixColors.primaryColor),
                           ),
                         ),

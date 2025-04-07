@@ -1,10 +1,18 @@
 {
   "helloWorld": "Hello World!",
-    "@language":{
-    "description": "helloWorld"
-  },
   "appName": "NemorixPay - En",
-    "@language":{
-    "description": "NemorixPay"
-  }
+  "welcomeBack": "Welcome Back",
+  "youHaveBeenMissed": "You have been missed",
+  "emailAddress": "Email address",
+  "emailIsRequired": "Email is required",
+  "enterValidEmail": "Enter a valid email",
+  "password": "Password",
+  "passwordIsRequired": "Password is required",
+  "passwordAtLeast6Characters": "Password must be at least 6 characters",
+  "forgotPassword": "Forgot Password",
+  "signIn": "Sign In",
+  "or":"OR",
+  "continueWithGoogle": "Continue with Google",
+  "dontHaveAnAccount": "Don't have an account",
+  "signUp": "Sign Up"
 }
