@@ -144,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                 RoundedElevatedButton(
                   text: AppLocalizations.of(context)!.signIn,
                   onPressed: () {}, // Flutter bloc action
-                  color: NemorixColors.primaryColor,
+                  backgroundColor: NemorixColors.primaryColor,
                   textColor: Colors.black,
                 ),
                 SizedBox(height: 30),
@@ -162,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                 RoundedElevatedButton(
                   text: AppLocalizations.of(context)!.continueWithGoogle,
                   onPressed: () {},
-                  color: NemorixColors.greyLevel1,
+                  backgroundColor: NemorixColors.greyLevel1,
                   textColor: Colors.white,
                   icon: ImageUrl.googleLogo,
                 ),

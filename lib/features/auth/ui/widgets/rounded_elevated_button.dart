@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 class RoundedElevatedButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
-  final Color color;
+  final Color backgroundColor;
   final Color textColor;
   final String? icon;
 
@@ -21,7 +21,7 @@ class RoundedElevatedButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
-    required this.color,
+    required this.backgroundColor,
     required this.textColor,
     this.icon,
   });
@@ -33,7 +33,7 @@ class RoundedElevatedButton extends StatelessWidget {
       height: 55,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: color,
+          backgroundColor: backgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

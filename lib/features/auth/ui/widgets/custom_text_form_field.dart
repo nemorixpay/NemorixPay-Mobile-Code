@@ -43,10 +43,10 @@ class CustomTextFormField extends StatelessWidget {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: NemorixColors.red, width: 1),
+          borderSide: BorderSide(color: NemorixColors.errorColor, width: 1),
         ),
         errorStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
-          color: NemorixColors.red,
+          color: NemorixColors.errorColor,
           fontSize: 12,
         ),
         focusedBorder: OutlineInputBorder(
@@ -55,7 +55,7 @@ class CustomTextFormField extends StatelessWidget {
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: NemorixColors.red, width: 1),
+          borderSide: BorderSide(color: NemorixColors.errorColor, width: 1),
         ),
       ),
     );

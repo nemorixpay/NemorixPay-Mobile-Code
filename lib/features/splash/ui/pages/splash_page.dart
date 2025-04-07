@@ -26,8 +26,8 @@ class SplashPage extends StatelessWidget {
               onPressed: () {
                 context.pushNamed(RouteNames.signIn);
               },
-              color: Colors.black,
-              textColor: Colors.white,
+              backgroundColor: Colors.white,
+              textColor: Colors.black,
             ),
           ],
         ),
