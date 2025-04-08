@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       title: 'Firebase Analytics Demo',
       debugShowCheckedModeBanner: false,
       // theme: ThemeData(primarySwatch: Colors.blue),
-      theme: NemorixTheme.lightThemeMode,
+      theme: NemorixTheme.darkThemeMode,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       // locale: Locale('en'),

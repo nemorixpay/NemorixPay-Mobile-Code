@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/core/utils/image_url.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-import 'package:nemorixpay/features/auth/ui/widgets/custom_text_form_field.dart';
-import 'package:nemorixpay/features/auth/ui/widgets/rounded_elevated_button.dart';
+import 'package:nemorixpay/features/auth/ui/widgets/widgets.dart';
 
 /// @file        sign_in_page.dart
 /// @brief       Implementation of functions for basic user authentication.
-/// @details     This file contains the basic widget to create a text form field
-///              for use in a Form widget. This widget is being used in the
-///              following files: sign_in_page.dart, sign_up_page.dart.
+/// @details
 /// @author      Miguel Fagundez
 /// @date        04/05/2025
 /// @version     1.0

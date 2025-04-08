@@ -18,13 +18,23 @@ class SplashPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(ImageUrl.logo, width: 100, height: 100),
-            SizedBox(height: 64),
+            SizedBox(height: 40),
             Text(AppLocalizations.of(context)!.appName),
             // TODO This is only for testing purposes
+            SizedBox(height: 20),
             RoundedElevatedButton(
               text: "Continue with SignIn",
               onPressed: () {
                 context.pushNamed(RouteNames.signIn);
+              },
+              backgroundColor: Colors.white,
+              textColor: Colors.black,
+            ),
+            SizedBox(height: 20),
+            RoundedElevatedButton(
+              text: "Continue with SignUp",
+              onPressed: () {
+                context.pushNamed(RouteNames.signUp);
               },
               backgroundColor: Colors.white,
               textColor: Colors.black,

@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 /// @copyright   Apache 2.0 License
 class RoundedElevatedButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final Color backgroundColor;
   final Color textColor;
   final String? icon;

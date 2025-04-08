@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 
-/// @file        sign_in_page.dart
+/// @file        custom_text_form_field.dart
 /// @brief       Implementation of a basic custom text form field.
 /// @details     This file contains the basic widget for creating a custom text form field
 ///              This widget is being used in the following files:
