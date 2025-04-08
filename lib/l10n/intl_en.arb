@@ -14,5 +14,20 @@
   "or":"OR",
   "continueWithGoogle": "Continue with Google",
   "dontHaveAnAccount": "Don't have an account",
-  "signUp": "Sign Up"
+  "signUp": "Sign Up",
+  "onlyTakesAminute": "It only takes a minute to create your account",
+  "firstNameRequired":"First name is required",
+  "firstName": "First Name",
+  "lastNameRequired":"Last name is required",
+  "lastName": "Last Name",
+  "confirmYourPassword": "Confirm your password",
+  "passwordsDoNotMatch": "Passwords do not match",
+  "securityWordRequired": "Security word is required",
+  "securityWord": "Security word (for account recovery)",
+  "birthdateRequired": "Birthdate is required",
+  "agreeWithNemorixPay": "I agree with NemorixPay",
+  "termsOfServices": "Terms of Services",
+  "and": "and",
+  "privacyPolicy": "Privacy Policy",
+  "alreadyRegistered": "Already registered"
 }

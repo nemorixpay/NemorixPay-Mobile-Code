@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/core/utils/image_url.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/widgets.dart';
@@ -29,8 +30,8 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _securityWordController = TextEditingController();
   DateTime? _birthDate;
 
-  final bool _isPasswordVisible = false;
-  final bool _isConfirmPasswordVisible = false;
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
   bool _agreedToTerms = false;
 
   @override
@@ -68,7 +69,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Sign Up",
+                        AppLocalizations.of(context)!.signUp,
                         style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
@@ -79,7 +80,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "It only takes a minute to create your account",
+                        AppLocalizations.of(context)!.onlyTakesAminute,
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -92,11 +93,13 @@ class _SignUpPageState extends State<SignUpPage> {
                             validator:
                                 (value) =>
                                     value == null || value.isEmpty
-                                        ? 'First name is required'
+                                        ? AppLocalizations.of(
+                                          context,
+                                        )!.firstNameRequired
                                         : null,
                             keyboardType: TextInputType.name,
                             obscureText: false,
-                            hintText: 'First Name',
+                            hintText: AppLocalizations.of(context)!.firstName,
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -106,11 +109,13 @@ class _SignUpPageState extends State<SignUpPage> {
                             validator:
                                 (value) =>
                                     value == null || value.isEmpty
-                                        ? 'Last name is required'
+                                        ? AppLocalizations.of(
+                                          context,
+                                        )!.lastNameRequired
                                         : null,
                             keyboardType: TextInputType.name,
                             obscureText: false,
-                            hintText: 'Last Name',
+                            hintText: AppLocalizations.of(context)!.lastName,
                           ),
                         ),
                       ],
@@ -120,46 +125,85 @@ class _SignUpPageState extends State<SignUpPage> {
                       controller: _emailController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Email is required';
+                          return AppLocalizations.of(context)!.emailIsRequired;
                         }
-                        if (!_isValidEmail(value)) return 'Invalid email';
+                        if (!_isValidEmail(value)) {
+                          return AppLocalizations.of(context)!.enterValidEmail;
+                        }
                         return null;
                       },
                       keyboardType: TextInputType.emailAddress,
                       obscureText: false,
-                      hintText: 'Email address',
+                      hintText: AppLocalizations.of(context)!.emailAddress,
                     ),
                     const SizedBox(height: 16),
                     CustomTextFormField(
                       controller: _passwordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Password is required';
+                          return AppLocalizations.of(
+                            context,
+                          )!.passwordIsRequired;
                         }
                         if (value.length < 6) {
-                          return 'Password must be at least 6 characters';
+                          return AppLocalizations.of(
+                            context,
+                          )!.passwordAtLeast6Characters;
                         }
                         return null;
                       },
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          // TODO: Temporal setState
+                          setState(
+                            () => _isPasswordVisible = !_isPasswordVisible,
+                          );
+                        },
+                      ),
                       keyboardType: TextInputType.visiblePassword,
                       obscureText: !_isPasswordVisible,
-                      hintText: 'Password',
+                      hintText: AppLocalizations.of(context)!.password,
                     ),
                     const SizedBox(height: 16),
                     CustomTextFormField(
                       controller: _confirmPasswordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Confirm your password';
+                          return AppLocalizations.of(
+                            context,
+                          )!.confirmYourPassword;
                         }
                         if (value != _passwordController.text) {
-                          return 'Passwords do not match';
+                          return AppLocalizations.of(
+                            context,
+                          )!.passwordsDoNotMatch;
                         }
                         return null;
                       },
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isConfirmPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          // TODO: Temporal setState
+                          setState(
+                            () =>
+                                _isConfirmPasswordVisible =
+                                    !_isConfirmPasswordVisible,
+                          );
+                        },
+                      ),
                       keyboardType: TextInputType.visiblePassword,
                       obscureText: !_isConfirmPasswordVisible,
-                      hintText: 'Confirm Password',
+                      hintText:
+                          AppLocalizations.of(context)!.confirmYourPassword,
                     ),
                     const SizedBox(height: 16),
                     CustomTextFormField(
@@ -167,11 +211,13 @@ class _SignUpPageState extends State<SignUpPage> {
                       validator:
                           (value) =>
                               value == null || value.isEmpty
-                                  ? 'Security word is required'
+                                  ? AppLocalizations.of(
+                                    context,
+                                  )!.securityWordRequired
                                   : null,
                       keyboardType: TextInputType.text,
                       obscureText: false,
-                      hintText: 'Security word (for account recovery)',
+                      hintText: AppLocalizations.of(context)!.securityWord,
                     ),
                     const SizedBox(height: 16),
                     BirthdatePickerField(
@@ -180,7 +226,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           (date) => setState(() => _birthDate = date),
                       validator: (value) {
                         if (value == null) {
-                          return 'Birthdate is required';
+                          return AppLocalizations.of(
+                            context,
+                          )!.birthdateRequired;
                         }
                         return null;
                       },
@@ -195,20 +243,30 @@ class _SignUpPageState extends State<SignUpPage> {
                                 () => _agreedToTerms = value ?? false,
                               ),
                         ),
-                        const Expanded(
+                        Expanded(
                           child: Text.rich(
                             TextSpan(
-                              text: 'I agree with NemorixPay ',
+                              text:
+                                  '${AppLocalizations.of(context)!.agreeWithNemorixPay} ',
                               children: [
                                 TextSpan(
-                                  text: 'Terms of Services',
+                                  text:
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.termsOfServices,
                                   style: TextStyle(
                                     color: NemorixColors.primaryColor,
                                   ),
                                 ),
-                                TextSpan(text: ' and '),
                                 TextSpan(
-                                  text: 'Privacy Policy',
+                                  text:
+                                      ' ${AppLocalizations.of(context)!.and} ',
+                                ),
+                                TextSpan(
+                                  text:
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.privacyPolicy,
                                   style: TextStyle(
                                     color: NemorixColors.primaryColor,
                                   ),
@@ -221,7 +279,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     const SizedBox(height: 16),
                     RoundedElevatedButton(
-                      text: 'Sign Up',
+                      text: AppLocalizations.of(context)!.signUp,
                       onPressed:
                           !_agreedToTerms
                               ? null
@@ -239,18 +297,18 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     const SizedBox(height: 24),
                     Row(
-                      children: const [
+                      children: [
                         Expanded(child: Divider()),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text("OR"),
+                          child: Text(AppLocalizations.of(context)!.or),
                         ),
                         Expanded(child: Divider()),
                       ],
                     ),
                     const SizedBox(height: 16),
                     RoundedElevatedButton(
-                      text: 'Continue with Google',
+                      text: AppLocalizations.of(context)!.continueWithGoogle,
                       onPressed: () {
                         // Login with Google
                       },
@@ -263,12 +321,13 @@ class _SignUpPageState extends State<SignUpPage> {
                       onTap: () {
                         // Login Page
                       },
-                      child: const Text.rich(
+                      child: Text.rich(
                         TextSpan(
-                          text: "Already registered? ",
+                          text:
+                              "${AppLocalizations.of(context)!.alreadyRegistered}? ",
                           children: [
                             TextSpan(
-                              text: "Sign In",
+                              text: AppLocalizations.of(context)!.signIn,
                               style: TextStyle(
                                 color: NemorixColors.primaryColor,
                               ),
