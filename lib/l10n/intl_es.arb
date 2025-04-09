@@ -29,5 +29,7 @@
   "termsOfServices": "Términos de servicios",
   "and": "y",
   "privacyPolicy": "Política de Privacidad",
-  "alreadyRegistered": "Ya registrado"
+  "alreadyRegistered": "Ya registrado",
+  "forgotPasswordSubtitle": "Ingrese su email para reiniciar su contraseña.",
+  "sendEmail": "Enviar correo electrónico"
 }

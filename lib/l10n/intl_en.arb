@@ -29,5 +29,7 @@
   "termsOfServices": "Terms of Services",
   "and": "and",
   "privacyPolicy": "Privacy Policy",
-  "alreadyRegistered": "Already registered"
+  "alreadyRegistered": "Already registered",
+  "forgotPasswordSubtitle": "Enter your app email to reset your password.",
+  "sendEmail": "Send Email"
 }

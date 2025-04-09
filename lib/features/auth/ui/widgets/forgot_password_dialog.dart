@@ -40,7 +40,7 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Enter your app email to reset your password."),
+          Text(AppLocalizations.of(context)!.forgotPasswordSubtitle),
           const SizedBox(height: 20),
           Form(
             key: _formKey,
@@ -61,7 +61,7 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
           ),
           SizedBox(height: 20),
           RoundedElevatedButton(
-            text: "Send Email",
+            text: AppLocalizations.of(context)!.sendEmail,
             onPressed: () {
               if (kDebugMode) {
                 print('Email Sent using the Custom Button');
