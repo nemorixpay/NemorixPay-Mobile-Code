@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/core/utils/image_url.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
+import 'package:nemorixpay/features/auth/ui/widgets/forgot_password_dialog.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/widgets.dart';
 
 /// @file        sign_in_page.dart
@@ -130,7 +131,13 @@ class _LoginPageState extends State<LoginPage> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await showDialog(
+                        context: context,
+                        builder:
+                            (BuildContext context) => ForgotPasswordDialog(),
+                      );
+                    },
                     child: Text(
                       "${AppLocalizations.of(context)!.forgotPassword}?",
                       style: TextStyle(color: NemorixColors.primaryColor),
