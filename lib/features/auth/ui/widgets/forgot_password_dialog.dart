@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
+import 'package:nemorixpay/core/utils/validation_rules.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/custom_text_form_field.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/rounded_elevated_button.dart';
 
@@ -52,7 +53,7 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
                 if (value == null || value.isEmpty) {
                   return AppLocalizations.of(context)!.emailIsRequired;
                 }
-                if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+').hasMatch(value)) {
+                if (!ValidationRules.emailValidation.hasMatch(value)) {
                   return AppLocalizations.of(context)!.enterValidEmail;
                 }
                 return null;

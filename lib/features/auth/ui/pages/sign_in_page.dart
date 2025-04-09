@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/core/utils/image_url.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
+import 'package:nemorixpay/core/utils/validation_rules.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/forgot_password_dialog.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/widgets.dart';
 
@@ -81,9 +82,9 @@ class _LoginPageState extends State<LoginPage> {
                               context,
                             )!.emailIsRequired;
                           }
-                          if (!RegExp(
-                            r'^[^@\s]+@[^@\s]+\.[^@\s]+',
-                          ).hasMatch(value)) {
+                          if (!ValidationRules.emailValidation.hasMatch(
+                            value,
+                          )) {
                             return AppLocalizations.of(
                               context,
                             )!.enterValidEmail;

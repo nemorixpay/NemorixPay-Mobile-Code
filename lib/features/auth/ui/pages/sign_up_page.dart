@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/core/utils/image_url.dart';
+import 'package:nemorixpay/core/utils/validation_rules.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/widgets.dart';
 
 /// @file        sign_up_page.dart
@@ -43,11 +44,6 @@ class _SignUpPageState extends State<SignUpPage> {
     _confirmPasswordController.dispose();
     _securityWordController.dispose();
     super.dispose();
-  }
-
-  bool _isValidEmail(String email) {
-    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+');
-    return emailRegex.hasMatch(email);
   }
 
   @override
@@ -127,7 +123,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         if (value == null || value.isEmpty) {
                           return AppLocalizations.of(context)!.emailIsRequired;
                         }
-                        if (!_isValidEmail(value)) {
+                        if (!ValidationRules.emailValidation.hasMatch(value)) {
                           return AppLocalizations.of(context)!.enterValidEmail;
                         }
                         return null;
