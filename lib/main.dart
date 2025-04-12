@@ -14,7 +14,7 @@ import 'package:nemorixpay/l10n/l10n.dart';
 
 import 'package:nemorixpay/config/routes/nemorix_routes.dart';
 import 'package:nemorixpay/config/theme/nemorix_theme.dart';
-import 'package:nemorixpay/shared/test_page/test_home_page.dart';
+import 'package:nemorixpay/shared/ui/pages/test_page/test_home_page.dart';
 
 import 'firebase_options.dart';
 import 'tabs_page.dart';

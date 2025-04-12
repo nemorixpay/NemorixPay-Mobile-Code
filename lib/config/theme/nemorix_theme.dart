@@ -10,6 +10,8 @@ class NemorixTheme {
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: NemorixColors.primaryColor,
     ),
+    primaryColor: NemorixColors.primaryColor,
+    cardColor: NemorixColors.greyLevel1,
   );
   static final ThemeData lightThemeMode = ThemeData.light(
     useMaterial3: true,
@@ -19,5 +21,9 @@ class NemorixTheme {
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: NemorixColors.primaryColor,
     ),
+    // checkboxTheme: const CheckboxThemeData(
+    //   checkColor:
+    // ),
+    cardColor: NemorixColors.greyLevel6,
   );
 }

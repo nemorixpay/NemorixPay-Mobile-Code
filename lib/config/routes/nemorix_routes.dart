@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/features/auth/ui/pages/sign_in_page.dart';
 import 'package:nemorixpay/features/auth/ui/pages/sign_up_page.dart';
+import 'package:nemorixpay/features/cryptocurrency/ui/pages/home_page.dart';
 import 'package:nemorixpay/features/splash/ui/pages/splash_page.dart';
 
 final GoRouter router = GoRouter(
@@ -20,6 +21,11 @@ final GoRouter router = GoRouter(
       name: RouteNames.signUp,
       path: "/signup",
       builder: (context, state) => const SignUpPage(),
+    ),
+    GoRoute(
+      name: RouteNames.home,
+      path: "/home",
+      builder: (context, state) => const HomePage(),
     ),
   ],
 );

@@ -45,6 +45,10 @@ dependencies:
   firebase_analytics: ^11.4.4
   # Routes
   go_router: ^14.8.1
+  # UI: Icons
+  lucide_icons: ^0.257.0
+  # UI: Graphics
+  fl_chart: ^0.70.2
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +77,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/logos/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
