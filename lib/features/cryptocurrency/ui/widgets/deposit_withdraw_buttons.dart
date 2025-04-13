@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/shared/ui/widgets/action_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DepositWithdrawButtons extends StatelessWidget {
   const DepositWithdrawButtons({super.key});
@@ -15,13 +16,13 @@ class DepositWithdrawButtons extends StatelessWidget {
         children: [
           ActionButton(
             icon: LucideIcons.download,
-            label: 'Deposit',
+            label: AppLocalizations.of(context)!.deposit,
             onTap: () => debugPrint('Deposit pressed'),
             color: NemorixColors.greyLevel1,
           ),
           ActionButton(
             icon: LucideIcons.upload,
-            label: 'Withdraw',
+            label: AppLocalizations.of(context)!.withdraw,
             onTap: () => debugPrint('Withdraw pressed'),
             color: NemorixColors.greyLevel1,
           ),

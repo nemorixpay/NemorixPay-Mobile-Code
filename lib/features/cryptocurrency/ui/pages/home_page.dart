@@ -6,6 +6,7 @@ import 'package:nemorixpay/features/cryptocurrency/ui/widgets/deposit_withdraw_b
 import 'package:nemorixpay/features/cryptocurrency/ui/widgets/live_price_tile.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/widgets/wallet_balance.dart';
 import 'package:nemorixpay/shared/data/mock_cryptos.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// @file        home_screen.dart
 /// @brief       Home screen implementation for NemorixPay.
@@ -96,8 +97,9 @@ class _HomeScreenState extends State<HomePage> {
                                 controller: _searchController,
                                 onChanged: _searchCrypto,
                                 style: const TextStyle(color: Colors.black),
-                                decoration: const InputDecoration(
-                                  hintText: 'Search...',
+                                decoration: InputDecoration(
+                                  hintText:
+                                      AppLocalizations.of(context)!.search,
                                   hintStyle: TextStyle(color: Colors.black54),
                                   border: InputBorder.none,
                                 ),
@@ -105,8 +107,8 @@ class _HomeScreenState extends State<HomePage> {
                               ),
                             )
                             : Expanded(
-                              child: const Text(
-                                'NemorixPay',
+                              child: Text(
+                                AppLocalizations.of(context)!.appName,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 18,
@@ -151,15 +153,15 @@ class _HomeScreenState extends State<HomePage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
-                              'My Assets',
+                            Text(
+                              AppLocalizations.of(context)!.myAssets,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const Text(
-                              'See All',
+                            Text(
+                              AppLocalizations.of(context)!.seeAll,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -185,8 +187,8 @@ class _HomeScreenState extends State<HomePage> {
                           horizontal: 16,
                           vertical: 20,
                         ),
-                        child: const Text(
-                          'Live Prices',
+                        child: Text(
+                          AppLocalizations.of(context)!.livePrices,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

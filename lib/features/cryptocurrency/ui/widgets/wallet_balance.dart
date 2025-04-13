@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WalletBalance extends StatelessWidget {
   final String balance;
@@ -12,7 +13,7 @@ class WalletBalance extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            'Current Wallet Balance',
+            AppLocalizations.of(context)!.currentWalletBalance,
             style: TextStyle(fontSize: 16, color: Colors.black),
           ),
           SizedBox(height: 4),

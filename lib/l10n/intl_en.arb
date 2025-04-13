@@ -1,6 +1,6 @@
 {
   "helloWorld": "Hello World!",
-  "appName": "NemorixPay - En",
+  "appName": "NemorixPay",
   "welcomeBack": "Welcome Back",
   "youHaveBeenMissed": "You have been missed",
   "emailAddress": "Email address",
@@ -31,5 +31,12 @@
   "privacyPolicy": "Privacy Policy",
   "alreadyRegistered": "Already registered",
   "forgotPasswordSubtitle": "Enter your app email to reset your password.",
-  "sendEmail": "Send Email"
+  "sendEmail": "Send Email",
+  "search": "Search",
+  "myAssets": "My Assets",
+  "seeAll": "See All",
+  "livePrices": "Live Prices",
+  "currentWalletBalance": "Current Wallet Balance",
+  "deposit": "Deposit",
+  "withdraw": "Withdraw"
 }
