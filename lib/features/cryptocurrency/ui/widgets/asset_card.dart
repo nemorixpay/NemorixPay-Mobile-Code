@@ -40,9 +40,9 @@ class AssetCard extends StatelessWidget {
                   lineBarsData: [
                     LineChartBarData(
                       spots: List.generate(
-                        crypto.priceHistory['1D']!.length,
+                        crypto.priceHistory['1M']!.length,
                         (i) =>
-                            FlSpot(i.toDouble(), crypto.priceHistory['1D']![i]),
+                            FlSpot(i.toDouble(), crypto.priceHistory['1M']![i]),
                       ),
                       isCurved: true,
                       color: Colors.greenAccent,

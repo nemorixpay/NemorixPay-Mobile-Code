@@ -5,10 +5,10 @@ import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 /// @brief       Implementation of a custom back button widget.
 /// @details     This file contains the basic widget for creating a custom back button.
 ///              This widget is being used in the following files:
-///              sign_up_page.dart.
+///              sign_up_page.dart, main_header.dart.
 /// @author      Miguel Fagundez
 /// @date        04/07/2025
-/// @version     1.0
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 class CustomBackButton extends StatelessWidget {
   final VoidCallback? onPressed;
@@ -18,22 +18,21 @@ class CustomBackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
         child: GestureDetector(
           onTap: onPressed ?? () => Navigator.of(context).pop(),
           child: Container(
-            height: 40.0,
-            width: 40.0,
+            height: 50.0,
+            width: 50.0,
             decoration: BoxDecoration(
-              color: NemorixColors.greyLevel1,
+              color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Center(
+            child: Center(
               child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: Colors.white,
-                //color: NemorixColors.primaryColor,
-                size: 12,
+                Icons.arrow_back_rounded,
+                color: Theme.of(context).primaryColor,
+                size: 20,
               ),
             ),
           ),

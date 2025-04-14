@@ -24,6 +24,7 @@ class NemorixTheme {
     // checkboxTheme: const CheckboxThemeData(
     //   checkColor:
     // ),
+    primaryColor: NemorixColors.primaryColor,
     cardColor: NemorixColors.greyLevel6,
   );
 }

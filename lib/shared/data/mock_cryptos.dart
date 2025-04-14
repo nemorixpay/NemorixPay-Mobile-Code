@@ -12,7 +12,7 @@ final List<Crypto> mockCryptos = [
     name: 'Bitcoin',
     abbreviation: 'BTC',
     project: 'Bitcoin.org',
-    logoPath: 'assets/crypto/btc.png',
+    logoPath: 'assets/logos/btc.png',
     currentPrice: 65000.0,
     priceHistory: {
       '24H': [60000, 62000, 64000, 65000],
@@ -31,7 +31,7 @@ final List<Crypto> mockCryptos = [
     name: 'Ethereum',
     abbreviation: 'ETH',
     project: 'Ethereum.org',
-    logoPath: 'assets/crypto/eth.png',
+    logoPath: 'assets/logos/btc.png',
     currentPrice: 3300.0,
     priceHistory: {
       '24H': [3100, 3200, 3250, 3300],
@@ -50,7 +50,7 @@ final List<Crypto> mockCryptos = [
     name: 'Stellar Lumens',
     abbreviation: 'XLM',
     project: 'Stellar.org',
-    logoPath: 'assets/crypto/xlm.png',
+    logoPath: 'assets/logos/btc.png',
     currentPrice: 0.13,
     priceHistory: {
       '24H': [0.11, 0.12, 0.125, 0.13],
@@ -69,7 +69,7 @@ final List<Crypto> mockCryptos = [
     name: 'Cardano',
     abbreviation: 'ADA',
     project: 'Cardano.org',
-    logoPath: 'assets/crypto/ada.png',
+    logoPath: 'assets/logos/btc.png',
     currentPrice: 0.45,
     priceHistory: {
       '24H': [0.40, 0.42, 0.44, 0.45],
@@ -88,7 +88,7 @@ final List<Crypto> mockCryptos = [
     name: 'Solana',
     abbreviation: 'SOL',
     project: 'Solana.com',
-    logoPath: 'assets/crypto/sol.png',
+    logoPath: 'assets/logos/btc.png',
     currentPrice: 150.0,
     priceHistory: {
       '24H': [130, 140, 145, 150],
@@ -107,7 +107,7 @@ final List<Crypto> mockCryptos = [
     name: 'Ripple',
     abbreviation: 'XRP',
     project: 'Ripple.com',
-    logoPath: 'assets/crypto/xrp.png',
+    logoPath: 'assets/logos/btc.png',
     currentPrice: 0.6,
     priceHistory: {
       '24H': [0.55, 0.57, 0.59, 0.6],
@@ -126,7 +126,7 @@ final List<Crypto> mockCryptos = [
     name: 'USD Coin',
     abbreviation: 'USDC',
     project: 'centre.io',
-    logoPath: 'assets/crypto/usdc.png',
+    logoPath: 'assets/logos/btc.png',
     currentPrice: 1.0,
     priceHistory: {
       '24H': [1.0, 1.0, 1.0, 1.0],
@@ -145,7 +145,7 @@ final List<Crypto> mockCryptos = [
     name: 'Tether',
     abbreviation: 'USDT',
     project: 'tether.to',
-    logoPath: 'assets/crypto/usdt.png',
+    logoPath: 'assets/logos/btc.png',
     currentPrice: 1.0,
     priceHistory: {
       '24H': [1.0, 1.0, 1.0, 1.0],
@@ -164,7 +164,7 @@ final List<Crypto> mockCryptos = [
     name: 'Velo',
     abbreviation: 'VELO',
     project: 'velo.org',
-    logoPath: 'assets/crypto/velo.png',
+    logoPath: 'assets/logos/btc.png',
     currentPrice: 0.002,
     priceHistory: {
       '24H': [0.0018, 0.0019, 0.00195, 0.002],
@@ -183,7 +183,7 @@ final List<Crypto> mockCryptos = [
     name: 'Stronghold Token',
     abbreviation: 'SHX',
     project: 'stronghold.co',
-    logoPath: 'assets/crypto/shx.png',
+    logoPath: 'assets/logos/btc.png',
     currentPrice: 0.005,
     priceHistory: {
       '24H': [0.0045, 0.0047, 0.0049, 0.005],
@@ -199,3 +199,5 @@ final List<Crypto> mockCryptos = [
     performance: -60.0,
   ),
 ];
+
+List<Crypto> favoriteCryptos = [];
