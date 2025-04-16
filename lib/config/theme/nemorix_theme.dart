@@ -12,6 +12,7 @@ class NemorixTheme {
     ),
     primaryColor: NemorixColors.primaryColor,
     cardColor: NemorixColors.greyLevel1,
+    textTheme: TextTheme(labelMedium: TextStyle(color: Colors.white)),
   );
   static final ThemeData lightThemeMode = ThemeData.light(
     useMaterial3: true,
@@ -26,5 +27,6 @@ class NemorixTheme {
     // ),
     primaryColor: NemorixColors.primaryColor,
     cardColor: NemorixColors.greyLevel6,
+    textTheme: TextTheme(labelMedium: TextStyle(color: Colors.black)),
   );
 }
