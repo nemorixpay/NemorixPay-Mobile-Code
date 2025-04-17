@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entity/crypto_entity.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/widgets/crypto_stats_tile.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/widgets/custom_two_buttons.dart';
-import 'package:nemorixpay/shared/data/mock_cryptos.dart';
 import 'package:nemorixpay/shared/ui/widgets/main_header.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:nemorixpay/shared/data/mock_cryptos.dart';
 
 /// @file        crypto_details.dart
 /// @brief       Crypto deatils screen implementation for NemorixPay.
@@ -185,11 +186,11 @@ class _CryptoDetailsScreenState extends State<CryptoDetailsPage> {
                         // Send/Receive Buttons
                         // --------------------
                         CustomTwoButtons(
-                          textButton1: 'Send',
+                          textButton1: AppLocalizations.of(context)!.send,
                           onFunctionButton1: () {
                             debugPrint('Button01 - Send');
                           },
-                          textButton2: 'Receive',
+                          textButton2: AppLocalizations.of(context)!.receive,
                           onFunctionButton2: () {
                             debugPrint('Button02 - Receive');
                           },
@@ -201,32 +202,35 @@ class _CryptoDetailsScreenState extends State<CryptoDetailsPage> {
                         Column(
                           children: [
                             CryptoStatsTile(
-                              label: 'Market Cap',
+                              label: AppLocalizations.of(context)!.marketCap,
                               value:
                                   '\$${widgetcrypto.marketCap.toStringAsFixed(2)}',
                             ),
                             CryptoStatsTile(
-                              label: 'Volume',
+                              label: AppLocalizations.of(context)!.volume,
                               value:
                                   '\$${widgetcrypto.volume.toStringAsFixed(2)}',
                             ),
                             CryptoStatsTile(
-                              label: 'Circulating Supply',
+                              label:
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.circulatingSupply,
                               value:
                                   '${widgetcrypto.circulatingSupply.toStringAsFixed(2)}',
                             ),
                             CryptoStatsTile(
-                              label: 'Total Supply',
+                              label: AppLocalizations.of(context)!.totalSupply,
                               value:
                                   '${widgetcrypto.totalSupply.toStringAsFixed(2)}',
                             ),
                             CryptoStatsTile(
-                              label: 'All Time High',
+                              label: AppLocalizations.of(context)!.allTimeHigh,
                               value:
                                   '\$${widgetcrypto.allTimeHigh.toStringAsFixed(2)}',
                             ),
                             CryptoStatsTile(
-                              label: 'Performance',
+                              label: AppLocalizations.of(context)!.performance,
                               value:
                                   '${widgetcrypto.performance.toStringAsFixed(2)}%',
                             ),
@@ -245,11 +249,11 @@ class _CryptoDetailsScreenState extends State<CryptoDetailsPage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: CustomTwoButtons(
-                textButton1: 'Sell',
+                textButton1: AppLocalizations.of(context)!.sell,
                 onFunctionButton1: () {
                   debugPrint('Button01 - Sell');
                 },
-                textButton2: 'Buy',
+                textButton2: AppLocalizations.of(context)!.buy,
                 onFunctionButton2: () {
                   debugPrint('Button02 - Buy');
                 },

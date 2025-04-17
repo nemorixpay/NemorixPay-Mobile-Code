@@ -38,5 +38,15 @@
   "livePrices": "Live Prices",
   "currentWalletBalance": "Current Wallet Balance",
   "deposit": "Deposit",
-  "withdraw": "Withdraw"
+  "withdraw": "Withdraw",
+  "send": "Send",
+  "receive": "Receive",
+  "sell": "Sell",
+  "buy": "Buy",
+  "marketCap": "Market Cap",
+  "volume": "Volume",
+  "circulatingSupply": "Circulating Supply",
+  "totalSupply": "Total Supply",
+  "allTimeHigh": "All Time High",
+  "performance": "Performance"
 }

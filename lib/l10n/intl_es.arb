@@ -38,5 +38,15 @@
   "livePrices": "Precios",
   "currentWalletBalance": "Balance de la Billetera",
   "deposit": "Depositar",
-  "withdraw": "Retirar"
+  "withdraw": "Retirar",
+  "send": "Enviar",
+  "receive": "Recibir",
+  "sell": "Vender",
+  "buy": "Comprar",
+  "marketCap": "Capitalización de Mercado",
+  "volume": "Volumen",
+  "circulatingSupply": "Oferta Circulante",
+  "totalSupply": "Oferta Total",
+  "allTimeHigh": "Máximo Histórico",
+  "performance": "Rendimiento"
 }
