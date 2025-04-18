@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/core/utils/image_url.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/rounded_elevated_button.dart';
-import 'package:nemorixpay/l10n/l10n.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
@@ -25,7 +22,7 @@ class SplashPage extends StatelessWidget {
             RoundedElevatedButton(
               text: "Continue with SignIn",
               onPressed: () {
-                context.pushNamed(RouteNames.signIn);
+                Navigator.pushNamed(context, RouteNames.signIn);
               },
               backgroundColor: Colors.white,
               textColor: Colors.black,
@@ -34,7 +31,7 @@ class SplashPage extends StatelessWidget {
             RoundedElevatedButton(
               text: "Continue with SignUp",
               onPressed: () {
-                context.pushNamed(RouteNames.signUp);
+                Navigator.pushNamed(context, RouteNames.signUp);
               },
               backgroundColor: Colors.white,
               textColor: Colors.black,
@@ -43,7 +40,7 @@ class SplashPage extends StatelessWidget {
             RoundedElevatedButton(
               text: "Continue with Home",
               onPressed: () {
-                context.pushNamed(RouteNames.home);
+                Navigator.pushNamed(context, RouteNames.home);
               },
               backgroundColor: Colors.white,
               textColor: Colors.black,
@@ -52,7 +49,7 @@ class SplashPage extends StatelessWidget {
             RoundedElevatedButton(
               text: "Continue with CryptoDetails",
               onPressed: () {
-                context.pushNamed(RouteNames.cryptoDetails);
+                Navigator.pushNamed(context, RouteNames.cryptoDetails);
               },
               backgroundColor: Colors.white,
               textColor: Colors.black,

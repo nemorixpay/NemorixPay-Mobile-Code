@@ -43,8 +43,6 @@ dependencies:
   firebase_auth: ^5.5.1
   firebase_core: ^3.12.1
   firebase_analytics: ^11.4.4
-  # Routes
-  go_router: ^14.8.1
   # UI: Icons
   lucide_icons: ^0.257.0
   # UI: Graphics
