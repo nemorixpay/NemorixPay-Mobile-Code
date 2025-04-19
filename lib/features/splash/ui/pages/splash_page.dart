@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/core/utils/image_url.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:nemorixpay/features/auth/ui/widgets/rounded_elevated_button.dart';
+import 'package:nemorixpay/shared/ui/widgets/rounded_elevated_button.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
