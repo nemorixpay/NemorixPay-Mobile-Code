@@ -27,9 +27,17 @@ class AssetCard extends StatelessWidget {
           children: [
             Image.asset(crypto.logoPath, width: 30),
             const SizedBox(height: 8),
-            Text(crypto.abbreviation),
+            Text(
+              crypto.abbreviation,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 4),
-            Text('\$${crypto.currentPrice.toStringAsFixed(2)}'),
+            Text(
+              '\$${crypto.currentPrice.toStringAsFixed(2)}',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
             const SizedBox(height: 8),
             Expanded(
               child: LineChart(

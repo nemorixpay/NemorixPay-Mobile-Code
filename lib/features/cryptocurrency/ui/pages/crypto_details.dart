@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entity/crypto_entity.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/widgets/crypto_stats_tile.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/widgets/custom_two_buttons.dart';
@@ -89,17 +90,13 @@ class _CryptoDetailsScreenState extends State<CryptoDetailsPage> {
                               children: [
                                 Text(
                                   widgetcrypto.abbreviation,
-                                  style: const TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 12,
-                                  ),
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium,
                                 ),
                                 Text(
                                   '\$${widgetcrypto.currentPrice.toStringAsFixed(2)}',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyLarge
+                                      ?.copyWith(fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -107,12 +104,16 @@ class _CryptoDetailsScreenState extends State<CryptoDetailsPage> {
                               child: GestureDetector(
                                 child: Icon(
                                   _isFav ? Icons.star : Icons.star_border,
-                                  color: _isFav ? Colors.amber : Colors.grey,
+                                  color:
+                                      _isFav
+                                          ? NemorixColors.primaryColor
+                                          : Colors.grey,
                                 ),
                                 onTap: () {
                                   setState(() {
                                     _isFav = !_isFav;
                                   });
+                                  // TODO Uncheck option not implemented
                                   toggleFavorite(widgetcrypto);
                                 },
                               ),
@@ -131,7 +132,7 @@ class _CryptoDetailsScreenState extends State<CryptoDetailsPage> {
                                 LineChartBarData(
                                   spots: getChartData(selectedTimeFrame),
                                   isCurved: true,
-                                  color: Colors.yellow,
+                                  color: NemorixColors.primaryColor,
                                   dotData: FlDotData(show: false),
                                   belowBarData: BarAreaData(show: false),
                                 ),
@@ -164,8 +165,10 @@ class _CryptoDetailsScreenState extends State<CryptoDetailsPage> {
                                     decoration: BoxDecoration(
                                       color:
                                           isSelected
-                                              ? Colors.yellow
-                                              : Colors.grey[800],
+                                              ? NemorixColors.primaryColor
+                                              : Theme.of(
+                                                context,
+                                              ).cardColor, //Colors.grey[800],
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: Text(
@@ -174,7 +177,10 @@ class _CryptoDetailsScreenState extends State<CryptoDetailsPage> {
                                         color:
                                             isSelected
                                                 ? Colors.black
-                                                : Colors.white,
+                                                : Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.color, //Colors.white,
                                       ),
                                     ),
                                   ),

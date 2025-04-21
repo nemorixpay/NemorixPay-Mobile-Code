@@ -155,17 +155,13 @@ class _HomeScreenState extends State<HomePage> {
                           children: [
                             Text(
                               AppLocalizations.of(context)!.myAssets,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context).textTheme.bodyLarge
+                                  ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                             Text(
                               AppLocalizations.of(context)!.seeAll,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context).textTheme.bodyLarge
+                                  ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -189,10 +185,8 @@ class _HomeScreenState extends State<HomePage> {
                         ),
                         child: Text(
                           AppLocalizations.of(context)!.livePrices,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ),
                       ..._searchResults.map(

@@ -47,8 +47,7 @@ class CustomTwoButtons extends StatelessWidget {
               textButton1,
               style: TextStyle(
                 color:
-                    textColor2 ??
-                    Theme.of(context).textTheme.labelMedium!.color,
+                    textColor2 ?? Theme.of(context).textTheme.bodyLarge!.color,
               ),
             ),
           ),

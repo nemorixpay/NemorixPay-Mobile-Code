@@ -24,9 +24,12 @@ class MainHeader extends StatelessWidget {
         Align(
           child: Text(
             title,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
+        SizedBox(height: 16),
       ],
     );
   }

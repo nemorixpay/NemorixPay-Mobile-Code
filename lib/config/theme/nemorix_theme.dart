@@ -16,7 +16,10 @@ class NemorixTheme {
       labelSmall: TextStyle(color: NemorixColors.greyLevel4),
       labelMedium: TextStyle(color: NemorixColors.greyLevel4),
       labelLarge: TextStyle(color: Colors.white),
+      bodyMedium: TextStyle(color: NemorixColors.greyLevel6),
+      bodyLarge: TextStyle(color: NemorixColors.greyLevel6),
       titleLarge: TextStyle(color: Colors.white),
+      headlineSmall: TextStyle(color: NemorixColors.greyLevel5),
     ),
   );
   static final ThemeData lightThemeMode = ThemeData.light(
@@ -36,7 +39,10 @@ class NemorixTheme {
       labelSmall: TextStyle(color: NemorixColors.greyLevel3),
       labelMedium: TextStyle(color: NemorixColors.greyLevel3),
       labelLarge: TextStyle(color: Colors.black),
+      bodyMedium: TextStyle(color: NemorixColors.greyLevel2),
+      bodyLarge: TextStyle(color: NemorixColors.greyLevel2),
       titleLarge: TextStyle(color: Colors.black),
+      headlineSmall: TextStyle(color: NemorixColors.greyLevel2),
     ),
   );
 }

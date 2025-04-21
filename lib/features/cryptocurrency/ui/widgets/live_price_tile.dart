@@ -10,11 +10,21 @@ class LivePriceTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Image.asset(crypto.logoPath, width: 32, height: 32),
-      title: Text(crypto.name),
-      subtitle: Text(crypto.project),
+      title: Text(
+        crypto.name,
+        style: Theme.of(
+          context,
+        ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+      ),
+      subtitle: Text(
+        crypto.project,
+        style: Theme.of(context).textTheme.bodyMedium,
+      ),
       trailing: Text(
         crypto.currentPrice.toStringAsFixed(2),
-        style: const TextStyle(fontWeight: FontWeight.bold),
+        style: Theme.of(
+          context,
+        ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
       ),
       onTap: () {
         // TODO: Navigate to detail or show more info
