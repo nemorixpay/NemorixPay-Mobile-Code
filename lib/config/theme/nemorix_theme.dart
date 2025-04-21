@@ -12,7 +12,12 @@ class NemorixTheme {
     ),
     primaryColor: NemorixColors.primaryColor,
     cardColor: NemorixColors.greyLevel1,
-    textTheme: TextTheme(labelMedium: TextStyle(color: Colors.white)),
+    textTheme: TextTheme(
+      labelSmall: TextStyle(color: NemorixColors.greyLevel4),
+      labelMedium: TextStyle(color: NemorixColors.greyLevel4),
+      labelLarge: TextStyle(color: Colors.white),
+      titleLarge: TextStyle(color: Colors.white),
+    ),
   );
   static final ThemeData lightThemeMode = ThemeData.light(
     useMaterial3: true,
@@ -27,6 +32,11 @@ class NemorixTheme {
     // ),
     primaryColor: NemorixColors.primaryColor,
     cardColor: NemorixColors.greyLevel6,
-    textTheme: TextTheme(labelMedium: TextStyle(color: Colors.black)),
+    textTheme: TextTheme(
+      labelSmall: TextStyle(color: NemorixColors.greyLevel3),
+      labelMedium: TextStyle(color: NemorixColors.greyLevel3),
+      labelLarge: TextStyle(color: Colors.black),
+      titleLarge: TextStyle(color: Colors.black),
+    ),
   );
 }

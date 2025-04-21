@@ -54,6 +54,15 @@ class SplashPage extends StatelessWidget {
               backgroundColor: Colors.white,
               textColor: Colors.black,
             ),
+            SizedBox(height: 20),
+            RoundedElevatedButton(
+              text: "Continue with BuyCrypto",
+              onPressed: () {
+                Navigator.pushNamed(context, RouteNames.buyCrypto);
+              },
+              backgroundColor: Colors.white,
+              textColor: Colors.black,
+            ),
           ],
         ),
       ),

@@ -6,6 +6,7 @@ import 'package:nemorixpay/config/routes/route_model.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/features/auth/ui/pages/sign_in_page.dart';
 import 'package:nemorixpay/features/auth/ui/pages/sign_up_page.dart';
+import 'package:nemorixpay/features/cryptocurrency/ui/pages/buy_crypto_page.dart';
 import 'package:nemorixpay/features/splash/ui/pages/splash_page.dart';
 import 'package:nemorixpay/shared/ui/pages/test_page/test_home_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/pages/home_page.dart';
@@ -59,6 +60,12 @@ class AppRoutes {
         observer: observer,
       ),
       icon: Icons.account_balance_wallet_outlined,
+    ),
+    RouteModel(
+      route: RouteNames.buyCrypto,
+      name: 'Buy',
+      screen: BuyCryptoPage(),
+      icon: Icons.credit_card_rounded,
     ),
   ];
 
