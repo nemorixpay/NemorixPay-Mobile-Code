@@ -6,6 +6,7 @@ import 'package:nemorixpay/shared/data/mock_fiats.dart';
 import 'package:nemorixpay/shared/ui/widgets/base_card.dart';
 import 'package:nemorixpay/shared/ui/widgets/main_header.dart';
 import 'package:nemorixpay/shared/ui/widgets/rounded_elevated_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// @file        buy_crypto_page.dart
 /// @brief       Buy Crypto screen implementation for NemorixPay.
@@ -47,7 +48,7 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    const MainHeader(title: 'Buy'),
+                    MainHeader(title: AppLocalizations.of(context)!.buy),
                     const SizedBox(height: 48),
                     // -----------------------
                     // Convertion Card
@@ -58,7 +59,7 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
                           Row(
                             children: [
                               Text(
-                                'You Pay',
+                                AppLocalizations.of(context)!.youPay,
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
                               const Spacer(),
@@ -97,7 +98,7 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
                           Row(
                             children: [
                               Text(
-                                'You Receive',
+                                AppLocalizations.of(context)!.youReceive,
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
                               const Spacer(),
@@ -108,10 +109,6 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
                             alignment: Alignment.centerLeft,
                             child: Text(
                               receiveAmount.toStringAsFixed(4),
-                              // style: const TextStyle(
-                              //   fontSize: 20,
-                              //   color: Colors.white,
-                              // ),
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
                           ),
@@ -126,7 +123,7 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                '1 $selectedFiat = ${(1 / cryptoPrice).toStringAsFixed(6)} ${selectedCrypto.abbreviation.toUpperCase()}',
+                                '1 USD = ${(1 / cryptoPrice).toStringAsFixed(6)} ${selectedCrypto.abbreviation.toUpperCase()}',
                                 style: Theme.of(context).textTheme.labelMedium,
                               ),
                             ],
@@ -154,7 +151,7 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
                           ),
                           const SizedBox(width: 12),
                           Text(
-                            'Exchange fee',
+                            AppLocalizations.of(context)!.exchangeFee,
                             style: Theme.of(context).textTheme.labelLarge,
                           ),
                           const Spacer(),
@@ -178,7 +175,7 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                'Click here for ',
+                                AppLocalizations.of(context)!.clickHereFor,
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
                               GestureDetector(
@@ -186,7 +183,9 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
                                   debugPrint('Terms and Conditions');
                                 },
                                 child: Text(
-                                  'Terms & Conditions',
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.termsAndConditions,
                                   style: TextStyle(
                                     color: NemorixColors.primaryColor,
                                   ),
@@ -196,7 +195,7 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
                           ),
                           SizedBox(height: 4),
                           Text(
-                            'For this transaction fee will be taken',
+                            AppLocalizations.of(context)!.transactionFeeTaken,
                             style: Theme.of(context).textTheme.labelLarge,
                           ),
                         ],
@@ -207,7 +206,7 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: RoundedElevatedButton(
-                        text: 'Continue',
+                        text: AppLocalizations.of(context)!.continueLabel,
                         onPressed: () {}, // Flutter bloc action
                         backgroundColor: NemorixColors.primaryColor,
                         textColor: Colors.black,

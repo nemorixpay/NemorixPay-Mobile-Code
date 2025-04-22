@@ -48,5 +48,13 @@
   "circulatingSupply": "Circulating Supply",
   "totalSupply": "Total Supply",
   "allTimeHigh": "All Time High",
-  "performance": "Performance"
+  "performance": "Performance",
+  "buy": "Buy",
+  "youPay": "You Pay",
+  "youReceive": "You Receive",
+  "exchangeFee": "Exchange fee",
+  "clickHereFor": "Click here for ",
+  "termsAndConditions": "Terms & Conditions.",
+  "transactionFeeTaken": "For this transaction fee will be taken.",
+  "continueLabel": "Continue"
 }

@@ -48,5 +48,13 @@
   "circulatingSupply": "Oferta Circulante",
   "totalSupply": "Oferta Total",
   "allTimeHigh": "Máximo Histórico",
-  "performance": "Rendimiento"
+  "performance": "Rendimiento",
+  "buy": "Comprar",
+  "youPay": "Pagas",
+  "youReceive": "Recibes",
+  "exchangeFee": "Tarifa de cambio",
+  "clickHereFor": "Haga clic aquí para los ",
+  "termsAndConditions": "Términos y Condiciones.",
+  "transactionFeeTaken": "Por esta transacción se cobrará una tarifa.",
+  "continueLabel": "Continuar"
 }
