@@ -4,6 +4,7 @@ import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entity/credit_card.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/widgets/credit_card_gradient.dart';
 import 'package:nemorixpay/shared/data/mock_credit_cards.dart';
+import 'package:nemorixpay/shared/ui/widgets/base_card.dart';
 import 'package:nemorixpay/shared/ui/widgets/custom_button_tile.dart';
 import 'package:nemorixpay/shared/ui/widgets/main_header.dart';
 import 'package:nemorixpay/shared/ui/widgets/rounded_elevated_button.dart';
@@ -116,76 +117,81 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const MainHeader(title: 'Payment Method'),
               const SizedBox(height: 20),
               // Credit Card Selector
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Credit Card',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: DropdownButton<int>(
-                      value: selectedCardIndex,
-                      dropdownColor: Colors.black,
-                      items: List.generate(
-                        creditCards.length,
-                        (index) => DropdownMenuItem(
-                          value: index,
-                          child: Row(
-                            children: [
-                              (creditCards[index].type == 'Visa')
-                                  ? FaIcon(FontAwesomeIcons.ccVisa)
-                                  : FaIcon(FontAwesomeIcons.ccMastercard),
-                              SizedBox(width: 8.0),
-                              Text(
-                                creditCards[index].number,
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            ],
+              BaseCard(
+                cardWidget: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Credit Card',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: DropdownButton<int>(
+                        value: selectedCardIndex,
+                        // dropdownColor: NemorixColors.primaryColor,
+                        items: List.generate(
+                          creditCards.length,
+                          (index) => DropdownMenuItem(
+                            value: index,
+                            child: Row(
+                              children: [
+                                (creditCards[index].type == 'Visa')
+                                    ? FaIcon(FontAwesomeIcons.ccVisa)
+                                    : FaIcon(FontAwesomeIcons.ccMastercard),
+                                SizedBox(width: 8.0),
+                                Text(
+                                  creditCards[index].number,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedCardIndex = value!;
+                          });
+                        },
+                      ),
+                    ),
+                    Stack(
+                      alignment: Alignment.bottomRight,
+                      children: [
+                        CreditCardGradient(
+                          card: creditCards[selectedCardIndex],
+                        ),
+                        GestureDetector(
+                          child: Icon(Icons.delete_forever_rounded, size: 24),
+                          onTap: () {
+                            debugPrint('Credit Card Deleted');
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Center(
+                      child: TextButton(
+                        onPressed: _showAddCardDialog,
+                        child: const Text(
+                          '+add new card',
+                          style: TextStyle(
+                            color: NemorixColors.primaryColor,
+                            fontSize: 14,
                           ),
                         ),
                       ),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedCardIndex = value!;
-                        });
-                      },
                     ),
-                  ),
-                  Stack(
-                    alignment: Alignment.bottomRight,
-                    children: [
-                      CreditCardGradient(card: creditCards[selectedCardIndex]),
-                      GestureDetector(
-                        child: Icon(Icons.delete_forever_rounded, size: 24),
-                        onTap: () {
-                          debugPrint('Credit Card Deleted');
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Center(
-                    child: TextButton(
-                      onPressed: _showAddCardDialog,
-                      child: const Text(
-                        '+add new card',
-                        style: TextStyle(
-                          color: NemorixColors.primaryColor,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               const SizedBox(height: 20),
               // Other Payment buttons
@@ -198,7 +204,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                 ),
                 widgetRight: const Icon(
                   Icons.arrow_forward_ios,
-                  color: Colors.white,
+                  // color: Colors.white,
                 ),
                 function: () {
                   debugPrint('New Google Pay');
@@ -213,7 +219,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                 ),
                 widgetRight: const Icon(
                   Icons.arrow_forward_ios,
-                  color: Colors.white,
+                  // color: Colors.white,
                 ),
                 label: 'Apple Pay',
                 // icon: Icons.chevron_right_outlined,
@@ -226,7 +232,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                 label: 'Mobile Banking',
                 widgetRight: const Icon(
                   Icons.arrow_forward_ios,
-                  color: Colors.white,
+                  // color: Colors.white,
                 ),
                 widgetLeft: const Icon(
                   size: 16,

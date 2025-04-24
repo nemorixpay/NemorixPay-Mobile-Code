@@ -30,7 +30,7 @@ class CustomButtonTile extends StatelessWidget {
       ),
       child: ListTile(
         leading: widgetLeft,
-        title: Text(label, style: const TextStyle(color: Colors.white)),
+        title: Text(label, style: Theme.of(context).textTheme.bodyLarge),
         trailing: widgetRight,
         onTap: function,
       ),

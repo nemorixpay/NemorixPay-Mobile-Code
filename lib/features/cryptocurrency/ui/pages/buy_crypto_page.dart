@@ -45,7 +45,7 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
             SliverFillRemaining(
               hasScrollBody: false,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
                     MainHeader(title: AppLocalizations.of(context)!.buy),

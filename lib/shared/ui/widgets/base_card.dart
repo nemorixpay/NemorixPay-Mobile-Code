@@ -19,16 +19,13 @@ class BaseCard extends StatefulWidget {
 class _BaseCardState extends State<BaseCard> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        padding: const EdgeInsets.all(16),
-        child: widget.cardWidget,
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(16),
       ),
+      padding: const EdgeInsets.all(16),
+      child: widget.cardWidget,
     );
   }
 }

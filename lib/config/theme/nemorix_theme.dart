@@ -19,6 +19,8 @@ class NemorixTheme {
       bodyMedium: TextStyle(color: NemorixColors.greyLevel6),
       bodyLarge: TextStyle(color: NemorixColors.greyLevel6),
       titleLarge: TextStyle(color: Colors.white),
+      titleMedium: TextStyle(color: Colors.white),
+      titleSmall: TextStyle(color: Colors.white),
       headlineSmall: TextStyle(color: NemorixColors.greyLevel5),
     ),
   );
@@ -42,6 +44,8 @@ class NemorixTheme {
       bodyMedium: TextStyle(color: NemorixColors.greyLevel2),
       bodyLarge: TextStyle(color: NemorixColors.greyLevel2),
       titleLarge: TextStyle(color: Colors.black),
+      titleMedium: TextStyle(color: Colors.black),
+      titleSmall: TextStyle(color: Colors.black),
       headlineSmall: TextStyle(color: NemorixColors.greyLevel2),
     ),
   );
