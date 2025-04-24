@@ -47,6 +47,9 @@ dependencies:
   lucide_icons: ^0.257.0
   # UI: Graphics
   fl_chart: ^0.70.2
+  # Fonts & Icons
+  google_fonts: ^6.2.1
+  font_awesome_flutter: ^10.8.0
 
 dev_dependencies:
   flutter_test:
