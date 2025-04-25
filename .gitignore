@@ -52,8 +52,12 @@ lib/env/
 # Firebase Files
 firebase.json
 lib/firebase_options.dart
+lib/config/firebase
 ios/Runner/GoogleService-Info.plist
 android/app/google-services.json
 
 # Internal docs
 docs/
+
+# Data
+app_constants.dart
