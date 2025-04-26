@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/core/utils/image_url.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-import 'package:nemorixpay/core/utils/validation_rules.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/forgot_password_dialog.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/widgets.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/password_field.dart';
@@ -12,8 +11,8 @@ import 'package:nemorixpay/features/auth/ui/widgets/email_field.dart';
 /// @brief       Implementation of functions for basic user authentication.
 /// @details
 /// @author      Miguel Fagundez
-/// @date        04/25/2025
-/// @version     1.2
+/// @date        04/26/2025
+/// @version     1.3
 /// @copyright   Apache 2.0 License
 
 class LoginPage extends StatefulWidget {
@@ -63,67 +62,76 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                 ),
-                SizedBox(height: 40),
+                SizedBox(height: 20),
                 Form(
                   key: _formKey,
-                  child: Column(
+                  child: FormSection(
+                    title: AppLocalizations.of(context)!.loginCredentials,
+                    description:
+                        AppLocalizations.of(context)!.enterYourLoginInfo,
                     children: [
                       EmailField(
                         controller: _emailController,
                         hintText: AppLocalizations.of(context)!.emailAddress,
                       ),
-                      SizedBox(height: 20),
                       PasswordField(
                         controller: _passwordController,
                         hintText: AppLocalizations.of(context)!.password,
                       ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () async {
+                            await showDialog(
+                              context: context,
+                              builder:
+                                  (BuildContext context) =>
+                                      ForgotPasswordDialog(),
+                            );
+                          },
+                          child: Text(
+                            "${AppLocalizations.of(context)!.forgotPassword}?",
+                            style: TextStyle(color: NemorixColors.primaryColor),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      RoundedElevatedButton(
+                        text: AppLocalizations.of(context)!.signIn,
+                        onPressed: () {}, // Flutter bloc action
+                        backgroundColor: NemorixColors.primaryColor,
+                        textColor: Colors.black,
+                      ),
                     ],
                   ),
                 ),
-                SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () async {
-                      await showDialog(
-                        context: context,
-                        builder:
-                            (BuildContext context) => ForgotPasswordDialog(),
-                      );
-                    },
-                    child: Text(
-                      "${AppLocalizations.of(context)!.forgotPassword}?",
-                      style: TextStyle(color: NemorixColors.primaryColor),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                RoundedElevatedButton(
-                  text: AppLocalizations.of(context)!.signIn,
-                  onPressed: () {}, // Flutter bloc action
-                  backgroundColor: NemorixColors.primaryColor,
-                  textColor: Colors.black,
-                ),
-                SizedBox(height: 30),
-                Row(
+                const SizedBox(height: 20),
+                FormSection(
+                  title: AppLocalizations.of(context)!.loginOptions,
+                  description:
+                      AppLocalizations.of(context)!.chooseYourLoginMethod,
                   children: [
-                    Expanded(child: Divider()),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(AppLocalizations.of(context)!.or),
+                    Row(
+                      children: [
+                        Expanded(child: Divider()),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(AppLocalizations.of(context)!.or),
+                        ),
+                        Expanded(child: Divider()),
+                      ],
                     ),
-                    Expanded(child: Divider()),
+                    const SizedBox(height: 16),
+                    RoundedElevatedButton(
+                      text: AppLocalizations.of(context)!.continueWithGoogle,
+                      onPressed: () {},
+                      backgroundColor: NemorixColors.greyLevel1,
+                      textColor: Colors.white,
+                      icon: ImageUrl.googleLogo,
+                    ),
                   ],
                 ),
-                SizedBox(height: 30),
-                RoundedElevatedButton(
-                  text: AppLocalizations.of(context)!.continueWithGoogle,
-                  onPressed: () {},
-                  backgroundColor: NemorixColors.greyLevel1,
-                  textColor: Colors.white,
-                  icon: ImageUrl.googleLogo,
-                ),
-                SizedBox(height: 40),
+                SizedBox(height: 20),
                 Center(
                   child: GestureDetector(
                     onTap: () {},

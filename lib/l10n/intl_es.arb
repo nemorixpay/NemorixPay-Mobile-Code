@@ -23,7 +23,7 @@
   "confirmYourPassword": "Confirma tu contraseña",
   "passwordsDoNotMatch": "Las contraseñas no coinciden",
   "securityWordRequired": "La palabra de seguridad es requerida",
-  "securityWord": "Palabra de seguridad",
+  "securityWord": "Palabra de seguridad (para recuperación de cuenta)",
   "birthdateRequired": "La fecha de nacimiento es requerida",
   "agreeWithNemorixPay": "Estoy de acuerdo con NemorixPay",
   "termsOfServices": "Términos de Servicio",
@@ -62,5 +62,9 @@
   "accountInformation": "Información de la Cuenta",
   "enterYourAccountInfo": "Por favor, ingresa tu información de cuenta",
   "security": "Seguridad",
-  "enterYourSecurityInfo": "Por favor, ingresa una palabra de seguridad que puedas recordar en caso de perder acceso a tu cuenta en NemorixPay."
+  "enterYourSecurityInfo": "Por favor, ingresa una palabra de seguridad que puedas recordar en caso de perder acceso a tu cuenta en NemorixPay.",
+  "loginCredentials": "Credenciales de Acceso",
+  "enterYourLoginInfo": "Por favor, ingresa tu correo electrónico y contraseña para acceder a tu cuenta",
+  "loginOptions": "Opciones de Acceso",
+  "chooseYourLoginMethod": "Elige cómo quieres acceder a tu cuenta"
 }

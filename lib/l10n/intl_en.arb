@@ -62,5 +62,9 @@
   "accountInformation": "Account Information",
   "enterYourAccountInfo": "Please enter your account information",
   "security": "Security",
-  "enterYourSecurityInfo": "Please enter a security word that you can remember in case you lose access to your NemorixPay account."
+  "enterYourSecurityInfo": "Please enter a security word that you can remember in case you lose access to your NemorixPay account.",
+  "loginCredentials": "Login Credentials",
+  "enterYourLoginInfo": "Please enter your email and password to access your account",
+  "loginOptions": "Login Options",
+  "chooseYourLoginMethod": "Choose how you want to access your account"
 }
