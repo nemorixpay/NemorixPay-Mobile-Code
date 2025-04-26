@@ -4,13 +4,14 @@ import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/core/utils/image_url.dart';
 import 'package:nemorixpay/core/utils/validation_rules.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/widgets.dart';
+import 'package:nemorixpay/features/auth/ui/widgets/password_field.dart';
 
 /// @file        sign_up_page.dart
 /// @brief       Implementation of functions for basic user registration.
 /// @details
 /// @author      Miguel Fagundez
-/// @date        04/05/2025
-/// @version     1.0
+/// @date        04/25/2025
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -31,8 +32,6 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _securityWordController = TextEditingController();
   DateTime? _birthDate;
 
-  bool _isPasswordVisible = false;
-  bool _isConfirmPasswordVisible = false;
   bool _agreedToTerms = false;
 
   @override
@@ -133,41 +132,15 @@ class _SignUpPageState extends State<SignUpPage> {
                       hintText: AppLocalizations.of(context)!.emailAddress,
                     ),
                     const SizedBox(height: 16),
-                    CustomTextFormField(
+                    PasswordField(
                       controller: _passwordController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return AppLocalizations.of(
-                            context,
-                          )!.passwordIsRequired;
-                        }
-                        if (value.length < 6) {
-                          return AppLocalizations.of(
-                            context,
-                          )!.passwordAtLeast6Characters;
-                        }
-                        return null;
-                      },
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _isPasswordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                        ),
-                        onPressed: () {
-                          // TODO: Temporal setState
-                          setState(
-                            () => _isPasswordVisible = !_isPasswordVisible,
-                          );
-                        },
-                      ),
-                      keyboardType: TextInputType.visiblePassword,
-                      obscureText: !_isPasswordVisible,
                       hintText: AppLocalizations.of(context)!.password,
                     ),
                     const SizedBox(height: 16),
-                    CustomTextFormField(
+                    PasswordField(
                       controller: _confirmPasswordController,
+                      hintText:
+                          AppLocalizations.of(context)!.confirmYourPassword,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return AppLocalizations.of(
@@ -181,25 +154,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         }
                         return null;
                       },
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _isConfirmPasswordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                        ),
-                        onPressed: () {
-                          // TODO: Temporal setState
-                          setState(
-                            () =>
-                                _isConfirmPasswordVisible =
-                                    !_isConfirmPasswordVisible,
-                          );
-                        },
-                      ),
-                      keyboardType: TextInputType.visiblePassword,
-                      obscureText: !_isConfirmPasswordVisible,
-                      hintText:
-                          AppLocalizations.of(context)!.confirmYourPassword,
                     ),
                     const SizedBox(height: 16),
                     CustomTextFormField(

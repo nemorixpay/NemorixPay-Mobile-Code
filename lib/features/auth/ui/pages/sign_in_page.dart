@@ -5,13 +5,14 @@ import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/core/utils/validation_rules.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/forgot_password_dialog.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/widgets.dart';
+import 'package:nemorixpay/features/auth/ui/widgets/password_field.dart';
 
 /// @file        sign_in_page.dart
 /// @brief       Implementation of functions for basic user authentication.
 /// @details
 /// @author      Miguel Fagundez
-/// @date        04/05/2025
-/// @version     1.0
+/// @date        04/25/2025
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 
 class LoginPage extends StatefulWidget {
@@ -25,7 +26,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _isPasswordVisible = false;
 
   @override
   void dispose() {
@@ -46,12 +46,7 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: 20),
-                Image.asset(
-                  ImageUrl.logo,
-                  width: 100,
-                  height: 100,
-                  // color: Colors.white,
-                ),
+                Image.asset(ImageUrl.logo, width: 100, height: 100),
                 SizedBox(height: 60),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -93,37 +88,9 @@ class _LoginPageState extends State<LoginPage> {
                         },
                       ),
                       SizedBox(height: 20),
-                      CustomTextFormField(
+                      PasswordField(
                         controller: _passwordController,
                         hintText: AppLocalizations.of(context)!.password,
-                        obscureText: !_isPasswordVisible,
-                        keyboardType: TextInputType.text,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return AppLocalizations.of(
-                              context,
-                            )!.passwordIsRequired;
-                          }
-                          if (value.length < 6) {
-                            return AppLocalizations.of(
-                              context,
-                            )!.passwordAtLeast6Characters;
-                          }
-                          return null;
-                        },
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _isPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
-                          onPressed: () {
-                            // TODO: Temporal setState
-                            setState(
-                              () => _isPasswordVisible = !_isPasswordVisible,
-                            );
-                          },
-                        ),
                       ),
                     ],
                   ),
