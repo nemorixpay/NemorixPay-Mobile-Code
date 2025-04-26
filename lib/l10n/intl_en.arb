@@ -23,7 +23,7 @@
   "confirmYourPassword": "Confirm your password",
   "passwordsDoNotMatch": "Passwords do not match",
   "securityWordRequired": "Security word is required",
-  "securityWord": "Security word (for account recovery)",
+  "securityWord": "Security word",
   "birthdateRequired": "Birthdate is required",
   "agreeWithNemorixPay": "I agree with NemorixPay",
   "termsOfServices": "Terms of Services",
@@ -56,5 +56,11 @@
   "clickHereFor": "Click here for ",
   "termsAndConditions": "Terms & Conditions.",
   "transactionFeeTaken": "For this transaction fee will be taken.",
-  "continueLabel": "Continue"
+  "continueLabel": "Continue",
+  "personalInformation": "Personal Information",
+  "enterYourPersonalInfo": "Please enter your personal information",
+  "accountInformation": "Account Information",
+  "enterYourAccountInfo": "Please enter your account information",
+  "security": "Security",
+  "enterYourSecurityInfo": "Please enter a security word that you can remember in case you lose access to your NemorixPay account."
 }

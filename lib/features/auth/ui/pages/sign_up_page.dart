@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/core/utils/image_url.dart';
-import 'package:nemorixpay/core/utils/validation_rules.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/widgets.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/password_field.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/email_field.dart';
@@ -11,8 +10,8 @@ import 'package:nemorixpay/features/auth/ui/widgets/email_field.dart';
 /// @brief       Implementation of functions for basic user registration.
 /// @details
 /// @author      Miguel Fagundez
-/// @date        04/25/2025
-/// @version     1.2
+/// @date        04/26/2025
+/// @version     1.3
 /// @copyright   Apache 2.0 License
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -62,6 +61,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   children: [
                     SizedBox(height: 20),
                     Image.asset(ImageUrl.logo, width: 100, height: 100),
+                    SizedBox(height: 20),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -81,142 +81,168 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     const SizedBox(height: 24),
 
-                    Row(
+                    FormSection(
+                      title: AppLocalizations.of(context)!.personalInformation,
+                      description:
+                          AppLocalizations.of(context)!.enterYourPersonalInfo,
                       children: [
-                        Expanded(
-                          child: CustomTextFormField(
-                            controller: _firstNameController,
-                            validator:
-                                (value) =>
-                                    value == null || value.isEmpty
-                                        ? AppLocalizations.of(
-                                          context,
-                                        )!.firstNameRequired
-                                        : null,
-                            keyboardType: TextInputType.name,
-                            obscureText: false,
-                            hintText: AppLocalizations.of(context)!.firstName,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: CustomTextFormField(
-                            controller: _lastNameController,
-                            validator:
-                                (value) =>
-                                    value == null || value.isEmpty
-                                        ? AppLocalizations.of(
-                                          context,
-                                        )!.lastNameRequired
-                                        : null,
-                            keyboardType: TextInputType.name,
-                            obscureText: false,
-                            hintText: AppLocalizations.of(context)!.lastName,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    EmailField(
-                      controller: _emailController,
-                      hintText: AppLocalizations.of(context)!.emailAddress,
-                    ),
-                    const SizedBox(height: 16),
-                    PasswordField(
-                      controller: _passwordController,
-                      hintText: AppLocalizations.of(context)!.password,
-                    ),
-                    const SizedBox(height: 16),
-                    PasswordField(
-                      controller: _confirmPasswordController,
-                      hintText:
-                          AppLocalizations.of(context)!.confirmYourPassword,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return AppLocalizations.of(
-                            context,
-                          )!.confirmYourPassword;
-                        }
-                        if (value != _passwordController.text) {
-                          return AppLocalizations.of(
-                            context,
-                          )!.passwordsDoNotMatch;
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    CustomTextFormField(
-                      controller: _securityWordController,
-                      validator:
-                          (value) =>
-                              value == null || value.isEmpty
-                                  ? AppLocalizations.of(
-                                    context,
-                                  )!.securityWordRequired
-                                  : null,
-                      keyboardType: TextInputType.text,
-                      obscureText: false,
-                      hintText: AppLocalizations.of(context)!.securityWord,
-                    ),
-                    const SizedBox(height: 16),
-                    BirthdatePickerField(
-                      selectedDate: _birthDate,
-                      onDateSelected:
-                          (date) => setState(() => _birthDate = date),
-                      validator: (value) {
-                        if (value == null) {
-                          return AppLocalizations.of(
-                            context,
-                          )!.birthdateRequired;
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: _agreedToTerms,
-                          onChanged:
-                              (value) => setState(
-                                () => _agreedToTerms = value ?? false,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomTextFormField(
+                                controller: _firstNameController,
+                                validator:
+                                    (value) =>
+                                        value == null || value.isEmpty
+                                            ? AppLocalizations.of(
+                                              context,
+                                            )!.firstNameRequired
+                                            : null,
+                                keyboardType: TextInputType.name,
+                                obscureText: false,
+                                hintText:
+                                    AppLocalizations.of(context)!.firstName,
                               ),
-                        ),
-                        Expanded(
-                          child: Text.rich(
-                            TextSpan(
-                              text:
-                                  '${AppLocalizations.of(context)!.agreeWithNemorixPay} ',
-                              children: [
-                                TextSpan(
-                                  text:
-                                      AppLocalizations.of(
-                                        context,
-                                      )!.termsOfServices,
-                                  style: TextStyle(
-                                    color: NemorixColors.primaryColor,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text:
-                                      ' ${AppLocalizations.of(context)!.and} ',
-                                ),
-                                TextSpan(
-                                  text:
-                                      AppLocalizations.of(
-                                        context,
-                                      )!.privacyPolicy,
-                                  style: TextStyle(
-                                    color: NemorixColors.primaryColor,
-                                  ),
-                                ),
-                              ],
                             ),
-                          ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: CustomTextFormField(
+                                controller: _lastNameController,
+                                validator:
+                                    (value) =>
+                                        value == null || value.isEmpty
+                                            ? AppLocalizations.of(
+                                              context,
+                                            )!.lastNameRequired
+                                            : null,
+                                keyboardType: TextInputType.name,
+                                obscureText: false,
+                                hintText:
+                                    AppLocalizations.of(context)!.lastName,
+                              ),
+                            ),
+                          ],
+                        ),
+                        BirthdatePickerField(
+                          selectedDate: _birthDate,
+                          onDateSelected:
+                              (date) => setState(() => _birthDate = date),
+                          validator: (value) {
+                            if (value == null) {
+                              return AppLocalizations.of(
+                                context,
+                              )!.birthdateRequired;
+                            }
+                            return null;
+                          },
                         ),
                       ],
                     ),
+
+                    FormSection(
+                      title: AppLocalizations.of(context)!.accountInformation,
+                      description:
+                          AppLocalizations.of(context)!.enterYourAccountInfo,
+                      children: [
+                        EmailField(
+                          controller: _emailController,
+                          hintText: AppLocalizations.of(context)!.emailAddress,
+                        ),
+                        PasswordField(
+                          controller: _passwordController,
+                          hintText: AppLocalizations.of(context)!.password,
+                        ),
+                        PasswordField(
+                          controller: _confirmPasswordController,
+                          hintText:
+                              AppLocalizations.of(context)!.confirmYourPassword,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return AppLocalizations.of(
+                                context,
+                              )!.confirmYourPassword;
+                            }
+                            if (value != _passwordController.text) {
+                              return AppLocalizations.of(
+                                context,
+                              )!.passwordsDoNotMatch;
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
+
+                    FormSection(
+                      title: AppLocalizations.of(context)!.security,
+                      description:
+                          AppLocalizations.of(context)!.enterYourSecurityInfo,
+                      children: [
+                        CustomTextFormField(
+                          controller: _securityWordController,
+                          validator:
+                              (value) =>
+                                  value == null || value.isEmpty
+                                      ? AppLocalizations.of(
+                                        context,
+                                      )!.securityWordRequired
+                                      : null,
+                          keyboardType: TextInputType.text,
+                          obscureText: false,
+                          hintText: AppLocalizations.of(context)!.securityWord,
+                        ),
+                      ],
+                    ),
+
+                    FormSection(
+                      title: AppLocalizations.of(context)!.termsAndConditions,
+                      children: [
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: _agreedToTerms,
+                              onChanged:
+                                  (value) => setState(
+                                    () => _agreedToTerms = value ?? false,
+                                  ),
+                            ),
+                            Expanded(
+                              child: Text.rich(
+                                TextSpan(
+                                  text:
+                                      '${AppLocalizations.of(context)!.agreeWithNemorixPay} ',
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.termsOfServices,
+                                      style: TextStyle(
+                                        color: NemorixColors.primaryColor,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          ' ${AppLocalizations.of(context)!.and} ',
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.privacyPolicy,
+                                      style: TextStyle(
+                                        color: NemorixColors.primaryColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+
                     const SizedBox(height: 16),
                     RoundedElevatedButton(
                       text: AppLocalizations.of(context)!.signUp,
