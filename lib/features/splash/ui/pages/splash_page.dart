@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
-import 'package:nemorixpay/core/utils/image_url.dart';
+import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/shared/ui/widgets/rounded_elevated_button.dart';
 
@@ -14,7 +14,7 @@ class SplashPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(ImageUrl.logo, width: 100, height: 100),
+            Image.asset(ImageUrl.nemorixpayLogo, width: 100, height: 100),
             SizedBox(height: 40),
             Text(AppLocalizations.of(context)!.appName),
             // TODO This is only for testing purposes

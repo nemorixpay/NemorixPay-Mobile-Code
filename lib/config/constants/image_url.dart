@@ -1,5 +1,5 @@
 /// @file        image_url.dart
-/// @brief       Class for managing assets.
+/// @brief       Class for managing images URLs.
 /// @details     This file contains the paths of all assets used
 ///              in the application. It is currently being referenced from:
 ///              splash, sign_in, sign_up.
@@ -8,6 +8,7 @@
 /// @version     1.0
 /// @copyright   Apache 2.0 License
 class ImageUrl {
-  static const logo = 'assets/images/logo_mobile.png';
-  static const googleLogo = 'assets/images/google_logo.png';
+  static const String nemorixpayLogo = 'assets/logos/nemorix_pay_logo.png';
+  static const String googleLogo = 'assets/logos/google_logo.png';
+  static const String appleLogo = 'assets/logos/nemorix_pay_logo.png';
 }

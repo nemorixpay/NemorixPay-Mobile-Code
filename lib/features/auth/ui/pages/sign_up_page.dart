@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-import 'package:nemorixpay/core/utils/image_url.dart';
+import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/widgets.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/password_field.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/email_field.dart';
+import 'package:nemorixpay/features/auth/ui/widgets/social_login_buttons.dart';
 
 /// @file        sign_up_page.dart
 /// @brief       Implementation of functions for basic user registration.
 /// @details
 /// @author      Miguel Fagundez
 /// @date        04/26/2025
-/// @version     1.3
+/// @version     1.4
 /// @copyright   Apache 2.0 License
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -60,7 +61,11 @@ class _SignUpPageState extends State<SignUpPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: 20),
-                    Image.asset(ImageUrl.logo, width: 100, height: 100),
+                    Image.asset(
+                      ImageUrl.nemorixpayLogo,
+                      width: 100,
+                      height: 100,
+                    ),
                     SizedBox(height: 20),
                     Align(
                       alignment: Alignment.centerLeft,
@@ -273,14 +278,13 @@ class _SignUpPageState extends State<SignUpPage> {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    RoundedElevatedButton(
-                      text: AppLocalizations.of(context)!.continueWithGoogle,
-                      onPressed: () {
-                        // Login with Google
+                    SocialLoginButtons(
+                      onGooglePressed: () {
+                        // TODO: Implement Google Sign In
                       },
-                      backgroundColor: Colors.black,
-                      textColor: Colors.white,
-                      icon: ImageUrl.googleLogo,
+                      onApplePressed: () {
+                        // TODO: Implement Apple Sign In
+                      },
                     ),
                     const SizedBox(height: 24),
                     GestureDetector(

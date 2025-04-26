@@ -53,6 +53,7 @@ dependencies:
   
   # UI: Icons
   lucide_icons: ^0.257.0
+  flutter_svg: ^2.0.9
   
   # UI: Graphics
   fl_chart: ^0.70.2
