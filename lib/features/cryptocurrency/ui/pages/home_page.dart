@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entity/crypto_entity.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/widgets/asset_card.dart';
-import 'package:nemorixpay/features/cryptocurrency/ui/widgets/deposit_withdraw_buttons.dart';
+import 'package:nemorixpay/features/cryptocurrency/ui/widgets/home_header.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/widgets/live_price_tile.dart';
-import 'package:nemorixpay/features/cryptocurrency/ui/widgets/wallet_balance.dart';
 import 'package:nemorixpay/shared/data/mock_cryptos.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -67,79 +66,13 @@ class _HomeScreenState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                decoration: const BoxDecoration(
-                  color: NemorixColors.primaryColor,
-                  borderRadius: BorderRadius.vertical(
-                    bottom: Radius.circular(12),
-                  ),
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        if (!_isSearching)
-                          IconButton(
-                            icon: Icon(
-                              _isSearching ? Icons.close : Icons.search,
-                              color: Colors.black,
-                            ),
-                            onPressed: _toggleSearch,
-                          ),
-                        _isSearching
-                            ? Expanded(
-                              child: TextField(
-                                controller: _searchController,
-                                onChanged: _searchCrypto,
-                                style: const TextStyle(color: Colors.black),
-                                decoration: InputDecoration(
-                                  hintText:
-                                      AppLocalizations.of(context)!.search,
-                                  hintStyle: TextStyle(color: Colors.black54),
-                                  border: InputBorder.none,
-                                ),
-                                autofocus: true,
-                              ),
-                            )
-                            : Expanded(
-                              child: Text(
-                                AppLocalizations.of(context)!.appName,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  // fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                        const SizedBox(width: 8),
-                        if (_isSearching)
-                          IconButton(
-                            icon: Icon(Icons.close, color: Colors.black),
-                            onPressed: _toggleSearch,
-                          ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.notifications_none,
-                            color: Colors.black,
-                          ),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                    const WalletBalance(balance: '\$12,345.67'),
-                    const DepositWithdrawButtons(),
-                  ],
-                ),
+              HomeHeader(
+                isSearching: _isSearching,
+                onSearchToggle: _toggleSearch,
+                onSearchChanged: _searchCrypto,
               ),
               Expanded(
                 child: SingleChildScrollView(
-                  //padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
