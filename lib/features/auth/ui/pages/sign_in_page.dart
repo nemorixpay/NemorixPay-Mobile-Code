@@ -6,13 +6,14 @@ import 'package:nemorixpay/core/utils/validation_rules.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/forgot_password_dialog.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/widgets.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/password_field.dart';
+import 'package:nemorixpay/features/auth/ui/widgets/email_field.dart';
 
 /// @file        sign_in_page.dart
 /// @brief       Implementation of functions for basic user authentication.
 /// @details
 /// @author      Miguel Fagundez
 /// @date        04/25/2025
-/// @version     1.1
+/// @version     1.2
 /// @copyright   Apache 2.0 License
 
 class LoginPage extends StatefulWidget {
@@ -67,25 +68,9 @@ class _LoginPageState extends State<LoginPage> {
                   key: _formKey,
                   child: Column(
                     children: [
-                      CustomTextFormField(
+                      EmailField(
                         controller: _emailController,
                         hintText: AppLocalizations.of(context)!.emailAddress,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return AppLocalizations.of(
-                              context,
-                            )!.emailIsRequired;
-                          }
-                          if (!ValidationRules.emailValidation.hasMatch(
-                            value,
-                          )) {
-                            return AppLocalizations.of(
-                              context,
-                            )!.enterValidEmail;
-                          }
-                          return null;
-                        },
                       ),
                       SizedBox(height: 20),
                       PasswordField(

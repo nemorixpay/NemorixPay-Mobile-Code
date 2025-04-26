@@ -5,13 +5,14 @@ import 'package:nemorixpay/core/utils/image_url.dart';
 import 'package:nemorixpay/core/utils/validation_rules.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/widgets.dart';
 import 'package:nemorixpay/features/auth/ui/widgets/password_field.dart';
+import 'package:nemorixpay/features/auth/ui/widgets/email_field.dart';
 
 /// @file        sign_up_page.dart
 /// @brief       Implementation of functions for basic user registration.
 /// @details
 /// @author      Miguel Fagundez
 /// @date        04/25/2025
-/// @version     1.1
+/// @version     1.2
 /// @copyright   Apache 2.0 License
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -116,19 +117,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    CustomTextFormField(
+                    EmailField(
                       controller: _emailController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return AppLocalizations.of(context)!.emailIsRequired;
-                        }
-                        if (!ValidationRules.emailValidation.hasMatch(value)) {
-                          return AppLocalizations.of(context)!.enterValidEmail;
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.emailAddress,
-                      obscureText: false,
                       hintText: AppLocalizations.of(context)!.emailAddress,
                     ),
                     const SizedBox(height: 16),
