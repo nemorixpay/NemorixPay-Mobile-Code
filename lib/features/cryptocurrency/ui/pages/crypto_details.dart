@@ -14,7 +14,7 @@ import 'package:nemorixpay/shared/data/mock_cryptos.dart';
 ///              including crypto asset information, buy/sell buttons, charts, and more.
 /// @author      Miguel Fagundez
 /// @date        2025-04-14
-/// @version     1.0
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 class CryptoDetailsPage extends StatefulWidget {
   const CryptoDetailsPage({super.key});
@@ -48,7 +48,7 @@ class _CryptoDetailsScreenState extends State<CryptoDetailsPage> {
     return data
         .asMap()
         .entries
-        .map((e) => FlSpot(e.key.toDouble(), e.value))
+        .map((e) => FlSpot(e.key.toDouble(), e.value.price))
         .toList();
   }
 
@@ -134,12 +134,143 @@ class _CryptoDetailsScreenState extends State<CryptoDetailsPage> {
                                   isCurved: true,
                                   color: NemorixColors.primaryColor,
                                   dotData: FlDotData(show: false),
-                                  belowBarData: BarAreaData(show: false),
+                                  belowBarData: BarAreaData(
+                                    show: true,
+                                    color: NemorixColors.primaryColor
+                                        .withOpacity(0.1),
+                                  ),
                                 ),
                               ],
-                              titlesData: FlTitlesData(show: false),
-                              gridData: FlGridData(show: false),
-                              borderData: FlBorderData(show: false),
+                              titlesData: FlTitlesData(
+                                show: false,
+                                rightTitles: AxisTitles(
+                                  sideTitles: SideTitles(showTitles: false),
+                                ),
+                                topTitles: AxisTitles(
+                                  sideTitles: SideTitles(showTitles: false),
+                                ),
+                                bottomTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    reservedSize: 30,
+                                    getTitlesWidget: (value, meta) {
+                                      final data =
+                                          widgetcrypto
+                                              .priceHistory[selectedTimeFrame]!;
+                                      if (value.toInt() >= 0 &&
+                                          value.toInt() < data.length) {
+                                        final date =
+                                            data[value.toInt()].timestamp;
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 8.0,
+                                          ),
+                                          child: Text(
+                                            '${date.hour}:00',
+                                            style:
+                                                Theme.of(
+                                                  context,
+                                                ).textTheme.bodySmall,
+                                          ),
+                                        );
+                                      }
+                                      return const Text('');
+                                    },
+                                  ),
+                                ),
+                              ),
+                              gridData: FlGridData(
+                                show: true,
+                                drawVerticalLine: false,
+                                horizontalInterval: 1,
+                                getDrawingHorizontalLine: (value) {
+                                  return FlLine(
+                                    color: Theme.of(context).dividerColor,
+                                    strokeWidth: 0.5,
+                                  );
+                                },
+                              ),
+                              borderData: FlBorderData(
+                                show: true,
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Theme.of(context).dividerColor,
+                                    width: 0.5,
+                                  ),
+                                ),
+                              ),
+                              lineTouchData: LineTouchData(
+                                touchTooltipData: LineTouchTooltipData(
+                                  tooltipBgColor: Theme.of(context).cardColor,
+                                  tooltipRoundedRadius: 8,
+                                  getTooltipItems: (touchedSpots) {
+                                    return touchedSpots.map((spot) {
+                                      final data =
+                                          widgetcrypto
+                                              .priceHistory[selectedTimeFrame]!;
+                                      final point = data[spot.x.toInt()];
+                                      return LineTooltipItem(
+                                        '\$${point.price.toStringAsFixed(2)}\n',
+                                        Theme.of(
+                                          context,
+                                        ).textTheme.titleMedium!.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                'Vol: \$${point.volume.toStringAsFixed(2)}\n',
+                                            style:
+                                                Theme.of(
+                                                  context,
+                                                ).textTheme.bodySmall,
+                                          ),
+                                          TextSpan(
+                                            text:
+                                                'Cap: \$${point.marketCap.toStringAsFixed(2)}',
+                                            style:
+                                                Theme.of(
+                                                  context,
+                                                ).textTheme.bodySmall,
+                                          ),
+                                        ],
+                                      );
+                                    }).toList();
+                                  },
+                                ),
+                                handleBuiltInTouches: true,
+                                getTouchedSpotIndicator: (
+                                  LineChartBarData barData,
+                                  List<int> spotIndexes,
+                                ) {
+                                  return spotIndexes.map((spotIndex) {
+                                    return TouchedSpotIndicatorData(
+                                      FlLine(
+                                        color: NemorixColors.primaryColor,
+                                        strokeWidth: 2,
+                                      ),
+                                      FlDotData(
+                                        getDotPainter: (
+                                          spot,
+                                          percent,
+                                          barData,
+                                          index,
+                                        ) {
+                                          return FlDotCirclePainter(
+                                            radius: 4,
+                                            color: NemorixColors.primaryColor,
+                                            strokeWidth: 2,
+                                            strokeColor:
+                                                Theme.of(
+                                                  context,
+                                                ).scaffoldBackgroundColor,
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  }).toList();
+                                },
+                              ),
                             ),
                           ),
                         ),
