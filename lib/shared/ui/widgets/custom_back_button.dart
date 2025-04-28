@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 
 /// @file        custom_back_button.dart
 /// @brief       Implementation of a custom back button widget.

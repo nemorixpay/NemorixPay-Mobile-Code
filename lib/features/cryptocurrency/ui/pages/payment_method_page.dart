@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-import 'package:nemorixpay/features/cryptocurrency/domain/entity/credit_card.dart';
+import 'package:nemorixpay/features/cryptocurrency/domain/entities/credit_card.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/widgets/credit_card_gradient.dart';
 import 'package:nemorixpay/shared/data/mock_credit_cards.dart';
 import 'package:nemorixpay/shared/ui/widgets/base_card.dart';

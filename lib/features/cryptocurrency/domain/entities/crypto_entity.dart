@@ -29,6 +29,7 @@ class CryptoEntity extends Equatable {
   final double atlChangePercentage;
   final DateTime atlDate;
   final DateTime lastUpdated;
+  final bool isFavorite;
 
   const CryptoEntity({
     required this.name,
@@ -51,6 +52,7 @@ class CryptoEntity extends Equatable {
     required this.atlChangePercentage,
     required this.atlDate,
     required this.lastUpdated,
+    this.isFavorite = false,
   });
 
   @override
@@ -75,6 +77,7 @@ class CryptoEntity extends Equatable {
     atlChangePercentage,
     atlDate,
     lastUpdated,
+    isFavorite,
   ];
 }
 

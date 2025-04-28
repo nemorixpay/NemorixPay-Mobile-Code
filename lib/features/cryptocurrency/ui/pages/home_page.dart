@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/widgets/asset_card.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/widgets/home_header.dart';

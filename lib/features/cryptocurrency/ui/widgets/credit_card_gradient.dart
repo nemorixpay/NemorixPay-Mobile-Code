@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nemorixpay/features/cryptocurrency/domain/entity/credit_card.dart';
+import 'package:nemorixpay/features/cryptocurrency/domain/entities/credit_card.dart';
 
 /// @file        credit_card_gradient.dart
 /// @brief       Credit card widget.
