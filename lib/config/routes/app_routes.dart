@@ -8,11 +8,11 @@ import 'package:nemorixpay/features/auth/ui/pages/sign_in_page.dart';
 import 'package:nemorixpay/features/auth/ui/pages/sign_up_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/pages/buy_crypto_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/pages/payment_method_page.dart';
-import 'package:nemorixpay/features/cryptocurrency/ui/pages/payment_method_page.dart';
 import 'package:nemorixpay/features/splash/ui/pages/splash_page.dart';
 import 'package:nemorixpay/shared/ui/pages/test_page/test_home_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/pages/home_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/pages/crypto_details.dart';
+import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
 
 class AppRoutes {
   static const initialRoute = RouteNames.splash;
@@ -48,12 +48,6 @@ class AppRoutes {
       icon: Icons.home,
     ),
     RouteModel(
-      route: RouteNames.cryptoDetails,
-      name: 'Details',
-      screen: const CryptoDetailsPage(),
-      icon: Icons.details_outlined,
-    ),
-    RouteModel(
       route: RouteNames.homeAnalytics,
       name: 'Analytics',
       screen: MyHomePage(
@@ -69,16 +63,6 @@ class AppRoutes {
       screen: BuyCryptoPage(),
       icon: Icons.credit_card_rounded,
     ),
-    RouteModel(
-      route: RouteNames.paymentMethod,
-      name: 'Payment Method',
-      screen: PaymentMethodPage(
-        cryptoName: 'BTC',
-        amount: 200,
-        currency: 'USD',
-      ),
-      icon: Icons.credit_card_rounded,
-    ),
   ];
 
   static Map<String, Widget Function(BuildContext)> getAppRoutes() {
@@ -92,6 +76,24 @@ class AppRoutes {
   }
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
-    return MaterialPageRoute(builder: (context) => const LoginPage());
+    switch (settings.name) {
+      case RouteNames.cryptoDetails:
+        final crypto = settings.arguments as CryptoEntity;
+        return MaterialPageRoute(
+          builder: (context) => CryptoDetailsPage(crypto: crypto),
+        );
+      case RouteNames.paymentMethod:
+        final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder:
+              (context) => PaymentMethodPage(
+                cryptoName: args['cryptoName'] as String,
+                amount: args['amount'] as double,
+                currency: args['currency'] as String,
+              ),
+        );
+      default:
+        return MaterialPageRoute(builder: (context) => const LoginPage());
+    }
   }
 }

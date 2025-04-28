@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-import 'package:nemorixpay/features/cryptocurrency/domain/entity/crypto_entity.dart';
+import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/widgets/asset_card.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/widgets/home_header.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/widgets/live_price_tile.dart';
-import 'package:nemorixpay/shared/data/mock_cryptos.dart';
+import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// @file        home_screen.dart
@@ -25,7 +25,7 @@ class HomePage extends StatefulWidget {
 class _HomeScreenState extends State<HomePage> {
   bool _isSearching = false;
   final TextEditingController _searchController = TextEditingController();
-  List<Crypto> _searchResults = mockCryptos;
+  List<CryptoEntity> _searchResults = mockCryptos;
 
   // Internal controller
   void _toggleSearch() {
@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomePage> {
   }
 
   // TODO For testing purposes ----------------------------------
-  List<Crypto> get myAssets => mockCryptos.take(5).toList();
+  List<CryptoEntity> get myAssets => mockCryptos.take(5).toList();
   // TODO For testing purposes ----------------------------------
 
   @override

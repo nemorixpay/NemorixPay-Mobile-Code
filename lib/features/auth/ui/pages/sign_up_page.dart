@@ -311,7 +311,10 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
-            const CustomBackButton(),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: const CustomBackButton(),
+            ),
           ],
         ),
       ),

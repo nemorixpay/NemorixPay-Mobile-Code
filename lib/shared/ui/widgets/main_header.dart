@@ -2,35 +2,56 @@ import 'package:flutter/material.dart';
 import 'package:nemorixpay/shared/ui/widgets/custom_back_button.dart';
 
 /// @file        main_header.dart
-/// @brief       Implementation of a custom header.
-/// @details     This file contains the basic widget for creating a custom header including a back button.
-///              This widget is being used in the following files:
-///              sign_up_page.dart, crypto_details.dart.dart.
+/// @brief       Reusable widget for the main header of the app.
+/// @details     This widget displays a title and optional back button and search button.
 /// @author      Miguel Fagundez
-/// @date        04/14/2025
-/// @version     1.0
+/// @date        04/28/2025
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 class MainHeader extends StatelessWidget {
   final String title;
+  final bool showBackButton;
+  final bool showSearchButton;
 
-  const MainHeader({super.key, required this.title});
+  const MainHeader({
+    super.key,
+    required this.title,
+    this.showBackButton = true,
+    this.showSearchButton = true,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CustomBackButton(),
-        Align(
-          child: Text(
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          if (showBackButton)
+            CustomBackButton()
+          // IconButton(
+          //   icon: const Icon(Icons.arrow_back),
+          //   onPressed: () => Navigator.pop(context),
+          // )
+          else
+            const SizedBox(width: 48),
+          Text(
             title,
             style: Theme.of(
               context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
-        ),
-        SizedBox(height: 16),
-      ],
+          if (showSearchButton)
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                // TODO: Implement search functionality
+              },
+            )
+          else
+            const SizedBox(width: 48),
+        ],
+      ),
     );
   }
 }

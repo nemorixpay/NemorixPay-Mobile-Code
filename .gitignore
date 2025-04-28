@@ -61,3 +61,6 @@ docs/
 
 # Data
 app_constants.dart
+
+# Rules
+.cursor/

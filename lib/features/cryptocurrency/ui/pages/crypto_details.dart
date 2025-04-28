@@ -1,55 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-import 'package:nemorixpay/features/cryptocurrency/domain/entity/crypto_entity.dart';
+import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
+import 'package:nemorixpay/features/cryptocurrency/ui/widgets/crypto_stats_card.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/widgets/crypto_stats_tile.dart';
-import 'package:nemorixpay/features/cryptocurrency/ui/widgets/custom_two_buttons.dart';
+import 'package:nemorixpay/shared/ui/widgets/rounded_elevated_button.dart';
 import 'package:nemorixpay/shared/ui/widgets/main_header.dart';
+import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:nemorixpay/shared/data/mock_cryptos.dart';
+import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
+import 'package:nemorixpay/features/cryptocurrency/ui/widgets/custom_two_buttons.dart';
 
 /// @file        crypto_details.dart
-/// @brief       Crypto deatils screen implementation for NemorixPay.
-/// @details     This file contains the layout and logic for the crypto details info of NemorixPay,
-///              including crypto asset information, buy/sell buttons, charts, and more.
+/// @brief       Screen to display detailed information about a cryptocurrency.
+/// @details     This screen shows detailed information about a cryptocurrency,
+///             including its price history, market data, and trading options.
 /// @author      Miguel Fagundez
-/// @date        2025-04-14
-/// @version     1.1
+/// @date        04/28/2025
+/// @version     1.2
 /// @copyright   Apache 2.0 License
 class CryptoDetailsPage extends StatefulWidget {
-  const CryptoDetailsPage({super.key});
+  final CryptoEntity crypto;
+
+  const CryptoDetailsPage({super.key, required this.crypto});
 
   @override
-  State<CryptoDetailsPage> createState() => _CryptoDetailsScreenState();
+  State<CryptoDetailsPage> createState() => _CryptoDetailsPageState();
 }
 
-class _CryptoDetailsScreenState extends State<CryptoDetailsPage> {
-  String selectedTimeFrame = '1D';
+class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
+  String selectedTimeFrame = '1M';
+  final List<String> timeFrameOptions = ['1D', '1W', '1M', '1Y'];
 
-  final Crypto widgetcrypto = mockCryptos[3];
   late bool _isFav;
 
   @override
   void initState() {
     super.initState();
-    _isFav = false;
+    _isFav = favoriteCryptos.contains(widget.crypto);
   }
 
-  void toggleFavorite(Crypto crypto) {
-    if (favoriteCryptos.contains(crypto)) {
-      favoriteCryptos.remove(crypto);
-    } else {
-      favoriteCryptos.add(crypto);
-    }
+  void toggleFavorite(CryptoEntity crypto) {
+    setState(() {
+      if (favoriteCryptos.contains(crypto)) {
+        favoriteCryptos.remove(crypto);
+        _isFav = false;
+      } else {
+        favoriteCryptos.add(crypto);
+        _isFav = true;
+      }
+    });
   }
 
-  List<FlSpot> getChartData(String range) {
-    final data = widgetcrypto.priceHistory[range] ?? [];
-    return data
-        .asMap()
-        .entries
-        .map((e) => FlSpot(e.key.toDouble(), e.value.price))
-        .toList();
+  List<FlSpot> getChartData(String timeframe) {
+    // Por ahora, generamos datos de ejemplo para el gráfico
+    return List.generate(
+      30,
+      (i) => FlSpot(
+        i.toDouble(),
+        widget.crypto.currentPrice * (1 + (i % 10) / 100),
+      ),
+    );
   }
 
   @override
@@ -68,7 +78,11 @@ class _CryptoDetailsScreenState extends State<CryptoDetailsPage> {
                   // --------------------
                   // Back button/Crypto Name
                   // --------------------
-                  MainHeader(title: widgetcrypto.name),
+                  MainHeader(
+                    title: widget.crypto.name,
+                    showBackButton: true,
+                    showSearchButton: false,
+                  ),
                   // --------------------
                   // Crypto Info Header
                   // --------------------
@@ -80,60 +94,60 @@ class _CryptoDetailsScreenState extends State<CryptoDetailsPage> {
                         Row(
                           children: [
                             Image.asset(
-                              widgetcrypto.logoPath,
+                              widget.crypto.logoPath,
                               width: 50,
                               height: 50,
                             ),
-                            SizedBox(width: 16.0),
+                            const SizedBox(width: 16.0),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  widgetcrypto.abbreviation,
-                                  style:
-                                      Theme.of(context).textTheme.labelMedium,
+                                  widget.crypto.symbol,
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
                                 Text(
-                                  '\$${widgetcrypto.currentPrice.toStringAsFixed(2)}',
-                                  style: Theme.of(context).textTheme.bodyLarge
-                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                  '\$${widget.crypto.currentPrice.toStringAsFixed(2)}',
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.headlineMedium?.copyWith(
+                                    color:
+                                        widget.crypto.priceChange >= 0
+                                            ? NemorixColors.successColor
+                                            : NemorixColors.errorColor,
+                                  ),
                                 ),
                               ],
                             ),
-                            Expanded(
-                              child: GestureDetector(
-                                child: Icon(
-                                  _isFav ? Icons.star : Icons.star_border,
-                                  color:
-                                      _isFav
-                                          ? NemorixColors.primaryColor
-                                          : Colors.grey,
-                                ),
-                                onTap: () {
-                                  setState(() {
-                                    _isFav = !_isFav;
-                                  });
-                                  // TODO Uncheck option not implemented
-                                  toggleFavorite(widgetcrypto);
-                                },
+                            const Spacer(),
+                            IconButton(
+                              icon: Icon(
+                                _isFav ? Icons.favorite : Icons.favorite_border,
+                                color:
+                                    _isFav
+                                        ? NemorixColors.errorColor
+                                        : NemorixColors.greyLevel3,
                               ),
+                              onPressed: () => toggleFavorite(widget.crypto),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 20),
-                        // --------------------
-                        // Crypto chart
-                        // --------------------
+                        const SizedBox(height: 40.0),
                         SizedBox(
                           height: 200,
                           child: LineChart(
                             LineChartData(
+                              gridData: const FlGridData(show: false),
+                              titlesData: const FlTitlesData(show: false),
+                              borderData: FlBorderData(show: false),
                               lineBarsData: [
                                 LineChartBarData(
                                   spots: getChartData(selectedTimeFrame),
                                   isCurved: true,
                                   color: NemorixColors.primaryColor,
-                                  dotData: FlDotData(show: false),
+                                  barWidth: 2,
+                                  isStrokeCapRound: true,
+                                  dotData: const FlDotData(show: false),
                                   belowBarData: BarAreaData(
                                     show: true,
                                     color: NemorixColors.primaryColor
@@ -141,242 +155,59 @@ class _CryptoDetailsScreenState extends State<CryptoDetailsPage> {
                                   ),
                                 ),
                               ],
-                              titlesData: FlTitlesData(
-                                show: false,
-                                rightTitles: AxisTitles(
-                                  sideTitles: SideTitles(showTitles: false),
-                                ),
-                                topTitles: AxisTitles(
-                                  sideTitles: SideTitles(showTitles: false),
-                                ),
-                                bottomTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: true,
-                                    reservedSize: 30,
-                                    getTitlesWidget: (value, meta) {
-                                      final data =
-                                          widgetcrypto
-                                              .priceHistory[selectedTimeFrame]!;
-                                      if (value.toInt() >= 0 &&
-                                          value.toInt() < data.length) {
-                                        final date =
-                                            data[value.toInt()].timestamp;
-                                        return Padding(
-                                          padding: const EdgeInsets.only(
-                                            top: 8.0,
-                                          ),
-                                          child: Text(
-                                            '${date.hour}:00',
-                                            style:
-                                                Theme.of(
-                                                  context,
-                                                ).textTheme.bodySmall,
-                                          ),
-                                        );
-                                      }
-                                      return const Text('');
-                                    },
-                                  ),
-                                ),
-                              ),
-                              gridData: FlGridData(
-                                show: true,
-                                drawVerticalLine: false,
-                                horizontalInterval: 1,
-                                getDrawingHorizontalLine: (value) {
-                                  return FlLine(
-                                    color: Theme.of(context).dividerColor,
-                                    strokeWidth: 0.5,
-                                  );
-                                },
-                              ),
-                              borderData: FlBorderData(
-                                show: true,
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: Theme.of(context).dividerColor,
-                                    width: 0.5,
-                                  ),
-                                ),
-                              ),
-                              lineTouchData: LineTouchData(
-                                touchTooltipData: LineTouchTooltipData(
-                                  tooltipBgColor: Theme.of(context).cardColor,
-                                  tooltipRoundedRadius: 8,
-                                  getTooltipItems: (touchedSpots) {
-                                    return touchedSpots.map((spot) {
-                                      final data =
-                                          widgetcrypto
-                                              .priceHistory[selectedTimeFrame]!;
-                                      final point = data[spot.x.toInt()];
-                                      return LineTooltipItem(
-                                        '\$${point.price.toStringAsFixed(2)}\n',
-                                        Theme.of(
-                                          context,
-                                        ).textTheme.titleMedium!.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        children: [
-                                          TextSpan(
-                                            text:
-                                                'Vol: \$${point.volume.toStringAsFixed(2)}\n',
-                                            style:
-                                                Theme.of(
-                                                  context,
-                                                ).textTheme.bodySmall,
-                                          ),
-                                          TextSpan(
-                                            text:
-                                                'Cap: \$${point.marketCap.toStringAsFixed(2)}',
-                                            style:
-                                                Theme.of(
-                                                  context,
-                                                ).textTheme.bodySmall,
-                                          ),
-                                        ],
-                                      );
-                                    }).toList();
-                                  },
-                                ),
-                                handleBuiltInTouches: true,
-                                getTouchedSpotIndicator: (
-                                  LineChartBarData barData,
-                                  List<int> spotIndexes,
-                                ) {
-                                  return spotIndexes.map((spotIndex) {
-                                    return TouchedSpotIndicatorData(
-                                      FlLine(
-                                        color: NemorixColors.primaryColor,
-                                        strokeWidth: 2,
-                                      ),
-                                      FlDotData(
-                                        getDotPainter: (
-                                          spot,
-                                          percent,
-                                          barData,
-                                          index,
-                                        ) {
-                                          return FlDotCirclePainter(
-                                            radius: 4,
-                                            color: NemorixColors.primaryColor,
-                                            strokeWidth: 2,
-                                            strokeColor:
-                                                Theme.of(
-                                                  context,
-                                                ).scaffoldBackgroundColor,
-                                          );
-                                        },
-                                      ),
-                                    );
-                                  }).toList();
-                                },
-                              ),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 12),
-                        // --------------------
-                        // Time Frame Options (1D, 1W, etc)
-                        // --------------------
+                        const SizedBox(height: 10.0),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children:
-                              timeFrameOptions.map((option) {
-                                final isSelected = selectedTimeFrame == option;
-                                return GestureDetector(
-                                  onTap:
-                                      () => setState(
-                                        () => selectedTimeFrame = option,
-                                      ),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 6,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          isSelected
-                                              ? NemorixColors.primaryColor
-                                              : Theme.of(
-                                                context,
-                                              ).cardColor, //Colors.grey[800],
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Text(
-                                      option,
-                                      style: TextStyle(
-                                        color:
-                                            isSelected
-                                                ? Colors.black
-                                                : Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge
-                                                    ?.color, //Colors.white,
-                                      ),
-                                    ),
+                              timeFrameOptions.map((timeframe) {
+                                return TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      selectedTimeFrame = timeframe;
+                                    });
+                                  },
+                                  style: TextButton.styleFrom(
+                                    foregroundColor:
+                                        selectedTimeFrame == timeframe
+                                            ? NemorixColors.primaryColor
+                                            : NemorixColors.greyLevel3,
                                   ),
+                                  child: Text(timeframe),
                                 );
                               }).toList(),
                         ),
-                        const SizedBox(height: 40),
-                        // --------------------
-                        // Send/Receive Buttons
-                        // --------------------
-                        CustomTwoButtons(
-                          textButton1: AppLocalizations.of(context)!.send,
-                          onFunctionButton1: () {
-                            debugPrint('Button01 - Send');
-                          },
-                          textButton2: AppLocalizations.of(context)!.receive,
-                          onFunctionButton2: () {
-                            debugPrint('Button02 - Receive');
-                          },
-                        ),
-                        const SizedBox(height: 40),
-                        // --------------------
-                        // Crypto Stats
-                        // --------------------
-                        Column(
-                          children: [
-                            CryptoStatsTile(
-                              label: AppLocalizations.of(context)!.marketCap,
-                              value:
-                                  '\$${widgetcrypto.marketCap.toStringAsFixed(2)}',
-                            ),
-                            CryptoStatsTile(
-                              label: AppLocalizations.of(context)!.volume,
-                              value:
-                                  '\$${widgetcrypto.volume.toStringAsFixed(2)}',
-                            ),
-                            CryptoStatsTile(
-                              label:
-                                  AppLocalizations.of(
-                                    context,
-                                  )!.circulatingSupply,
-                              value:
-                                  '${widgetcrypto.circulatingSupply.toStringAsFixed(2)}',
-                            ),
-                            CryptoStatsTile(
-                              label: AppLocalizations.of(context)!.totalSupply,
-                              value:
-                                  '${widgetcrypto.totalSupply.toStringAsFixed(2)}',
-                            ),
-                            CryptoStatsTile(
-                              label: AppLocalizations.of(context)!.allTimeHigh,
-                              value:
-                                  '\$${widgetcrypto.allTimeHigh.toStringAsFixed(2)}',
-                            ),
-                            CryptoStatsTile(
-                              label: AppLocalizations.of(context)!.performance,
-                              value:
-                                  '${widgetcrypto.performance.toStringAsFixed(2)}%',
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 75),
                       ],
                     ),
                   ),
+                  // --------------------
+                  // Send/Receive Buttons
+                  // --------------------
+                  CustomTwoButtons(
+                    textButton1: AppLocalizations.of(context)!.send,
+                    onFunctionButton1: () {
+                      debugPrint('Button01 - Send');
+                    },
+                    textButton2: AppLocalizations.of(context)!.receive,
+                    onFunctionButton2: () {
+                      debugPrint('Button02 - Receive');
+                    },
+                  ),
+                  const SizedBox(height: 20.0),
+                  // --------------------
+                  // Crypto Stats
+                  // --------------------
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      right: 16.0,
+                      left: 16.0,
+                      bottom: 16.0,
+                    ),
+                    child: CryptoStatsCard(crypto: widget.crypto),
+                  ),
+                  SizedBox(height: 80),
                 ],
               ),
             ),
@@ -384,15 +215,15 @@ class _CryptoDetailsScreenState extends State<CryptoDetailsPage> {
             // Sell/Buy Buttons
             // --------------------
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(16.0),
               child: CustomTwoButtons(
-                textButton1: AppLocalizations.of(context)!.sell,
+                textButton1: AppLocalizations.of(context)!.buy,
+                textButton2: AppLocalizations.of(context)!.sell,
                 onFunctionButton1: () {
-                  debugPrint('Button01 - Sell');
+                  // TODO: Implement buy action
                 },
-                textButton2: AppLocalizations.of(context)!.buy,
                 onFunctionButton2: () {
-                  debugPrint('Button02 - Buy');
+                  // TODO: Implement sell action
                 },
                 height: 1.25,
               ),

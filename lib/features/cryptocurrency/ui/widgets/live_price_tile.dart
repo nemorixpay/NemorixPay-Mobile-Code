@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:nemorixpay/features/cryptocurrency/domain/entity/crypto_entity.dart';
+import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
 
 class LivePriceTile extends StatelessWidget {
-  final Crypto crypto;
+  final CryptoEntity crypto;
   const LivePriceTile({super.key, required this.crypto});
 
   @override
@@ -17,7 +17,7 @@ class LivePriceTile extends StatelessWidget {
         ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
       ),
       subtitle: Text(
-        crypto.project,
+        crypto.symbol,
         style: Theme.of(context).textTheme.bodyMedium,
       ),
       trailing: Text(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-import 'package:nemorixpay/features/cryptocurrency/domain/entity/crypto_entity.dart';
-import 'package:nemorixpay/shared/data/mock_cryptos.dart';
+import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
+import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
 import 'package:nemorixpay/shared/data/mock_fiats.dart';
 import 'package:nemorixpay/shared/ui/widgets/base_card.dart';
 import 'package:nemorixpay/shared/ui/widgets/main_header.dart';
@@ -14,7 +14,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 ///              including crypto asset information.
 /// @author      Miguel Fagundez
 /// @date        2025-04-18
-/// @version     1.0
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 class BuyCryptoPage extends StatefulWidget {
   const BuyCryptoPage({super.key});
@@ -27,7 +27,7 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
   final TextEditingController _payController = TextEditingController();
 
   String selectedFiat = 'USD';
-  Crypto selectedCrypto = mockCryptos.first;
+  CryptoEntity selectedCrypto = mockCryptos.first;
   double exchangeFeePercent = 0.0005;
 
   double get cryptoPrice => selectedCrypto.currentPrice;
@@ -48,7 +48,10 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
-                    MainHeader(title: AppLocalizations.of(context)!.buy),
+                    MainHeader(
+                      title: AppLocalizations.of(context)!.buy,
+                      showSearchButton: false,
+                    ),
                     const SizedBox(height: 48),
                     // -----------------------
                     // Convertion Card
@@ -69,10 +72,7 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
                           TextField(
                             controller: _payController,
                             keyboardType: TextInputType.number,
-                            style:
-                                Theme.of(context)
-                                    .textTheme
-                                    .titleLarge, //const TextStyle(color: Colors.white),
+                            style: Theme.of(context).textTheme.titleLarge,
                             decoration: const InputDecoration(
                               hintText: '0.00',
                               hintStyle: TextStyle(color: Colors.grey),
@@ -123,7 +123,7 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                '1 USD = ${(1 / cryptoPrice).toStringAsFixed(6)} ${selectedCrypto.abbreviation.toUpperCase()}',
+                                '1 USD = ${(1 / cryptoPrice).toStringAsFixed(6)} ${selectedCrypto.symbol.toUpperCase()}',
                                 style: Theme.of(context).textTheme.labelMedium,
                               ),
                             ],
@@ -239,7 +239,7 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
   }
 
   Widget _buildCryptoDropdown() {
-    return DropdownButton<Crypto>(
+    return DropdownButton<CryptoEntity>(
       value: selectedCrypto,
       style: Theme.of(context).textTheme.labelLarge,
       underline: const SizedBox(),
@@ -248,7 +248,7 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
               .map(
                 (crypto) => DropdownMenuItem(
                   value: crypto,
-                  child: Text(crypto.abbreviation.toUpperCase()),
+                  child: Text(crypto.symbol.toUpperCase()),
                 ),
               )
               .toList(),

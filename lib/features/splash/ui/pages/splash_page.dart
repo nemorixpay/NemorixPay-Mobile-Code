@@ -3,9 +3,20 @@ import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/shared/ui/widgets/rounded_elevated_button.dart';
+import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
+import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
+import 'dart:math';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
+
+  // TODO For testing purposes ----------------------------------
+  CryptoEntity get randomCrypto {
+    final random = Random();
+    final index = random.nextInt(mockCryptos.length);
+    return mockCryptos[index];
+  }
+  // TODO For testing purposes ----------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +60,11 @@ class SplashPage extends StatelessWidget {
             RoundedElevatedButton(
               text: "Continue with CryptoDetails",
               onPressed: () {
-                Navigator.pushNamed(context, RouteNames.cryptoDetails);
+                Navigator.pushNamed(
+                  context,
+                  RouteNames.cryptoDetails,
+                  arguments: randomCrypto,
+                );
               },
               backgroundColor: Colors.white,
               textColor: Colors.black,

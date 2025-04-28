@@ -7,8 +7,8 @@ import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 ///              This widget is being used in the following files:
 ///              sign_up_page.dart, main_header.dart.
 /// @author      Miguel Fagundez
-/// @date        04/07/2025
-/// @version     1.1
+/// @date        04/28/2025
+/// @version     1.2
 /// @copyright   Apache 2.0 License
 class CustomBackButton extends StatelessWidget {
   final VoidCallback? onPressed;
@@ -17,23 +17,20 @@ class CustomBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
-        child: GestureDetector(
-          onTap: onPressed ?? () => Navigator.of(context).pop(),
-          child: Container(
-            height: 50.0,
-            width: 50.0,
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Center(
-              child: Icon(
-                Icons.arrow_back_rounded,
-                color: Theme.of(context).primaryColor,
-                size: 20,
-              ),
+      child: GestureDetector(
+        onTap: onPressed ?? () => Navigator.of(context).pop(),
+        child: Container(
+          height: 50.0,
+          width: 50.0,
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Center(
+            child: Icon(
+              Icons.arrow_back_rounded,
+              color: Theme.of(context).primaryColor,
+              size: 20,
             ),
           ),
         ),
