@@ -14,14 +14,28 @@ import 'package:nemorixpay/features/cryptocurrency/ui/pages/home_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/pages/crypto_details.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
 
+/// @file        app_routes.dart
+/// @brief       Centralized route management for NemorixPay.
+/// @details     This class handles all navigation logic, route generation,
+///             and analytics tracking for the application.
+/// @author      Miguel Fagundez
+/// @date        2025-04-28
+/// @version     1.0
+/// @copyright   Apache 2.0 License
 class AppRoutes {
+  /// The initial route when the app starts
   static const initialRoute = RouteNames.splash;
 
+  /// Firebase Analytics instance for tracking navigation events
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
+  /// Firebase Analytics Observer to automatically track screen views
   static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(
     analytics: analytics,
   );
 
+  /// List of all available routes in the application
+  /// Each route is defined with its name, screen, and icon
   static final routeOptions = <RouteModel>[
     RouteModel(
       route: RouteNames.splash,
@@ -65,6 +79,13 @@ class AppRoutes {
     ),
   ];
 
+  /// Generates a map of all available routes for the MaterialApp
+  ///
+  /// This method converts the [routeOptions] list into a map that can be used
+  /// by the MaterialApp's routes parameter. Each route is mapped to its
+  /// corresponding screen widget.
+  ///
+  /// @return A map of route names to their corresponding screen builders
   static Map<String, Widget Function(BuildContext)> getAppRoutes() {
     Map<String, Widget Function(BuildContext)> appRoutes = {};
 
@@ -75,6 +96,15 @@ class AppRoutes {
     return appRoutes;
   }
 
+  /// Handles dynamic route generation with arguments
+  ///
+  /// This method is called when a named route is requested with arguments.
+  /// It handles special cases like [cryptoDetails] and [paymentMethod] routes
+  /// that require specific arguments to be passed.
+  ///
+  /// @param settings The route settings containing the route name and arguments
+  /// @return A MaterialPageRoute for the requested screen
+  /// @throws TypeError if the arguments are not of the expected type
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RouteNames.cryptoDetails:
