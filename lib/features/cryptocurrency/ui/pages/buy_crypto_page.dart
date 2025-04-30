@@ -3,10 +3,12 @@ import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
 import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
 import 'package:nemorixpay/shared/data/mock_fiats.dart';
-import 'package:nemorixpay/shared/ui/widgets/base_card.dart';
 import 'package:nemorixpay/shared/ui/widgets/main_header.dart';
-import 'package:nemorixpay/shared/ui/widgets/rounded_elevated_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:nemorixpay/features/cryptocurrency/ui/widgets/crypto_conversion_card.dart';
+import 'package:nemorixpay/features/cryptocurrency/ui/widgets/exchange_fee_card.dart';
+import 'package:nemorixpay/features/cryptocurrency/ui/widgets/terms_and_conditions_section.dart';
+import 'package:nemorixpay/features/cryptocurrency/ui/widgets/continue_button.dart';
 
 /// @file        buy_crypto_page.dart
 /// @brief       Buy Crypto screen implementation for NemorixPay.
@@ -35,6 +37,22 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
   double get receiveAmount => payAmount / cryptoPrice;
   double get exchangeFee => payAmount * exchangeFeePercent;
 
+  void _handleFiatChanged(String value) {
+    setState(() => selectedFiat = value);
+  }
+
+  void _handleCryptoChanged(CryptoEntity value) {
+    setState(() => selectedCrypto = value);
+  }
+
+  void _handlePayAmountChanged(String value) {
+    setState(() {});
+  }
+
+  void _handleTermsTap() {
+    debugPrint('Terms and Conditions');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,165 +71,23 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
                       showSearchButton: false,
                     ),
                     const SizedBox(height: 48),
-                    // -----------------------
-                    // Convertion Card
-                    // -----------------------
-                    BaseCard(
-                      cardWidget: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!.youPay,
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                              const Spacer(),
-                              _buildFiatDropdown(),
-                            ],
-                          ),
-                          TextField(
-                            controller: _payController,
-                            keyboardType: TextInputType.number,
-                            style: Theme.of(context).textTheme.titleLarge,
-                            decoration: const InputDecoration(
-                              hintText: '0.00',
-                              hintStyle: TextStyle(color: Colors.grey),
-                              border: InputBorder.none,
-                            ),
-                            onChanged: (_) => setState(() {}),
-                          ),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              Expanded(child: Divider()),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                child: const Icon(
-                                  Icons.swap_vert,
-                                  color: NemorixColors.primaryColor,
-                                ),
-                              ),
-                              Expanded(child: Divider()),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!.youReceive,
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                              const Spacer(),
-                              _buildCryptoDropdown(),
-                            ],
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              receiveAmount.toStringAsFixed(4),
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.circle,
-                                color: NemorixColors.primaryColor,
-                                size: 8,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                '1 USD = ${(1 / cryptoPrice).toStringAsFixed(6)} ${selectedCrypto.symbol.toUpperCase()}',
-                                style: Theme.of(context).textTheme.labelMedium,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                    CryptoConversionCard(
+                      selectedFiat: selectedFiat,
+                      selectedCrypto: selectedCrypto,
+                      payController: _payController,
+                      cryptoPrice: cryptoPrice,
+                      receiveAmount: receiveAmount,
+                      onFiatChanged: _handleFiatChanged,
+                      onCryptoChanged: _handleCryptoChanged,
+                      onPayAmountChanged: _handlePayAmountChanged,
                     ),
                     const SizedBox(height: 24),
-                    // ------------------------
-                    // Exchange Fee Card
-                    // ------------------------
-                    BaseCard(
-                      cardWidget: Row(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: NemorixColors.greyLevel2,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            padding: const EdgeInsets.all(8),
-                            child: const Icon(
-                              Icons.monetization_on,
-                              color: NemorixColors.primaryColor,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            AppLocalizations.of(context)!.exchangeFee,
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                          const Spacer(),
-                          Text(
-                            '\$${exchangeFee.toStringAsFixed(2)}',
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                        ],
-                      ),
-                    ),
+                    ExchangeFeeCard(exchangeFee: exchangeFee),
                     const SizedBox(height: 16),
-                    // ---------------------------
-                    // Terms & Conditions
-                    // ---------------------------
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!.clickHereFor,
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  debugPrint('Terms and Conditions');
-                                },
-                                child: Text(
-                                  AppLocalizations.of(
-                                    context,
-                                  )!.termsAndConditions,
-                                  style: TextStyle(
-                                    color: NemorixColors.primaryColor,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            AppLocalizations.of(context)!.transactionFeeTaken,
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                        ],
-                      ),
-                    ),
+                    TermsAndConditionsSection(onTermsTap: _handleTermsTap),
                     const Spacer(),
-                    SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: RoundedElevatedButton(
-                        text: AppLocalizations.of(context)!.continueLabel,
-                        onPressed: () {}, // Flutter bloc action
-                        backgroundColor: NemorixColors.primaryColor,
-                        textColor: Colors.black,
-                      ),
-                    ),
+                    const SizedBox(height: 20),
+                    ContinueButton(onPressed: () {}, isEnabled: payAmount > 0),
                   ],
                 ),
               ),
@@ -219,40 +95,6 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildFiatDropdown() {
-    return DropdownButton<String>(
-      value: selectedFiat,
-      style: Theme.of(context).textTheme.labelLarge,
-      underline: const SizedBox(),
-      items:
-          mockFiats
-              .map(
-                (currency) =>
-                    DropdownMenuItem(value: currency, child: Text(currency)),
-              )
-              .toList(),
-      onChanged: (value) => setState(() => selectedFiat = value!),
-    );
-  }
-
-  Widget _buildCryptoDropdown() {
-    return DropdownButton<CryptoEntity>(
-      value: selectedCrypto,
-      style: Theme.of(context).textTheme.labelLarge,
-      underline: const SizedBox(),
-      items:
-          mockCryptos
-              .map(
-                (crypto) => DropdownMenuItem(
-                  value: crypto,
-                  child: Text(crypto.symbol.toUpperCase()),
-                ),
-              )
-              .toList(),
-      onChanged: (value) => setState(() => selectedCrypto = value!),
     );
   }
 }
