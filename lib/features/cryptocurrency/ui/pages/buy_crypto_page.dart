@@ -82,7 +82,11 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
                       onPayAmountChanged: _handlePayAmountChanged,
                     ),
                     const SizedBox(height: 24),
-                    ExchangeFeeCard(exchangeFee: exchangeFee),
+                    ExchangeFeeCard(
+                      exchangeFee: exchangeFee,
+                      amount: payAmount,
+                      commissionPercent: exchangeFeePercent,
+                    ),
                     const SizedBox(height: 16),
                     TermsAndConditionsSection(onTermsTap: _handleTermsTap),
                     const Spacer(),
@@ -90,6 +94,7 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
                     ContinueButton(
                       onPressed: () {},
                       amount: _payController.text,
+                      commissionPercent: exchangeFeePercent,
                     ),
                   ],
                 ),

@@ -2,41 +2,50 @@ import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/shared/ui/widgets/rounded_elevated_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:nemorixpay/features/cryptocurrency/domain/entities/amount_validator.dart';
+import '../../domain/entities/amount_validator.dart';
+import '../../domain/entities/commission_validator.dart';
 
 /// @file        continue_button.dart
-/// @brief       Widget for the continue button in cryptocurrency purchase.
-/// @details     This widget implements a continue button that is enabled only when
-///              a valid amount is entered for the transaction.
+/// @brief       Button to continue with the crypto purchase.
+/// @details     This widget handles the continue button for the crypto purchase,
+///              including validation states and error messages.
 /// @author      Miguel Fagundez
-/// @date        2025-04-29
-/// @version     1.0
+/// @date        04/30/2025
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 class ContinueButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final Function() onPressed;
   final String amount;
+  final double commissionPercent;
 
   const ContinueButton({
     super.key,
     required this.onPressed,
     required this.amount,
+    this.commissionPercent = 0.0005,
   });
 
-  bool get _isEnabled {
-    return AmountValidator.validateAmount(amount) ==
-        AmountValidationState.valid;
+  bool get _isValid {
+    final amountState = AmountValidator.validateAmount(amount);
+    if (amountState != AmountValidationState.valid) return false;
+
+    final payAmount = double.tryParse(amount) ?? 0;
+    final commissionState = CommissionValidator.validateCommission(
+      amount: payAmount,
+      commissionPercent: commissionPercent,
+    );
+
+    return commissionState == CommissionValidationState.valid;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: RoundedElevatedButton(
-        text: AppLocalizations.of(context)!.continueLabel,
-        onPressed: _isEnabled ? onPressed : null,
-        backgroundColor: NemorixColors.primaryColor,
-        textColor: Colors.black,
-      ),
+    return RoundedElevatedButton(
+      text: AppLocalizations.of(context)!.continueText,
+      onPressed: _isValid ? onPressed : null,
+      backgroundColor:
+          _isValid ? NemorixColors.primaryColor : NemorixColors.greyLevel2,
+      textColor: _isValid ? Colors.white : NemorixColors.greyLevel3,
     );
   }
 }

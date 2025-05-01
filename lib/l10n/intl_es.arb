@@ -70,5 +70,10 @@
   "chooseYourLoginMethod": "Elige cómo quieres acceder a tu cuenta",
   "invalidAmountFormat": "Por favor, ingresa un monto valido",  
   "minimumAmount": "El monto minimo es de $1",
-  "maximumAmount": "El monto máximo diario es de $10,000"
+  "maximumAmount": "El monto máximo diario es de $10,000",
+  "commissionBelowMinimum": "La tasa de comisión está por debajo del mínimo permitido (0.05%)",
+  "commissionAboveMaximum": "La tasa de comisión excede el máximo permitido (1.0%)",
+  "commissionExceedsLimit": "El monto de la comisión excede el límite máximo ($50)",
+  "totalAmount": "Monto Total",
+  "continueText": "Continuar"
 }

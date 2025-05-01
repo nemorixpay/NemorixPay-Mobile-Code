@@ -13,7 +13,7 @@ enum AmountValidationState { valid, invalidFormat, belowMinimum, aboveMaximum }
 
 class AmountValidator {
   static const double minimumAmount = 1.0;
-  static const double maximumAmount = 10000.0;
+  static const double maximumAmount = 100000000.0;
 
   static AmountValidationState validateAmount(String amount) {
     final parsedAmount = double.tryParse(amount);

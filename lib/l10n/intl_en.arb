@@ -70,5 +70,10 @@
   "chooseYourLoginMethod": "Choose how you want to access your account",
   "invalidAmountFormat": "Please enter a valid amount",  
   "minimumAmount": "Minimum amount is $1",
-  "maximumAmount": "Maximum daily amount is $10,000"
+  "maximumAmount": "Maximum daily amount is $10,000",
+  "commissionBelowMinimum": "Commission rate is below minimum allowed (0.05%)",
+  "commissionAboveMaximum": "Commission rate exceeds maximum allowed (1.0%)",
+  "commissionExceedsLimit": "Commission amount exceeds maximum limit ($50)",
+  "totalAmount": "Total Amount",
+  "continueText": "Continue"
 }
