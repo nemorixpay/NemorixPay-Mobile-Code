@@ -4,6 +4,7 @@ import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity
 import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
 import 'package:nemorixpay/shared/ui/widgets/base_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:nemorixpay/features/cryptocurrency/domain/entities/amount_validator.dart';
 
 /// @file        crypto_conversion_card.dart
 /// @brief       Widget for conversion between fiat and cryptocurrencies.
@@ -14,7 +15,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 /// @date        2025-04-29
 /// @version     1.0
 /// @copyright   Apache 2.0 License
-class CryptoConversionCard extends StatelessWidget {
+class CryptoConversionCard extends StatefulWidget {
   final String selectedFiat;
   final CryptoEntity selectedCrypto;
   final TextEditingController payController;
@@ -37,6 +38,33 @@ class CryptoConversionCard extends StatelessWidget {
   });
 
   @override
+  State<CryptoConversionCard> createState() => _CryptoConversionCardState();
+}
+
+class _CryptoConversionCardState extends State<CryptoConversionCard> {
+  AmountValidationState _validationState = AmountValidationState.valid;
+
+  void _validateAmount(String amount) {
+    setState(() {
+      _validationState = AmountValidator.validateAmount(amount);
+    });
+    widget.onPayAmountChanged(amount);
+  }
+
+  String _getErrorMessage(BuildContext context) {
+    switch (_validationState) {
+      case AmountValidationState.invalidFormat:
+        return AppLocalizations.of(context)!.invalidAmountFormat;
+      case AmountValidationState.belowMinimum:
+        return AppLocalizations.of(context)!.minimumAmount;
+      case AmountValidationState.aboveMaximum:
+        return AppLocalizations.of(context)!.maximumAmount;
+      case AmountValidationState.valid:
+        return '';
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BaseCard(
       cardWidget: Column(
@@ -52,15 +80,20 @@ class CryptoConversionCard extends StatelessWidget {
             ],
           ),
           TextField(
-            controller: payController,
+            controller: widget.payController,
             keyboardType: TextInputType.number,
             style: Theme.of(context).textTheme.titleLarge,
-            decoration: const InputDecoration(
+            inputFormatters: [AmountInputFormatter()],
+            decoration: InputDecoration(
               hintText: '0.00',
-              hintStyle: TextStyle(color: Colors.grey),
+              hintStyle: const TextStyle(color: Colors.grey),
               border: InputBorder.none,
+              errorText:
+                  _validationState != AmountValidationState.valid
+                      ? _getErrorMessage(context)
+                      : null,
             ),
-            onChanged: onPayAmountChanged,
+            onChanged: _validateAmount,
           ),
           const SizedBox(height: 12),
           Row(
@@ -90,7 +123,7 @@ class CryptoConversionCard extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              receiveAmount.toStringAsFixed(4),
+              widget.receiveAmount.toStringAsFixed(4),
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
@@ -105,7 +138,7 @@ class CryptoConversionCard extends StatelessWidget {
               ),
               const SizedBox(width: 4),
               Text(
-                '1 USD = ${(1 / cryptoPrice).toStringAsFixed(6)} ${selectedCrypto.symbol.toUpperCase()}',
+                '1 USD = ${(1 / widget.cryptoPrice).toStringAsFixed(6)} ${widget.selectedCrypto.symbol.toUpperCase()}',
                 style: Theme.of(context).textTheme.labelMedium,
               ),
             ],
@@ -117,7 +150,7 @@ class CryptoConversionCard extends StatelessWidget {
 
   Widget _buildFiatDropdown(BuildContext context) {
     return DropdownButton<String>(
-      value: selectedFiat,
+      value: widget.selectedFiat,
       style: Theme.of(context).textTheme.labelLarge,
       underline: const SizedBox(),
       items:
@@ -127,13 +160,13 @@ class CryptoConversionCard extends StatelessWidget {
                     DropdownMenuItem(value: currency, child: Text(currency)),
               )
               .toList(),
-      onChanged: (value) => onFiatChanged(value!),
+      onChanged: (value) => widget.onFiatChanged(value!),
     );
   }
 
   Widget _buildCryptoDropdown(BuildContext context) {
     return DropdownButton<CryptoEntity>(
-      value: selectedCrypto,
+      value: widget.selectedCrypto,
       style: Theme.of(context).textTheme.labelLarge,
       underline: const SizedBox(),
       items:
@@ -145,7 +178,7 @@ class CryptoConversionCard extends StatelessWidget {
                 ),
               )
               .toList(),
-      onChanged: (value) => onCryptoChanged(value!),
+      onChanged: (value) => widget.onCryptoChanged(value!),
     );
   }
 }

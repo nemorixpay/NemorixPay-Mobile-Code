@@ -67,5 +67,8 @@
   "loginCredentials": "Login Credentials",
   "enterYourLoginInfo": "Please enter your email and password to access your account",
   "loginOptions": "Login Options",
-  "chooseYourLoginMethod": "Choose how you want to access your account"
+  "chooseYourLoginMethod": "Choose how you want to access your account",
+  "invalidAmountFormat": "Please enter a valid amount",  
+  "minimumAmount": "Minimum amount is $1",
+  "maximumAmount": "Maximum daily amount is $10,000"
 }

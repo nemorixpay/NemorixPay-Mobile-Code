@@ -16,7 +16,7 @@ import 'package:nemorixpay/features/cryptocurrency/ui/widgets/continue_button.da
 ///              including crypto asset information.
 /// @author      Miguel Fagundez
 /// @date        2025-04-18
-/// @version     1.1
+/// @version     1.2
 /// @copyright   Apache 2.0 License
 class BuyCryptoPage extends StatefulWidget {
   const BuyCryptoPage({super.key});
@@ -87,7 +87,10 @@ class _BuyCryptoScreenState extends State<BuyCryptoPage> {
                     TermsAndConditionsSection(onTermsTap: _handleTermsTap),
                     const Spacer(),
                     const SizedBox(height: 20),
-                    ContinueButton(onPressed: () {}, isEnabled: payAmount > 0),
+                    ContinueButton(
+                      onPressed: () {},
+                      amount: _payController.text,
+                    ),
                   ],
                 ),
               ),

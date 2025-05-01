@@ -67,5 +67,8 @@
   "loginCredentials": "Credenciales de Acceso",
   "enterYourLoginInfo": "Por favor, ingresa tu correo electrónico y contraseña para acceder a tu cuenta",
   "loginOptions": "Opciones de Acceso",
-  "chooseYourLoginMethod": "Elige cómo quieres acceder a tu cuenta"
+  "chooseYourLoginMethod": "Elige cómo quieres acceder a tu cuenta",
+  "invalidAmountFormat": "Por favor, ingresa un monto valido",  
+  "minimumAmount": "El monto minimo es de $1",
+  "maximumAmount": "El monto máximo diario es de $10,000"
 }
