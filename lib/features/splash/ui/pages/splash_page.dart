@@ -82,7 +82,18 @@ class SplashPage extends StatelessWidget {
             RoundedElevatedButton(
               text: "Continue with Payment Method",
               onPressed: () {
-                Navigator.pushNamed(context, RouteNames.paymentMethod);
+                Navigator.pushNamed(
+                  context,
+                  RouteNames.paymentMethod,
+                  /**cryptoName: args['cryptoName'] as String,
+                amount: args['amount'] as double,
+                currency: args['currency'] as String, */
+                  arguments: {
+                    'cryptoName': "BTC",
+                    'amount': 1000.0,
+                    'currency': "USD",
+                  },
+                );
               },
               backgroundColor: Colors.white,
               textColor: Colors.black,

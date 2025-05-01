@@ -75,5 +75,8 @@
   "commissionAboveMaximum": "Commission rate exceeds maximum allowed (1.0%)",
   "commissionExceedsLimit": "Commission amount exceeds maximum limit ($50)",
   "totalAmount": "Total Amount",
-  "continueText": "Continue"
+  "continueText": "Continue",
+  "noPaymentMethodSelected": "Please select a payment method",
+  "invalidCardSelected": "Please select a valid card",
+  "cardExpired": "The selected card has expired"
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/credit_card.dart';
+import 'package:nemorixpay/features/cryptocurrency/domain/entities/payment_method_validator.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/widgets/credit_card_gradient.dart';
 import 'package:nemorixpay/shared/data/mock_credit_cards.dart';
 import 'package:nemorixpay/shared/ui/widgets/base_card.dart';
@@ -14,7 +15,7 @@ import 'package:nemorixpay/shared/ui/widgets/rounded_elevated_button.dart';
 /// @details     This file contains the base code for the second step in the crypto purchase process: selecting the payment method.
 /// @author      Miguel Fagundez
 /// @date        2025-04-21
-/// @version     1.0
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 class PaymentMethodPage extends StatefulWidget {
   final String cryptoName;
@@ -35,6 +36,9 @@ class PaymentMethodPage extends StatefulWidget {
 class _PaymentMethodPageState extends State<PaymentMethodPage> {
   int selectedCardIndex = 0;
   bool sendReceipt = false;
+  String selectedMethod = '';
+  PaymentMethodValidationState _validationState =
+      PaymentMethodValidationState.valid;
 
   void _showAddCardDialog() {
     final numberController = TextEditingController();
@@ -42,7 +46,6 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
     final expiryController = TextEditingController();
     String selectedType = 'Visa';
 
-    // TODO TEMPORAL
     showDialog(
       context: context,
       builder:
@@ -100,6 +103,8 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                         ),
                       );
                       selectedCardIndex = creditCards.length - 1;
+                      selectedMethod = 'Credit Card';
+                      _validatePaymentMethod();
                     });
                     Navigator.pop(context);
                   }
@@ -109,6 +114,16 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
             ],
           ),
     );
+  }
+
+  void _validatePaymentMethod() {
+    setState(() {
+      _validationState = PaymentMethodValidator.validatePaymentMethod(
+        selectedCardIndex: selectedCardIndex,
+        cards: creditCards,
+        selectedMethod: selectedMethod,
+      );
+    });
   }
 
   @override
@@ -121,7 +136,10 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const MainHeader(title: 'Payment Method'),
+              const MainHeader(
+                title: 'Payment Method',
+                showSearchButton: false,
+              ),
               const SizedBox(height: 20),
               // Credit Card Selector
               BaseCard(
@@ -136,7 +154,6 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                     Center(
                       child: DropdownButton<int>(
                         value: selectedCardIndex,
-                        // dropdownColor: NemorixColors.primaryColor,
                         items: List.generate(
                           creditCards.length,
                           (index) => DropdownMenuItem(
@@ -146,7 +163,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                                 (creditCards[index].type == 'Visa')
                                     ? FaIcon(FontAwesomeIcons.ccVisa)
                                     : FaIcon(FontAwesomeIcons.ccMastercard),
-                                SizedBox(width: 8.0),
+                                const SizedBox(width: 8.0),
                                 Text(
                                   creditCards[index].number,
                                   style:
@@ -159,6 +176,8 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                         onChanged: (value) {
                           setState(() {
                             selectedCardIndex = value!;
+                            selectedMethod = 'Credit Card';
+                            _validatePaymentMethod();
                           });
                         },
                       ),
@@ -170,9 +189,21 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                           card: creditCards[selectedCardIndex],
                         ),
                         GestureDetector(
-                          child: Icon(Icons.delete_forever_rounded, size: 24),
+                          child: const Icon(
+                            Icons.delete_forever_rounded,
+                            size: 24,
+                          ),
                           onTap: () {
-                            debugPrint('Credit Card Deleted');
+                            setState(() {
+                              creditCards.removeAt(selectedCardIndex);
+                              if (creditCards.isEmpty) {
+                                selectedCardIndex = -1;
+                                selectedMethod = '';
+                              } else {
+                                selectedCardIndex = 0;
+                              }
+                              _validatePaymentMethod();
+                            });
                           },
                         ),
                       ],
@@ -202,12 +233,12 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                   FontAwesomeIcons.google,
                   color: NemorixColors.primaryColor,
                 ),
-                widgetRight: const Icon(
-                  Icons.arrow_forward_ios,
-                  // color: Colors.white,
-                ),
+                widgetRight: const Icon(Icons.arrow_forward_ios),
                 function: () {
-                  debugPrint('New Google Pay');
+                  setState(() {
+                    selectedMethod = 'Google Pay';
+                    _validatePaymentMethod();
+                  });
                 },
               ),
               const SizedBox(height: 10),
@@ -217,32 +248,44 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                   FontAwesomeIcons.apple,
                   color: NemorixColors.primaryColor,
                 ),
-                widgetRight: const Icon(
-                  Icons.arrow_forward_ios,
-                  // color: Colors.white,
-                ),
+                widgetRight: const Icon(Icons.arrow_forward_ios),
                 label: 'Apple Pay',
-                // icon: Icons.chevron_right_outlined,
                 function: () {
-                  debugPrint('New Apple Pay');
+                  setState(() {
+                    selectedMethod = 'Apple Pay';
+                    _validatePaymentMethod();
+                  });
                 },
               ),
               const SizedBox(height: 10),
               CustomButtonTile(
                 label: 'Mobile Banking',
-                widgetRight: const Icon(
-                  Icons.arrow_forward_ios,
-                  // color: Colors.white,
-                ),
+                widgetRight: const Icon(Icons.arrow_forward_ios),
                 widgetLeft: const Icon(
                   size: 16,
                   Icons.phone_iphone,
                   color: NemorixColors.primaryColor,
                 ),
                 function: () {
-                  debugPrint('New Mobile Banking');
+                  setState(() {
+                    selectedMethod = 'Mobile Banking';
+                    _validatePaymentMethod();
+                  });
                 },
               ),
+              if (_validationState != PaymentMethodValidationState.valid) ...[
+                const SizedBox(height: 16),
+                Text(
+                  PaymentMethodValidator.getErrorMessage(
+                    context,
+                    _validationState,
+                  ),
+                  style: const TextStyle(
+                    color: NemorixColors.errorColor,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
               const SizedBox(height: 20),
               // Switch email option
               Row(
@@ -265,11 +308,20 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: RoundedElevatedButton(
                   text: 'Continue',
-                  onPressed: () {
-                    debugPrint('Button continue pressed');
-                  }, // Flutter bloc action
-                  backgroundColor: NemorixColors.primaryColor,
-                  textColor: Colors.black,
+                  onPressed:
+                      _validationState == PaymentMethodValidationState.valid
+                          ? () {
+                            debugPrint('Button continue pressed');
+                          }
+                          : null,
+                  backgroundColor:
+                      _validationState == PaymentMethodValidationState.valid
+                          ? NemorixColors.primaryColor
+                          : NemorixColors.greyLevel2,
+                  textColor:
+                      _validationState == PaymentMethodValidationState.valid
+                          ? Colors.black
+                          : NemorixColors.greyLevel3,
                 ),
               ),
             ],
