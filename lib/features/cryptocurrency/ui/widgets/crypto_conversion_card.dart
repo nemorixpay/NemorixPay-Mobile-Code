@@ -5,6 +5,14 @@ import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
 import 'package:nemorixpay/shared/ui/widgets/base_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/amount_validator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../presentation/bloc/crypto_price_bloc.dart';
+import 'crypto_price_display.dart';
+import '../../domain/entities/amount_validator.dart';
+import '../../domain/entities/crypto_entity.dart';
+import '../../domain/usecases/update_crypto_price_usecase.dart';
+import '../../data/repositories/crypto_repository_impl.dart';
+import '../../data/datasources/crypto_price_datasource.dart';
 
 /// @file        crypto_conversion_card.dart
 /// @brief       Widget for conversion between fiat and cryptocurrencies.
@@ -12,8 +20,8 @@ import 'package:nemorixpay/features/cryptocurrency/domain/entities/amount_valida
 ///              including fiat currency selection, amount input, cryptocurrency selection,
 ///              and exchange rate display.
 /// @author      Miguel Fagundez
-/// @date        2025-04-29
-/// @version     1.0
+/// @date        04/30/2025
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 class CryptoConversionCard extends StatefulWidget {
   final String selectedFiat;
@@ -43,6 +51,32 @@ class CryptoConversionCard extends StatefulWidget {
 
 class _CryptoConversionCardState extends State<CryptoConversionCard> {
   AmountValidationState _validationState = AmountValidationState.valid;
+  late CryptoPriceBloc _cryptoPriceBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeBloc();
+  }
+
+  @override
+  void didUpdateWidget(CryptoConversionCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.selectedCrypto.symbol != widget.selectedCrypto.symbol) {
+      _initializeBloc();
+    }
+  }
+
+  void _initializeBloc() {
+    _cryptoPriceBloc = CryptoPriceBloc(
+      updateCryptoPrice: UpdateCryptoPriceUseCase(
+        CryptoRepositoryImpl(
+          CryptoPriceDataSourceImpl()
+            ..initializeMockData(widget.selectedCrypto),
+        ),
+      ),
+    );
+  }
 
   void _validateAmount(String amount) {
     setState(() {
@@ -66,84 +100,97 @@ class _CryptoConversionCardState extends State<CryptoConversionCard> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseCard(
-      cardWidget: Column(
-        children: [
-          Row(
-            children: [
-              Text(
-                AppLocalizations.of(context)!.youPay,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const Spacer(),
-              _buildFiatDropdown(context),
-            ],
-          ),
-          TextField(
-            controller: widget.payController,
-            keyboardType: TextInputType.number,
-            style: Theme.of(context).textTheme.titleLarge,
-            inputFormatters: [AmountInputFormatter()],
-            decoration: InputDecoration(
-              hintText: '0.00',
-              hintStyle: const TextStyle(color: Colors.grey),
-              border: InputBorder.none,
-              errorText:
-                  _validationState != AmountValidationState.valid
-                      ? _getErrorMessage(context)
-                      : null,
+    return BlocProvider.value(
+      value: _cryptoPriceBloc,
+      child: BaseCard(
+        cardWidget: Column(
+          children: [
+            Text(
+              AppLocalizations.of(context)!.youPay,
+              style: Theme.of(context).textTheme.labelLarge,
             ),
-            onChanged: _validateAmount,
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              const Expanded(child: Divider()),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: const Icon(
-                  Icons.swap_vert,
-                  color: NemorixColors.primaryColor,
+            const SizedBox(height: 12),
+            CryptoPriceDisplay(
+              symbol: widget.selectedCrypto.symbol,
+              initialCrypto: widget.selectedCrypto,
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.youPay,
+                  style: Theme.of(context).textTheme.labelLarge,
                 ),
-              ),
-              const Expanded(child: Divider()),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Text(
-                AppLocalizations.of(context)!.youReceive,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const Spacer(),
-              _buildCryptoDropdown(context),
-            ],
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              widget.receiveAmount.toStringAsFixed(4),
-              style: Theme.of(context).textTheme.titleLarge,
+                const Spacer(),
+                _buildFiatDropdown(context),
+              ],
             ),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.circle,
-                color: NemorixColors.primaryColor,
-                size: 8,
+            TextField(
+              controller: widget.payController,
+              keyboardType: TextInputType.number,
+              style: Theme.of(context).textTheme.titleLarge,
+              inputFormatters: [AmountInputFormatter()],
+              decoration: InputDecoration(
+                hintText: '0.00',
+                hintStyle: const TextStyle(color: Colors.grey),
+                border: InputBorder.none,
+                errorText:
+                    _validationState != AmountValidationState.valid
+                        ? _getErrorMessage(context)
+                        : null,
               ),
-              const SizedBox(width: 4),
-              Text(
-                '1 USD = ${(1 / widget.cryptoPrice).toStringAsFixed(6)} ${widget.selectedCrypto.symbol.toUpperCase()}',
-                style: Theme.of(context).textTheme.labelMedium,
+              onChanged: _validateAmount,
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                const Expanded(child: Divider()),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: const Icon(
+                    Icons.swap_vert,
+                    color: NemorixColors.primaryColor,
+                  ),
+                ),
+                const Expanded(child: Divider()),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.youReceive,
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                const Spacer(),
+                _buildCryptoDropdown(context),
+              ],
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                widget.receiveAmount.toStringAsFixed(4),
+                style: Theme.of(context).textTheme.titleLarge,
               ),
-            ],
-          ),
-        ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.circle,
+                  color: NemorixColors.primaryColor,
+                  size: 8,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  '1 USD = ${(1 / widget.cryptoPrice).toStringAsFixed(6)} ${widget.selectedCrypto.symbol.toUpperCase()}',
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -180,5 +227,11 @@ class _CryptoConversionCardState extends State<CryptoConversionCard> {
               .toList(),
       onChanged: (value) => widget.onCryptoChanged(value!),
     );
+  }
+
+  @override
+  void dispose() {
+    _cryptoPriceBloc.close();
+    super.dispose();
   }
 }
