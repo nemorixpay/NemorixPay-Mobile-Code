@@ -78,5 +78,9 @@
   "continueText": "Continuar",
   "noPaymentMethodSelected": "Por favor selecciona un método de pago",
   "invalidCardSelected": "Por favor selecciona una tarjeta válida",
-  "cardExpired": "La tarjeta seleccionada ha expirado"
+  "cardExpired": "La tarjeta seleccionada ha expirado",
+  "walletSetupTitle": "Configuración de Billetera",
+  "walletSetupSubtitle": "Importa una billetera existente o crea una nueva",
+  "importUsingSeedPhrase": "Importar Usando Frase Semilla",
+  "createNewAccount": "Crear Nueva Cuenta" 
 }

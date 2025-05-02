@@ -33,4 +33,7 @@ class RouteNames {
 
   /// Page for selecting payment methods
   static const paymentMethod = "payment_method";
+
+  /// Page for selecting payment methods
+  static const walletSetup = "wallet_setup";
 }

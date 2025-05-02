@@ -78,5 +78,9 @@
   "continueText": "Continue",
   "noPaymentMethodSelected": "Please select a payment method",
   "invalidCardSelected": "Please select a valid card",
-  "cardExpired": "The selected card has expired"
+  "cardExpired": "The selected card has expired",
+  "walletSetupTitle": "Wallet Setup",
+  "walletSetupSubtitle": "Import an existing wallet or create a new one",
+  "importUsingSeedPhrase": "Import Using Seed Phrase",
+  "createNewAccount": "Create a New Account"
 }
