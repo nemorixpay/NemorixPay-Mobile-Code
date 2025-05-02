@@ -82,5 +82,7 @@
   "walletSetupTitle": "Configuración de Billetera",
   "walletSetupSubtitle": "Importa una billetera existente o crea una nueva",
   "importUsingSeedPhrase": "Importar Usando Frase Semilla",
-  "createNewAccount": "Crear Nueva Cuenta" 
+  "createNewAccount": "Crear Nueva Cuenta",
+  "importSeedPhraseInstructions": "Introduce tu frase semilla (12 o 24 palabras). NemorixPay no almacenará tus frases mnemotécnicas.",
+  "next": "Siguiente"
 }

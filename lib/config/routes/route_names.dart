@@ -36,4 +36,7 @@ class RouteNames {
 
   /// Page for selecting payment methods
   static const walletSetup = "wallet_setup";
+
+  /// Page for importing seed phrase
+  static const importSeedPhrase = "import_seed_phrase";
 }

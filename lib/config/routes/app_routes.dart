@@ -9,6 +9,7 @@ import 'package:nemorixpay/features/auth/ui/pages/sign_up_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/pages/buy_crypto_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/pages/payment_method_page.dart';
 import 'package:nemorixpay/features/splash/ui/pages/splash_page.dart';
+import 'package:nemorixpay/features/wallet/ui/pages/import_seed_phrase_page.dart';
 import 'package:nemorixpay/features/wallet/ui/pages/wallet_setup_page.dart';
 import 'package:nemorixpay/shared/ui/pages/test_page/test_home_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/pages/home_page.dart';
@@ -83,6 +84,12 @@ class AppRoutes {
       name: 'Wallet Setup',
       screen: WalletSetupPage(),
       icon: Icons.wallet_outlined,
+    ),
+    RouteModel(
+      route: RouteNames.importSeedPhrase,
+      name: 'ImportSeed Phrase',
+      screen: ImportSeedPhrasePage(),
+      icon: Icons.import_export,
     ),
   ];
 
