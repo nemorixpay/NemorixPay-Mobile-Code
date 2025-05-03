@@ -10,6 +10,7 @@ import 'package:nemorixpay/features/cryptocurrency/ui/pages/buy_crypto_page.dart
 import 'package:nemorixpay/features/cryptocurrency/ui/pages/payment_method_page.dart';
 import 'package:nemorixpay/features/splash/ui/pages/splash_page.dart';
 import 'package:nemorixpay/features/wallet/ui/pages/import_seed_phrase_page.dart';
+import 'package:nemorixpay/features/wallet/ui/pages/show_seed_phrase_page.dart';
 import 'package:nemorixpay/features/wallet/ui/pages/wallet_setup_page.dart';
 import 'package:nemorixpay/shared/ui/pages/test_page/test_home_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/pages/home_page.dart';
@@ -135,6 +136,11 @@ class AppRoutes {
                 amount: args['amount'] as double,
                 currency: args['currency'] as String,
               ),
+        );
+      case RouteNames.showSeedPhrase:
+        final args = settings.arguments as List<String>;
+        return MaterialPageRoute(
+          builder: (context) => ShowSeedPhrasePage(seedPhrase: args),
         );
       default:
         return MaterialPageRoute(builder: (context) => const LoginPage());

@@ -1,13 +1,14 @@
+import 'package:flutter/material.dart';
+import 'package:nemorixpay/shared/ui/widgets/rounded_elevated_button.dart';
+import 'package:nemorixpay/config/theme/nemorix_colors.dart';
+
 /// @file        continue_button.dart
 /// @brief       Continue Button widget for NemorixPay wallet feature.
 /// @details     Reusable button for advancing in wallet-related flows, based on RoundedElevatedButton.
 /// @author      Miguel Fagundez
-/// @date        2024-06-09
+/// @date        2025-05-02
 /// @version     1.0
 /// @copyright   Apache 2.0 License
-import 'package:flutter/material.dart';
-import 'package:nemorixpay/shared/ui/widgets/rounded_elevated_button.dart';
-import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 
 /// @brief Continue button for the wallet feature.
 /// @details Reuses RoundedElevatedButton and allows custom onPressed and label.
@@ -20,11 +21,11 @@ class ContinueButton extends StatelessWidget {
   /// @param label Button label text
   /// @param enabled Whether the button is enabled
   const ContinueButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.label,
     this.enabled = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

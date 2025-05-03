@@ -39,4 +39,7 @@ class RouteNames {
 
   /// Page for importing seed phrase
   static const importSeedPhrase = "import_seed_phrase";
+
+  /// Page for showing seed phrase
+  static const showSeedPhrase = "show_seed_phrase";
 }

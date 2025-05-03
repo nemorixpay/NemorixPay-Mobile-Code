@@ -1,13 +1,14 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:nemorixpay/config/theme/nemorix_colors.dart';
+
 /// @file        wallet_setup_page.dart
 /// @brief       Wallet Setup screen for NemorixPay.
 /// @details     This file contains the UI for the initial wallet setup, allowing users to import or create a new wallet.
 /// @author      Miguel Fagundez
-/// @date        2024-06-09
+/// @date        2025-05-02
 /// @version     1.0
 /// @copyright   Apache 2.0 License
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 
 class WalletSetupPage extends StatelessWidget {
   const WalletSetupPage({super.key});

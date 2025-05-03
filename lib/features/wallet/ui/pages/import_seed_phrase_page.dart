@@ -1,17 +1,18 @@
+import 'package:flutter/material.dart';
+import 'package:nemorixpay/shared/ui/widgets/base_card.dart';
+import 'package:nemorixpay/shared/ui/widgets/main_header.dart';
+import 'package:nemorixpay/features/wallet/ui/widgets/seed_phrase_input_grid.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:nemorixpay/features/wallet/ui/widgets/continue_button.dart';
+
 /// @file        import_seed_phrase_page.dart
 /// @brief       Import Seed Phrase screen for NemorixPay wallet feature.
 /// @details     This file contains the UI and logic for importing a Stellar account using a 12 or 24 word mnemonic phrase.
 /// @author      Miguel Fagundez
-/// @date        2024-06-09
+/// @date        2025-05-02
 /// @version     1.0
 /// @copyright   Apache 2.0 License
-import 'package:flutter/material.dart';
-import 'package:nemorixpay/shared/ui/widgets/base_card.dart';
-import 'package:nemorixpay/shared/ui/widgets/main_header.dart';
-import 'package:nemorixpay/shared/ui/widgets/rounded_elevated_button.dart';
-import 'package:nemorixpay/features/wallet/ui/widgets/seed_phrase_input_grid.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:nemorixpay/features/wallet/ui/widgets/continue_button.dart';
+
 // ... otros imports necesarios ...
 
 /// @brief Page for importing a Stellar account using a seed phrase.
@@ -107,8 +108,8 @@ class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const MainHeader(
-                title: '  Import Your Stellar Account',
+              MainHeader(
+                title: l10n.importStellarAccountTitle,
                 showSearchButton: false,
               ),
               const SizedBox(height: 24),
@@ -128,8 +129,8 @@ class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage> {
                 child: BaseCard(
                   cardWidget: DropdownButtonFormField<int>(
                     value: _phraseLength,
-                    decoration: const InputDecoration(
-                      labelText: 'Seed Phrase Type',
+                    decoration: InputDecoration(
+                      labelText: l10n.seedPhraseTypeLabel,
                       border: OutlineInputBorder(),
                       isDense: true,
                     ),
@@ -137,7 +138,7 @@ class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage> {
                         _phraseOptions.map((option) {
                           return DropdownMenuItem<int>(
                             value: option,
-                            child: Text('$option Seed Phrase'),
+                            child: Text('$option ${l10n.seedPhraseLabel}'),
                           );
                         }).toList(),
                     onChanged: (value) {

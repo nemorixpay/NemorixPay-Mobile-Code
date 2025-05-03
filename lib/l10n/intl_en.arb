@@ -84,5 +84,10 @@
   "importUsingSeedPhrase": "Import Using Seed Phrase",
   "createNewAccount": "Create a New Account",
   "importSeedPhraseInstructions": "Enter Your Seed Phrase (12 or 24 words). NemorixPay will not store your mnemonic phrases.",
-  "next": "Next"
+  "next": "Next",
+  "writeDownSeedPhraseTitle": "Write Down Your Seed Phrase",
+  "writeDownSeedPhraseInstructions": "This is your seed phrase. Write it down on a paper and keep it in a safe place. You will be asked to re-enter this phrase (in order) on the next step.",
+  "importStellarAccountTitle": "Import Your Stellar Account",
+  "seedPhraseTypeLabel": "Seed Phrase Type",
+  "seedPhraseLabel": "Seed Phrase"
 }

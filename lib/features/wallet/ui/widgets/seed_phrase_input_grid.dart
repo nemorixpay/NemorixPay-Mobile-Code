@@ -1,11 +1,12 @@
+import 'package:flutter/material.dart';
+
 /// @file        seed_phrase_input_grid.dart
 /// @brief       Seed Phrase Input Grid widget for NemorixPay wallet feature.
 /// @details     Contains the dynamic grid and input field widgets for entering the mnemonic phrase during wallet import.
 /// @author      Miguel Fagundez
-/// @date        2024-06-09
+/// @date        2025-05-02
 /// @version     1.0
 /// @copyright   Apache 2.0 License
-import 'package:flutter/material.dart';
 
 /// @brief Widget that displays a dynamic grid of seed phrase input fields.
 /// @details The grid adapts to the selected phrase length (12 or 24 words) and arranges the fields in two columns.
@@ -16,10 +17,10 @@ class SeedPhraseInputGrid extends StatelessWidget {
   /// @param phraseLength Number of words in the seed phrase (12 or 24)
   /// @param controllers List of controllers for each input field
   const SeedPhraseInputGrid({
-    Key? key,
+    super.key,
     required this.phraseLength,
     required this.controllers,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
