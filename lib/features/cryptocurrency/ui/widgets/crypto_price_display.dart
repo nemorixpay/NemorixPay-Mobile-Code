@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/crypto_entity.dart';
-import '../../presentation/bloc/crypto_price_bloc.dart';
+import '../../ui/bloc/crypto_price_bloc.dart';
 
 /// @file        crypto_price_display.dart
 /// @brief       Widget for displaying cryptocurrency prices.
@@ -15,10 +15,10 @@ class CryptoPriceDisplay extends StatelessWidget {
   final CryptoEntity initialCrypto;
 
   const CryptoPriceDisplay({
-    Key? key,
+    super.key,
     required this.symbol,
     required this.initialCrypto,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

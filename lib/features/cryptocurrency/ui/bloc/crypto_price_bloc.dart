@@ -8,7 +8,7 @@ import '../../domain/usecases/update_crypto_price_usecase.dart';
 /// @brief       BLoC for managing cryptocurrency price state and events.
 /// @details     Handles the state management for cryptocurrency price updates.
 /// @author      Miguel Fagundez
-/// @date        04/30/2025
+/// @date        2025-05-03
 /// @version     1.0
 /// @copyright   Apache 2.0 License
 
