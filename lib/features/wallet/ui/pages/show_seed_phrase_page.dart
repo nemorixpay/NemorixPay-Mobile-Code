@@ -3,18 +3,19 @@ import 'package:nemorixpay/features/wallet/ui/widgets/continue_button.dart';
 import 'package:nemorixpay/shared/ui/widgets/main_header.dart';
 import 'package:nemorixpay/shared/ui/widgets/base_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../../core/security/secure_screen_mixin.dart';
 
 /// @file        show_seed_phrase_page.dart
 /// @brief       Show Seed Phrase screen for NemorixPay wallet feature.
 /// @details     This file displays the generated seed phrase (12 or 24 words) for the user to write down and keep safe. It reuses existing widgets and adapts the grid for display only.
 /// @author      Miguel Fagundez
-/// @date        2025-05-02
-/// @version     1.0
+/// @date        2025-05-03
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 
 /// @brief Page to display the generated seed phrase for the user to write down.
 /// @details The grid adapts to 12 or 24 words and is read-only.
-class ShowSeedPhrasePage extends StatelessWidget {
+class ShowSeedPhrasePage extends StatefulWidget {
   final List<String> seedPhrase;
   final VoidCallback? onNext;
 
@@ -23,7 +24,13 @@ class ShowSeedPhrasePage extends StatelessWidget {
   const ShowSeedPhrasePage({super.key, required this.seedPhrase, this.onNext});
 
   @override
-  Widget build(BuildContext context) {
+  _ShowSeedPhrasePageState createState() => _ShowSeedPhrasePageState();
+}
+
+class _ShowSeedPhrasePageState extends State<ShowSeedPhrasePage>
+    with SecureScreenMixin {
+  @override
+  Widget buildSecureScreen(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -52,7 +59,7 @@ class ShowSeedPhrasePage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(24.0),
                 child: BaseCard(
-                  cardWidget: SeedPhraseDisplayGrid(words: seedPhrase),
+                  cardWidget: SeedPhraseDisplayGrid(words: widget.seedPhrase),
                 ),
               ),
               const SizedBox(height: 32),
@@ -61,7 +68,7 @@ class ShowSeedPhrasePage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: ContinueButton(
                   label: l10n.next,
-                  onPressed: onNext ?? () {},
+                  onPressed: widget.onNext ?? () {},
                 ),
               ),
               SizedBox(height: 24),

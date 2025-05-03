@@ -4,16 +4,15 @@ import 'package:nemorixpay/shared/ui/widgets/main_header.dart';
 import 'package:nemorixpay/features/wallet/ui/widgets/seed_phrase_input_grid.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/features/wallet/ui/widgets/continue_button.dart';
+import '../../../../core/security/secure_screen_mixin.dart';
 
 /// @file        import_seed_phrase_page.dart
 /// @brief       Import Seed Phrase screen for NemorixPay wallet feature.
 /// @details     This file contains the UI and logic for importing a Stellar account using a 12 or 24 word mnemonic phrase.
 /// @author      Miguel Fagundez
-/// @date        2025-05-02
-/// @version     1.0
+/// @date        2025-05-03
+/// @version     1.1
 /// @copyright   Apache 2.0 License
-
-// ... otros imports necesarios ...
 
 /// @brief Page for importing a Stellar account using a seed phrase.
 /// @details Allows the user to input a 12 or 24 word mnemonic phrase to import their wallet. The UI adapts to the selected phrase length and supports both light and dark themes.
@@ -24,7 +23,8 @@ class ImportSeedPhrasePage extends StatefulWidget {
   State<ImportSeedPhrasePage> createState() => _ImportSeedPhrasePageState();
 }
 
-class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage> {
+class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage>
+    with SecureScreenMixin {
   /// @brief Current selected phrase length (12 or 24)
   int _phraseLength = 12;
 
@@ -99,7 +99,7 @@ class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildSecureScreen(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
