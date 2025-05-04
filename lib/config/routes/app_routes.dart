@@ -9,6 +9,7 @@ import 'package:nemorixpay/features/auth/ui/pages/sign_up_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/pages/buy_crypto_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/pages/payment_method_page.dart';
 import 'package:nemorixpay/features/splash/ui/pages/splash_page.dart';
+import 'package:nemorixpay/features/wallet/ui/pages/confirm_seed_phrase_page.dart';
 import 'package:nemorixpay/features/wallet/ui/pages/import_seed_phrase_page.dart';
 import 'package:nemorixpay/features/wallet/ui/pages/show_seed_phrase_page.dart';
 import 'package:nemorixpay/features/wallet/ui/pages/wallet_setup_page.dart';
@@ -16,6 +17,7 @@ import 'package:nemorixpay/shared/ui/pages/test_page/test_home_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/pages/home_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/pages/crypto_details.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
+import 'package:nemorixpay/shared/ui/widgets/nemorix_snackbar.dart';
 
 /// @file        app_routes.dart
 /// @brief       Centralized route management for NemorixPay.
@@ -142,6 +144,22 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (context) => ShowSeedPhrasePage(seedPhrase: args),
         );
+      case RouteNames.confirmSeedPhrase:
+        final args = settings.arguments as List<String>;
+        return MaterialPageRoute(
+          builder: (context) => ConfirmSeedPhrasePage(seedPhrase: args),
+        );
+      //   ConfirmSeedPhrasePage(
+      //      seedPhrase: mySeedPhrase,
+      //      onSuccess: () {
+      //       // Navegar a la pantalla principal
+      //        Navigator.pushReplacementNamed(context, '/walletHome');
+      //      },
+      //      onFail: () {
+      //        // Mostrar alerta
+      //        showDialog(...);
+      //      },
+      //    )
       default:
         return MaterialPageRoute(builder: (context) => const LoginPage());
     }

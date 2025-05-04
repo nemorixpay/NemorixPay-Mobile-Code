@@ -89,5 +89,9 @@
   "writeDownSeedPhraseInstructions": "Esta es tu frase semilla. Escríbela en un papel y guárdala en un lugar seguro. Se te pedirá que vuelvas a ingresar esta frase (en el mismo orden) en el siguiente paso.",
   "importStellarAccountTitle": "Importar tu cuenta Stellar",
   "seedPhraseTypeLabel": "Tipo de frase semilla",
-  "seedPhraseLabel": "Frase semilla"
+  "seedPhraseLabel": "Frase semilla",
+  "confirmSeedPhraseTitle": "Confirma tu frase semilla",
+  "confirmSeedPhraseInstructions": "Selecciona cada palabra en el orden en que te fue presentada.",
+  "confirmSeedPhraseError": "Palabra incorrecta. Por favor, revisa tu frase semilla y asegúrate de haber anotado todas las palabras en el orden correcto. Si cometes un error, podrías perder el acceso a tu cuenta.",
+  "confirmSeedPhraseSuccess": "¡Correcto! Ahora confirma una segunda palabra de tu frase semilla."
 }

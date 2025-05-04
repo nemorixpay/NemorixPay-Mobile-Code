@@ -89,5 +89,9 @@
   "writeDownSeedPhraseInstructions": "This is your seed phrase. Write it down on a paper and keep it in a safe place. You will be asked to re-enter this phrase (in order) on the next step.",
   "importStellarAccountTitle": "Import Your Stellar Account",
   "seedPhraseTypeLabel": "Seed Phrase Type",
-  "seedPhraseLabel": "Seed Phrase"
+  "seedPhraseLabel": "Seed Phrase",
+  "confirmSeedPhraseTitle": "Confirm Seed Phrase",
+  "confirmSeedPhraseInstructions": "Select each word in the order it was presented to you.",
+  "confirmSeedPhraseError": "Incorrect word. Please check your seed phrase and make sure you wrote down all the words in the correct order. If you make a mistake, you may lose access to your account.",
+  "confirmSeedPhraseSuccess": "Correct! Now confirm a second word from your seed phrase."
 }
