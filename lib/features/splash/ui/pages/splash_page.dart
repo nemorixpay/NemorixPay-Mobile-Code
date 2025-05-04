@@ -182,6 +182,15 @@ class SplashPage extends StatelessWidget {
                   backgroundColor: Colors.white,
                   textColor: Colors.black,
                 ),
+                SizedBox(height: 20),
+                RoundedElevatedButton(
+                  text: "Continue with Tetsing Page",
+                  onPressed: () {
+                    Navigator.pushNamed(context, RouteNames.testingPage);
+                  },
+                  backgroundColor: Colors.white,
+                  textColor: Colors.black,
+                ),
                 SizedBox(height: 40),
               ],
             ),

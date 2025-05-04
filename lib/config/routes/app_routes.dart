@@ -12,6 +12,7 @@ import 'package:nemorixpay/features/splash/ui/pages/splash_page.dart';
 import 'package:nemorixpay/features/wallet/ui/pages/confirm_seed_phrase_page.dart';
 import 'package:nemorixpay/features/wallet/ui/pages/import_seed_phrase_page.dart';
 import 'package:nemorixpay/features/wallet/ui/pages/show_seed_phrase_page.dart';
+import 'package:nemorixpay/features/wallet/ui/pages/stellar_service_test_page.dart';
 import 'package:nemorixpay/features/wallet/ui/pages/wallet_setup_page.dart';
 import 'package:nemorixpay/shared/ui/pages/test_page/test_home_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/pages/home_page.dart';
@@ -92,6 +93,12 @@ class AppRoutes {
       route: RouteNames.importSeedPhrase,
       name: 'ImportSeed Phrase',
       screen: ImportSeedPhrasePage(),
+      icon: Icons.import_export,
+    ),
+    RouteModel(
+      route: RouteNames.testingPage,
+      name: 'Testing Page',
+      screen: StellarServiceTestPage(),
       icon: Icons.import_export,
     ),
   ];
