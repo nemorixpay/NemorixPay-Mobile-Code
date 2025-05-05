@@ -4,10 +4,11 @@ import 'package:bip39/bip39.dart' as bip39;
 
 /// @file        stellar_service.dart
 /// @brief       Service for Stellar network integration in NemorixPay.
-/// @details     Provides methods for mnemonic generation, key derivation, and account creation on the Stellar testnet using the official Flutter SDK.
+/// @details     Provides methods for mnemonic generation, key derivation, account creation
+///              and create/validate transactions on the Stellar testnet using the official Flutter SDK.
 /// @author      Miguel Fagundez
-/// @date        2025-05-03
-/// @version     1.0
+/// @date        2025-05-04
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 
 /// Service responsible for interacting with the Stellar network
@@ -53,5 +54,79 @@ class StellarService {
     return double.tryParse(xlmBalance.balance) ?? 0.0;
   }
 
-  // Future methods: getBalance, sendTransaction, etc.
+  /// Sends XLM from source account to destination account
+  Future<String> sendTransaction({
+    required String sourceSecretSeed,
+    required String destinationPublicKey,
+    required double amount,
+    String? memo,
+  }) async {
+    try {
+      // Create source KeyPair from secret seed
+      final sourceKeyPair = KeyPair.fromSecretSeed(sourceSecretSeed);
+
+      // Verificar balance antes de proceder
+      final balance = await getBalance(sourceKeyPair.accountId);
+      if (balance < amount) {
+        throw Exception(
+          'Balance insuficiente. Balance actual: $balance XLM, Monto a enviar: $amount XLM',
+        );
+      }
+
+      // Load source account
+      final sourceAccount = await sdk.accounts.account(sourceKeyPair.accountId);
+
+      // Create transaction
+      final transaction =
+          TransactionBuilder(sourceAccount)
+              .addOperation(
+                PaymentOperationBuilder(
+                  destinationPublicKey, // destination account ID
+                  Asset.NATIVE, // asset type (XLM)
+                  amount.toString(), // amount to send
+                ).build(),
+              )
+              .addMemo(Memo.text("NemorixPay Transfer: $memo"))
+              .build();
+
+      // Sign transaction
+      transaction.sign(sourceKeyPair, Network.TESTNET);
+
+      // Submit transaction
+      final response = await sdk.submitTransaction(transaction);
+
+      // Check if transaction was successful
+      final String transactionHash = response.hash ?? '';
+      if (response.success && transactionHash.isNotEmpty) {
+        return transactionHash;
+      } else {
+        throw Exception(
+          'Error al enviar transacción: ${response.extras?.resultCodes?.transactionResultCode}',
+        );
+      }
+    } catch (e) {
+      throw Exception('Error al enviar transacción: $e');
+    }
+  }
+
+  /// Validates a transaction by its hash
+  Future<Map<String, dynamic>> validateTransaction(
+    String transactionHash,
+  ) async {
+    try {
+      // Solo normalizar el hash a minúsculas y eliminar espacios
+      final normalizedHash = transactionHash.toLowerCase().trim();
+
+      final transaction = await sdk.transactions.transaction(normalizedHash);
+      return {
+        'successful': transaction.successful,
+        'ledger': transaction.ledger,
+        'createdAt': transaction.createdAt,
+        'sourceAccount': transaction.sourceAccount,
+        'feeCharged': transaction.feeCharged,
+      };
+    } catch (e) {
+      throw Exception('Error al validar transacción: $e');
+    }
+  }
 }

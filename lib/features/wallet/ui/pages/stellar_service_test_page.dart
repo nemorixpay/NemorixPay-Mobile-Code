@@ -1,15 +1,15 @@
-/// @file        stellar_service_test_page.dart
-/// @brief       Test page for StellarService integration in NemorixPay.
-/// @details     Allows isolated testing of mnemonic generation, key derivation, and account creation on the Stellar testnet. Results are shown on screen and in the debug console.
-/// @author      Miguel Fagundez
-/// @date        2025-05-03
-/// @version     1.0
-/// @copyright   Apache 2.0 License
-
 import 'package:flutter/material.dart';
 import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
 import 'package:nemorixpay/features/wallet/data/datasources/stellar_service.dart';
+import 'dart:convert';
 
+/// @file        stellar_service_test_page.dart
+/// @brief       Test page for StellarService integration in NemorixPay.
+/// @details     Allows isolated testing of mnemonic generation, key derivation, account creation and transactions on the Stellar testnet.
+/// @author      Miguel Fagundez
+/// @date        2025-05-04
+/// @version     1.1
+/// @copyright   Apache 2.0 License
 class StellarServiceTestPage extends StatefulWidget {
   const StellarServiceTestPage({super.key});
 
@@ -23,15 +23,32 @@ class _StellarServiceTestPageState extends State<StellarServiceTestPage> {
   String? _publicKey;
   String? _secretSeed;
   String? _friendbotResult;
-  String? _balancePublicKey;
-  double? _balanceResult;
-  String? _balanceError;
+  String? _transactionHash;
+  String? _transactionResult;
   bool _loading = false;
+  double? _currentBalance;
+
+  // Controllers para formularios
+  final _sourceSecretSeedController = TextEditingController();
+  final _destinationController = TextEditingController();
+  final _amountController = TextEditingController();
+  final _hashController = TextEditingController();
+  final _memoController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _stellarService = StellarService(sdk: StellarSDK.TESTNET);
+  }
+
+  @override
+  void dispose() {
+    _sourceSecretSeedController.dispose();
+    _destinationController.dispose();
+    _amountController.dispose();
+    _hashController.dispose();
+    _memoController.dispose();
+    super.dispose();
   }
 
   void _generateMnemonic() {
@@ -40,6 +57,8 @@ class _StellarServiceTestPageState extends State<StellarServiceTestPage> {
       _publicKey = null;
       _secretSeed = null;
       _friendbotResult = null;
+      _transactionHash = null;
+      _transactionResult = null;
     });
     debugPrint('Mnemonic: $_mnemonic');
   }
@@ -82,23 +101,112 @@ class _StellarServiceTestPageState extends State<StellarServiceTestPage> {
   }
 
   Future<void> _checkBalance() async {
-    if (_balancePublicKey == null || _balancePublicKey!.isEmpty) return;
-    setState(() {
-      _loading = true;
-      _balanceResult = null;
-      _balanceError = null;
-    });
+    if (_sourceSecretSeedController.text.isEmpty) return;
+
     try {
-      final balance = await _stellarService.getBalance(_balancePublicKey!);
+      final keyPair = KeyPair.fromSecretSeed(_sourceSecretSeedController.text);
+      final balance = await _stellarService.getBalance(keyPair.accountId);
       setState(() {
-        _balanceResult = balance;
+        _currentBalance = balance;
       });
-      debugPrint('Balance for $_balancePublicKey: $balance XLM');
     } catch (e) {
       setState(() {
-        _balanceError = 'Error: $e';
+        _currentBalance = null;
       });
       debugPrint('Error checking balance: $e');
+    }
+  }
+
+  Future<void> _sendTransaction() async {
+    if (_sourceSecretSeedController.text.isEmpty ||
+        _destinationController.text.isEmpty ||
+        _amountController.text.isEmpty) {
+      setState(() {
+        _transactionResult = 'Por favor, complete todos los campos requeridos';
+      });
+      return;
+    }
+
+    // Validar balance
+    if (_currentBalance == null) {
+      await _checkBalance();
+    }
+
+    final amount = double.tryParse(_amountController.text);
+    if (amount == null) {
+      setState(() {
+        _transactionResult = 'Por favor, ingrese un monto válido';
+      });
+      return;
+    }
+
+    if (_currentBalance != null && _currentBalance! < amount) {
+      setState(() {
+        _transactionResult =
+            'Balance insuficiente. Balance actual: ${_currentBalance} XLM, Monto a enviar: $amount XLM';
+      });
+      return;
+    }
+
+    // Validar tamaño del memo
+    if (_memoController.text.isNotEmpty) {
+      final memoBytes = utf8.encode(_memoController.text);
+      if (memoBytes.length > 28) {
+        setState(() {
+          _transactionResult =
+              'El memo no puede exceder 28 bytes (aproximadamente 28 caracteres ASCII)';
+        });
+        return;
+      }
+    }
+
+    setState(() => _loading = true);
+    try {
+      final hash = await _stellarService.sendTransaction(
+        sourceSecretSeed: _sourceSecretSeedController.text,
+        destinationPublicKey: _destinationController.text,
+        amount: amount,
+        memo: _memoController.text,
+      );
+      setState(() {
+        _transactionHash = hash;
+        _transactionResult = 'Transaction sent successfully!';
+        // Actualizar balance después de la transacción
+        _checkBalance();
+      });
+      debugPrint('Transaction sent with hash: $hash');
+    } catch (e) {
+      setState(() {
+        _transactionResult = 'Error: $e';
+      });
+      debugPrint('Error sending transaction: $e');
+    } finally {
+      setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _validateTransaction() async {
+    if (_hashController.text.isEmpty) {
+      setState(() {
+        _transactionResult = 'Por favor, ingrese el hash de la transacción';
+      });
+      return;
+    }
+
+    setState(() => _loading = true);
+    try {
+      final result = await _stellarService.validateTransaction(
+        _hashController.text.trim(),
+      );
+      setState(() {
+        _transactionResult = 'Transaction details:\n${result.toString()}';
+      });
+      debugPrint('Transaction validation result: $result');
+    } catch (e) {
+      setState(() {
+        _transactionResult = 'Error: $e';
+      });
+      debugPrint('Error validating transaction: $e');
     } finally {
       setState(() => _loading = false);
     }
@@ -108,18 +216,24 @@ class _StellarServiceTestPageState extends State<StellarServiceTestPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('StellarService Test')),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Sección de creación de cuenta
+            const Text(
+              'Create New Account:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
             ElevatedButton(
               onPressed: _loading ? null : _generateMnemonic,
               child: const Text('Generate Mnemonic'),
             ),
             const SizedBox(height: 12),
             if (_mnemonic != null) SelectableText('Mnemonic: $_mnemonic'),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
             ElevatedButton(
               onPressed: (_loading || _mnemonic == null) ? null : _deriveKeys,
               child: const Text('Derive Keys from Mnemonic'),
@@ -128,7 +242,7 @@ class _StellarServiceTestPageState extends State<StellarServiceTestPage> {
             if (_publicKey != null) SelectableText('Public Key: $_publicKey'),
             if (_secretSeed != null)
               SelectableText('Secret Seed: $_secretSeed'),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
             ElevatedButton(
               onPressed:
                   (_loading || _publicKey == null) ? null : _createAccount,
@@ -140,30 +254,111 @@ class _StellarServiceTestPageState extends State<StellarServiceTestPage> {
                 _friendbotResult!,
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-            const SizedBox(height: 32),
-            Text(
-              'Check XLM Balance for Public Key:',
+            const SizedBox(height: 24),
+
+            // Sección de envío de transacción
+            const Text(
+              'Send Transaction:',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
+            const SizedBox(height: 12),
             TextField(
+              controller: _sourceSecretSeedController,
               decoration: const InputDecoration(
-                labelText: 'Public Key',
+                labelText: 'Source Secret Seed',
                 border: OutlineInputBorder(),
               ),
-              onChanged: (value) => _balancePublicKey = value.trim(),
+              onChanged: (_) => _checkBalance(),
+            ),
+            const SizedBox(height: 12),
+            if (_currentBalance != null)
+              Text(
+                'Balance actual: ${_currentBalance} XLM',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
+                ),
+              ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _destinationController,
+              decoration: const InputDecoration(
+                labelText: 'Destination Public Key',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _amountController,
+              decoration: const InputDecoration(
+                labelText: 'Amount (XLM)',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              onChanged: (_) {
+                if (_currentBalance != null &&
+                    _amountController.text.isNotEmpty) {
+                  final amount = double.tryParse(_amountController.text);
+                  if (amount != null && amount > _currentBalance!) {
+                    setState(() {
+                      _transactionResult =
+                          '⚠️ El monto excede el balance disponible';
+                    });
+                  } else {
+                    setState(() {
+                      _transactionResult = null;
+                    });
+                  }
+                }
+              },
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _memoController,
+              decoration: const InputDecoration(
+                labelText: 'Memo (optional)',
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 12),
             ElevatedButton(
-              onPressed: _loading ? null : _checkBalance,
-              child: const Text('Check Balance'),
+              onPressed: _loading ? null : _sendTransaction,
+              child: const Text('Send Transaction'),
             ),
-            if (_balanceResult != null)
+            const SizedBox(height: 12),
+            if (_transactionResult != null)
               Text(
-                'Balance: $_balanceResult XLM',
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                _transactionResult!,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color:
+                      _transactionResult!.contains('Error') ||
+                              _transactionResult!.contains('⚠️')
+                          ? Colors.red
+                          : Colors.green,
+                ),
               ),
-            if (_balanceError != null)
-              Text(_balanceError!, style: const TextStyle(color: Colors.red)),
+            const SizedBox(height: 24),
+
+            // Sección de validación de transacción
+            const Text(
+              'Validate Transaction:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _hashController,
+              decoration: const InputDecoration(
+                labelText: 'Transaction Hash',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: _loading ? null : _validateTransaction,
+              child: const Text('Validate Transaction'),
+            ),
+            const SizedBox(height: 12),
             if (_loading)
               const Padding(
                 padding: EdgeInsets.only(top: 24.0),
