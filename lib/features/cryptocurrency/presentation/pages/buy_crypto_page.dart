@@ -5,10 +5,10 @@ import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
 import 'package:nemorixpay/shared/data/mock_fiats.dart';
 import 'package:nemorixpay/shared/ui/widgets/main_header.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:nemorixpay/features/cryptocurrency/ui/widgets/crypto_conversion_card.dart';
-import 'package:nemorixpay/features/cryptocurrency/ui/widgets/exchange_fee_card.dart';
-import 'package:nemorixpay/features/cryptocurrency/ui/widgets/terms_and_conditions_section.dart';
-import 'package:nemorixpay/features/cryptocurrency/ui/widgets/continue_button.dart';
+import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/crypto_conversion_card.dart';
+import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/exchange_fee_card.dart';
+import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/terms_and_conditions_section.dart';
+import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/continue_button.dart';
 
 /// @file        buy_crypto_page.dart
 /// @brief       Buy Crypto screen implementation for NemorixPay.

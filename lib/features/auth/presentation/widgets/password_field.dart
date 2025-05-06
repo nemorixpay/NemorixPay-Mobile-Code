@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:nemorixpay/features/auth/ui/widgets/custom_text_form_field.dart';
+import 'package:nemorixpay/features/auth/presentation/widgets/custom_text_form_field.dart';
 
 /// @file        password_field.dart
 /// @brief       Custom password field widget with visibility toggle.

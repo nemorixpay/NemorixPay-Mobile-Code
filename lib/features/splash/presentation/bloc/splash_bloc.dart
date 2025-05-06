@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
-import 'package:nemorixpay/features/splash/ui/bloc/splash_event.dart';
-import 'package:nemorixpay/features/splash/ui/bloc/splash_state.dart';
+import 'package:nemorixpay/features/splash/presentation/bloc/splash_event.dart';
+import 'package:nemorixpay/features/splash/presentation/bloc/splash_state.dart';
 
 /// @file        splash_bloc.dart
 /// @brief       Splash screen business logic implementation for NemorixPay.

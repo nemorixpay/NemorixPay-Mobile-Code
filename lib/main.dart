@@ -12,7 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/config/routes/app_routes.dart';
 import 'package:nemorixpay/config/theme/nemorix_theme.dart';
-import 'package:nemorixpay/features/splash/ui/bloc/splash_bloc.dart';
+import 'package:nemorixpay/features/splash/presentation/bloc/splash_bloc.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/crypto_entity.dart';
-import '../../ui/bloc/crypto_price_bloc.dart';
+import '../bloc/crypto_price_bloc.dart';
 
 /// @file        crypto_price_display.dart
 /// @brief       Widget for displaying cryptocurrency prices.

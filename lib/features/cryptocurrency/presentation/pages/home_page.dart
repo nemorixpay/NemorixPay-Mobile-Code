@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
-import 'package:nemorixpay/features/cryptocurrency/ui/widgets/asset_card.dart';
-import 'package:nemorixpay/features/cryptocurrency/ui/widgets/home_header.dart';
-import 'package:nemorixpay/features/cryptocurrency/ui/widgets/live_price_tile.dart';
+import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/asset_card.dart';
+import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/home_header.dart';
+import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/live_price_tile.dart';
 import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

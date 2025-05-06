@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/shared/ui/widgets/main_header.dart';
 import 'package:nemorixpay/shared/ui/widgets/base_card.dart';
-import 'package:nemorixpay/features/wallet/ui/widgets/continue_button.dart';
+import 'package:nemorixpay/features/wallet/presentation/widgets/continue_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/shared/ui/widgets/nemorix_snackbar.dart';

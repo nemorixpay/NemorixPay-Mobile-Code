@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
-import 'package:nemorixpay/features/cryptocurrency/ui/widgets/crypto_stats_card.dart';
+import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/crypto_stats_card.dart';
 import 'package:nemorixpay/shared/ui/widgets/main_header.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
-import 'package:nemorixpay/features/cryptocurrency/ui/widgets/custom_two_buttons.dart';
+import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/custom_two_buttons.dart';
 
 /// @file        crypto_details.dart
 /// @brief       Screen to display detailed information about a cryptocurrency.

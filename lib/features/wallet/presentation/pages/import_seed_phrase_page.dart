@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/shared/ui/widgets/base_card.dart';
 import 'package:nemorixpay/shared/ui/widgets/main_header.dart';
-import 'package:nemorixpay/features/wallet/ui/widgets/seed_phrase_input_grid.dart';
+import 'package:nemorixpay/features/wallet/presentation/widgets/seed_phrase_input_grid.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:nemorixpay/features/wallet/ui/widgets/continue_button.dart';
+import 'package:nemorixpay/features/wallet/presentation/widgets/continue_button.dart';
 import '../../../../core/security/secure_screen_mixin.dart';
 
 /// @file        import_seed_phrase_page.dart

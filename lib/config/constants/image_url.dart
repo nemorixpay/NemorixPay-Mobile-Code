@@ -10,6 +10,7 @@
 class ImageUrl {
   // Images
   static const String logoMobileImage = 'assets/images/logo_mobile.png';
+  static const String walletSetupImage = 'assets/images/wallet_setup_1.png';
   // Logos
   static const String nemorixpayLogo = 'assets/logos/nemorix_pay_logo.png';
   static const String googleLogo = 'assets/logos/google_logo.png';

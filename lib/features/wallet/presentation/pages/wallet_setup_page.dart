@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 
 /// @file        wallet_setup_page.dart
@@ -29,9 +30,9 @@ class WalletSetupPage extends StatelessWidget {
               // Wallet Image
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.4,
-                child: Image.network(
-                  'https://cdn3d.iconscout.com/3d/premium/thumb/crypto-wallet-5324736-4445632.png',
-                  fit: BoxFit.contain,
+                child: Image.asset(
+                  ImageUrl.walletSetupImage,
+                  fit: BoxFit.scaleDown,
                 ),
               ),
               const SizedBox(height: 32),

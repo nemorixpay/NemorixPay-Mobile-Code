@@ -1,3 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
+import 'package:nemorixpay/config/constants/animations_url.dart';
+import 'package:nemorixpay/config/constants/image_url.dart';
+import 'package:nemorixpay/features/splash/presentation/bloc/splash_bloc.dart';
+import 'package:nemorixpay/features/splash/presentation/bloc/splash_event.dart';
+import 'package:nemorixpay/features/splash/presentation/bloc/splash_state.dart';
+
 /// @file        splash_native_page.dart
 /// @brief       Native splash screen implementation for NemorixPay.
 /// @details     This file contains the UI implementation of the splash screen,
@@ -6,17 +15,6 @@
 /// @date        2025-05-06
 /// @version     1.0
 /// @copyright   Apache 2.0 License
-
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart';
-import 'package:nemorixpay/config/constants/animations_url.dart';
-import 'package:nemorixpay/config/constants/image_url.dart';
-import 'package:nemorixpay/features/splash/ui/bloc/splash_bloc.dart';
-import 'package:nemorixpay/features/splash/ui/bloc/splash_event.dart';
-import 'package:nemorixpay/features/splash/ui/bloc/splash_state.dart';
-import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-
 class SplashNativePage extends StatefulWidget {
   const SplashNativePage({super.key});
 

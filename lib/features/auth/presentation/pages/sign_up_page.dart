@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
-import 'package:nemorixpay/features/auth/ui/widgets/widgets.dart';
-import 'package:nemorixpay/features/auth/ui/widgets/password_field.dart';
-import 'package:nemorixpay/features/auth/ui/widgets/email_field.dart';
-import 'package:nemorixpay/features/auth/ui/widgets/social_login_buttons.dart';
+import 'package:nemorixpay/features/auth/presentation/widgets/widgets.dart';
+import 'package:nemorixpay/features/auth/presentation/widgets/password_field.dart';
+import 'package:nemorixpay/features/auth/presentation/widgets/email_field.dart';
+import 'package:nemorixpay/features/auth/presentation/widgets/social_login_buttons.dart';
 
 /// @file        sign_up_page.dart
 /// @brief       Implementation of functions for basic user registration.
