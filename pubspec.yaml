@@ -73,6 +73,12 @@ dependencies:
   stellar_flutter_sdk: ^1.9.3
   bip39: ^1.0.6
 
+  # Animation controller
+  lottie: ^3.3.1
+
+  # Native splash
+  flutter_native_splash: ^2.3.10
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -103,6 +109,7 @@ flutter:
   assets:
     - assets/images/
     - assets/logos/
+    - assets/animations/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -130,3 +137,14 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_native_splash:
+  color: "#1A1A1A"  # Color de fondo oscuro para modo dark
+  image: assets/images/logo_mobile.png
+  android: true
+  ios: true
+  web: false
+  android_12:
+    image: assets/images/logo_mobile.png
+    icon_background_color: "#1A1A1A"
+  ios_content_mode: center

@@ -8,7 +8,8 @@ import 'package:nemorixpay/features/auth/ui/pages/sign_in_page.dart';
 import 'package:nemorixpay/features/auth/ui/pages/sign_up_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/pages/buy_crypto_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/ui/pages/payment_method_page.dart';
-import 'package:nemorixpay/features/splash/ui/pages/splash_page.dart';
+import 'package:nemorixpay/features/splash/ui/pages/splash_native_page.dart';
+import 'package:nemorixpay/features/splash/ui/pages/splash_test_page.dart';
 import 'package:nemorixpay/features/wallet/ui/pages/confirm_seed_phrase_page.dart';
 import 'package:nemorixpay/features/wallet/ui/pages/import_seed_phrase_page.dart';
 import 'package:nemorixpay/features/wallet/ui/pages/show_seed_phrase_page.dart';
@@ -30,7 +31,7 @@ import 'package:nemorixpay/shared/ui/widgets/nemorix_snackbar.dart';
 /// @copyright   Apache 2.0 License
 class AppRoutes {
   /// The initial route when the app starts
-  static const initialRoute = RouteNames.splash;
+  static const initialRoute = RouteNames.splashNative;
 
   /// Firebase Analytics instance for tracking navigation events
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
@@ -44,9 +45,15 @@ class AppRoutes {
   /// Each route is defined with its name, screen, and icon
   static final routeOptions = <RouteModel>[
     RouteModel(
-      route: RouteNames.splash,
+      route: RouteNames.splashTest,
       name: 'Splash',
-      screen: const SplashPage(),
+      screen: const SplashTestPage(),
+      icon: Icons.account_balance_wallet_outlined,
+    ),
+    RouteModel(
+      route: RouteNames.splashNative,
+      name: 'Splash Native',
+      screen: const SplashNativePage(),
       icon: Icons.account_balance_wallet_outlined,
     ),
     RouteModel(

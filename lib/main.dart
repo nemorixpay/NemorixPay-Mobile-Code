@@ -4,20 +4,26 @@
 
 import 'package:flutter/material.dart';
 import 'dart:async';
-
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/config/routes/app_routes.dart';
 import 'package:nemorixpay/config/theme/nemorix_theme.dart';
-
+import 'package:nemorixpay/features/splash/ui/bloc/splash_bloc.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Remover la splash nativa cuando la app esté lista
+  FlutterNativeSplash.remove();
+
   runApp(const MyApp());
 }
 
@@ -31,18 +37,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'NemorixPay',
-      debugShowCheckedModeBanner: false,
-      theme: NemorixTheme.darkThemeMode,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      // locale: Locale('en'),
-      locale: Locale('es'),
-      initialRoute: RouteNames.splash,
-      routes: AppRoutes.getAppRoutes(),
-      onGenerateRoute: AppRoutes.onGenerateRoute,
-      navigatorObservers: <NavigatorObserver>[observer],
+    return MultiBlocProvider(
+      providers: [BlocProvider(create: (context) => SplashBloc())],
+      child: MaterialApp(
+        title: 'NemorixPay',
+        debugShowCheckedModeBanner: false,
+        theme: NemorixTheme.darkThemeMode,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: const Locale('es'),
+        initialRoute: RouteNames.splashNative,
+        routes: AppRoutes.getAppRoutes(),
+        onGenerateRoute: AppRoutes.onGenerateRoute,
+        navigatorObservers: <NavigatorObserver>[observer],
+      ),
     );
   }
 }

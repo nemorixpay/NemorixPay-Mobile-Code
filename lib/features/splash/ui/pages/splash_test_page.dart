@@ -1,3 +1,13 @@
+/// @file        splash_test_page.dart
+/// @brief       Temporary test page for NemorixPay UI components.
+/// @details     This file contains a temporary test page that displays all created
+///              screens for basic visual testing purposes. This is a temporary
+///              implementation and will be removed in production.
+/// @author      Miguel Fagundez
+/// @date        2025-05-06
+/// @version     1.0
+/// @copyright   Apache 2.0 License
+
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
@@ -7,8 +17,8 @@ import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
 import 'dart:math';
 
-class SplashPage extends StatelessWidget {
-  const SplashPage({super.key});
+class SplashTestPage extends StatelessWidget {
+  const SplashTestPage({super.key});
 
   // TODO For testing purposes ----------------------------------
   CryptoEntity get randomCrypto {
@@ -21,6 +31,7 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('Test Page')),
       body: Center(
         child: SafeArea(
           child: SingleChildScrollView(

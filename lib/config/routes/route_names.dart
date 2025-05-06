@@ -8,7 +8,10 @@
 /// @copyright   Apache 2.0 License
 class RouteNames {
   /// Initial splash screen route
-  static const splash = "splash";
+  static const splashTest = "splash_test";
+
+  /// Initial splash screen route
+  static const splashNative = "splash_native";
 
   /// User authentication - Sign In page
   static const signIn = "sign_in";

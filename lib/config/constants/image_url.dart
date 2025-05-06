@@ -8,6 +8,9 @@
 /// @version     1.0
 /// @copyright   Apache 2.0 License
 class ImageUrl {
+  // Images
+  static const String logoMobileImage = 'assets/images/logo_mobile.png';
+  // Logos
   static const String nemorixpayLogo = 'assets/logos/nemorix_pay_logo.png';
   static const String googleLogo = 'assets/logos/google_logo.png';
   static const String appleLogo = 'assets/logos/nemorix_pay_logo.png';
