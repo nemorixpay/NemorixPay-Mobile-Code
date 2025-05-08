@@ -9,9 +9,11 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/config/routes/app_routes.dart';
 import 'package:nemorixpay/config/theme/nemorix_theme.dart';
+import 'package:nemorixpay/di/injection_container.dart';
 import 'package:nemorixpay/features/auth/data/datasources/firebase_auth_datasource.dart';
 import 'package:nemorixpay/features/auth/data/repositories/firebase_auth_repository.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/sign_in_usecase.dart';
@@ -28,6 +30,9 @@ Future<void> main() async {
   // Remover la splash nativa cuando la app esté lista
   FlutterNativeSplash.remove();
 
+  // Init Bloc dependencies
+  await initInjectionDependencies();
+
   runApp(const MyApp());
 }
 
@@ -43,20 +48,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // ---------------------------------------------------
     // Inicializar las dependencias de autenticación
-    final authDataSource = FirebaseAuthDataSource();
-    final authRepository = FirebaseAuthRepository(
-      firebaseAuthDataSource: authDataSource,
-    );
-    final signInUseCase = SignInUseCase(authRepository: authRepository);
+    // final authDataSource = FirebaseAuthDataSource();
+    // final authRepository = FirebaseAuthRepository(
+    //   firebaseAuthDataSource: authDataSource,
+    // );
+    // final signInUseCase = SignInUseCase(authRepository: authRepository);
     // Inicializar las dependencias de autenticación
     // ---------------------------------------------------
 
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => SplashBloc()),
-        BlocProvider(
-          create: (context) => AuthBloc(signInUseCase: signInUseCase),
-        ),
+        BlocProvider(create: (_) => GetIt.instance.get<AuthBloc>()),
+        // BlocProvider(
+        //   create: (context) => AuthBloc(signInUseCase: signInUseCase),
+        // ),
       ],
       child: MaterialApp(
         title: 'NemorixPay',
