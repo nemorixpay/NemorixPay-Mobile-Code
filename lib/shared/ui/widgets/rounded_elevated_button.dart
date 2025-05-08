@@ -16,6 +16,7 @@ class RoundedElevatedButton extends StatelessWidget {
   final Color backgroundColor;
   final Color textColor;
   final String? icon;
+  final bool isLoading;
 
   const RoundedElevatedButton({
     super.key,
@@ -24,6 +25,7 @@ class RoundedElevatedButton extends StatelessWidget {
     required this.backgroundColor,
     required this.textColor,
     this.icon,
+    this.isLoading = false,
   });
 
   @override
@@ -38,13 +40,24 @@ class RoundedElevatedButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        onPressed: onPressed,
+        onPressed: isLoading ? null : onPressed,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (icon != null) Image.asset(icon ?? '', height: 20, width: 20),
-            if (icon != null) SizedBox(width: 10),
-            Text(text, style: TextStyle(color: textColor)),
+            if (isLoading)
+              const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              )
+            else ...[
+              if (icon != null) Image.asset(icon ?? '', height: 20, width: 20),
+              if (icon != null) SizedBox(width: 10),
+              Text(text, style: TextStyle(color: textColor)),
+            ],
           ],
         ),
       ),

@@ -79,6 +79,9 @@ dependencies:
   # Native splash
   flutter_native_splash: ^2.3.10
 
+  # Util
+  dartz: ^0.10.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

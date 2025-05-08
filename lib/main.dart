@@ -12,6 +12,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/config/routes/app_routes.dart';
 import 'package:nemorixpay/config/theme/nemorix_theme.dart';
+import 'package:nemorixpay/features/auth/data/datasources/firebase_auth_datasource.dart';
+import 'package:nemorixpay/features/auth/data/repositories/firebase_auth_repository.dart';
+import 'package:nemorixpay/features/auth/domain/usecases/sign_in_usecase.dart';
+import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:nemorixpay/features/splash/presentation/bloc/splash_bloc.dart';
 import 'firebase_options.dart';
 
@@ -37,8 +41,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ---------------------------------------------------
+    // Inicializar las dependencias de autenticación
+    final authDataSource = FirebaseAuthDataSource();
+    final authRepository = FirebaseAuthRepository(
+      firebaseAuthDataSource: authDataSource,
+    );
+    final signInUseCase = SignInUseCase(authRepository: authRepository);
+    // Inicializar las dependencias de autenticación
+    // ---------------------------------------------------
+
     return MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => SplashBloc())],
+      providers: [
+        BlocProvider(create: (context) => SplashBloc()),
+        BlocProvider(
+          create: (context) => AuthBloc(signInUseCase: signInUseCase),
+        ),
+      ],
       child: MaterialApp(
         title: 'NemorixPay',
         debugShowCheckedModeBanner: false,

@@ -8,6 +8,7 @@
 /// @version     1.0
 /// @copyright   Apache 2.0 License
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
@@ -17,9 +18,14 @@ import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
 import 'dart:math';
 
-class SplashTestPage extends StatelessWidget {
+class SplashTestPage extends StatefulWidget {
   const SplashTestPage({super.key});
 
+  @override
+  State<SplashTestPage> createState() => _SplashTestPageState();
+}
+
+class _SplashTestPageState extends State<SplashTestPage> {
   // TODO For testing purposes ----------------------------------
   CryptoEntity get randomCrypto {
     final random = Random();
@@ -27,6 +33,22 @@ class SplashTestPage extends StatelessWidget {
     return mockCryptos[index];
   }
   // TODO For testing purposes ----------------------------------
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        debugPrint('User Authenticated');
+      } else {
+        debugPrint('User Unauthenticated');
+      }
+    } catch (e) {
+      debugPrint('Error _SplashTestPageState: $e');
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
