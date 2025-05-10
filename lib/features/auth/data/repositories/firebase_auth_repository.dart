@@ -12,8 +12,8 @@ import 'package:nemorixpay/features/auth/domain/repositories/auth_repository.dar
 /// @details     This class implements the AuthRepository interface using Firebase Auth.
 ///              It handles the conversion between Firebase User and UserEntity.
 /// @author      Miguel Fagundez
-/// @date        2025-05-07
-/// @version     1.0
+/// @date        2024-05-08
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 class FirebaseAuthRepository implements AuthRepository {
   final FirebaseAuthDataSource firebaseAuthDataSource;
@@ -26,20 +26,26 @@ class FirebaseAuthRepository implements AuthRepository {
     String password,
   ) async {
     try {
-      debugPrint('FirebaseAuthRepository');
+      debugPrint('FirebaseAuthRepository - Begin sign in process');
+
       final UserModel user = await firebaseAuthDataSource.signIn(
         email: email,
         password: password,
       );
-      debugPrint('FirebaseAuthRepository - return User');
+
+      debugPrint('FirebaseAuthRepository - User authenticated successfully');
       return Right(user.toUserEntity());
+    } on FirebaseFailure catch (failure) {
+      debugPrint(
+        'FirebaseAuthRepository - Firebase error: ${failure.firebaseCode}',
+      );
+      return Left(failure);
     } catch (e) {
-      debugPrint('FirebaseAuthRepository - return FirebaseFailure');
+      debugPrint('FirebaseAuthRepository - Unexpected error: $e');
       return Left(
         FirebaseFailure(
-          firebaseMessage:
-              'Ha ocurrido un error inesperado. Por favor, intenta nuevamente.',
-          firebaseCode: 'Unknown',
+          firebaseMessage: e.toString(),
+          firebaseCode: e.runtimeType.toString(),
         ),
       );
     }

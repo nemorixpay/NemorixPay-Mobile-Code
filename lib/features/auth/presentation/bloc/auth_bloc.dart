@@ -5,8 +5,16 @@ import 'package:nemorixpay/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_event.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
 
+/// @file        auth_bloc.dart
+/// @brief       Authentication Bloc for managing auth state and events.
+/// @details     Handles authentication state management and user interactions.
+/// @author      Miguel Fagundez
+/// @date        2024-05-08
+/// @version     1.1
+/// @copyright   Apache 2.0 License
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignInUseCase _signInUseCase;
+
   AuthBloc({required SignInUseCase signInUseCase})
     : _signInUseCase = signInUseCase,
       super(const AuthInitial()) {
@@ -17,46 +25,48 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     SignInRequested event,
     Emitter<AuthState> emit,
   ) async {
-    debugPrint('Bloc: Iniciando proceso de login');
+    debugPrint('AuthBloc - Begin sign in process');
     emit(const AuthLoading());
-    try {
-      debugPrint('Bloc: Llamando a signInUseCase');
-      final resp = await _signInUseCase(event.email, event.password);
 
-      resp.fold(
-        (userAuthenticatedFailure) {
-          debugPrint('User was not Authenticated - Try Again!');
-          emit(
-            AuthError(
-              FirebaseFailure(
-                firebaseCode: userAuthenticatedFailure.code,
-                firebaseMessage: userAuthenticatedFailure.message,
-              ),
-            ),
-          );
+    try {
+      debugPrint('AuthBloc - Calling sign in use case');
+      final result = await _signInUseCase(event.email, event.password);
+
+      result.fold(
+        (failure) {
+          if (failure is FirebaseFailure) {
+            debugPrint(
+              'AuthBloc - Authentication failed: ${failure.firebaseCode}',
+            );
+            debugPrint('AuthBloc - Error message: ${failure.firebaseMessage}');
+          } else {
+            debugPrint('AuthBloc - Authentication failed: ${failure.message}');
+          }
+          emit(AuthError(failure));
           emit(const AuthUnauthenticated());
         },
-        (userAuthenticatedSuccess) {
+        (user) {
           debugPrint(
-            'User was Authenticated successfully, ${userAuthenticatedSuccess.email}',
+            'AuthBloc - User authenticated successfully: ${user.email}',
           );
-          // TODO : Save user data
-          emit(AuthAuthenticated(userAuthenticatedSuccess));
+          emit(AuthAuthenticated(user));
         },
       );
+    } on FirebaseFailure catch (failure) {
+      debugPrint('AuthBloc - Firebase error: ${failure.firebaseCode}');
+      debugPrint('AuthBloc - Error message: ${failure.firebaseMessage}');
+      emit(AuthError(failure));
+      emit(const AuthUnauthenticated());
     } catch (e) {
-      debugPrint('Bloc: Error capturado: $e');
-
+      debugPrint('AuthBloc - Unexpected error: $e');
       emit(
         AuthError(
           FirebaseFailure(
-            firebaseCode: 'unknown',
-            firebaseMessage:
-                'Ha ocurrido un error inesperado. Por favor, intenta nuevamente.',
+            firebaseMessage: e.toString(),
+            firebaseCode: e.runtimeType.toString(),
           ),
         ),
       );
-
       emit(const AuthUnauthenticated());
     }
   }

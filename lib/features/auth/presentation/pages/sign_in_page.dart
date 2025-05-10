@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
+import 'package:nemorixpay/core/errors/firebase_failure.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_event.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
@@ -14,13 +15,19 @@ import 'package:nemorixpay/features/auth/presentation/widgets/email_field.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/social_login_buttons.dart';
 
 /// @file        sign_in_page.dart
-/// @brief       Implementation of functions for basic user authentication.
-/// @details
+/// @brief       Sign In page implementation for NemorixPay authentication system.
+/// @details     This page provides a complete sign-in experience including:
+///             - Email and password authentication
+///             - Social login options (Google, Apple)
+///             - Password recovery
+///             - Form validation
+///             - Error handling with localized messages
+///             - Loading states
+///             - Responsive design
 /// @author      Miguel Fagundez
-/// @date        04/26/2025
-/// @version     1.4
+/// @date        2024-05-08
+/// @version     1.5
 /// @copyright   Apache 2.0 License
-
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -28,6 +35,14 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+/// @brief       State management for the Sign In page.
+/// @details     Handles:
+///             - Form state and validation
+///             - Text controllers for input fields
+///             - Authentication state changes
+///             - Error message display
+///             - Loading states
+///             - Navigation
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -51,17 +66,12 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error -  Email & Password required'),
-          backgroundColor: Colors.red,
+          content: Text(AppLocalizations.of(context)!.enterYourLoginInfo),
+          backgroundColor: Theme.of(context).colorScheme.error,
+          behavior: SnackBarBehavior.floating,
         ),
       );
     }
-    // try {
-    //   FirebaseAuth.instance.signOut();
-    //   debugPrint('User Unauthenticated (signOut)');
-    // } catch (e) {
-    //   debugPrint('Error (signOut)');
-    // }
   }
 
   @override
@@ -69,21 +79,39 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (BuildContext context, AuthState state) {
-          debugPrint('Auth State Changed: $state'); // Debug log
+          debugPrint('Auth State Changed: $state');
+
           if (state is AuthError) {
+            final message =
+                state.error is FirebaseFailure
+                    ? (state.error as FirebaseFailure).getLocalizedMessage(
+                      context,
+                    )
+                    : state.error.message;
+
+            debugPrint('Displaying error message: $message');
+
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.error.message),
-                backgroundColor: Colors.red,
+                content: Text(message),
+                backgroundColor: Theme.of(context).colorScheme.error,
+                behavior: SnackBarBehavior.floating,
+                action: SnackBarAction(
+                  label: 'OK',
+                  textColor: Theme.of(context).colorScheme.onError,
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  },
+                ),
               ),
             );
           } else if (state is AuthAuthenticated) {
-            // Manejar navegación cuando el usuario está autenticado
-            debugPrint('User authenticated: ${state.user.email}'); // Debug log
+            debugPrint('User authenticated: ${state.user.email}');
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.user.email),
-                backgroundColor: Colors.green,
+                content: Text(AppLocalizations.of(context)!.welcomeBack),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                behavior: SnackBarBehavior.floating,
               ),
             );
           } else if (state is AuthUnauthenticated) {

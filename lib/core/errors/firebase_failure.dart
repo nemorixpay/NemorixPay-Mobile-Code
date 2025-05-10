@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/core/errors/failures.dart';
 import 'package:nemorixpay/core/errors/firebase_error_codes.dart';
 
@@ -33,10 +34,10 @@ class FirebaseFailure extends Failure {
     FirebaseAuthException exception,
     BuildContext context,
   ) {
-    final code = exception.code;
-    final message = FirebaseErrorCode.getMessageForCode(code, context);
-
-    return FirebaseFailure(firebaseCode: code, firebaseMessage: message);
+    return FirebaseFailure(
+      firebaseCode: exception.code,
+      firebaseMessage: exception.message ?? 'Unknown error',
+    );
   }
 
   /// Creates a [FirebaseFailure] from a generic exception
@@ -53,10 +54,7 @@ class FirebaseFailure extends Failure {
 
     return FirebaseFailure(
       firebaseCode: FirebaseErrorCode.unknown.code,
-      firebaseMessage: FirebaseErrorCode.getMessageForCode(
-        FirebaseErrorCode.unknown.code,
-        context,
-      ),
+      firebaseMessage: exception.toString(),
     );
   }
 
