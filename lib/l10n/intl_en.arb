@@ -93,5 +93,22 @@
   "confirmSeedPhraseTitle": "Confirm Seed Phrase",
   "confirmSeedPhraseInstructions": "Select each word in the order it was presented to you.",
   "confirmSeedPhraseError": "Incorrect word. Please check your seed phrase and make sure you wrote down all the words in the correct order. If you make a mistake, you may lose access to your account.",
-  "confirmSeedPhraseSuccess": "Correct! Now confirm a second word from your seed phrase."
+  "confirmSeedPhraseSuccess": "Correct! Now confirm a second word from your seed phrase.",
+  "authErrorUserNotFound": "No account found with this email.",
+  "authErrorWrongPassword": "Incorrect password.",
+  "authErrorInvalidEmail": "Invalid email format.",
+  "authErrorUserDisabled": "This account has been disabled.",
+  "authErrorEmailAlreadyInUse": "An account already exists with this email.",
+  "authErrorWeakPassword": "Password is too weak.",
+  "authErrorOperationNotAllowed": "This operation is not allowed.",
+  "authErrorTooManyRequests": "Too many failed attempts. Please try again later.",
+  "authErrorNetworkRequestFailed": "Connection error. Please check your internet connection.",
+  "authErrorRequiresRecentLogin": "Please sign in again to perform this action.",
+  "authErrorUnknown": "An unexpected error occurred. Please try again.",
+  "authErrorInvalidCredential": "Invalid credentials.",
+  "authErrorAccountExistsWithDifferentCredential": "An account already exists with these credentials.",
+  "authErrorInvalidVerificationCode": "Invalid verification code.",
+  "authErrorInvalidVerificationId": "Invalid verification ID.",
+  "authErrorMissingVerificationCode": "Missing verification code.",
+  "authErrorMissingVerificationId": "Missing verification ID."
 }

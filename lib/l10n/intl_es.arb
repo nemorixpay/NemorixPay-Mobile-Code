@@ -93,5 +93,22 @@
   "confirmSeedPhraseTitle": "Confirma tu frase semilla",
   "confirmSeedPhraseInstructions": "Selecciona cada palabra en el orden en que te fue presentada.",
   "confirmSeedPhraseError": "Palabra incorrecta. Por favor, revisa tu frase semilla y asegúrate de haber anotado todas las palabras en el orden correcto. Si cometes un error, podrías perder el acceso a tu cuenta.",
-  "confirmSeedPhraseSuccess": "¡Correcto! Ahora confirma una segunda palabra de tu frase semilla."
+  "confirmSeedPhraseSuccess": "¡Correcto! Ahora confirma una segunda palabra de tu frase semilla.",
+  "authErrorUserNotFound": "No existe una cuenta con este correo electrónico.",
+  "authErrorWrongPassword": "La contraseña es incorrecta.",
+  "authErrorInvalidEmail": "El formato del correo electrónico no es válido.",
+  "authErrorUserDisabled": "Esta cuenta ha sido deshabilitada.",
+  "authErrorEmailAlreadyInUse": "Ya existe una cuenta con este correo electrónico.",
+  "authErrorWeakPassword": "La contraseña es demasiado débil.",
+  "authErrorOperationNotAllowed": "Esta operación no está permitida.",
+  "authErrorTooManyRequests": "Demasiados intentos fallidos. Por favor, intente más tarde.",
+  "authErrorNetworkRequestFailed": "Error de conexión. Verifique su conexión a internet.",
+  "authErrorRequiresRecentLogin": "Por favor, inicie sesión nuevamente para realizar esta acción.",
+  "authErrorUnknown": "Ha ocurrido un error inesperado. Por favor, intente nuevamente.",
+  "authErrorInvalidCredential": "Credenciales inválidas.",
+  "authErrorAccountExistsWithDifferentCredential": "Ya existe una cuenta con estas credenciales.",
+  "authErrorInvalidVerificationCode": "Código de verificación inválido.",
+  "authErrorInvalidVerificationId": "ID de verificación inválido.",
+  "authErrorMissingVerificationCode": "Falta el código de verificación.",
+  "authErrorMissingVerificationId": "Falta el ID de verificación."
 }
