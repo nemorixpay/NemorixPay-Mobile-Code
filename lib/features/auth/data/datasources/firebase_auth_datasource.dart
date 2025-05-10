@@ -67,4 +67,58 @@ class FirebaseAuthDataSource implements AuthDataSource {
       );
     }
   }
+
+  @override
+  Future<UserModel> signUp({
+    required String email,
+    required String password,
+    required String firstName,
+    required String lastName,
+    required DateTime birthDate,
+    required String securityWord,
+  }) async {
+    try {
+      debugPrint('FirebaseAuthDataSource - Begin sign up process');
+      debugPrint('Email: $email');
+
+      final credentials = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      debugPrint('FirebaseAuthDataSource - Registration response received');
+
+      if (credentials.user?.uid == null) {
+        debugPrint('FirebaseAuthDataSource - Registration failed: No user ID');
+        throw FirebaseFailure(
+          firebaseMessage: 'Registration failed: No user ID',
+          firebaseCode: FirebaseErrorCode.unknown.code,
+        );
+      }
+
+      // Update user profile with additional information
+      await credentials.user?.updateDisplayName('$firstName $lastName');
+
+      debugPrint('FirebaseAuthDataSource - User registered successfully');
+
+      return UserModel(
+        id: credentials.user!.uid,
+        email: email,
+        isEmailVerified: credentials.user!.emailVerified,
+        createdAt: DateTime.now(),
+      );
+    } on FirebaseAuthException catch (error) {
+      debugPrint('FirebaseAuthDataSource - Firebase Auth Error: ${error.code}');
+      throw FirebaseFailure(
+        firebaseMessage: error.message ?? 'Registration failed',
+        firebaseCode: error.code,
+      );
+    } catch (error) {
+      debugPrint('FirebaseAuthDataSource - Unexpected error: $error');
+      throw FirebaseFailure(
+        firebaseMessage: 'An unexpected error occurred',
+        firebaseCode: FirebaseErrorCode.unknown.code,
+      );
+    }
+  }
 }

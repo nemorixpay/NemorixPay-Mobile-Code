@@ -50,4 +50,43 @@ class FirebaseAuthRepository implements AuthRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, UserEntity>> signUp({
+    required String email,
+    required String password,
+    required String firstName,
+    required String lastName,
+    required DateTime birthDate,
+    required String securityWord,
+  }) async {
+    try {
+      debugPrint('FirebaseAuthRepository - Begin sign up process');
+
+      final UserModel user = await firebaseAuthDataSource.signUp(
+        email: email,
+        password: password,
+        firstName: firstName,
+        lastName: lastName,
+        birthDate: birthDate,
+        securityWord: securityWord,
+      );
+
+      debugPrint('FirebaseAuthRepository - User registered successfully');
+      return Right(user.toUserEntity());
+    } on FirebaseFailure catch (failure) {
+      debugPrint(
+        'FirebaseAuthRepository - Firebase error: ${failure.firebaseCode}',
+      );
+      return Left(failure);
+    } catch (e) {
+      debugPrint('FirebaseAuthRepository - Unexpected error: $e');
+      return Left(
+        FirebaseFailure(
+          firebaseMessage: e.toString(),
+          firebaseCode: e.runtimeType.toString(),
+        ),
+      );
+    }
+  }
 }

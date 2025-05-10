@@ -41,6 +41,8 @@ class _SplashTestPageState extends State<SplashTestPage> {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         debugPrint('User Authenticated');
+        FirebaseAuth.instance.signOut();
+        debugPrint('User was SignOut');
       } else {
         debugPrint('User Unauthenticated');
       }

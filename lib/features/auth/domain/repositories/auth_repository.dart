@@ -16,4 +16,17 @@ abstract class AuthRepository {
   /// Returns [UserEntity] if sign in is successful
   /// Throws [Failure] if there is an error
   Future<Either<Failure, UserEntity>> signIn(String email, String password);
+
+  /// Registers a new user with email and password
+  ///
+  /// Returns [UserEntity] if registration is successful
+  /// Throws [Failure] if there is an error
+  Future<Either<Failure, UserEntity>> signUp({
+    required String email,
+    required String password,
+    required String firstName,
+    required String lastName,
+    required DateTime birthDate,
+    required String securityWord,
+  });
 }

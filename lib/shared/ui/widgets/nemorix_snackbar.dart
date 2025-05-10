@@ -13,6 +13,7 @@ class NemorixSnackBar {
     required String message,
     Duration duration = const Duration(seconds: 3),
     Color? backgroundColor,
+    Color? borderColor,
     Color? textColor,
   }) {
     final theme = Theme.of(context);
@@ -28,7 +29,13 @@ class NemorixSnackBar {
       backgroundColor: backgroundColor ?? Theme.of(context).cardColor,
       behavior: SnackBarBehavior.floating,
       duration: duration,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+          color: borderColor ?? Theme.of(context).cardColor,
+          width: 2,
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
       margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       elevation: 6,
     );

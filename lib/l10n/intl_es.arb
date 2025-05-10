@@ -26,6 +26,7 @@
   "securityWordRequired": "La palabra de seguridad es requerida",
   "securityWord": "Palabra de seguridad (para recuperación de cuenta)",
   "birthdateRequired": "La fecha de nacimiento es requerida",
+  "fillRegistrationData": "Por favor completa todos los campos de registro para continuar",
   "agreeWithNemorixPay": "Estoy de acuerdo con NemorixPay",
   "termsOfServices": "Términos de Servicio",
   "and": "y",
@@ -110,5 +111,8 @@
   "authErrorInvalidVerificationCode": "Código de verificación inválido.",
   "authErrorInvalidVerificationId": "ID de verificación inválido.",
   "authErrorMissingVerificationCode": "Falta el código de verificación.",
-  "authErrorMissingVerificationId": "Falta el ID de verificación."
+  "authErrorMissingVerificationId": "Falta el ID de verificación.",
+  "acceptTermsAndConditions": "Por favor acepta los términos y condiciones",
+  "agreeToTerms": "Acepto los términos y condiciones",
+  "alreadyHaveAnAccount": "¿Ya tienes una cuenta? Inicia sesión"
 }

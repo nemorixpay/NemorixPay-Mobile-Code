@@ -26,6 +26,7 @@
   "securityWordRequired": "Security word is required",
   "securityWord": "Security word",
   "birthdateRequired": "Birthdate is required",
+  "fillRegistrationData": "Please fill in all registration fields to continue",
   "agreeWithNemorixPay": "I agree with NemorixPay",
   "termsOfServices": "Terms of Services",
   "and": "and",
@@ -110,5 +111,8 @@
   "authErrorInvalidVerificationCode": "Invalid verification code.",
   "authErrorInvalidVerificationId": "Invalid verification ID.",
   "authErrorMissingVerificationCode": "Missing verification code.",
-  "authErrorMissingVerificationId": "Missing verification ID."
+  "authErrorMissingVerificationId": "Missing verification ID.",
+  "acceptTermsAndConditions": "Please accept the terms and conditions",
+  "agreeToTerms": "I agree to the terms and conditions",
+  "alreadyHaveAnAccount": "Already have an account? Sign in"
 }

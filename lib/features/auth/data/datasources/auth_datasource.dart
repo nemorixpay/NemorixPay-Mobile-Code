@@ -14,4 +14,17 @@ abstract class AuthDataSource {
   /// Returns [UserModel] from NemorixPay model if sign in is successful
   /// Throws [Failure] if there is an error
   Future<UserModel> signIn({required String email, required String password});
+
+  /// Registers a new user with email and password
+  ///
+  /// Returns [UserModel] from NemorixPay model if registration is successful
+  /// Throws [Failure] if there is an error
+  Future<UserModel> signUp({
+    required String email,
+    required String password,
+    required String firstName,
+    required String lastName,
+    required DateTime birthDate,
+    required String securityWord,
+  });
 }
