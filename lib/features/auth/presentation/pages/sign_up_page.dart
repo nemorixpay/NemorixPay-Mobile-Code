@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
+import 'package:nemorixpay/core/errors/firebase_failure.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_event.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
@@ -120,11 +121,39 @@ class _SignUpPageState extends State<SignUpPage> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.error.message),
-              backgroundColor: Colors.red,
-            ),
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //     content: Text(state.error.message),
+          //     backgroundColor: Colors.red,
+          //   ),
+          // );
+
+          final message =
+              state.error is FirebaseFailure
+                  ? (state.error as FirebaseFailure).getLocalizedMessage(
+                    context,
+                  )
+                  : state.error.message;
+
+          NemorixSnackBar.show(
+            context,
+            message: message,
+            borderColor: NemorixColors.errorColor,
+          );
+        }
+        if (state is AuthAuthenticated) {
+          Navigator.of(context).pop();
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //     content: Text(AppLocalizations.of(context)!.registrationSuccess),
+          //     backgroundColor: NemorixColors.successColor,
+          //     behavior: SnackBarBehavior.floating,
+          //   ),
+          // );
+          NemorixSnackBar.show(
+            context,
+            message: AppLocalizations.of(context)!.registrationSuccess,
+            borderColor: NemorixColors.successColor,
           );
         }
       },

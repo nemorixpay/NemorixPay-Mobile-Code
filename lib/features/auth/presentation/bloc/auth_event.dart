@@ -64,3 +64,13 @@ class SignOutRequested extends AuthEvent {
 class CheckAuthStatus extends AuthEvent {
   const CheckAuthStatus();
 }
+
+/// Event to request password recovery
+class ForgotPasswordRequested extends AuthEvent {
+  final String email;
+
+  const ForgotPasswordRequested({required this.email});
+
+  @override
+  List<Object?> get props => [email];
+}

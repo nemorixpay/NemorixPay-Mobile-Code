@@ -13,6 +13,7 @@ import 'package:nemorixpay/features/auth/presentation/widgets/widgets.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/password_field.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/email_field.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/social_login_buttons.dart';
+import 'package:nemorixpay/shared/ui/widgets/nemorix_snackbar.dart';
 
 /// @file        sign_in_page.dart
 /// @brief       Sign In page implementation for NemorixPay authentication system.
@@ -64,14 +65,37 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.enterYourLoginInfo),
-          backgroundColor: Theme.of(context).colorScheme.error,
-          behavior: SnackBarBehavior.floating,
-        ),
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(AppLocalizations.of(context)!.enterYourLoginInfo),
+      //     backgroundColor: Theme.of(context).colorScheme.error,
+      //     behavior: SnackBarBehavior.floating,
+      //   ),
+      // );
+      NemorixSnackBar.show(
+        context,
+        message: AppLocalizations.of(context)!.enterYourLoginInfo,
+        borderColor: NemorixColors.errorColor,
       );
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        debugPrint('User Authenticated: Login');
+        FirebaseAuth.instance.signOut();
+        debugPrint('User was SignOut: Login');
+      } else {
+        debugPrint('User Unauthenticated: Login');
+      }
+    } catch (e) {
+      debugPrint('Error _LoginPageState: $e');
+    }
+    super.didChangeDependencies();
   }
 
   @override
@@ -91,28 +115,38 @@ class _LoginPageState extends State<LoginPage> {
 
             debugPrint('Displaying error message: $message');
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(message),
-                backgroundColor: Theme.of(context).colorScheme.error,
-                behavior: SnackBarBehavior.floating,
-                action: SnackBarAction(
-                  label: 'OK',
-                  textColor: Theme.of(context).colorScheme.onError,
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  },
-                ),
-              ),
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   SnackBar(
+            //     content: Text(message),
+            //     backgroundColor: Theme.of(context).colorScheme.error,
+            //     behavior: SnackBarBehavior.floating,
+            //     action: SnackBarAction(
+            //       label: 'OK',
+            //       textColor: Theme.of(context).colorScheme.onError,
+            //       onPressed: () {
+            //         ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            //       },
+            //     ),
+            //   ),
+            // );
+            NemorixSnackBar.show(
+              context,
+              message: message,
+              borderColor: NemorixColors.errorColor,
             );
           } else if (state is AuthAuthenticated) {
             debugPrint('User authenticated: ${state.user.email}');
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(AppLocalizations.of(context)!.welcomeBack),
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                behavior: SnackBarBehavior.floating,
-              ),
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   SnackBar(
+            //     content: Text(AppLocalizations.of(context)!.welcomeBack),
+            //     backgroundColor: Theme.of(context).colorScheme.primary,
+            //     behavior: SnackBarBehavior.floating,
+            //   ),
+            // );
+            NemorixSnackBar.show(
+              context,
+              message: AppLocalizations.of(context)!.welcomeBack,
+              borderColor: NemorixColors.successColor,
             );
           } else if (state is AuthUnauthenticated) {
             debugPrint('User Unauthenticated');

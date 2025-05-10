@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/core/errors/firebase_failure.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/sign_up_usecase.dart';
+import 'package:nemorixpay/features/auth/domain/usecases/forgot_password_usecase.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_event.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
 
@@ -16,15 +17,19 @@ import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignInUseCase _signInUseCase;
   final SignUpUseCase _signUpUseCase;
+  final ForgotPasswordUseCase _forgotPasswordUseCase;
 
   AuthBloc({
     required SignInUseCase signInUseCase,
     required SignUpUseCase signUpUseCase,
+    required ForgotPasswordUseCase forgotPasswordUseCase,
   }) : _signInUseCase = signInUseCase,
        _signUpUseCase = signUpUseCase,
+       _forgotPasswordUseCase = forgotPasswordUseCase,
        super(const AuthInitial()) {
     on<SignInRequested>(_onSignInRequested);
     on<SignUpRequested>(_onSignUpRequested);
+    on<ForgotPasswordRequested>(_onForgotPasswordRequested);
   }
 
   Future<void> _onSignInRequested(
@@ -129,6 +134,53 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         ),
       );
       emit(const AuthUnauthenticated());
+    }
+  }
+
+  Future<void> _onForgotPasswordRequested(
+    ForgotPasswordRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    debugPrint('AuthBloc - Begin forgot password process');
+    emit(const ForgotPasswordLoading());
+
+    try {
+      debugPrint('AuthBloc - Calling forgot password use case');
+      final result = await _forgotPasswordUseCase(event.email);
+
+      result.fold(
+        (failure) {
+          if (failure is FirebaseFailure) {
+            debugPrint(
+              'AuthBloc - Password recovery failed (Code): ${failure.firebaseCode}',
+            );
+            debugPrint('AuthBloc - Error message: ${failure.firebaseMessage}');
+          } else {
+            debugPrint(
+              'AuthBloc - Password recovery failed: ${failure.message}',
+            );
+          }
+          emit(ForgotPasswordError(failure.message));
+        },
+        (success) {
+          debugPrint('AuthBloc - Password recovery email sent successfully');
+          emit(const ForgotPasswordSuccess());
+        },
+      );
+    } on FirebaseFailure catch (failure) {
+      debugPrint('AuthBloc - Firebase error: ${failure.firebaseCode}');
+      debugPrint('AuthBloc - Error message: ${failure.firebaseMessage}');
+      emit(ForgotPasswordError(failure.firebaseMessage));
+    } catch (e) {
+      debugPrint('AuthBloc - Unexpected error: $e');
+      emit(
+        ForgotPasswordError(
+          FirebaseFailure(
+            firebaseMessage: e.toString(),
+            firebaseCode: e.runtimeType.toString(),
+          ).firebaseMessage,
+        ),
+      );
     }
   }
 }

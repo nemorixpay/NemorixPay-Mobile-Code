@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:nemorixpay/features/auth/data/datasources/firebase_auth_datasource.dart';
 import 'package:nemorixpay/features/auth/data/repositories/firebase_auth_repository.dart';
+import 'package:nemorixpay/features/auth/domain/usecases/forgot_password_usecase.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/sign_up_usecase.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
@@ -51,12 +52,20 @@ Future<void> authInjectionServices() async {
     SignInUseCase(authRepository: firebaseAuthRepository),
   );
 
+  final ForgotPasswordUseCase forgotPasswordUseCase = di.registerSingleton(
+    ForgotPasswordUseCase(repository: firebaseAuthRepository),
+  );
+
   final SignUpUseCase signUpUseCase = di.registerSingleton(
     SignUpUseCase(authRepository: firebaseAuthRepository),
   );
 
   // Define Auth Bloc
   di.registerFactory(
-    () => AuthBloc(signInUseCase: signInUseCase, signUpUseCase: signUpUseCase),
+    () => AuthBloc(
+      signInUseCase: signInUseCase,
+      signUpUseCase: signUpUseCase,
+      forgotPasswordUseCase: forgotPasswordUseCase,
+    ),
   );
 }

@@ -1,8 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/core/utils/validation_rules.dart';
+import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:nemorixpay/features/auth/presentation/bloc/auth_event.dart';
+import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/custom_text_form_field.dart';
 import 'package:nemorixpay/shared/ui/widgets/rounded_elevated_button.dart';
 
@@ -21,67 +25,88 @@ class ForgotPasswordDialog extends StatefulWidget {
 }
 
 class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
-  TextEditingController forgotEmailController = TextEditingController();
-
   final TextEditingController _emailController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _emailController.dispose();
     super.dispose();
   }
 
+  void _handlePasswordReset() {
+    if (_formKey.currentState?.validate() ?? false) {
+      context.read<AuthBloc>().add(
+        ForgotPasswordRequested(email: _emailController.text.trim()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(AppLocalizations.of(context)!.forgotPassword),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(AppLocalizations.of(context)!.forgotPasswordSubtitle),
-          const SizedBox(height: 20),
-          Form(
-            key: _formKey,
-            child: CustomTextFormField(
-              controller: _emailController,
-              hintText: AppLocalizations.of(context)!.emailAddress,
-              keyboardType: TextInputType.emailAddress,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return AppLocalizations.of(context)!.emailIsRequired;
-                }
-                if (!ValidationRules.emailValidation.hasMatch(value)) {
-                  return AppLocalizations.of(context)!.enterValidEmail;
-                }
-                return null;
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is ForgotPasswordSuccess) {
+          Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context)!.emailWasSent),
+              backgroundColor: NemorixColors.successColor,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        } else if (state is ForgotPasswordError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: NemorixColors.errorColor,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
+      },
+      child: AlertDialog(
+        title: Text(AppLocalizations.of(context)!.forgotPasswordTitle),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(AppLocalizations.of(context)!.forgotPasswordSubtitle),
+            const SizedBox(height: 20),
+            Form(
+              key: _formKey,
+              child: CustomTextFormField(
+                controller: _emailController,
+                hintText: AppLocalizations.of(context)!.emailAddress,
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return AppLocalizations.of(context)!.emailIsRequired;
+                  }
+                  if (!ValidationRules.emailValidation.hasMatch(value)) {
+                    return AppLocalizations.of(context)!.enterValidEmail;
+                  }
+                  return null;
+                },
+              ),
+            ),
+            SizedBox(height: 20),
+            BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, state) {
+                return RoundedElevatedButton(
+                  text: AppLocalizations.of(context)!.sendEmail,
+                  onPressed:
+                      state is ForgotPasswordLoading
+                          ? null
+                          : _handlePasswordReset,
+                  backgroundColor: NemorixColors.primaryColor,
+                  textColor: Colors.black,
+                  isLoading: state is ForgotPasswordLoading,
+                );
               },
             ),
-          ),
-          SizedBox(height: 20),
-          RoundedElevatedButton(
-            text: AppLocalizations.of(context)!.sendEmail,
-            onPressed: () {
-              if (kDebugMode) {
-                print('Email Sent using the Custom Button');
-              }
-              /*
-    //          final alert = BaseAlertDialog(
-    //                 title: AppLocalizations.of(context)!.information_title,
-    //                 content: AppLocalizations.of(context)!.email_was_sent,
-    //                 yesOnPressed: () {},
-    //                 noOnPressed: () {},
-    //                 yes: '',
-    //                 no: AppLocalizations.of(context)!.ok);
-    //             showDialog(context: context, builder: (_) => alert);
-    //          */
-            }, // Flutter bloc action
-            backgroundColor: NemorixColors.primaryColor,
-            textColor: Colors.black,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

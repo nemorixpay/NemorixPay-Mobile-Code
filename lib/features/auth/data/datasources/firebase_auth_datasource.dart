@@ -68,6 +68,27 @@ class FirebaseAuthDataSource implements AuthDataSource {
     }
   }
 
+  Future<void> forgotPassword(String email) async {
+    try {
+      debugPrint('FirebaseAuthDataSource - Begin forgot password process');
+      debugPrint('Email: $email');
+
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+
+      debugPrint(
+        'FirebaseAuthDataSource - Password reset email sent successfully',
+      );
+    } catch (e) {
+      debugPrint(
+        'FirebaseAuthDataSource - Error sending password reset email: $e',
+      );
+      throw FirebaseFailure(
+        firebaseMessage: e.toString(),
+        firebaseCode: e.runtimeType.toString(),
+      );
+    }
+  }
+
   @override
   Future<UserModel> signUp({
     required String email,

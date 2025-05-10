@@ -51,3 +51,23 @@ class AuthError extends AuthState {
   @override
   List<Object?> get props => [error];
 }
+
+/// State when password recovery is in progress
+class ForgotPasswordLoading extends AuthState {
+  const ForgotPasswordLoading();
+}
+
+/// State when password recovery is successful
+class ForgotPasswordSuccess extends AuthState {
+  const ForgotPasswordSuccess();
+}
+
+/// State when password recovery fails
+class ForgotPasswordError extends AuthState {
+  final String message;
+
+  const ForgotPasswordError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}

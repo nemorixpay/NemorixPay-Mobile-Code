@@ -1,11 +1,14 @@
 {
-  "helloWorld": "¡Hola Mundo!",
+  "@_APP_GENERAL": {
+  },
   "appName": "NemorixPay",
+  "@_SIGN_IN_PAGE": {
+  },
   "welcomeBack": "Bienvenido de nuevo",
   "youHaveBeenMissed": "Te hemos extrañado",
-  "emailAddress": "Correo electrónico",
+  "emailAddress": "Correo Electrónico",
   "emailIsRequired": "El correo electrónico es requerido",
-  "enterValidEmail": "Ingresa un correo electrónico válido",
+  "enterValidEmail": "Por favor, ingresa un correo electrónico válido",
   "password": "Contraseña",
   "passwordIsRequired": "La contraseña es requerida",
   "passwordAtLeast6Characters": "La contraseña debe tener al menos 6 caracteres",
@@ -15,6 +18,14 @@
   "continueWithGoogle": "Continuar con Google",
   "continueWithApple": "Continuar con Apple",
   "dontHaveAnAccount": "¿No tienes una cuenta?",
+  "@_FORGOT_PASSWORD_DIALOG": {
+  },  
+  "emailWasSent": "Se ha enviado el correo de restablecimiento de contraseña. Por favor, revisa tu bandeja de entrada.",
+  "forgotPasswordTitle": "Olvidé mi Contraseña",
+  "forgotPasswordSubtitle": "Ingresa tu correo electrónico y te enviaremos instrucciones para restablecer tu contraseña.",
+  "sendEmail": "Enviar Correo",
+  "@_SIGN_UP_PAGE": {
+  },
   "signUp": "Registrarse",
   "onlyTakesAminute": "Solo toma un minuto crear tu cuenta",
   "firstNameRequired":"El nombre es requerido",
@@ -27,12 +38,10 @@
   "securityWord": "Palabra de seguridad (para recuperación de cuenta)",
   "birthdateRequired": "La fecha de nacimiento es requerida",
   "fillRegistrationData": "Por favor completa todos los campos de registro para continuar",
-  "agreeWithNemorixPay": "Estoy de acuerdo con NemorixPay",
-  "termsOfServices": "Términos de Servicio",
-  "and": "y",
-  "privacyPolicy": "Política de Privacidad",
-  "alreadyRegistered": "¿Ya estás registrado?",
-  "forgotPasswordSubtitle": "Ingresa tu correo electrónico para restablecer tu contraseña.",
+  "acceptTermsAndConditions": "Por favor acepta los términos y condiciones",
+  "alreadyHaveAnAccount": "¿Ya tienes una cuenta? Inicia sesión",
+  "registrationSuccess": "Tu cuenta ha sido creada exitosamente. Ahora puedes iniciar sesión con tus credenciales.",
+  "agreeToTerms": "Acepto los términos y condiciones",
   "sendEmail": "Enviar Correo",
   "search": "Buscar",
   "myAssets": "Mis Activos",
@@ -111,8 +120,5 @@
   "authErrorInvalidVerificationCode": "Código de verificación inválido.",
   "authErrorInvalidVerificationId": "ID de verificación inválido.",
   "authErrorMissingVerificationCode": "Falta el código de verificación.",
-  "authErrorMissingVerificationId": "Falta el ID de verificación.",
-  "acceptTermsAndConditions": "Por favor acepta los términos y condiciones",
-  "agreeToTerms": "Acepto los términos y condiciones",
-  "alreadyHaveAnAccount": "¿Ya tienes una cuenta? Inicia sesión"
+  "authErrorMissingVerificationId": "Falta el ID de verificación."
 }

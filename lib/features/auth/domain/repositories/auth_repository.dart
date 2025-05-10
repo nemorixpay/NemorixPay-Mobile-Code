@@ -29,4 +29,10 @@ abstract class AuthRepository {
     required DateTime birthDate,
     required String securityWord,
   });
+
+  /// Sends a password reset email to the user
+  ///
+  /// Returns [true] if the email was sent successfully
+  /// Throws [Failure] if there is an error
+  Future<Either<Failure, bool>> forgotPassword(String email);
 }

@@ -89,4 +89,29 @@ class FirebaseAuthRepository implements AuthRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> forgotPassword(String email) async {
+    try {
+      debugPrint('FirebaseAuthRepository - Begin forgot password process');
+      await firebaseAuthDataSource.forgotPassword(email);
+      debugPrint(
+        'FirebaseAuthRepository - Password reset email sent successfully',
+      );
+      return const Right(true);
+    } on FirebaseFailure catch (failure) {
+      debugPrint(
+        'FirebaseAuthRepository - Firebase error: ${failure.firebaseCode}',
+      );
+      return Left(failure);
+    } catch (e) {
+      debugPrint('FirebaseAuthRepository - Unexpected error: $e');
+      return Left(
+        FirebaseFailure(
+          firebaseMessage: e.toString(),
+          firebaseCode: e.runtimeType.toString(),
+        ),
+      );
+    }
+  }
 }
