@@ -51,6 +51,19 @@
   "verificationEmailSent": "Verification email has been sent. Please check your inbox.",
   "iReceivedTheEmail": "I already received the email",
   "authErrorEmailNotVerified": "Please verify your email before signing in.",
+  "verifyEmailMessage": "We have sent you a verification email. Please check your inbox and follow the instructions to verify your account.",
+  "waitTimeMessage": "Wait time: {minutes} minutes",
+  "@waitTimeMessage": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "close": "Close",
+  "resendVerification": "Resend verification",
+  "@CRYPTO_PAGES": {
+  },
   "search": "Search",
   "myAssets": "My Assets",
   "seeAll": "See All",

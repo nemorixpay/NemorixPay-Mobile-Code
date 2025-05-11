@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -5,6 +6,7 @@ import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_event.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
+import 'package:nemorixpay/features/auth/presentation/controllers/email_verification_controller.dart';
 import 'package:nemorixpay/shared/ui/widgets/nemorix_snackbar.dart';
 import 'package:nemorixpay/shared/ui/widgets/rounded_elevated_button.dart';
 
@@ -12,16 +14,75 @@ import 'package:nemorixpay/shared/ui/widgets/rounded_elevated_button.dart';
 /// @brief       Implementation of email verification dialog.
 /// @details     This dialog is shown after user registration to inform about
 ///             email verification process and allow resending the verification email.
+///             It includes a wait time control to prevent spam.
 /// @author      Miguel Fagundez
 /// @date        2024-05-08
-/// @version     1.0
+/// @version     1.2
 /// @copyright   Apache 2.0 License
-class VerificationEmailDialog extends StatelessWidget {
-  const VerificationEmailDialog({super.key});
+class VerificationEmailDialog extends StatefulWidget {
+  /// Whether the dialog is shown from signup page
+  final bool isFromSignUp;
+
+  const VerificationEmailDialog({super.key, this.isFromSignUp = false});
+
+  @override
+  State<VerificationEmailDialog> createState() =>
+      _VerificationEmailDialogState();
+}
+
+class _VerificationEmailDialogState extends State<VerificationEmailDialog> {
+  Timer? _timer;
+  int _remainingMinutes = 0;
+  bool _canResend = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _initializeTimer() async {
+    _remainingMinutes = await EmailVerificationController.getRemainingMinutes();
+    _canResend = await EmailVerificationController.canResendVerification();
+
+    if (_remainingMinutes > 0) {
+      _startTimer();
+    }
+
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) async {
+      if (_remainingMinutes > 0) {
+        setState(() {
+          _remainingMinutes--;
+        });
+      } else {
+        _canResend = await EmailVerificationController.canResendVerification();
+        _timer?.cancel();
+        if (mounted) {
+          setState(() {});
+        }
+      }
+    });
+  }
 
   void _handleClose(BuildContext context) {
     Navigator.of(context).pop(); // Close dialog
-    Navigator.of(context).pop(); // Close sign up page
+    if (widget.isFromSignUp) {
+      Navigator.of(
+        context,
+      ).pop(); // Close sign up page only if coming from signup
+    }
   }
 
   @override
@@ -36,6 +97,18 @@ class VerificationEmailDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(AppLocalizations.of(context)!.verifyEmailSubtitle),
+            if (_remainingMinutes > 0) ...[
+              const SizedBox(height: 12),
+              Text(
+                AppLocalizations.of(
+                  context,
+                )!.waitTimeMessage(_remainingMinutes),
+                style: TextStyle(
+                  color: NemorixColors.primaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
             const SizedBox(height: 20),
             BlocBuilder<AuthBloc, AuthState>(
               builder: (context, state) {
@@ -45,9 +118,10 @@ class VerificationEmailDialog extends StatelessWidget {
                       text:
                           AppLocalizations.of(context)!.resendVerificationEmail,
                       onPressed:
-                          state is VerificationEmailSending
+                          (state is VerificationEmailSending || !_canResend)
                               ? null
                               : () async {
+                                await EmailVerificationController.recordVerificationAttempt();
                                 context.read<AuthBloc>().add(
                                   const SendVerificationEmailRequested(),
                                 );
@@ -57,12 +131,14 @@ class VerificationEmailDialog extends StatelessWidget {
                                   const Duration(seconds: 1),
                                 );
 
-                                // Close dialog and sign up page
+                                // Close dialog and sign up page if coming from signup
                                 if (context.mounted) {
                                   Navigator.of(context).pop(); // Close dialog
-                                  Navigator.of(
-                                    context,
-                                  ).pop(); // Close sign up page
+                                  if (widget.isFromSignUp) {
+                                    Navigator.of(
+                                      context,
+                                    ).pop(); // Close sign up page
+                                  }
 
                                   // Show success message
                                   NemorixSnackBar.show(

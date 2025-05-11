@@ -51,6 +51,19 @@
   "verificationEmailSent": "Se ha enviado el correo de verificación. Por favor, revisa tu bandeja de entrada.",
   "iReceivedTheEmail": "Ya recibí el correo",
   "authErrorEmailNotVerified": "Por favor, verifica tu correo electrónico antes de iniciar sesión.",
+  "verifyEmailMessage": "Te hemos enviado un correo electrónico de verificación. Por favor, revisa tu bandeja de entrada y sigue las instrucciones para verificar tu cuenta.",
+  "waitTimeMessage": "Tiempo de espera: {minutes} minutos",
+  "@waitTimeMessage": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "close": "Cerrar",
+  "resendVerification": "Reenviar verificación",
+  "@_VERIFICATION_EMAIL_DIALOG": {
+  },
   "search": "Buscar",
   "myAssets": "Mis Activos",
   "seeAll": "Ver Todo",

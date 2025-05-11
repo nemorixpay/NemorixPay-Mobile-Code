@@ -23,7 +23,7 @@ class RouteNames {
   static const forgotPassword = "forgot_password";
 
   /// Analytics dashboard page
-  static const homeAnalytics = "home_analytics";
+  // static const homeAnalytics = "home_analytics";
 
   /// Main home page with cryptocurrency overview
   static const home = "home";

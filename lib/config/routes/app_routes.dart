@@ -1,7 +1,7 @@
 // ignore_for_file: slash_for_doc_comments
 
 import 'package:flutter/material.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
+// import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:nemorixpay/config/routes/route_model.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/features/auth/presentation/pages/sign_in_page.dart';
@@ -32,13 +32,13 @@ class AppRoutes {
   /// The initial route when the app starts
   static const initialRoute = RouteNames.splashNative;
 
-  /// Firebase Analytics instance for tracking navigation events
-  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  // /// Firebase Analytics instance for tracking navigation events
+  // static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
-  /// Firebase Analytics Observer to automatically track screen views
-  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(
-    analytics: analytics,
-  );
+  // /// Firebase Analytics Observer to automatically track screen views
+  // static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(
+  //   analytics: analytics,
+  // );
 
   /// List of all available routes in the application
   /// Each route is defined with its name, screen, and icon
@@ -73,16 +73,16 @@ class AppRoutes {
       screen: const HomePage(),
       icon: Icons.home,
     ),
-    RouteModel(
-      route: RouteNames.homeAnalytics,
-      name: 'Analytics',
-      screen: MyHomePage(
-        title: 'Firebase Analytics Demo',
-        analytics: analytics,
-        observer: observer,
-      ),
-      icon: Icons.account_balance_wallet_outlined,
-    ),
+    // RouteModel(
+    //   route: RouteNames.homeAnalytics,
+    //   name: 'Analytics',
+    //   screen: MyHomePage(
+    //     title: 'Firebase Analytics Demo',
+    //     analytics: analytics,
+    //     observer: observer,
+    //   ),
+    //   icon: Icons.account_balance_wallet_outlined,
+    // ),
     RouteModel(
       route: RouteNames.buyCrypto,
       name: 'Buy',

@@ -148,7 +148,8 @@ class _SignUpPageState extends State<SignUpPage> {
             context: context,
             barrierDismissible: false,
             builder:
-                (BuildContext dialogContext) => const VerificationEmailDialog(),
+                (BuildContext dialogContext) =>
+                    const VerificationEmailDialog(isFromSignUp: true),
           );
         }
       },
