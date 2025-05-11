@@ -24,7 +24,7 @@ class ShowSeedPhrasePage extends StatefulWidget {
   const ShowSeedPhrasePage({super.key, required this.seedPhrase, this.onNext});
 
   @override
-  _ShowSeedPhrasePageState createState() => _ShowSeedPhrasePageState();
+  State<ShowSeedPhrasePage> createState() => _ShowSeedPhrasePageState();
 }
 
 class _ShowSeedPhrasePageState extends State<ShowSeedPhrasePage>

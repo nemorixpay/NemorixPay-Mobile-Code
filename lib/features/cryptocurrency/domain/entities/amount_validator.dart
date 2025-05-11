@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 /// @file        amount_validator.dart
 /// @brief       Utility class for amount validation in cryptocurrency transactions.
 /// @details     This class provides methods to validate transaction amounts,
@@ -6,9 +8,6 @@
 /// @date        2025-04-30
 /// @version     1.0
 /// @copyright   Apache 2.0 License
-
-import 'package:flutter/services.dart';
-
 enum AmountValidationState { valid, invalidFormat, belowMinimum, aboveMaximum }
 
 class AmountValidator {

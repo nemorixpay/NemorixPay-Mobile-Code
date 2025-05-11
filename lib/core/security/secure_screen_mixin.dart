@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:secure_application/secure_application.dart';
+import 'app_security_service.dart';
+
 /// @file        secure_screen_mixin.dart
 /// @brief       Mixin for handling secure screen functionality.
 /// @details     This mixin provides screen security features to prevent
@@ -6,10 +10,6 @@
 /// @date        2025-05-03
 /// @version     1.0
 /// @copyright   Apache 2.0 License
-
-import 'package:flutter/material.dart';
-import 'package:secure_application/secure_application.dart';
-import 'app_security_service.dart';
 
 /// Mixin for handling security of sensitive screens
 mixin SecureScreenMixin<T extends StatefulWidget> on State<T> {

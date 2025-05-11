@@ -9,19 +9,19 @@ import 'package:nemorixpay/tabs_page.dart';
 // import 'tabs_page.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({
-    Key? key,
+  const MyHomePage({
+    super.key,
     required this.title,
     required this.analytics,
     required this.observer,
-  }) : super(key: key);
+  });
 
   final String title;
   final FirebaseAnalytics analytics;
   final FirebaseAnalyticsObserver observer;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {

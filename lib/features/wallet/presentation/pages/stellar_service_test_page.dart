@@ -143,7 +143,7 @@ class _StellarServiceTestPageState extends State<StellarServiceTestPage> {
     if (_currentBalance != null && _currentBalance! < amount) {
       setState(() {
         _transactionResult =
-            'Balance insuficiente. Balance actual: ${_currentBalance} XLM, Monto a enviar: $amount XLM';
+            'Balance insuficiente. Balance actual: $_currentBalance XLM, Monto a enviar: $amount XLM';
       });
       return;
     }
@@ -273,7 +273,7 @@ class _StellarServiceTestPageState extends State<StellarServiceTestPage> {
             const SizedBox(height: 12),
             if (_currentBalance != null)
               Text(
-                'Balance actual: ${_currentBalance} XLM',
+                'Balance actual: $_currentBalance XLM',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.green,

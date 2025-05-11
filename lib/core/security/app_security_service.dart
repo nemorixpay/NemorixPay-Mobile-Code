@@ -1,3 +1,6 @@
+import 'package:flutter/foundation.dart';
+import 'package:secure_application/secure_application.dart';
+
 /// @file        app_security_service.dart
 /// @brief       Security service for handling screen capture protection.
 /// @details     This service manages screen security features, preventing screenshots
@@ -6,8 +9,6 @@
 /// @date        2025-05-03
 /// @version     1.0
 /// @copyright   Apache 2.0 License
-
-import 'package:secure_application/secure_application.dart';
 
 /// Service responsible for managing application security
 class AppSecurityService {
@@ -23,7 +24,7 @@ class AppSecurityService {
       _controller.secure();
     } catch (e) {
       // Handle error appropriately
-      print('Error blocking screen capture: $e');
+      debugPrint('Error blocking screen capture: $e');
     }
   }
 
@@ -33,7 +34,7 @@ class AppSecurityService {
       _controller.unlock();
     } catch (e) {
       // Handle error appropriately
-      print('Error unblocking screen capture: $e');
+      debugPrint('Error unblocking screen capture: $e');
     }
   }
 }

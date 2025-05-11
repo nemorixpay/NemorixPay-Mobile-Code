@@ -53,10 +53,10 @@ class SeedPhraseInputField extends StatelessWidget {
   /// @param index Index of the field (0-based)
   /// @param controller Controller for the text input
   const SeedPhraseInputField({
-    Key? key,
+    super.key,
     required this.index,
     required this.controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

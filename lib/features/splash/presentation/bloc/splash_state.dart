@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 /// @file        splash_state.dart
 /// @brief       Splash screen states implementation for NemorixPay.
 /// @details     This file contains all possible states for the splash screen,
@@ -6,9 +8,6 @@
 /// @date        2025-05-06
 /// @version     1.0
 /// @copyright   Apache 2.0 License
-
-import 'package:equatable/equatable.dart';
-
 abstract class SplashState extends Equatable {
   const SplashState();
 

@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// @copyright   Apache 2.0 License
 
 abstract class BaseBloc<Event, State> extends Bloc<Event, State> {
-  BaseBloc(State initialState) : super(initialState) {
+  BaseBloc(super.initialState) {
     on<Event>((event, emit) async {
       try {
         await handleEvent(event, emit);

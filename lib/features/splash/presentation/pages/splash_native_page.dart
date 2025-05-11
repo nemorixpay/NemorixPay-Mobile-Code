@@ -63,12 +63,12 @@ class _SplashNativePageState extends State<SplashNativePage>
   Widget build(BuildContext context) {
     return BlocListener<SplashBloc, SplashState>(
       listener: (context, state) {
-        print('SplashState: $state'); // Debug log
+        debugPrint('SplashState: $state'); // Debug log
         if (state is SplashLoaded) {
-          print('Navigating to: ${state.route}'); // Debug log
+          debugPrint('Navigating to: ${state.route}'); // Debug log
           Navigator.pushReplacementNamed(context, state.route);
         } else if (state is SplashError) {
-          print('Error: ${state.message}'); // Debug log
+          debugPrint('Error: ${state.message}'); // Debug log
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(state.message)));

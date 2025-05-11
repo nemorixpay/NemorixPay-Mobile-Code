@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 /// @file        splash_event.dart
 /// @brief       Splash screen events implementation for NemorixPay.
 /// @details     This file contains all possible events for the splash screen,
@@ -6,9 +8,6 @@
 /// @date        2025-05-06
 /// @version     1.0
 /// @copyright   Apache 2.0 License
-
-import 'package:equatable/equatable.dart';
-
 abstract class SplashEvent extends Equatable {
   const SplashEvent();
 

@@ -1,13 +1,3 @@
-/// @file        splash_test_page.dart
-/// @brief       Temporary test page for NemorixPay UI components.
-/// @details     This file contains a temporary test page that displays all created
-///              screens for basic visual testing purposes. This is a temporary
-///              implementation and will be removed in production.
-/// @author      Miguel Fagundez
-/// @date        2025-05-06
-/// @version     1.0
-/// @copyright   Apache 2.0 License
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
@@ -18,6 +8,15 @@ import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
 import 'dart:math';
 
+/// @file        splash_test_page.dart
+/// @brief       Temporary test page for NemorixPay UI components.
+/// @details     This file contains a temporary test page that displays all created
+///              screens for basic visual testing purposes. This is a temporary
+///              implementation and will be removed in production.
+/// @author      Miguel Fagundez
+/// @date        2025-05-06
+/// @version     1.0
+/// @copyright   Apache 2.0 License
 class SplashTestPage extends StatefulWidget {
   const SplashTestPage({super.key});
 

@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 /// @file        commission_validator.dart
 /// @brief       Utility class for commission validation in cryptocurrency transactions.
 /// @details     This class provides methods to validate transaction commissions,
@@ -6,10 +9,6 @@
 /// @date        04/30/2025
 /// @version     1.1
 /// @copyright   Apache 2.0 License
-
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 enum CommissionValidationState { valid, belowMinimum, aboveMaximum }
 
 class CommissionValidator {

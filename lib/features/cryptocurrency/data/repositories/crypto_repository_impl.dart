@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import '../../domain/entities/crypto_entity.dart';
 import '../../domain/entities/crypto_price_point.dart';
 import '../../domain/repositories/crypto_repository.dart';
