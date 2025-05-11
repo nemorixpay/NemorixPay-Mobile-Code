@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:nemorixpay/core/errors/failures.dart';
+import 'package:nemorixpay/core/errors/firebase_error_codes.dart';
 import 'package:nemorixpay/core/errors/firebase_failure.dart';
 import 'package:nemorixpay/features/auth/data/datasources/firebase_auth_datasource.dart';
 import 'package:nemorixpay/features/auth/data/models/user_model.dart';
@@ -44,8 +45,8 @@ class FirebaseAuthRepository implements AuthRepository {
       debugPrint('FirebaseAuthRepository - Unexpected error: $e');
       return Left(
         FirebaseFailure(
-          firebaseMessage: e.toString(),
-          firebaseCode: e.runtimeType.toString(),
+          firebaseMessage: 'An unexpected error occurred',
+          firebaseCode: FirebaseErrorCode.unknown.code,
         ),
       );
     }
@@ -97,6 +98,31 @@ class FirebaseAuthRepository implements AuthRepository {
       await firebaseAuthDataSource.forgotPassword(email);
       debugPrint(
         'FirebaseAuthRepository - Password reset email sent successfully',
+      );
+      return const Right(true);
+    } on FirebaseFailure catch (failure) {
+      debugPrint(
+        'FirebaseAuthRepository - Firebase error: ${failure.firebaseCode}',
+      );
+      return Left(failure);
+    } catch (e) {
+      debugPrint('FirebaseAuthRepository - Unexpected error: $e');
+      return Left(
+        FirebaseFailure(
+          firebaseMessage: e.toString(),
+          firebaseCode: e.runtimeType.toString(),
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> sendVerificationEmail() async {
+    try {
+      debugPrint('FirebaseAuthRepository - Begin sending verification email');
+      await firebaseAuthDataSource.sendVerificationEmail();
+      debugPrint(
+        'FirebaseAuthRepository - Verification email sent successfully',
       );
       return const Right(true);
     } on FirebaseFailure catch (failure) {

@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
+import 'package:nemorixpay/core/errors/firebase_error_codes.dart';
 import 'package:nemorixpay/core/errors/firebase_failure.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_event.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/forgot_password_dialog.dart';
+import 'package:nemorixpay/features/auth/presentation/widgets/verification_email_dialog.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/widgets.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/password_field.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/email_field.dart';
@@ -115,25 +117,24 @@ class _LoginPageState extends State<LoginPage> {
 
             debugPrint('Displaying error message: $message');
 
-            // ScaffoldMessenger.of(context).showSnackBar(
-            //   SnackBar(
-            //     content: Text(message),
-            //     backgroundColor: Theme.of(context).colorScheme.error,
-            //     behavior: SnackBarBehavior.floating,
-            //     action: SnackBarAction(
-            //       label: 'OK',
-            //       textColor: Theme.of(context).colorScheme.onError,
-            //       onPressed: () {
-            //         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            //       },
-            //     ),
-            //   ),
-            // );
             NemorixSnackBar.show(
               context,
               message: message,
               borderColor: NemorixColors.errorColor,
             );
+
+            // Show verification dialog if email is not verified
+            if (state.error is FirebaseFailure &&
+                (state.error as FirebaseFailure).firebaseCode ==
+                    FirebaseErrorCode.emailNotVerified.code) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder:
+                    (BuildContext dialogContext) =>
+                        const VerificationEmailDialog(),
+              );
+            }
           } else if (state is AuthAuthenticated) {
             debugPrint('User authenticated: ${state.user.email}');
             // ScaffoldMessenger.of(context).showSnackBar(

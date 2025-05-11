@@ -71,3 +71,33 @@ class ForgotPasswordError extends AuthState {
   @override
   List<Object?> get props => [message];
 }
+
+/// State when the user's email is not verified
+class EmailNotVerified extends AuthState {
+  final UserEntity user;
+
+  const EmailNotVerified(this.user);
+
+  @override
+  List<Object?> get props => [user];
+}
+
+/// State when verification email is being sent
+class VerificationEmailSending extends AuthState {
+  const VerificationEmailSending();
+}
+
+/// State when verification email has been sent
+class VerificationEmailSent extends AuthState {
+  const VerificationEmailSent();
+}
+
+/// State when verification email fails to send
+class VerificationEmailError extends AuthState {
+  final String message;
+
+  const VerificationEmailError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}

@@ -11,6 +11,7 @@ import 'package:nemorixpay/features/auth/presentation/widgets/widgets.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/password_field.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/email_field.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/social_login_buttons.dart';
+import 'package:nemorixpay/features/auth/presentation/widgets/verification_email_dialog.dart';
 import 'package:nemorixpay/shared/ui/widgets/nemorix_snackbar.dart';
 
 /// @file        sign_up_page.dart
@@ -121,13 +122,6 @@ class _SignUpPageState extends State<SignUpPage> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthError) {
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(
-          //     content: Text(state.error.message),
-          //     backgroundColor: Colors.red,
-          //   ),
-          // );
-
           final message =
               state.error is FirebaseFailure
                   ? (state.error as FirebaseFailure).getLocalizedMessage(
@@ -142,18 +136,19 @@ class _SignUpPageState extends State<SignUpPage> {
           );
         }
         if (state is AuthAuthenticated) {
-          Navigator.of(context).pop();
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(
-          //     content: Text(AppLocalizations.of(context)!.registrationSuccess),
-          //     backgroundColor: NemorixColors.successColor,
-          //     behavior: SnackBarBehavior.floating,
-          //   ),
-          // );
+          // Show success message
           NemorixSnackBar.show(
             context,
             message: AppLocalizations.of(context)!.registrationSuccess,
             borderColor: NemorixColors.successColor,
+          );
+
+          // Show dialog
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder:
+                (BuildContext dialogContext) => const VerificationEmailDialog(),
           );
         }
       },

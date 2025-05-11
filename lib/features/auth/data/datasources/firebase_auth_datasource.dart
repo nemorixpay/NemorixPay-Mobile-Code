@@ -45,6 +45,15 @@ class FirebaseAuthDataSource implements AuthDataSource {
         );
       }
 
+      // Check if email is verified
+      if (!credentials.user!.emailVerified) {
+        debugPrint('FirebaseAuthDataSource - Email not verified');
+        throw FirebaseFailure(
+          firebaseMessage: 'Please verify your email before signing in',
+          firebaseCode: FirebaseErrorCode.emailNotVerified.code,
+        );
+      }
+
       debugPrint('FirebaseAuthDataSource - User authenticated successfully');
 
       return UserModel(
@@ -61,6 +70,9 @@ class FirebaseAuthDataSource implements AuthDataSource {
       );
     } catch (error) {
       debugPrint('FirebaseAuthDataSource - Unexpected error: $error');
+      if (error is FirebaseFailure) {
+        throw error;
+      }
       throw FirebaseFailure(
         firebaseMessage: 'An unexpected error occurred',
         firebaseCode: FirebaseErrorCode.unknown.code,
@@ -68,6 +80,7 @@ class FirebaseAuthDataSource implements AuthDataSource {
     }
   }
 
+  @override
   Future<void> forgotPassword(String email) async {
     try {
       debugPrint('FirebaseAuthDataSource - Begin forgot password process');
@@ -132,6 +145,39 @@ class FirebaseAuthDataSource implements AuthDataSource {
       debugPrint('FirebaseAuthDataSource - Firebase Auth Error: ${error.code}');
       throw FirebaseFailure(
         firebaseMessage: error.message ?? 'Registration failed',
+        firebaseCode: error.code,
+      );
+    } catch (error) {
+      debugPrint('FirebaseAuthDataSource - Unexpected error: $error');
+      throw FirebaseFailure(
+        firebaseMessage: 'An unexpected error occurred',
+        firebaseCode: FirebaseErrorCode.unknown.code,
+      );
+    }
+  }
+
+  @override
+  Future<void> sendVerificationEmail() async {
+    try {
+      debugPrint('FirebaseAuthDataSource - Begin sending verification email');
+
+      final user = _firebaseAuth.currentUser;
+      if (user == null) {
+        debugPrint('FirebaseAuthDataSource - No user found');
+        throw FirebaseFailure(
+          firebaseMessage: 'No user found',
+          firebaseCode: FirebaseErrorCode.unknown.code,
+        );
+      }
+
+      await user.sendEmailVerification();
+      debugPrint(
+        'FirebaseAuthDataSource - Verification email sent successfully',
+      );
+    } on FirebaseAuthException catch (error) {
+      debugPrint('FirebaseAuthDataSource - Firebase Auth Error: ${error.code}');
+      throw FirebaseFailure(
+        firebaseMessage: error.message ?? 'Failed to send verification email',
         firebaseCode: error.code,
       );
     } catch (error) {

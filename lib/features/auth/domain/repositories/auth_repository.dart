@@ -35,4 +35,10 @@ abstract class AuthRepository {
   /// Returns [true] if the email was sent successfully
   /// Throws [Failure] if there is an error
   Future<Either<Failure, bool>> forgotPassword(String email);
+
+  /// Sends a verification email to the current user
+  ///
+  /// Returns [true] if the email was sent successfully
+  /// Throws [Failure] if there is an error
+  Future<Either<Failure, bool>> sendVerificationEmail();
 }

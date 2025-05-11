@@ -24,6 +24,7 @@ enum FirebaseErrorCode {
     'authErrorNetworkRequestFailed',
   ),
   requiresRecentLogin('requires-recent-login', 'authErrorRequiresRecentLogin'),
+  emailNotVerified('email-not-verified', 'authErrorEmailNotVerified'),
 
   // General errors
   unknown('unknown', 'authErrorUnknown'),
@@ -113,6 +114,8 @@ enum FirebaseErrorCode {
         return AppLocalizations.of(context)!.authErrorMissingVerificationCode;
       case 'authErrorMissingVerificationId':
         return AppLocalizations.of(context)!.authErrorMissingVerificationId;
+      case 'authErrorEmailNotVerified':
+        return AppLocalizations.of(context)!.authErrorEmailNotVerified;
       default:
         return AppLocalizations.of(context)!.authErrorUnknown;
     }

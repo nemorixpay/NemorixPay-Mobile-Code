@@ -4,8 +4,11 @@ import 'package:nemorixpay/core/errors/firebase_failure.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/sign_up_usecase.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/forgot_password_usecase.dart';
+import 'package:nemorixpay/features/auth/domain/usecases/send_verification_email_usecase.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_event.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nemorixpay/features/auth/data/models/user_model.dart';
 
 /// @file        auth_bloc.dart
 /// @brief       Authentication Bloc for managing auth state and events.
@@ -18,18 +21,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignInUseCase _signInUseCase;
   final SignUpUseCase _signUpUseCase;
   final ForgotPasswordUseCase _forgotPasswordUseCase;
+  final SendVerificationEmailUseCase _sendVerificationEmailUseCase;
 
   AuthBloc({
     required SignInUseCase signInUseCase,
     required SignUpUseCase signUpUseCase,
     required ForgotPasswordUseCase forgotPasswordUseCase,
+    required SendVerificationEmailUseCase sendVerificationEmailUseCase,
   }) : _signInUseCase = signInUseCase,
        _signUpUseCase = signUpUseCase,
        _forgotPasswordUseCase = forgotPasswordUseCase,
+       _sendVerificationEmailUseCase = sendVerificationEmailUseCase,
        super(const AuthInitial()) {
     on<SignInRequested>(_onSignInRequested);
     on<SignUpRequested>(_onSignUpRequested);
     on<ForgotPasswordRequested>(_onForgotPasswordRequested);
+    on<SendVerificationEmailRequested>(_onSendVerificationEmailRequested);
+    on<CheckEmailVerificationStatus>(_onCheckEmailVerificationStatus);
   }
 
   Future<void> _onSignInRequested(
@@ -100,8 +108,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         securityWord: event.securityWord,
       );
 
-      result.fold(
-        (failure) {
+      await result.fold(
+        (failure) async {
           if (failure is FirebaseFailure) {
             debugPrint(
               'AuthBloc - Registration failed: ${failure.firebaseCode}',
@@ -113,9 +121,26 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(AuthError(failure));
           emit(const AuthUnauthenticated());
         },
-        (user) {
+        (user) async {
           debugPrint('AuthBloc - User registered successfully: ${user.email}');
           emit(AuthAuthenticated(user));
+
+          // Send verification email automatically
+          debugPrint('AuthBloc - Sending verification email');
+          final verificationResult = await _sendVerificationEmailUseCase();
+
+          verificationResult.fold(
+            (failure) {
+              debugPrint(
+                'AuthBloc - Verification email failed: ${failure.message}',
+              );
+              emit(VerificationEmailError(failure.message));
+            },
+            (success) {
+              debugPrint('AuthBloc - Verification email sent successfully');
+              emit(const VerificationEmailSent());
+            },
+          );
         },
       );
     } on FirebaseFailure catch (failure) {
@@ -181,6 +206,93 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           ).firebaseMessage,
         ),
       );
+    }
+  }
+
+  Future<void> _onSendVerificationEmailRequested(
+    SendVerificationEmailRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    debugPrint('AuthBloc - Begin sending verification email');
+    emit(const VerificationEmailSending());
+
+    try {
+      debugPrint('AuthBloc - Calling send verification email use case');
+      final result = await _sendVerificationEmailUseCase();
+
+      result.fold(
+        (failure) {
+          if (failure is FirebaseFailure) {
+            debugPrint(
+              'AuthBloc - Verification email failed: ${failure.firebaseCode}',
+            );
+            debugPrint('AuthBloc - Error message: ${failure.firebaseMessage}');
+          } else {
+            debugPrint(
+              'AuthBloc - Verification email failed: ${failure.message}',
+            );
+          }
+          emit(VerificationEmailError(failure.message));
+        },
+        (success) {
+          debugPrint('AuthBloc - Verification email sent successfully');
+          emit(const VerificationEmailSent());
+        },
+      );
+    } on FirebaseFailure catch (failure) {
+      debugPrint('AuthBloc - Firebase error: ${failure.firebaseCode}');
+      debugPrint('AuthBloc - Error message: ${failure.firebaseMessage}');
+      emit(VerificationEmailError(failure.firebaseMessage));
+    } catch (e) {
+      debugPrint('AuthBloc - Unexpected error: $e');
+      emit(
+        VerificationEmailError(
+          FirebaseFailure(
+            firebaseMessage: e.toString(),
+            firebaseCode: e.runtimeType.toString(),
+          ).firebaseMessage,
+        ),
+      );
+    }
+  }
+
+  Future<void> _onCheckEmailVerificationStatus(
+    CheckEmailVerificationStatus event,
+    Emitter<AuthState> emit,
+  ) async {
+    debugPrint('AuthBloc - Checking email verification status');
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      await user.reload();
+      if (!user.emailVerified) {
+        debugPrint('AuthBloc - Email not verified');
+        emit(
+          EmailNotVerified(
+            UserModel(
+              id: user.uid,
+              email: user.email ?? '',
+              isEmailVerified: false,
+              createdAt: DateTime.now(),
+            ).toUserEntity(),
+          ),
+        );
+      } else {
+        debugPrint('AuthBloc - Email verified');
+        emit(
+          AuthAuthenticated(
+            UserModel(
+              id: user.uid,
+              email: user.email ?? '',
+              isEmailVerified: true,
+              createdAt: DateTime.now(),
+            ).toUserEntity(),
+          ),
+        );
+      }
+    } else {
+      debugPrint('AuthBloc - No user found');
+      emit(const AuthUnauthenticated());
     }
   }
 }

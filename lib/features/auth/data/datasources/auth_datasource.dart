@@ -27,4 +27,14 @@ abstract class AuthDataSource {
     required DateTime birthDate,
     required String securityWord,
   });
+
+  /// Sends a password reset email to the user
+  ///
+  /// Throws [Failure] if there is an error
+  Future<void> forgotPassword(String email);
+
+  /// Sends a verification email to the current user
+  ///
+  /// Throws [Failure] if there is an error
+  Future<void> sendVerificationEmail();
 }
