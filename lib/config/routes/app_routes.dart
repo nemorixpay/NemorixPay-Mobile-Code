@@ -1,7 +1,6 @@
 // ignore_for_file: slash_for_doc_comments
 
 import 'package:flutter/material.dart';
-// import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:nemorixpay/config/routes/route_model.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/features/auth/presentation/pages/sign_in_page.dart';
@@ -15,7 +14,6 @@ import 'package:nemorixpay/features/wallet/presentation/pages/import_seed_phrase
 import 'package:nemorixpay/features/wallet/presentation/pages/show_seed_phrase_page.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/stellar_service_test_page.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/wallet_setup_page.dart';
-import 'package:nemorixpay/shared/ui/pages/test_page/test_home_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/presentation/pages/home_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/presentation/pages/crypto_details.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
@@ -73,16 +71,6 @@ class AppRoutes {
       screen: const HomePage(),
       icon: Icons.home,
     ),
-    // RouteModel(
-    //   route: RouteNames.homeAnalytics,
-    //   name: 'Analytics',
-    //   screen: MyHomePage(
-    //     title: 'Firebase Analytics Demo',
-    //     analytics: analytics,
-    //     observer: observer,
-    //   ),
-    //   icon: Icons.account_balance_wallet_outlined,
-    // ),
     RouteModel(
       route: RouteNames.buyCrypto,
       name: 'Buy',

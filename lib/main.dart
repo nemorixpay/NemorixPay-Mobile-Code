@@ -5,7 +5,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-// import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,11 +34,6 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-  // static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(
-  //   analytics: analytics,
-  // );
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +65,6 @@ class MyApp extends StatelessWidget {
         initialRoute: RouteNames.splashNative,
         routes: AppRoutes.getAppRoutes(),
         onGenerateRoute: AppRoutes.onGenerateRoute,
-        // navigatorObservers: <NavigatorObserver>[observer],
       ),
     );
   }

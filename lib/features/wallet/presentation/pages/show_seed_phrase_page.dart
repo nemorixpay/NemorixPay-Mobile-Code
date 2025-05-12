@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/continue_button.dart';
-import 'package:nemorixpay/shared/ui/widgets/main_header.dart';
-import 'package:nemorixpay/shared/ui/widgets/base_card.dart';
+import 'package:nemorixpay/shared/presentation/widgets/main_header.dart';
+import 'package:nemorixpay/shared/presentation/widgets/base_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../../core/security/secure_screen_mixin.dart';
 

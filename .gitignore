@@ -64,3 +64,5 @@ app_constants.dart
 
 # Rules
 .cursor/
+
+.DS_Store

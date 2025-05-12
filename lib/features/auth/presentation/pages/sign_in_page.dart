@@ -15,7 +15,7 @@ import 'package:nemorixpay/features/auth/presentation/widgets/widgets.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/password_field.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/email_field.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/social_login_buttons.dart';
-import 'package:nemorixpay/shared/ui/widgets/nemorix_snackbar.dart';
+import 'package:nemorixpay/shared/presentation/widgets/nemorix_snackbar.dart';
 
 /// @file        sign_in_page.dart
 /// @brief       Sign In page implementation for NemorixPay authentication system.

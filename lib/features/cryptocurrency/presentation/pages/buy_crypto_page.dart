@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
 import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
-import 'package:nemorixpay/shared/ui/widgets/main_header.dart';
+import 'package:nemorixpay/shared/presentation/widgets/main_header.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/crypto_conversion_card.dart';
 import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/exchange_fee_card.dart';
