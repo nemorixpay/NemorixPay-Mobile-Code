@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/shared/presentation/widgets/rounded_elevated_button.dart';
+import 'package:nemorixpay/shared/presentation/widgets/single_action_dialog.dart';
 
 /// @file        seed_phrase_success_dialog.dart
 /// @brief       Implementation of seed phrase verification success dialog.
@@ -19,26 +20,15 @@ class SeedPhraseSuccessDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(AppLocalizations.of(context)!.seedPhraseVerifiedTitle),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(AppLocalizations.of(context)!.seedPhraseVerifiedMessage),
-          const SizedBox(height: 20),
-          RoundedElevatedButton(
-            text: AppLocalizations.of(context)!.iUnderstand,
-            onPressed: () {
-              Navigator.of(context).pop(); // Close dialog
-              Navigator.of(context).pop(); // Close page
-              onContinue(); // Proceed with wallet creation
-            },
-            backgroundColor: NemorixColors.primaryColor,
-            textColor: Colors.black,
-          ),
-        ],
-      ),
+    return SingleActionDialog(
+      title: AppLocalizations.of(context)!.seedPhraseVerifiedTitle,
+      buttonText: AppLocalizations.of(context)!.iUnderstand,
+      onPressed: () {
+        Navigator.of(context).pop(); // Close dialog
+        Navigator.of(context).pop(); // Close page
+        onContinue(); // Proceed with wallet creation
+      },
+      child: Text(AppLocalizations.of(context)!.seedPhraseVerifiedMessage),
     );
   }
 }

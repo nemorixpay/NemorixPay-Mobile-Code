@@ -9,6 +9,7 @@ import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
 import 'package:nemorixpay/features/auth/presentation/controllers/email_verification_controller.dart';
 import 'package:nemorixpay/shared/presentation/widgets/nemorix_snackbar.dart';
 import 'package:nemorixpay/shared/presentation/widgets/rounded_elevated_button.dart';
+import 'package:nemorixpay/shared/presentation/widgets/single_action_dialog.dart';
 
 /// @file        verification_email_dialog.dart
 /// @brief       Implementation of email verification dialog.
@@ -90,9 +91,12 @@ class _VerificationEmailDialogState extends State<VerificationEmailDialog> {
     // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async => false,
-      child: AlertDialog(
-        title: Text(AppLocalizations.of(context)!.verifyEmailTitle),
-        content: Column(
+      child: SingleActionDialog(
+        title: AppLocalizations.of(context)!.verifyEmailTitle,
+        buttonText: AppLocalizations.of(context)!.resendVerificationEmail,
+        onPressed: () {},
+        showButton: false,
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

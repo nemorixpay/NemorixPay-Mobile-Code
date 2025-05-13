@@ -7,7 +7,9 @@ import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_event.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/custom_text_form_field.dart';
+import 'package:nemorixpay/shared/presentation/widgets/nemorix_snackbar.dart';
 import 'package:nemorixpay/shared/presentation/widgets/rounded_elevated_button.dart';
+import 'package:nemorixpay/shared/presentation/widgets/single_action_dialog.dart';
 
 /// @file        forgot_password_dialog.dart
 /// @brief       Implementation of functions for resetting the user password.
@@ -47,26 +49,28 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
       listener: (context, state) {
         if (state is ForgotPasswordSuccess) {
           Navigator.of(context).pop();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(AppLocalizations.of(context)!.emailWasSent),
-              backgroundColor: NemorixColors.successColor,
-              behavior: SnackBarBehavior.floating,
-            ),
+          NemorixSnackBar.show(
+            context,
+            message: AppLocalizations.of(context)!.emailWasSent,
+            borderColor: NemorixColors.successColor,
           );
         } else if (state is ForgotPasswordError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-              backgroundColor: NemorixColors.errorColor,
-              behavior: SnackBarBehavior.floating,
-            ),
+          Navigator.of(context).pop();
+          // TODO: Need to check error handler
+          // Case: User-not-found
+          NemorixSnackBar.show(
+            context,
+            message: state.message,
+            borderColor: NemorixColors.errorColor,
           );
         }
       },
-      child: AlertDialog(
-        title: Text(AppLocalizations.of(context)!.forgotPasswordTitle),
-        content: Column(
+      child: SingleActionDialog(
+        title: AppLocalizations.of(context)!.forgotPasswordTitle,
+        buttonText: '',
+        onPressed: () {},
+        showButton: false,
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
