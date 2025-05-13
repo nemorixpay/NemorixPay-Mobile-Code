@@ -1,4 +1,5 @@
 import 'package:nemorixpay/di/services/auth_injection_service.dart';
+import 'package:nemorixpay/di/services/stellar_injection_service.dart';
 
 /// @file        injection_container.dart
 /// @brief       Dependency injection container implementation for NemorixPay.
@@ -33,5 +34,8 @@ import 'package:nemorixpay/di/services/auth_injection_service.dart';
 /// ```
 Future<void> initInjectionDependencies() async {
   // Define all services
+  // Authentication
   await authInjectionServices();
+  // Stellar
+  await stellarInjectionServices();
 }
