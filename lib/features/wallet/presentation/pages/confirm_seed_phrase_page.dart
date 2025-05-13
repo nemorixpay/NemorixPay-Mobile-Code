@@ -1,5 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:nemorixpay/config/routes/route_names.dart';
+import 'package:nemorixpay/features/wallet/presentation/widgets/seed_phrase_success_dialog.dart';
 import 'package:nemorixpay/shared/presentation/widgets/main_header.dart';
 import 'package:nemorixpay/shared/presentation/widgets/base_card.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/continue_button.dart';
@@ -96,7 +98,22 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
         _currentAttempt++;
         _prepareQuestion();
       } else {
-        if (widget.onSuccess != null) widget.onSuccess!();
+        // if (widget.onSuccess != null) widget.onSuccess!();
+        debugPrint('Before SeedPhraseSuccessDialog');
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder:
+              (context) => SeedPhraseSuccessDialog(
+                onContinue: () {
+                  debugPrint('onSuccess Pressed');
+                  // Moving to the next page
+                  Navigator.pushNamed(context, RouteNames.testingPage);
+                  debugPrint('onSuccess After Navigation');
+                },
+              ),
+        );
+        debugPrint('After SeedPhraseSuccessDialog');
       }
     } else {
       setState(() {
