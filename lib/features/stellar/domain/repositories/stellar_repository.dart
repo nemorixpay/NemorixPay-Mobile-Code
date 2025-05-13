@@ -13,8 +13,10 @@ import '../entities/stellar_transaction.dart';
 /// @copyright   Apache 2.0 License
 
 abstract class StellarRepository {
-  /// Generates a new mnemonic phrase for account creation
-  Future<Either<Failure, String>> generateMnemonic({int strength = 128});
+  /// Generates a mnemonic phrase for account creation
+  /// @param strength Strength of the mnemonic phrase (128 for 12 words, 256 for 24 words)
+  /// @return Either<Failure, List<String>> List of mnemonic words or error
+  Future<Either<Failure, List<String>>> generateMnemonic({int strength = 256});
 
   /// Creates a new Stellar account from a mnemonic phrase
   Future<Either<Failure, StellarAccount>> createAccount({

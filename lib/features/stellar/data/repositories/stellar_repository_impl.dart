@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/errors/stellar_failure.dart';
@@ -22,9 +23,13 @@ class StellarRepositoryImpl implements StellarRepository {
   StellarRepositoryImpl({required this.datasource});
 
   @override
-  Future<Either<Failure, String>> generateMnemonic({int strength = 128}) async {
+  Future<Either<Failure, List<String>>> generateMnemonic({
+    int strength = 256,
+  }) async {
     try {
       final mnemonic = datasource.generateMnemonic(strength: strength);
+      debugPrint('StellarRepositoryImpl: generateMnemonic');
+      debugPrint(mnemonic.toString());
       return Right(mnemonic);
     } catch (e) {
       return Left(StellarFailure.fromException(e as Exception));

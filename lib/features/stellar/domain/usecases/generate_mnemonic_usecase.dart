@@ -17,7 +17,7 @@ class GenerateMnemonicUseCase {
 
   GenerateMnemonicUseCase({required this.repository});
 
-  Future<Either<Failure, String>> call({int strength = 128}) async {
+  Future<Either<Failure, List<String>>> call({int strength = 256}) async {
     debugPrint('GenerateMnemonicUseCase');
     return await repository.generateMnemonic(strength: strength);
   }

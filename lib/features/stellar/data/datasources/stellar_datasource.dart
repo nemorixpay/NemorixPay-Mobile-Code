@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
 import 'package:dio/dio.dart';
 import 'package:bip39/bip39.dart' as bip39;
@@ -19,11 +20,14 @@ class StellarDatasource {
     _sdk = StellarSDK.TESTNET;
   }
 
-  /// Generates a BIP39 mnemonic phrase (12 or 24 words)
-  /// 12 words: String mnemonic12 = bip39.generateMnemonic(strength: 128);
-  /// 24 words: String mnemonic24 = bip39.generateMnemonic(strength: 256);
-  String generateMnemonic({int strength = 128}) {
-    return bip39.generateMnemonic(strength: strength);
+  /// Generates a mnemonic phrase (12 or 24 words)
+  /// @param strength Strength of the mnemonic phrase (128 for 12 words, 256 for 24 words)
+  /// @return List of mnemonic words
+  List<String> generateMnemonic({int strength = 256}) {
+    final mnemonic = bip39.generateMnemonic(strength: strength);
+    debugPrint('StellarDatasource: generateMnemonic');
+    debugPrint(mnemonic);
+    return mnemonic.split(' ');
   }
 
   /// Derives a KeyPair (public/private keys) from a mnemonic phrase

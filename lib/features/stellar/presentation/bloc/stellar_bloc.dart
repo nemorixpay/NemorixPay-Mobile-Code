@@ -44,7 +44,7 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
     final result = await generateMnemonicUseCase(strength: event.strength);
     result.fold(
       (failure) => emit(StellarError(failure.message)),
-      (mnemonic) => emit(MnemonicGenerated(mnemonic)),
+      (mnemonicWords) => emit(MnemonicGenerated(mnemonicWords)),
     );
   }
 

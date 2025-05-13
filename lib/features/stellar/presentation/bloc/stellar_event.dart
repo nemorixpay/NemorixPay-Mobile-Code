@@ -18,7 +18,7 @@ abstract class StellarEvent extends Equatable {
 class GenerateMnemonicEvent extends StellarEvent {
   final int strength;
 
-  const GenerateMnemonicEvent({this.strength = 128});
+  const GenerateMnemonicEvent({this.strength = 256});
 
   @override
   List<Object?> get props => [strength];

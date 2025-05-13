@@ -31,7 +31,7 @@ class StellarError extends StellarState {
 }
 
 class MnemonicGenerated extends StellarState {
-  final String mnemonic;
+  final List<String> mnemonic;
 
   const MnemonicGenerated(this.mnemonic);
 
