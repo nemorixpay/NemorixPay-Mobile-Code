@@ -67,6 +67,12 @@
   "seedPhraseVerifiedTitle": "Seed Phrase Verified!",
   "seedPhraseVerifiedMessage": "You have successfully verified your seed phrase. Remember to keep it in a safe place, as it's the only way to recover your wallet if you lose access to your account.",
   "iUnderstand": "I understand",
+  "@_WALLET_SUCCESS_PAGE": {
+  },
+  "walletSuccessTitle": "You've successfully created your wallet.",
+  "walletSuccessSecurity": "Remember to keep your seed phrase safe, it's your responsibility!",
+  "walletSuccessInfo": "NemorixPay cannot recover your wallet if you lose it. You can find your seed phrase in Settings > Security & Privacy.",
+  "goToHomePage": "Go to Home Page",
   "@CRYPTO_PAGES": {
   },
   "search": "Search",

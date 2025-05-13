@@ -49,6 +49,9 @@ class RouteNames {
   /// Page for showing seed phrase
   static const confirmSeedPhrase = "confirm_seed_phrase";
 
+  /// Page for showing seed phrase
+  static const successWalletCreation = "success_wallet_creation";
+
   /// Page for showing testing page
   static const testingPage = "testing_page";
 }

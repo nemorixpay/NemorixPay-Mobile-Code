@@ -67,6 +67,12 @@
   "seedPhraseVerifiedTitle": "¡Frase Semilla Verificada!",
   "seedPhraseVerifiedMessage": "Has verificado correctamente tu frase semilla. Recuerda guardarla en un lugar seguro, ya que es la única forma de recuperar tu wallet si pierdes acceso a tu cuenta.",
   "iUnderstand": "Entendido",
+  "@_WALLET_SUCCESS_PAGE": {
+  },
+  "walletSuccessTitle": "Has creado tu wallet exitosamente.",
+  "walletSuccessSecurity": "Recuerda mantener tu frase semilla segura, ¡es tu responsabilidad!",
+  "walletSuccessInfo": "NemorixPay no puede recuperar tu wallet si la pierdes. Puedes encontrar tu frase semilla en Ajustes > Seguridad & Privacidad.",
+  "goToHomePage": "Ir a la página principal",
   "@CRYPTO_PAGES": {
   },
   "search": "Buscar",

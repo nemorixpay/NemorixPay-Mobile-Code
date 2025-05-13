@@ -218,6 +218,18 @@ class _SplashTestPageState extends State<SplashTestPage> {
                 ),
                 SizedBox(height: 20),
                 RoundedElevatedButton(
+                  text: "Continue with Wallet Success Creation",
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      RouteNames.successWalletCreation,
+                    );
+                  },
+                  backgroundColor: Colors.white,
+                  textColor: Colors.black,
+                ),
+                SizedBox(height: 20),
+                RoundedElevatedButton(
                   text: "Continue with Tetsing Page",
                   onPressed: () {
                     Navigator.pushNamed(context, RouteNames.testingPage);

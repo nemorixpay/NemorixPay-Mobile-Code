@@ -17,6 +17,7 @@ import 'package:nemorixpay/features/wallet/presentation/pages/wallet_setup_page.
 import 'package:nemorixpay/features/cryptocurrency/presentation/pages/home_page.dart';
 import 'package:nemorixpay/features/cryptocurrency/presentation/pages/crypto_details.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
+import 'package:nemorixpay/features/wallet/presentation/pages/wallet_success_page.dart';
 
 /// @file        app_routes.dart
 /// @brief       Centralized route management for NemorixPay.
@@ -88,6 +89,12 @@ class AppRoutes {
       name: 'ImportSeed Phrase',
       screen: ImportSeedPhrasePage(),
       icon: Icons.import_export,
+    ),
+    RouteModel(
+      route: RouteNames.successWalletCreation,
+      name: 'Success Wallet Creation',
+      screen: WalletSuccessPage(),
+      icon: Icons.wallet,
     ),
     RouteModel(
       route: RouteNames.testingPage,

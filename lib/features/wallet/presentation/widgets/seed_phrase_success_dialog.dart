@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-import 'package:nemorixpay/shared/presentation/widgets/rounded_elevated_button.dart';
 import 'package:nemorixpay/shared/presentation/widgets/single_action_dialog.dart';
 
 /// @file        seed_phrase_success_dialog.dart
