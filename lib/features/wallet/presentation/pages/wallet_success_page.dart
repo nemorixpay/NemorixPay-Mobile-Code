@@ -91,9 +91,10 @@ class WalletSuccessPage extends StatelessWidget {
                         child: RoundedElevatedButton(
                           text: l10n.goToHomePage,
                           onPressed: () {
-                            Navigator.pushReplacementNamed(
+                            Navigator.pushNamedAndRemoveUntil(
                               context,
                               RouteNames.home,
+                              (route) => false,
                             );
                           },
                           backgroundColor: NemorixColors.primaryColor,

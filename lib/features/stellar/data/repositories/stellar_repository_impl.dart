@@ -41,6 +41,9 @@ class StellarRepositoryImpl implements StellarRepository {
     required String mnemonic,
     String passphrase = "",
   }) async {
+    debugPrint('Repository: createAccount called');
+    debugPrint('Repository: mnemonic = $mnemonic');
+    debugPrint('Repository: passphrase = $passphrase');
     try {
       final keyPair = await datasource.getKeyPairFromMnemonic(
         mnemonic,
@@ -59,6 +62,7 @@ class StellarRepositoryImpl implements StellarRepository {
 
       return Right(account);
     } catch (e) {
+      debugPrint('Repository: Exception - $e');
       return Left(StellarFailure.accountError(e.toString()));
     }
   }

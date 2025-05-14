@@ -22,8 +22,8 @@ class SeedPhraseSuccessDialog extends StatelessWidget {
       title: AppLocalizations.of(context)!.seedPhraseVerifiedTitle,
       buttonText: AppLocalizations.of(context)!.iUnderstand,
       onPressed: () {
-        Navigator.of(context).pop(); // Close dialog
-        Navigator.of(context).pop(); // Close page
+        // Navigator.of(context).pop(); // Close dialog
+        // Navigator.of(context).pop(); // Close page
         onContinue(); // Proceed with wallet creation
       },
       child: Text(AppLocalizations.of(context)!.seedPhraseVerifiedMessage),

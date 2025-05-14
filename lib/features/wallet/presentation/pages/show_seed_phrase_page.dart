@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/continue_button.dart';
 import 'package:nemorixpay/shared/presentation/widgets/main_header.dart';
 import 'package:nemorixpay/shared/presentation/widgets/base_card.dart';
@@ -17,11 +18,11 @@ import '../../../../core/security/secure_screen_mixin.dart';
 /// @details The grid adapts to 12 or 24 words and is read-only.
 class ShowSeedPhrasePage extends StatefulWidget {
   final List<String> seedPhrase;
-  final VoidCallback? onNext;
+  // final VoidCallback? onNext;
 
   /// @param seedPhrase List of words (12 or 24) to display
   /// @param onNext Callback for the Next button
-  const ShowSeedPhrasePage({super.key, required this.seedPhrase, this.onNext});
+  const ShowSeedPhrasePage({super.key, required this.seedPhrase});
 
   @override
   State<ShowSeedPhrasePage> createState() => _ShowSeedPhrasePageState();
@@ -68,7 +69,13 @@ class _ShowSeedPhrasePageState extends State<ShowSeedPhrasePage>
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: ContinueButton(
                   label: l10n.next,
-                  onPressed: widget.onNext ?? () {},
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      RouteNames.confirmSeedPhrase,
+                      arguments: widget.seedPhrase,
+                    );
+                  },
                 ),
               ),
               SizedBox(height: 24),

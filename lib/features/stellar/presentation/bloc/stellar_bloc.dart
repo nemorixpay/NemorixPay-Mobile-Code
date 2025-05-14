@@ -6,6 +6,7 @@ import '../../domain/usecases/send_payment_usecase.dart';
 import '../../domain/usecases/validate_transaction_usecase.dart';
 import 'stellar_event.dart';
 import 'stellar_state.dart';
+import 'package:flutter/foundation.dart';
 
 /// @file        stellar_bloc.dart
 /// @brief       Bloc implementation for the Stellar feature.
@@ -40,11 +41,18 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
     GenerateMnemonicEvent event,
     Emitter<StellarState> emit,
   ) async {
+    debugPrint('Bloc: GenerateMnemonicEvent received');
     emit(StellarLoading());
     final result = await generateMnemonicUseCase(strength: event.strength);
     result.fold(
-      (failure) => emit(StellarError(failure.message)),
-      (mnemonicWords) => emit(MnemonicGenerated(mnemonicWords)),
+      (failure) {
+        debugPrint('Bloc: StellarError emitted (generateMnemonic)');
+        emit(StellarError(failure.message));
+      },
+      (mnemonicWords) {
+        debugPrint('Bloc: MnemonicGenerated emitted');
+        emit(MnemonicGenerated(mnemonicWords));
+      },
     );
   }
 
@@ -52,14 +60,21 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
     CreateAccountEvent event,
     Emitter<StellarState> emit,
   ) async {
+    debugPrint('Bloc: CreateAccountEvent received');
     emit(StellarLoading());
     final result = await createAccountUseCase(
       mnemonic: event.mnemonic,
       passphrase: event.passphrase,
     );
     result.fold(
-      (failure) => emit(StellarError(failure.message)),
-      (account) => emit(AccountCreated(account)),
+      (failure) {
+        debugPrint('Bloc: StellarError emitted (createAccount)');
+        emit(StellarError(failure.message));
+      },
+      (account) {
+        debugPrint('Bloc: AccountCreated emitted');
+        emit(AccountCreated(account));
+      },
     );
   }
 

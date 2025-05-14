@@ -2,12 +2,17 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/seed_phrase_success_dialog.dart';
+import 'package:nemorixpay/shared/presentation/widgets/app_loader.dart';
 import 'package:nemorixpay/shared/presentation/widgets/main_header.dart';
 import 'package:nemorixpay/shared/presentation/widgets/base_card.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/continue_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/shared/presentation/widgets/nemorix_snackbar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nemorixpay/features/stellar/presentation/bloc/stellar_bloc.dart';
+import 'package:nemorixpay/features/stellar/presentation/bloc/stellar_event.dart';
+import 'package:nemorixpay/features/stellar/presentation/bloc/stellar_state.dart';
 
 /// @file        confirm_seed_phrase_page.dart
 /// @brief       Confirm Seed Phrase screen for NemorixPay wallet feature.
@@ -98,7 +103,6 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
         _currentAttempt++;
         _prepareQuestion();
       } else {
-        // if (widget.onSuccess != null) widget.onSuccess!();
         debugPrint('Before SeedPhraseSuccessDialog');
         showDialog(
           context: context,
@@ -107,9 +111,12 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
               (context) => SeedPhraseSuccessDialog(
                 onContinue: () {
                   debugPrint('onSuccess Pressed');
-                  // Moving to the next page
-                  Navigator.pushNamed(context, RouteNames.testingPage);
-                  debugPrint('onSuccess After Navigation');
+                  Navigator.of(context).pop();
+                  Future.delayed(const Duration(milliseconds: 150), () {
+                    context.read<StellarBloc>().add(
+                      CreateAccountEvent(mnemonic: widget.seedPhrase.join(' ')),
+                    );
+                  });
                 },
               ),
         );
@@ -126,122 +133,155 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            MainHeader(
-              title: l10n.confirmSeedPhraseTitle,
-              showBackButton: true,
-              showSearchButton: false,
-            ),
-            const SizedBox(height: 24),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Text(
-                l10n.confirmSeedPhraseInstructions,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyLarge,
+    return BlocListener<StellarBloc, StellarState>(
+      listener: (context, state) {
+        if (state is AccountCreated) {
+          debugPrint('WALLET CREATED!');
+          // TODO: Save Keys in local DB or remote DB
+          debugPrint('Public Key: \\${state.account.publicKey}');
+          debugPrint('Secret Key: \\${state.account.secretKey}');
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            RouteNames.successWalletCreation,
+            (route) => false,
+          );
+        } else if (state is StellarError) {
+          debugPrint('StellarError - SnackBar!');
+          Navigator.of(context, rootNavigator: true).popUntil(
+            (route) =>
+                route.isFirst ||
+                route.settings.name == ModalRoute.of(context)?.settings.name,
+          );
+          NemorixSnackBar.show(context, message: state.message);
+        } else if (state is StellarLoading) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder:
+                (context) => const AppLoader(message: 'Creating wallet...'),
+          );
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              MainHeader(
+                title: l10n.confirmSeedPhraseTitle,
+                showBackButton: true,
+                showSearchButton: false,
               ),
-            ),
-            const SizedBox(height: 24),
-            Center(
-              child: Text(
-                '${_randomIndex + 1}.',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
+              const SizedBox(height: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Text(
+                  l10n.confirmSeedPhraseInstructions,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
-            ),
-            const SizedBox(height: 24),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: BaseCard(
-                cardWidget: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 12,
-                            crossAxisSpacing: 12,
-                            childAspectRatio: 2.8,
-                          ),
-                      itemCount: _options.length,
-                      itemBuilder: (context, index) {
-                        final isSelected = _selectedIndex == index;
-                        return ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                isSelected
-                                    ? Theme.of(context).primaryColor
-                                    : Theme.of(
-                                      context,
-                                    ).colorScheme.surfaceContainerHighest,
-                            foregroundColor:
-                                isSelected
-                                    ? NemorixColors.mainBlack
-                                    : Theme.of(context).colorScheme.onSurface,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+              const SizedBox(height: 24),
+              Center(
+                child: Text(
+                  '${_randomIndex + 1}.',
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: BaseCard(
+                  cardWidget: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 12,
+                              crossAxisSpacing: 12,
+                              childAspectRatio: 2.8,
                             ),
-                            elevation: isSelected ? 2 : 0,
+                        itemCount: _options.length,
+                        itemBuilder: (context, index) {
+                          final isSelected = _selectedIndex == index;
+                          return ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  isSelected
+                                      ? Theme.of(context).primaryColor
+                                      : Theme.of(
+                                        context,
+                                      ).colorScheme.surfaceContainerHighest,
+                              foregroundColor:
+                                  isSelected
+                                      ? NemorixColors.mainBlack
+                                      : Theme.of(context).colorScheme.onSurface,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              elevation: isSelected ? 2 : 0,
+                            ),
+                            onPressed: () => _onOptionSelected(index),
+                            child: Text(
+                              _options[index],
+                              style: Theme.of(
+                                context,
+                              ).textTheme.bodyLarge?.copyWith(
+                                fontWeight:
+                                    isSelected
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      if (_showError)
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 24.0,
+                            bottom: 8.0,
                           ),
-                          onPressed: () => _onOptionSelected(index),
                           child: Text(
-                            _options[index],
+                            l10n.confirmSeedPhraseError,
                             style: Theme.of(
                               context,
-                            ).textTheme.bodyLarge?.copyWith(
-                              fontWeight:
-                                  isSelected
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
+                            ).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.error,
+                              fontWeight: FontWeight.bold,
                             ),
+                            textAlign: TextAlign.center,
                           ),
-                        );
-                      },
-                    ),
-                    if (_showError)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 24.0, bottom: 8.0),
-                        child: Text(
-                          l10n.confirmSeedPhraseError,
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.error,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24.0,
-                vertical: 24.0,
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24.0,
+                  vertical: 24.0,
+                ),
+                child: ContinueButton(
+                  label: l10n.next,
+                  enabled: _selectedIndex != null,
+                  onPressed: () {
+                    if (_selectedIndex != null) {
+                      _onNextPressed();
+                    }
+                  },
+                ),
               ),
-              child: ContinueButton(
-                label: l10n.next,
-                enabled: _selectedIndex != null,
-                onPressed: () {
-                  if (_selectedIndex != null) {
-                    _onNextPressed();
-                  }
-                },
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
