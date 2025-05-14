@@ -136,6 +136,8 @@
   "confirmSeedPhraseInstructions": "Selecciona cada palabra en el orden en que te fue presentada.",
   "confirmSeedPhraseError": "Palabra incorrecta. Por favor, revisa tu frase semilla y asegúrate de haber anotado todas las palabras en el orden correcto. Si cometes un error, podrías perder el acceso a tu cuenta.",
   "confirmSeedPhraseSuccess": "¡Correcto! Ahora confirma una segunda palabra de tu frase semilla.",
+  "@_FIREBASE_ERROR_MESSAGES": {
+  },
   "authErrorUserNotFound": "No existe una cuenta con este correo electrónico.",
   "authErrorWrongPassword": "La contraseña es incorrecta.",
   "authErrorInvalidEmail": "El formato del correo electrónico no es válido.",
@@ -152,5 +154,22 @@
   "authErrorInvalidVerificationCode": "Código de verificación inválido.",
   "authErrorInvalidVerificationId": "ID de verificación inválido.",
   "authErrorMissingVerificationCode": "Falta el código de verificación.",
-  "authErrorMissingVerificationId": "Falta el ID de verificación."
+  "authErrorMissingVerificationId": "Falta el ID de verificación.",
+  "@_STELLAR_ERROR_MESSAGES": {
+  },
+  "stellarErrorAccountNotFound": "Cuenta Stellar no encontrada",
+  "stellarErrorAccountExists": "La cuenta Stellar ya existe",
+  "stellarErrorInvalidAccount": "Cuenta Stellar inválida",
+  "stellarErrorInsufficientBalance": "Saldo insuficiente en la cuenta Stellar",
+  "stellarErrorTransactionFailed": "Transacción Stellar fallida",
+  "stellarErrorInvalidTransaction": "Transacción Stellar inválida",
+  "stellarErrorTransactionExpired": "Transacción Stellar expirada",
+  "stellarErrorInvalidAmount": "Monto inválido para la transacción Stellar",
+  "stellarErrorNetworkError": "Error de red Stellar",
+  "stellarErrorServerError": "Error del servidor Stellar",
+  "stellarErrorTimeoutError": "Tiempo de espera agotado en Stellar",
+  "stellarErrorUnknown": "Error desconocido en Stellar",
+  "stellarErrorInvalidOperation": "Operación Stellar inválida",
+  "stellarErrorInvalidMnemonic": "Frase mnemotécnica Stellar inválida",
+  "stellarErrorInvalidSecretKey": "Clave secreta Stellar inválida"
 }

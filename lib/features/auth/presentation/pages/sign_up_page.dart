@@ -86,7 +86,7 @@ class _SignUpPageState extends State<SignUpPage> {
         NemorixSnackBar.show(
           context,
           message: AppLocalizations.of(context)!.acceptTermsAndConditions,
-          borderColor: NemorixColors.errorColor,
+          type: SnackBarType.warning,
         );
         return;
       }
@@ -105,7 +105,7 @@ class _SignUpPageState extends State<SignUpPage> {
     NemorixSnackBar.show(
       context,
       message: AppLocalizations.of(context)!.fillRegistrationData,
-      borderColor: NemorixColors.errorColor,
+      type: SnackBarType.error,
     );
   }
 
@@ -132,7 +132,7 @@ class _SignUpPageState extends State<SignUpPage> {
           NemorixSnackBar.show(
             context,
             message: message,
-            borderColor: NemorixColors.errorColor,
+            type: SnackBarType.error,
           );
         }
         if (state is AuthAuthenticated) {
@@ -140,7 +140,7 @@ class _SignUpPageState extends State<SignUpPage> {
           NemorixSnackBar.show(
             context,
             message: AppLocalizations.of(context)!.registrationSuccess,
-            borderColor: NemorixColors.successColor,
+            type: SnackBarType.success,
           );
 
           // Show dialog

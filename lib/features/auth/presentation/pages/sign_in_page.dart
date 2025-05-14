@@ -67,17 +67,9 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
     } else {
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: Text(AppLocalizations.of(context)!.enterYourLoginInfo),
-      //     backgroundColor: Theme.of(context).colorScheme.error,
-      //     behavior: SnackBarBehavior.floating,
-      //   ),
-      // );
       NemorixSnackBar.show(
         context,
         message: AppLocalizations.of(context)!.enterYourLoginInfo,
-        borderColor: NemorixColors.errorColor,
       );
     }
   }
@@ -120,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
             NemorixSnackBar.show(
               context,
               message: message,
-              borderColor: NemorixColors.errorColor,
+              type: SnackBarType.error,
             );
 
             // Show verification dialog if email is not verified
@@ -137,17 +129,10 @@ class _LoginPageState extends State<LoginPage> {
             }
           } else if (state is AuthAuthenticated) {
             debugPrint('User authenticated: ${state.user.email}');
-            // ScaffoldMessenger.of(context).showSnackBar(
-            //   SnackBar(
-            //     content: Text(AppLocalizations.of(context)!.welcomeBack),
-            //     backgroundColor: Theme.of(context).colorScheme.primary,
-            //     behavior: SnackBarBehavior.floating,
-            //   ),
-            // );
             NemorixSnackBar.show(
               context,
               message: AppLocalizations.of(context)!.welcomeBack,
-              borderColor: NemorixColors.successColor,
+              type: SnackBarType.success,
             );
           } else if (state is AuthUnauthenticated) {
             debugPrint('User Unauthenticated');

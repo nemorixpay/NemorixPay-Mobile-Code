@@ -52,7 +52,7 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
           NemorixSnackBar.show(
             context,
             message: AppLocalizations.of(context)!.emailWasSent,
-            borderColor: NemorixColors.successColor,
+            type: SnackBarType.info,
           );
         } else if (state is ForgotPasswordError) {
           Navigator.of(context).pop();
@@ -61,7 +61,7 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
           NemorixSnackBar.show(
             context,
             message: state.message,
-            borderColor: NemorixColors.errorColor,
+            type: SnackBarType.error,
           );
         }
       },

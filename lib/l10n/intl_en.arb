@@ -136,6 +136,8 @@
   "confirmSeedPhraseInstructions": "Select each word in the order it was presented to you.",
   "confirmSeedPhraseError": "Incorrect word. Please check your seed phrase and make sure you wrote down all the words in the correct order. If you make a mistake, you may lose access to your account.",
   "confirmSeedPhraseSuccess": "Correct! Now confirm a second word from your seed phrase.",
+  "@_FIREBASE_ERROR_MESSAGES": {
+  },
   "authErrorUserNotFound": "No account found with this email.",
   "authErrorWrongPassword": "Incorrect password.",
   "authErrorInvalidEmail": "Invalid email format.",
@@ -152,5 +154,22 @@
   "authErrorInvalidVerificationCode": "Invalid verification code.",
   "authErrorInvalidVerificationId": "Invalid verification ID.",
   "authErrorMissingVerificationCode": "Missing verification code.",
-  "authErrorMissingVerificationId": "Missing verification ID."
+  "authErrorMissingVerificationId": "Missing verification ID.",
+  "@_STELLAR_ERROR_MESSAGES": {
+  },
+  "stellarErrorAccountNotFound": "Stellar account not found",
+  "stellarErrorAccountExists": "Stellar account already exists",
+  "stellarErrorInvalidAccount": "Invalid Stellar account",
+  "stellarErrorInsufficientBalance": "Insufficient balance in Stellar account",
+  "stellarErrorTransactionFailed": "Stellar transaction failed",
+  "stellarErrorInvalidTransaction": "Invalid Stellar transaction",
+  "stellarErrorTransactionExpired": "Stellar transaction expired",
+  "stellarErrorInvalidAmount": "Invalid amount for Stellar transaction",
+  "stellarErrorNetworkError": "Stellar network error",
+  "stellarErrorServerError": "Stellar server error",
+  "stellarErrorTimeoutError": "Stellar request timed out",
+  "stellarErrorUnknown": "Unknown Stellar error",
+  "stellarErrorInvalidOperation": "Invalid Stellar operation",
+  "stellarErrorInvalidMnemonic": "Invalid Stellar mnemonic phrase",
+  "stellarErrorInvalidSecretKey": "Invalid Stellar secret key"
 }

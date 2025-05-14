@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import '../../../../core/errors/failures.dart';
 import '../entities/stellar_account.dart';
 import '../entities/stellar_transaction.dart';
@@ -8,8 +9,8 @@ import '../entities/stellar_transaction.dart';
 /// @details     Defines the contract for Stellar network operations including
 ///              account management and transaction handling.
 /// @author      Miguel Fagundez
-/// @date        2025-05-12
-/// @version     1.0
+/// @date        2025-05-13
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 
 abstract class StellarRepository {

@@ -1,20 +1,19 @@
 import 'package:dartz/dartz.dart';
+import 'package:nemorixpay/core/errors/failures.dart';
+import 'package:nemorixpay/core/errors/stellar_failure.dart';
+import 'package:nemorixpay/features/stellar/data/datasources/stellar_datasource.dart';
+import 'package:nemorixpay/features/stellar/domain/entities/stellar_account.dart';
+import 'package:nemorixpay/features/stellar/domain/entities/stellar_transaction.dart';
+import 'package:nemorixpay/features/stellar/domain/repositories/stellar_repository.dart';
 import 'package:flutter/foundation.dart';
-import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
-import '../../../../core/errors/failures.dart';
-import '../../../../core/errors/stellar_failure.dart';
-import '../../domain/entities/stellar_account.dart';
-import '../../domain/entities/stellar_transaction.dart';
-import '../../domain/repositories/stellar_repository.dart';
-import '../datasources/stellar_datasource.dart';
 
 /// @file        stellar_repository_impl.dart
-/// @brief       Implementation of the Stellar repository.
-/// @details     Provides concrete implementation of Stellar network operations
-///              using the StellarDatasource.
+/// @brief       Implementation of the Stellar repository interface.
+/// @details     This class implements the StellarRepository interface, providing
+///              concrete implementations for all Stellar network operations.
 /// @author      Miguel Fagundez
-/// @date        2025-05-12
-/// @version     1.0
+/// @date        2025-05-13
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 
 class StellarRepositoryImpl implements StellarRepository {
@@ -26,13 +25,18 @@ class StellarRepositoryImpl implements StellarRepository {
   Future<Either<Failure, List<String>>> generateMnemonic({
     int strength = 256,
   }) async {
+    debugPrint(
+      'StellarRepositoryImpl: generateMnemonic - Iniciando generación',
+    );
     try {
-      final mnemonic = datasource.generateMnemonic(strength: strength);
-      debugPrint('StellarRepositoryImpl: generateMnemonic');
-      debugPrint(mnemonic.toString());
+      final mnemonic = await datasource.generateMnemonic(strength: strength);
+      debugPrint(
+        'StellarRepositoryImpl: generateMnemonic - Mnemonic generado exitosamente',
+      );
       return Right(mnemonic);
-    } catch (e) {
-      return Left(StellarFailure.fromException(e as Exception));
+    } on Exception catch (e) {
+      debugPrint('StellarRepositoryImpl: generateMnemonic - Error: $e');
+      return Left(StellarFailure.fromException(e));
     }
   }
 
@@ -41,29 +45,22 @@ class StellarRepositoryImpl implements StellarRepository {
     required String mnemonic,
     String passphrase = "",
   }) async {
-    debugPrint('Repository: createAccount called');
-    debugPrint('Repository: mnemonic = $mnemonic');
-    debugPrint('Repository: passphrase = $passphrase');
+    debugPrint(
+      'StellarRepositoryImpl: createAccount - Iniciando creación de cuenta',
+    );
+    debugPrint('StellarRepositoryImpl: createAccount - Mnemonic: $mnemonic');
     try {
-      final keyPair = await datasource.getKeyPairFromMnemonic(
-        mnemonic,
+      final account = await datasource.createAccount(
+        mnemonic: mnemonic,
         passphrase: passphrase,
       );
-
-      await datasource.createAccountInTestnet(keyPair.accountId);
-
-      final account = StellarAccount(
-        publicKey: keyPair.accountId,
-        secretKey: keyPair.secretSeed,
-        balance: 0.0, // La cuenta nueva comienza con 0 XLM
-        mnemonic: mnemonic,
-        createdAt: DateTime.now(),
+      debugPrint(
+        'StellarRepositoryImpl: createAccount - Cuenta creada exitosamente: ${account.publicKey}',
       );
-
       return Right(account);
-    } catch (e) {
-      debugPrint('Repository: Exception - $e');
-      return Left(StellarFailure.accountError(e.toString()));
+    } on Exception catch (e) {
+      debugPrint('StellarRepositoryImpl: createAccount - Error: $e');
+      return Left(StellarFailure.fromException(e));
     }
   }
 
@@ -71,18 +68,18 @@ class StellarRepositoryImpl implements StellarRepository {
   Future<Either<Failure, StellarAccount>> getAccountBalance(
     String publicKey,
   ) async {
+    debugPrint(
+      'StellarRepositoryImpl: getAccountBalance - Consultando balance para: $publicKey',
+    );
     try {
-      final balance = await datasource.getBalance(publicKey);
-
-      final account = StellarAccount(
-        publicKey: publicKey,
-        balance: balance,
-        createdAt: DateTime.now(),
+      final account = await datasource.getAccountBalance(publicKey);
+      debugPrint(
+        'StellarRepositoryImpl: getAccountBalance - Balance obtenido: ${account.balance}',
       );
-
       return Right(account);
-    } catch (e) {
-      return Left(StellarFailure.accountError(e.toString()));
+    } on Exception catch (e) {
+      debugPrint('StellarRepositoryImpl: getAccountBalance - Error: $e');
+      return Left(StellarFailure.fromException(e));
     }
   }
 
@@ -93,33 +90,25 @@ class StellarRepositoryImpl implements StellarRepository {
     required double amount,
     String? memo,
   }) async {
+    debugPrint('StellarRepositoryImpl: sendPayment - Iniciando envío de pago');
+    debugPrint(
+      'StellarRepositoryImpl: sendPayment - Destino: $destinationPublicKey',
+    );
+    debugPrint('StellarRepositoryImpl: sendPayment - Monto: $amount');
     try {
-      final transactionHash = await datasource.sendTransaction(
-        sourceSecretSeed: sourceSecretKey,
+      final transaction = await datasource.sendPayment(
+        sourceSecretKey: sourceSecretKey,
         destinationPublicKey: destinationPublicKey,
         amount: amount,
         memo: memo,
       );
-
-      final transactionDetails = await datasource.validateTransaction(
-        transactionHash,
+      debugPrint(
+        'StellarRepositoryImpl: sendPayment - Transacción exitosa: ${transaction.hash}',
       );
-
-      final transaction = StellarTransaction(
-        hash: transactionHash,
-        sourceAccount: transactionDetails['sourceAccount'] as String,
-        destinationAccount: destinationPublicKey,
-        amount: amount,
-        memo: memo,
-        successful: transactionDetails['successful'] as bool,
-        ledger: transactionDetails['ledger'] as int?,
-        createdAt: DateTime.parse(transactionDetails['createdAt'] as String),
-        feeCharged: transactionDetails['feeCharged'].toString(),
-      );
-
       return Right(transaction);
-    } catch (e) {
-      return Left(StellarFailure.transactionError(e.toString()));
+    } on Exception catch (e) {
+      debugPrint('StellarRepositoryImpl: sendPayment - Error: $e');
+      return Left(StellarFailure.fromException(e));
     }
   }
 
@@ -127,25 +116,18 @@ class StellarRepositoryImpl implements StellarRepository {
   Future<Either<Failure, StellarTransaction>> validateTransaction(
     String transactionHash,
   ) async {
+    debugPrint(
+      'StellarRepositoryImpl: validateTransaction - Validando transacción: $transactionHash',
+    );
     try {
-      final transactionDetails = await datasource.validateTransaction(
-        transactionHash,
+      final transaction = await datasource.validateTransaction(transactionHash);
+      debugPrint(
+        'StellarRepositoryImpl: validateTransaction - Transacción validada: ${transaction.successful}',
       );
-
-      final transaction = StellarTransaction(
-        hash: transactionHash,
-        sourceAccount: transactionDetails['sourceAccount'] as String,
-        destinationAccount: '', // No disponible en la validación
-        amount: 0.0, // No disponible en la validación
-        successful: transactionDetails['successful'] as bool,
-        ledger: transactionDetails['ledger'] as int?,
-        createdAt: DateTime.parse(transactionDetails['createdAt'] as String),
-        feeCharged: transactionDetails['feeCharged'].toString(),
-      );
-
       return Right(transaction);
-    } catch (e) {
-      return Left(StellarFailure.transactionError(e.toString()));
+    } on Exception catch (e) {
+      debugPrint('StellarRepositoryImpl: validateTransaction - Error: $e');
+      return Left(StellarFailure.fromException(e));
     }
   }
 }

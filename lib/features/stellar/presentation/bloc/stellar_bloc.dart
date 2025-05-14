@@ -41,16 +41,31 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
     GenerateMnemonicEvent event,
     Emitter<StellarState> emit,
   ) async {
-    debugPrint('Bloc: GenerateMnemonicEvent received');
+    debugPrint(
+      'StellarBloc: _onGenerateMnemonic - Iniciando generación de mnemonic',
+    );
+    debugPrint(
+      'StellarBloc: _onGenerateMnemonic - Strength: ${event.strength}',
+    );
     emit(StellarLoading());
     final result = await generateMnemonicUseCase(strength: event.strength);
     result.fold(
       (failure) {
-        debugPrint('Bloc: StellarError emitted (generateMnemonic)');
+        debugPrint(
+          'StellarBloc: _onGenerateMnemonic - Error: ${failure.message}',
+        );
+        debugPrint(
+          'StellarBloc: _onGenerateMnemonic - Código: ${failure.code}',
+        );
         emit(StellarError(failure.message));
       },
       (mnemonicWords) {
-        debugPrint('Bloc: MnemonicGenerated emitted');
+        debugPrint(
+          'StellarBloc: _onGenerateMnemonic - Mnemonic generado exitosamente',
+        );
+        debugPrint(
+          'StellarBloc: _onGenerateMnemonic - Palabras: ${mnemonicWords.join(" ")}',
+        );
         emit(MnemonicGenerated(mnemonicWords));
       },
     );
@@ -60,7 +75,11 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
     CreateAccountEvent event,
     Emitter<StellarState> emit,
   ) async {
-    debugPrint('Bloc: CreateAccountEvent received');
+    debugPrint('StellarBloc: _onCreateAccount - Iniciando creación de cuenta');
+    debugPrint('StellarBloc: _onCreateAccount - Mnemonic: ${event.mnemonic}');
+    debugPrint(
+      'StellarBloc: _onCreateAccount - Passphrase: ${event.passphrase}',
+    );
     emit(StellarLoading());
     final result = await createAccountUseCase(
       mnemonic: event.mnemonic,
@@ -68,11 +87,20 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
     );
     result.fold(
       (failure) {
-        debugPrint('Bloc: StellarError emitted (createAccount)');
+        debugPrint('StellarBloc: _onCreateAccount - Error: ${failure.message}');
+        debugPrint('StellarBloc: _onCreateAccount - Código: ${failure.code}');
         emit(StellarError(failure.message));
       },
       (account) {
-        debugPrint('Bloc: AccountCreated emitted');
+        debugPrint(
+          'StellarBloc: _onCreateAccount - Cuenta creada exitosamente',
+        );
+        debugPrint(
+          'StellarBloc: _onCreateAccount - PublicKey: ${account.publicKey}',
+        );
+        debugPrint(
+          'StellarBloc: _onCreateAccount - Balance: ${account.balance}',
+        );
         emit(AccountCreated(account));
       },
     );
@@ -82,11 +110,28 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
     GetAccountBalanceEvent event,
     Emitter<StellarState> emit,
   ) async {
+    debugPrint('StellarBloc: _onGetAccountBalance - Consultando balance');
+    debugPrint(
+      'StellarBloc: _onGetAccountBalance - PublicKey: ${event.publicKey}',
+    );
     emit(StellarLoading());
     final result = await getAccountBalanceUseCase(event.publicKey);
     result.fold(
-      (failure) => emit(StellarError(failure.message)),
-      (account) => emit(BalanceUpdated(account)),
+      (failure) {
+        debugPrint(
+          'StellarBloc: _onGetAccountBalance - Error: ${failure.message}',
+        );
+        debugPrint(
+          'StellarBloc: _onGetAccountBalance - Código: ${failure.code}',
+        );
+        emit(StellarError(failure.message));
+      },
+      (account) {
+        debugPrint(
+          'StellarBloc: _onGetAccountBalance - Balance obtenido: ${account.balance}',
+        );
+        emit(BalanceUpdated(account));
+      },
     );
   }
 
@@ -94,6 +139,12 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
     SendPaymentEvent event,
     Emitter<StellarState> emit,
   ) async {
+    debugPrint('StellarBloc: _onSendPayment - Iniciando envío de pago');
+    debugPrint(
+      'StellarBloc: _onSendPayment - Destino: ${event.destinationPublicKey}',
+    );
+    debugPrint('StellarBloc: _onSendPayment - Monto: ${event.amount}');
+    debugPrint('StellarBloc: _onSendPayment - Memo: ${event.memo}');
     emit(StellarLoading());
     final result = await sendPaymentUseCase(
       sourceSecretKey: event.sourceSecretKey,
@@ -102,8 +153,19 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
       memo: event.memo,
     );
     result.fold(
-      (failure) => emit(StellarError(failure.message)),
-      (transaction) => emit(PaymentSent(transaction)),
+      (failure) {
+        debugPrint('StellarBloc: _onSendPayment - Error: ${failure.message}');
+        debugPrint('StellarBloc: _onSendPayment - Código: ${failure.code}');
+        emit(StellarError(failure.message));
+      },
+      (transaction) {
+        debugPrint('StellarBloc: _onSendPayment - Pago enviado exitosamente');
+        debugPrint('StellarBloc: _onSendPayment - Hash: ${transaction.hash}');
+        debugPrint(
+          'StellarBloc: _onSendPayment - Estado: ${transaction.successful}',
+        );
+        emit(PaymentSent(transaction));
+      },
     );
   }
 
@@ -111,11 +173,34 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
     ValidateTransactionEvent event,
     Emitter<StellarState> emit,
   ) async {
+    debugPrint('StellarBloc: _onValidateTransaction - Validando transacción');
+    debugPrint(
+      'StellarBloc: _onValidateTransaction - Hash: ${event.transactionHash}',
+    );
     emit(StellarLoading());
     final result = await validateTransactionUseCase(event.transactionHash);
     result.fold(
-      (failure) => emit(StellarError(failure.message)),
-      (transaction) => emit(TransactionValidated(transaction)),
+      (failure) {
+        debugPrint(
+          'StellarBloc: _onValidateTransaction - Error: ${failure.message}',
+        );
+        debugPrint(
+          'StellarBloc: _onValidateTransaction - Código: ${failure.code}',
+        );
+        emit(StellarError(failure.message));
+      },
+      (transaction) {
+        debugPrint(
+          'StellarBloc: _onValidateTransaction - Transacción validada',
+        );
+        debugPrint(
+          'StellarBloc: _onValidateTransaction - Estado: ${transaction.successful}',
+        );
+        debugPrint(
+          'StellarBloc: _onValidateTransaction - Ledger: ${transaction.ledger}',
+        );
+        emit(TransactionValidated(transaction));
+      },
     );
   }
 }

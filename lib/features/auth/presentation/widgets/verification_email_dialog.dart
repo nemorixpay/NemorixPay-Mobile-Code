@@ -151,7 +151,7 @@ class _VerificationEmailDialogState extends State<VerificationEmailDialog> {
                                         AppLocalizations.of(
                                           context,
                                         )!.verificationEmailSent,
-                                    borderColor: NemorixColors.successColor,
+                                    type: SnackBarType.success,
                                   );
                                 }
                               },

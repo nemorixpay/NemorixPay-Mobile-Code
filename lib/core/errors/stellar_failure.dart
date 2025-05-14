@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/core/errors/failures.dart';
+import 'package:nemorixpay/core/errors/stellar_error_codes.dart';
 
 /// @file        stellar_failure.dart
 /// @brief       Stellar network failure for NemorixPay.
@@ -7,8 +8,8 @@ import 'package:nemorixpay/core/errors/failures.dart';
 ///              It provides a standardized way to handle Stellar-related errors with
 ///              proper error code mapping and internationalization support.
 /// @author      Miguel Fagundez
-/// @date        2025-05-04
-/// @version     1.0
+/// @date        2025-05-13
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 
 class StellarFailure extends Failure {
@@ -29,8 +30,32 @@ class StellarFailure extends Failure {
   /// This factory constructor handles unknown errors and converts them
   /// to our standardized failure format
   factory StellarFailure.fromException(Exception exception) {
+    final errorMessage = exception.toString().toLowerCase();
+
+    if (errorMessage.contains('status code of 400')) {
+      return StellarFailure(
+        stellarCode: StellarErrorCode.accountExists.code,
+        stellarMessage:
+            'Esta wallet ya existe. Por favor, usa una frase semilla diferente.',
+      );
+    }
+
+    if (errorMessage.contains('insufficient balance')) {
+      return StellarFailure(
+        stellarCode: StellarErrorCode.insufficientBalance.code,
+        stellarMessage: 'Balance insuficiente para realizar la operación.',
+      );
+    }
+
+    if (errorMessage.contains('network error')) {
+      return StellarFailure(
+        stellarCode: StellarErrorCode.networkError.code,
+        stellarMessage: 'Error de conexión con la red Stellar.',
+      );
+    }
+
     return StellarFailure(
-      stellarCode: 'STELLAR_ERROR',
+      stellarCode: StellarErrorCode.unknown.code,
       stellarMessage: exception.toString(),
     );
   }
@@ -38,7 +63,7 @@ class StellarFailure extends Failure {
   /// Creates a [StellarFailure] for account-related errors
   factory StellarFailure.accountError(String message) {
     return StellarFailure(
-      stellarCode: 'STELLAR_ACCOUNT_ERROR',
+      stellarCode: StellarErrorCode.accountNotFound.code,
       stellarMessage: message,
     );
   }
@@ -46,7 +71,7 @@ class StellarFailure extends Failure {
   /// Creates a [StellarFailure] for transaction-related errors
   factory StellarFailure.transactionError(String message) {
     return StellarFailure(
-      stellarCode: 'STELLAR_TRANSACTION_ERROR',
+      stellarCode: StellarErrorCode.transactionFailed.code,
       stellarMessage: message,
     );
   }
@@ -54,8 +79,16 @@ class StellarFailure extends Failure {
   /// Creates a [StellarFailure] for network-related errors
   factory StellarFailure.networkError(String message) {
     return StellarFailure(
-      stellarCode: 'STELLAR_NETWORK_ERROR',
+      stellarCode: StellarErrorCode.networkError.code,
       stellarMessage: message,
     );
+  }
+
+  /// Checks if this failure represents a specific error type
+  bool isErrorType(StellarErrorCode errorCode) => stellarCode == errorCode.code;
+
+  /// Gets a localized message for this failure
+  String getLocalizedMessage(BuildContext context) {
+    return StellarErrorCode.getMessageForCode(stellarCode, context);
   }
 }

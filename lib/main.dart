@@ -18,6 +18,10 @@ import 'package:nemorixpay/features/splash/presentation/bloc/splash_bloc.dart';
 import 'package:nemorixpay/features/stellar/presentation/bloc/stellar_bloc.dart';
 import 'firebase_options.dart';
 
+/// Global key for accessing the ScaffoldMessenger from anywhere in the app
+final GlobalKey<ScaffoldMessengerState> scaffoldKey =
+    GlobalKey<ScaffoldMessengerState>();
+
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -60,6 +64,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'NemorixPay',
         debugShowCheckedModeBanner: false,
+        scaffoldMessengerKey: scaffoldKey,
         theme: NemorixTheme.darkThemeMode,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,

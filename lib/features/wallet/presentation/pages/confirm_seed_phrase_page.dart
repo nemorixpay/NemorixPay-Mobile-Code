@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/seed_phrase_success_dialog.dart';
+import 'package:nemorixpay/shared/presentation/keys/app_keys.dart';
 import 'package:nemorixpay/shared/presentation/widgets/app_loader.dart';
 import 'package:nemorixpay/shared/presentation/widgets/main_header.dart';
 import 'package:nemorixpay/shared/presentation/widgets/base_card.dart';
@@ -99,6 +100,7 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
         NemorixSnackBar.show(
           context,
           message: AppLocalizations.of(context)!.confirmSeedPhraseSuccess,
+          type: SnackBarType.success,
         );
         _currentAttempt++;
         _prepareQuestion();
@@ -112,11 +114,9 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
                 onContinue: () {
                   debugPrint('onSuccess Pressed');
                   Navigator.of(context).pop();
-                  Future.delayed(const Duration(milliseconds: 150), () {
-                    context.read<StellarBloc>().add(
-                      CreateAccountEvent(mnemonic: widget.seedPhrase.join(' ')),
-                    );
-                  });
+                  context.read<StellarBloc>().add(
+                    CreateAccountEvent(mnemonic: widget.seedPhrase.join(' ')),
+                  );
                 },
               ),
         );
@@ -137,9 +137,8 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
       listener: (context, state) {
         if (state is AccountCreated) {
           debugPrint('WALLET CREATED!');
-          // TODO: Save Keys in local DB or remote DB
-          debugPrint('Public Key: \\${state.account.publicKey}');
-          debugPrint('Secret Key: \\${state.account.secretKey}');
+          debugPrint('Public Key: ${state.account.publicKey}');
+          debugPrint('Secret Key: ${state.account.secretKey}');
           Navigator.pushNamedAndRemoveUntil(
             context,
             RouteNames.successWalletCreation,
@@ -147,12 +146,14 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
           );
         } else if (state is StellarError) {
           debugPrint('StellarError - SnackBar!');
-          Navigator.of(context, rootNavigator: true).popUntil(
-            (route) =>
-                route.isFirst ||
-                route.settings.name == ModalRoute.of(context)?.settings.name,
+          if (Navigator.canPop(context)) {
+            Navigator.of(context).pop();
+          }
+          NemorixSnackBar.show(
+            context,
+            message: state.message,
+            type: SnackBarType.error,
           );
-          NemorixSnackBar.show(context, message: state.message);
         } else if (state is StellarLoading) {
           showDialog(
             context: context,
