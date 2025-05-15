@@ -142,6 +142,7 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
           Navigator.pushNamedAndRemoveUntil(
             context,
             RouteNames.successWalletCreation,
+            arguments: l10n.walletSuccessTitle,
             (route) => false,
           );
         } else if (state is StellarError) {

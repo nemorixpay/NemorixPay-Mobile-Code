@@ -211,6 +211,10 @@ class _SplashTestPageState extends State<SplashTestPage> {
                     Navigator.pushNamed(
                       context,
                       RouteNames.successWalletCreation,
+                      arguments:
+                          AppLocalizations.of(
+                            context,
+                          )!.importWalletSuccessTitle,
                     );
                   },
                   backgroundColor: Colors.white,

@@ -70,6 +70,7 @@
   "@_WALLET_SUCCESS_PAGE": {
   },
   "walletSuccessTitle": "Has creado tu wallet exitosamente.",
+  "importWalletSuccessTitle": "Has importado tu wallet exitosamente.",
   "walletSuccessSecurity": "Recuerda mantener tu frase semilla segura, ¡es tu responsabilidad!",
   "walletSuccessInfo": "NemorixPay no puede recuperar tu wallet si la pierdes. Puedes encontrar tu frase semilla en Ajustes > Seguridad & Privacidad.",
   "goToHomePage": "Ir a la página principal",

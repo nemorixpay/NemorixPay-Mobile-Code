@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/shared/presentation/widgets/base_card.dart';
 import 'package:nemorixpay/shared/presentation/widgets/main_header.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/seed_phrase_input_grid.dart';
@@ -134,8 +135,11 @@ class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage>
           debugPrint(
             'Account imported - Secret Key: ${state.account.secretKey}',
           );
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const WalletSuccessPage()),
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            RouteNames.successWalletCreation,
+            arguments: l10n.importWalletSuccessTitle,
+            (route) => false,
           );
         }
       },

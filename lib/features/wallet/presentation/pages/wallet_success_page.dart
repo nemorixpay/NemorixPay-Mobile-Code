@@ -13,7 +13,8 @@ import 'package:nemorixpay/shared/presentation/widgets/rounded_elevated_button.d
 /// @version     1.0
 /// @copyright   Apache 2.0 License
 class WalletSuccessPage extends StatelessWidget {
-  const WalletSuccessPage({super.key});
+  final String titleSuccess;
+  const WalletSuccessPage({super.key, required this.titleSuccess});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +56,7 @@ class WalletSuccessPage extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 32.0),
                         child: Text(
-                          l10n.walletSuccessTitle,
+                          titleSuccess,
                           style: theme.textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),

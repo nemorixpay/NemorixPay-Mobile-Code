@@ -91,12 +91,6 @@ class AppRoutes {
       icon: Icons.import_export,
     ),
     RouteModel(
-      route: RouteNames.successWalletCreation,
-      name: 'Success Wallet Creation',
-      screen: WalletSuccessPage(),
-      icon: Icons.wallet,
-    ),
-    RouteModel(
       route: RouteNames.testingPage,
       name: 'Testing Page',
       screen: StellarServiceTestPage(),
@@ -151,6 +145,11 @@ class AppRoutes {
         final args = settings.arguments as List<String>;
         return MaterialPageRoute(
           builder: (context) => ShowSeedPhrasePage(seedPhrase: args),
+        );
+      case RouteNames.successWalletCreation:
+        final title = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (context) => WalletSuccessPage(titleSuccess: title),
         );
       case RouteNames.confirmSeedPhrase:
         final args = settings.arguments as List<String>;
