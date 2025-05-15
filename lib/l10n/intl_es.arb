@@ -173,5 +173,7 @@
   "stellarErrorUnknown": "Error desconocido en Stellar",
   "stellarErrorInvalidOperation": "Operación Stellar inválida",
   "stellarErrorInvalidMnemonic": "Frase mnemotécnica Stellar inválida",
-  "stellarErrorInvalidSecretKey": "Clave secreta Stellar inválida"
+  "stellarErrorInvalidSecretKey": "Clave secreta Stellar inválida",
+  "stellarErrorInvalidPublicKey": "La clave pública no es válida",
+  "stellarErrorInvalidMemo": "El memo no puede tener más de 28 caracteres"
 }

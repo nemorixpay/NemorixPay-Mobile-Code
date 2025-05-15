@@ -19,12 +19,14 @@ enum StellarErrorCode {
     'insufficient-balance',
     'stellarErrorInsufficientBalance',
   ),
+  invalidPublicKey('invalid-public-key', 'stellarErrorInvalidPublicKey'),
 
   // Transaction errors
   transactionFailed('transaction-failed', 'stellarErrorTransactionFailed'),
   invalidTransaction('invalid-transaction', 'stellarErrorInvalidTransaction'),
   transactionExpired('transaction-expired', 'stellarErrorTransactionExpired'),
   invalidAmount('invalid-amount', 'stellarErrorInvalidAmount'),
+  invalidMemo('invalid-memo', 'stellarErrorInvalidMemo'),
 
   // Network errors
   networkError('network-error', 'stellarErrorNetworkError'),
@@ -70,6 +72,8 @@ enum StellarErrorCode {
         return AppLocalizations.of(context)!.stellarErrorInvalidAccount;
       case 'stellarErrorInsufficientBalance':
         return AppLocalizations.of(context)!.stellarErrorInsufficientBalance;
+      case 'stellarErrorInvalidPublicKey':
+        return AppLocalizations.of(context)!.stellarErrorInvalidPublicKey;
       case 'stellarErrorTransactionFailed':
         return AppLocalizations.of(context)!.stellarErrorTransactionFailed;
       case 'stellarErrorInvalidTransaction':
@@ -78,6 +82,8 @@ enum StellarErrorCode {
         return AppLocalizations.of(context)!.stellarErrorTransactionExpired;
       case 'stellarErrorInvalidAmount':
         return AppLocalizations.of(context)!.stellarErrorInvalidAmount;
+      case 'stellarErrorInvalidMemo':
+        return AppLocalizations.of(context)!.stellarErrorInvalidMemo;
       case 'stellarErrorNetworkError':
         return AppLocalizations.of(context)!.stellarErrorNetworkError;
       case 'stellarErrorServerError':

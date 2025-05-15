@@ -12,8 +12,8 @@ import 'package:nemorixpay/core/errors/stellar_error_codes.dart';
 /// @details     Provides methods for mnemonic generation, key derivation, account creation
 ///              and create/validate transactions on the Stellar testnet using the official Flutter SDK.
 /// @author      Miguel Fagundez
-/// @date        2025-05-12
-/// @version     1.1
+/// @date        2025-05-15
+/// @version     1.2
 /// @copyright   Apache 2.0 License
 
 /// Service responsible for interacting with the Stellar network
@@ -66,12 +66,30 @@ class StellarDatasource {
 
   /// Gets the current balance of a Stellar account
   Future<StellarAccount> getAccountBalance(String publicKey) async {
-    final balance = await getBalance(publicKey);
-    return StellarAccount(
-      publicKey: publicKey,
-      balance: balance,
-      createdAt: DateTime.now(),
-    );
+    try {
+      // Validate public key format
+      if (!publicKey.startsWith('G') || publicKey.length != 56) {
+        throw StellarFailure(
+          stellarCode: StellarErrorCode.invalidPublicKey.code,
+          stellarMessage: 'La clave pública no es válida',
+        );
+      }
+
+      final balance = await getBalance(publicKey);
+      return StellarAccount(
+        publicKey: publicKey,
+        balance: balance,
+        createdAt: DateTime.now(),
+      );
+    } catch (e) {
+      debugPrint('StellarDatasource: getAccountBalance - Error: $e');
+      if (e is StellarFailure) rethrow;
+
+      throw StellarFailure(
+        stellarCode: StellarErrorCode.unknown.code,
+        stellarMessage: 'Error al obtener el balance: $e',
+      );
+    }
   }
 
   /// Sends XLM from source account to destination account
@@ -81,25 +99,51 @@ class StellarDatasource {
     required double amount,
     String? memo,
   }) async {
-    final transactionHash = await sendTransaction(
-      sourceSecretSeed: sourceSecretKey,
-      destinationPublicKey: destinationPublicKey,
-      amount: amount,
-      memo: memo,
-    );
+    try {
+      // Validate memo length if provided
+      if (memo != null && memo.length > 28) {
+        throw StellarFailure(
+          stellarCode: StellarErrorCode.invalidMemo.code,
+          stellarMessage: 'El memo no puede tener más de 28 caracteres',
+        );
+      }
 
-    final details = await _validateTransaction(transactionHash);
-    return StellarTransaction(
-      hash: transactionHash,
-      sourceAccount: details['sourceAccount'] as String,
-      destinationAccount: destinationPublicKey,
-      amount: amount,
-      memo: memo,
-      successful: details['successful'] as bool,
-      ledger: details['ledger'] as int?,
-      createdAt: DateTime.parse(details['createdAt'] as String),
-      feeCharged: details['feeCharged'].toString(),
-    );
+      // Validate amount
+      if (amount <= 0) {
+        throw StellarFailure(
+          stellarCode: StellarErrorCode.invalidAmount.code,
+          stellarMessage: 'El monto debe ser mayor que 0',
+        );
+      }
+
+      final transactionHash = await sendTransaction(
+        sourceSecretSeed: sourceSecretKey,
+        destinationPublicKey: destinationPublicKey,
+        amount: amount,
+        memo: memo,
+      );
+
+      final details = await _validateTransaction(transactionHash);
+      return StellarTransaction(
+        hash: transactionHash,
+        sourceAccount: details['sourceAccount'] as String,
+        destinationAccount: destinationPublicKey,
+        amount: amount,
+        memo: memo,
+        successful: details['successful'] as bool,
+        ledger: details['ledger'] as int?,
+        createdAt: DateTime.parse(details['createdAt'] as String),
+        feeCharged: details['feeCharged'].toString(),
+      );
+    } catch (e) {
+      debugPrint('StellarDatasource: sendPayment - Error: $e');
+      if (e is StellarFailure) rethrow;
+
+      throw StellarFailure(
+        stellarCode: StellarErrorCode.unknown.code,
+        stellarMessage: 'Error al enviar el pago: $e',
+      );
+    }
   }
 
   /// Validates a transaction by its hash
