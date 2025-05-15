@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter/material.dart';
 import '../../../../core/errors/failures.dart';
 import '../entities/stellar_account.dart';
 import '../entities/stellar_transaction.dart';
@@ -21,6 +20,15 @@ abstract class StellarRepository {
 
   /// Creates a new Stellar account from a mnemonic phrase
   Future<Either<Failure, StellarAccount>> createAccount({
+    required String mnemonic,
+    String passphrase = "",
+  });
+
+  /// Imports an existing Stellar account using a mnemonic phrase
+  /// @param mnemonic The mnemonic phrase to import (12 or 24 words)
+  /// @param passphrase Optional passphrase for the mnemonic
+  /// @return Either<Failure, StellarAccount> The imported account or error
+  Future<Either<Failure, StellarAccount>> importAccount({
     required String mnemonic,
     String passphrase = "",
   });

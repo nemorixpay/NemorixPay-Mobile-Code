@@ -4,6 +4,7 @@ import 'package:nemorixpay/features/stellar/data/repositories/stellar_repository
 import 'package:nemorixpay/features/stellar/domain/usecases/create_account_usecase.dart';
 import 'package:nemorixpay/features/stellar/domain/usecases/generate_mnemonic_usecase.dart';
 import 'package:nemorixpay/features/stellar/domain/usecases/get_account_balance_usecase.dart';
+import 'package:nemorixpay/features/stellar/domain/usecases/import_account_usecase.dart';
 import 'package:nemorixpay/features/stellar/domain/usecases/send_payment_usecase.dart';
 import 'package:nemorixpay/features/stellar/domain/usecases/validate_transaction_usecase.dart';
 import 'package:nemorixpay/features/stellar/presentation/bloc/stellar_bloc.dart';
@@ -72,6 +73,10 @@ Future<void> stellarInjectionServices() async {
         ValidateTransactionUseCase(repository: stellarRepository),
       );
 
+  final ImportAccountUseCase importAccountUseCase = di.registerSingleton(
+    ImportAccountUseCase(repository: stellarRepository),
+  );
+
   // Define Stellar Bloc
   di.registerFactory(
     () => StellarBloc(
@@ -80,6 +85,7 @@ Future<void> stellarInjectionServices() async {
       getAccountBalanceUseCase: getAccountBalanceUseCase,
       sendPaymentUseCase: sendPaymentUseCase,
       validateTransactionUseCase: validateTransactionUseCase,
+      importAccountUseCase: importAccountUseCase,
     ),
   );
 }

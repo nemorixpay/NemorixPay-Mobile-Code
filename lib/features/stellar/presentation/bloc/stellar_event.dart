@@ -73,3 +73,14 @@ class ValidateTransactionEvent extends StellarEvent {
   @override
   List<Object?> get props => [transactionHash];
 }
+
+/// Event for importing an existing Stellar account
+class ImportAccountEvent extends StellarEvent {
+  final String mnemonic;
+  final String passphrase;
+
+  ImportAccountEvent({required this.mnemonic, this.passphrase = ""});
+
+  @override
+  List<Object?> get props => [mnemonic, passphrase];
+}

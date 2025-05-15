@@ -130,6 +130,7 @@
   "writeDownSeedPhraseTitle": "Write Down Your Seed Phrase",
   "writeDownSeedPhraseInstructions": "This is your seed phrase. Write it down on a paper and keep it in a safe place. You will be asked to re-enter this phrase (in order) on the next step.",
   "importStellarAccountTitle": "Import Your Stellar Account",
+  "importingWallet": "Importing Wallet...",
   "seedPhraseTypeLabel": "Seed Phrase Type",
   "seedPhraseLabel": "Seed Phrase",
   "confirmSeedPhraseTitle": "Confirm Seed Phrase",

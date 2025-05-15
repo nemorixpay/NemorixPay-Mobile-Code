@@ -130,6 +130,7 @@
   "writeDownSeedPhraseTitle": "Anota tu frase semilla",
   "writeDownSeedPhraseInstructions": "Esta es tu frase semilla. Escríbela en un papel y guárdala en un lugar seguro. Se te pedirá que vuelvas a ingresar esta frase (en el mismo orden) en el siguiente paso.",
   "importStellarAccountTitle": "Importar tu cuenta Stellar",
+  "importingWallet": "Importando Billetera...",
   "seedPhraseTypeLabel": "Tipo de frase semilla",
   "seedPhraseLabel": "Frase semilla",
   "confirmSeedPhraseTitle": "Confirma tu frase semilla",

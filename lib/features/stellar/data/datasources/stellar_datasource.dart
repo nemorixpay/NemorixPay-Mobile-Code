@@ -4,6 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:nemorixpay/features/stellar/domain/entities/stellar_account.dart';
 import 'package:nemorixpay/features/stellar/domain/entities/stellar_transaction.dart';
+import 'package:nemorixpay/core/errors/stellar_failure.dart';
+import 'package:nemorixpay/core/errors/stellar_error_codes.dart';
 
 /// @file        stellar_datasource.dart
 /// @brief       Service for Stellar network integration in NemorixPay.
@@ -113,6 +115,71 @@ class StellarDatasource {
       createdAt: DateTime.parse(details['createdAt'] as String),
       feeCharged: details['feeCharged'].toString(),
     );
+  }
+
+  /// Imports an existing Stellar account using a mnemonic phrase
+  /// @param mnemonic The mnemonic phrase to import (12 or 24 words)
+  /// @param passphrase Optional passphrase for the mnemonic
+  /// @return StellarAccount with the imported account details
+  /// @throws StellarFailure if the import fails
+  Future<StellarAccount> importAccount({
+    required String mnemonic,
+    String passphrase = "",
+  }) async {
+    try {
+      debugPrint('StellarDatasource: importAccount - Iniciando importación');
+      debugPrint('StellarDatasource: importAccount - Mnemonic: $mnemonic');
+
+      // Validate mnemonic format
+      if (!bip39.validateMnemonic(mnemonic)) {
+        debugPrint('StellarDatasource: importAccount - Mnemonic inválido');
+        throw StellarFailure(
+          stellarCode: StellarErrorCode.invalidMnemonic.code,
+          stellarMessage: 'La frase semilla no es válida',
+        );
+      }
+
+      // Get key pair from mnemonic
+      final keyPair = await getKeyPairFromMnemonic(
+        mnemonic,
+        passphrase: passphrase,
+      );
+      debugPrint(
+        'StellarDatasource: importAccount - KeyPair generado: ${keyPair.accountId}',
+      );
+      debugPrint(
+        'StellarDatasource: importAccount - SecrteSeed generado: ${keyPair.secretSeed}',
+      );
+
+      // Check if account exists in Stellar
+      try {
+        final account = await _sdk.accounts.account(keyPair.accountId);
+        final balance = await getBalance(keyPair.accountId);
+
+        debugPrint('StellarDatasource: importAccount - Cuenta encontrada');
+        return StellarAccount(
+          publicKey: keyPair.accountId,
+          secretKey: keyPair.secretSeed,
+          balance: balance,
+          mnemonic: mnemonic,
+          createdAt: DateTime.now(),
+        );
+      } catch (e) {
+        debugPrint('StellarDatasource: importAccount - Cuenta no encontrada');
+        throw StellarFailure(
+          stellarCode: StellarErrorCode.accountNotFound.code,
+          stellarMessage: 'La cuenta no existe en la red Stellar',
+        );
+      }
+    } catch (e) {
+      debugPrint('StellarDatasource: importAccount - Error: $e');
+      if (e is StellarFailure) rethrow;
+
+      throw StellarFailure(
+        stellarCode: StellarErrorCode.unknown.code,
+        stellarMessage: 'Error al importar la cuenta: $e',
+      );
+    }
   }
 
   // Private helper methods

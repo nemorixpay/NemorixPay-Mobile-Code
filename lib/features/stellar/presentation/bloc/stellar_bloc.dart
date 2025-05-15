@@ -4,6 +4,7 @@ import '../../domain/usecases/generate_mnemonic_usecase.dart';
 import '../../domain/usecases/get_account_balance_usecase.dart';
 import '../../domain/usecases/send_payment_usecase.dart';
 import '../../domain/usecases/validate_transaction_usecase.dart';
+import '../../domain/usecases/import_account_usecase.dart';
 import 'stellar_event.dart';
 import 'stellar_state.dart';
 import 'package:flutter/foundation.dart';
@@ -22,6 +23,7 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
   final GetAccountBalanceUseCase getAccountBalanceUseCase;
   final SendPaymentUseCase sendPaymentUseCase;
   final ValidateTransactionUseCase validateTransactionUseCase;
+  final ImportAccountUseCase importAccountUseCase;
 
   StellarBloc({
     required this.generateMnemonicUseCase,
@@ -29,12 +31,14 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
     required this.getAccountBalanceUseCase,
     required this.sendPaymentUseCase,
     required this.validateTransactionUseCase,
+    required this.importAccountUseCase,
   }) : super(StellarInitial()) {
     on<GenerateMnemonicEvent>(_onGenerateMnemonic);
     on<CreateAccountEvent>(_onCreateAccount);
     on<GetAccountBalanceEvent>(_onGetAccountBalance);
     on<SendPaymentEvent>(_onSendPayment);
     on<ValidateTransactionEvent>(_onValidateTransaction);
+    on<ImportAccountEvent>(_onImportAccount);
   }
 
   Future<void> _onGenerateMnemonic(
@@ -200,6 +204,43 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
           'StellarBloc: _onValidateTransaction - Ledger: ${transaction.ledger}',
         );
         emit(TransactionValidated(transaction));
+      },
+    );
+  }
+
+  Future<void> _onImportAccount(
+    ImportAccountEvent event,
+    Emitter<StellarState> emit,
+  ) async {
+    debugPrint(
+      'StellarBloc: _onImportAccount - Iniciando importación de cuenta',
+    );
+    debugPrint('StellarBloc: _onImportAccount - Mnemonic: ${event.mnemonic}');
+    debugPrint(
+      'StellarBloc: _onImportAccount - Passphrase: ${event.passphrase}',
+    );
+    emit(StellarLoading());
+    final result = await importAccountUseCase(
+      mnemonic: event.mnemonic,
+      passphrase: event.passphrase,
+    );
+    result.fold(
+      (failure) {
+        debugPrint('StellarBloc: _onImportAccount - Error: ${failure.message}');
+        debugPrint('StellarBloc: _onImportAccount - Código: ${failure.code}');
+        emit(StellarError(failure.message));
+      },
+      (account) {
+        debugPrint(
+          'StellarBloc: _onImportAccount - Cuenta importada exitosamente',
+        );
+        debugPrint(
+          'StellarBloc: _onImportAccount - PublicKey: ${account.publicKey}',
+        );
+        debugPrint(
+          'StellarBloc: _onImportAccount - Balance: ${account.balance}',
+        );
+        emit(AccountImported(account));
       },
     );
   }

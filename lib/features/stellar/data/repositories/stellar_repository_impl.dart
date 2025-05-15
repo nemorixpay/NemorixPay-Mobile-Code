@@ -65,6 +65,30 @@ class StellarRepositoryImpl implements StellarRepository {
   }
 
   @override
+  Future<Either<Failure, StellarAccount>> importAccount({
+    required String mnemonic,
+    String passphrase = "",
+  }) async {
+    debugPrint(
+      'StellarRepositoryImpl: importAccount - Iniciando importación de cuenta',
+    );
+    debugPrint('StellarRepositoryImpl: importAccount - Mnemonic: $mnemonic');
+    try {
+      final account = await datasource.importAccount(
+        mnemonic: mnemonic,
+        passphrase: passphrase,
+      );
+      debugPrint(
+        'StellarRepositoryImpl: importAccount - Cuenta importada exitosamente: ${account.publicKey}',
+      );
+      return Right(account);
+    } on Exception catch (e) {
+      debugPrint('StellarRepositoryImpl: importAccount - Error: $e');
+      return Left(StellarFailure.fromException(e));
+    }
+  }
+
+  @override
   Future<Either<Failure, StellarAccount>> getAccountBalance(
     String publicKey,
   ) async {

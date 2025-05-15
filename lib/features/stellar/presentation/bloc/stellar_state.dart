@@ -74,3 +74,13 @@ class TransactionValidated extends StellarState {
   @override
   List<Object?> get props => [transaction];
 }
+
+/// State when an account has been successfully imported
+class AccountImported extends StellarState {
+  final StellarAccount account;
+
+  AccountImported(this.account);
+
+  @override
+  List<Object?> get props => [account];
+}
