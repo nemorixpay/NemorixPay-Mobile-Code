@@ -7,7 +7,7 @@ import 'package:nemorixpay/shared/presentation/widgets/app_loader.dart';
 import 'package:nemorixpay/shared/presentation/widgets/main_header.dart';
 import 'package:nemorixpay/shared/presentation/widgets/base_card.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/continue_button.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/shared/presentation/widgets/nemorix_snackbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

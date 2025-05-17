@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
@@ -16,6 +15,7 @@ import 'package:nemorixpay/di/injection_container.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:nemorixpay/features/splash/presentation/bloc/splash_bloc.dart';
 import 'package:nemorixpay/features/stellar/presentation/bloc/stellar_bloc.dart';
+import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'firebase_options.dart';
 
 /// Global key for accessing the ScaffoldMessenger from anywhere in the app

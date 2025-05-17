@@ -4,7 +4,7 @@ import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity
 import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
 import 'package:nemorixpay/features/cryptocurrency/presentation/bloc/crypto_price_bloc.dart';
 import 'package:nemorixpay/shared/presentation/widgets/base_card.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/amount_validator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'crypto_price_display.dart';

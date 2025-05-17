@@ -4,7 +4,7 @@ import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/asset_ca
 import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/home_header.dart';
 import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/live_price_tile.dart';
 import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:nemorixpay/l10n/app_localizations.dart';
 
 /// @file        home_screen.dart
 /// @brief       Home screen implementation for NemorixPay.

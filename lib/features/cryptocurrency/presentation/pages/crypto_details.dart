@@ -4,7 +4,7 @@ import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity
 import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/crypto_stats_card.dart';
 import 'package:nemorixpay/shared/presentation/widgets/main_header.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
 import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/custom_two_buttons.dart';
 
@@ -148,6 +148,7 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
                                   dotData: const FlDotData(show: false),
                                   belowBarData: BarAreaData(
                                     show: true,
+                                    // TODO 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss.
                                     color: NemorixColors.primaryColor
                                         .withOpacity(0.1),
                                   ),

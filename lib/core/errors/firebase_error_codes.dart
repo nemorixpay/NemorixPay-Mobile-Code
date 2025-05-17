@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:nemorixpay/l10n/app_localizations.dart';
 
 /// @file        firebase_error_codes.dart
 /// @brief       Firebase Authentication error codes enum for NemorixPay.

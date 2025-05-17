@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/deposit_withdraw_buttons.dart';
 import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/wallet_balance.dart';
