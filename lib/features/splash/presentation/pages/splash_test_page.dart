@@ -4,8 +4,8 @@ import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_button.dart';
-import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
-import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
+import 'package:nemorixpay/features/asset/data/mock_cryptos.dart';
+import 'package:nemorixpay/features/asset/domain/entities/asset_entity.dart';
 import 'dart:math';
 
 /// @file        splash_test_page.dart
@@ -26,7 +26,7 @@ class SplashTestPage extends StatefulWidget {
 
 class _SplashTestPageState extends State<SplashTestPage> {
   // TODO For testing purposes ----------------------------------
-  CryptoEntity get randomCrypto {
+  AssetEntity get randomAsset {
     final random = Random();
     final index = random.nextInt(mockCryptos.length);
     return mockCryptos[index];
@@ -94,12 +94,12 @@ class _SplashTestPageState extends State<SplashTestPage> {
                 ),
                 SizedBox(height: 20),
                 RoundedElevatedButton(
-                  text: "Continue with CryptoDetails",
+                  text: "Continue with AssetDetails",
                   onPressed: () {
                     Navigator.pushNamed(
                       context,
-                      RouteNames.cryptoDetails,
-                      arguments: randomCrypto,
+                      RouteNames.assetDetails,
+                      arguments: randomAsset,
                     );
                   },
                   backgroundColor: Colors.white,
@@ -107,9 +107,9 @@ class _SplashTestPageState extends State<SplashTestPage> {
                 ),
                 SizedBox(height: 20),
                 RoundedElevatedButton(
-                  text: "Continue with BuyCrypto",
+                  text: "Continue with BuyAsset",
                   onPressed: () {
-                    Navigator.pushNamed(context, RouteNames.buyCrypto);
+                    Navigator.pushNamed(context, RouteNames.buyAsset);
                   },
                   backgroundColor: Colors.white,
                   textColor: Colors.black,
@@ -121,11 +121,8 @@ class _SplashTestPageState extends State<SplashTestPage> {
                     Navigator.pushNamed(
                       context,
                       RouteNames.paymentMethod,
-                      /**cryptoName: args['cryptoName'] as String,
-                    amount: args['amount'] as double,
-                    currency: args['currency'] as String, */
                       arguments: {
-                        'cryptoName': "BTC",
+                        'assetName': "BTC",
                         'amount': 1000.0,
                         'currency': "USD",
                       },

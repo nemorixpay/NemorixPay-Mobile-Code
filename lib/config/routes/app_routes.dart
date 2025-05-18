@@ -5,8 +5,8 @@ import 'package:nemorixpay/config/routes/route_model.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:nemorixpay/features/auth/presentation/pages/sign_up_page.dart';
-import 'package:nemorixpay/features/cryptocurrency/presentation/pages/buy_crypto_page.dart';
-import 'package:nemorixpay/features/cryptocurrency/presentation/pages/payment_method_page.dart';
+import 'package:nemorixpay/features/asset/presentation/pages/buy_asset_page.dart';
+import 'package:nemorixpay/features/asset/presentation/pages/payment_method_page.dart';
 import 'package:nemorixpay/features/splash/presentation/pages/splash_native_page.dart';
 import 'package:nemorixpay/features/splash/presentation/pages/splash_test_page.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/confirm_seed_phrase_page.dart';
@@ -14,9 +14,9 @@ import 'package:nemorixpay/features/wallet/presentation/pages/import_seed_phrase
 import 'package:nemorixpay/features/wallet/presentation/pages/show_seed_phrase_page.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/stellar_service_test_page.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/wallet_setup_page.dart';
-import 'package:nemorixpay/features/cryptocurrency/presentation/pages/home_page.dart';
-import 'package:nemorixpay/features/cryptocurrency/presentation/pages/crypto_details.dart';
-import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
+import 'package:nemorixpay/features/asset/presentation/pages/home_page.dart';
+import 'package:nemorixpay/features/asset/presentation/pages/asset_details.dart';
+import 'package:nemorixpay/features/asset/domain/entities/asset_entity.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/wallet_success_page.dart';
 import 'package:nemorixpay/shared/stellar/presentation/pages/test_transactions_page.dart';
 
@@ -74,9 +74,9 @@ class AppRoutes {
       icon: Icons.home,
     ),
     RouteModel(
-      route: RouteNames.buyCrypto,
+      route: RouteNames.buyAsset,
       name: 'Buy',
-      screen: BuyCryptoPage(),
+      screen: BuyAssetPage(),
       icon: Icons.credit_card_rounded,
     ),
     RouteModel(
@@ -125,7 +125,7 @@ class AppRoutes {
   /// Handles dynamic route generation with arguments
   ///
   /// This method is called when a named route is requested with arguments.
-  /// It handles special cases like [cryptoDetails] and [paymentMethod] routes
+  /// It handles special cases like [assetDetails] and [paymentMethod] routes
   /// that require specific arguments to be passed.
   ///
   /// @param settings The route settings containing the route name and arguments
@@ -133,17 +133,17 @@ class AppRoutes {
   /// @throws TypeError if the arguments are not of the expected type
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case RouteNames.cryptoDetails:
-        final crypto = settings.arguments as CryptoEntity;
+      case RouteNames.assetDetails:
+        final assetArg = settings.arguments as AssetEntity;
         return MaterialPageRoute(
-          builder: (context) => CryptoDetailsPage(crypto: crypto),
+          builder: (context) => AssetDetailsPage(asset: assetArg),
         );
       case RouteNames.paymentMethod:
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder:
               (context) => PaymentMethodPage(
-                cryptoName: args['cryptoName'] as String,
+                assetName: args['assetName'] as String,
                 amount: args['amount'] as double,
                 currency: args['currency'] as String,
               ),

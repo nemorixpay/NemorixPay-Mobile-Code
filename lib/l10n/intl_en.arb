@@ -74,7 +74,7 @@
   "walletSuccessSecurity": "Remember to keep your seed phrase safe, it's your responsibility!",
   "walletSuccessInfo": "NemorixPay cannot recover your wallet if you lose it. You can find your seed phrase in Settings > Security & Privacy.",
   "goToHomePage": "Go to Home Page",
-  "@CRYPTO_PAGES": {
+  "@ASSET_PAGES": {
   },
   "search": "Search",
   "myAssets": "My Assets",

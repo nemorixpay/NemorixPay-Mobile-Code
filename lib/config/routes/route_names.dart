@@ -25,14 +25,14 @@ class RouteNames {
   /// Analytics dashboard page
   // static const homeAnalytics = "home_analytics";
 
-  /// Main home page with cryptocurrency overview
+  /// Main home page with assets overview
   static const home = "home";
 
-  /// Detailed view of a specific cryptocurrency
-  static const cryptoDetails = "crypto_details";
+  /// Detailed view of a specific asset
+  static const assetDetails = "asset_details";
 
   /// Page for purchasing cryptocurrencies
-  static const buyCrypto = "buy_crypto";
+  static const buyAsset = "buy_asset";
 
   /// Page for selecting payment methods
   static const paymentMethod = "payment_method";
