@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/core/errors/failures.dart';
-import 'package:nemorixpay/core/errors/firebase_error_codes.dart';
+import 'package:nemorixpay/core/errors/auth/firebase_error_codes.dart';
 
 /// @file        firebase_failure.dart
 /// @brief       Authentication failure for NemorixPay auth feature using FirebaseAuth.

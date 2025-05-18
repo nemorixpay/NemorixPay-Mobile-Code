@@ -1,11 +1,15 @@
+// ignore_for_file: unintended_html_in_doc_comment
+
 import 'package:flutter/foundation.dart';
 import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
 import 'package:dio/dio.dart';
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:nemorixpay/features/stellar/domain/entities/stellar_account.dart';
-import 'package:nemorixpay/features/stellar/domain/entities/stellar_transaction.dart';
-import 'package:nemorixpay/core/errors/stellar_failure.dart';
-import 'package:nemorixpay/core/errors/stellar_error_codes.dart';
+import 'package:nemorixpay/shared/stellar/domain/entities/stellar_account.dart';
+import 'package:nemorixpay/shared/stellar/domain/entities/stellar_transaction.dart';
+import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
+import 'package:nemorixpay/core/errors/stellar/stellar_error_codes.dart';
+import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart';
+import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
 
 /// @file        stellar_datasource.dart
 /// @brief       Service for Stellar network integration in NemorixPay.
@@ -19,9 +23,22 @@ import 'package:nemorixpay/core/errors/stellar_error_codes.dart';
 /// Service responsible for interacting with the Stellar network
 class StellarDatasource {
   late final StellarSDK _sdk;
+  final _accountProvider = StellarAccountProvider();
 
   StellarDatasource() {
     _sdk = StellarSDK.TESTNET;
+  }
+
+  /// Gets the current public key from the account provider
+  String getCurrentPublicKey() {
+    final account = _accountProvider.currentAccount;
+    if (account == null) {
+      throw StellarFailure(
+        stellarCode: StellarErrorCode.accountNotInitialized.code,
+        stellarMessage: 'No hay una cuenta Stellar inicializada',
+      );
+    }
+    return account.publicKey;
   }
 
   /// Generates a mnemonic phrase (12 or 24 words)
@@ -55,13 +72,16 @@ class StellarDatasource {
     await createAccountInTestnet(keyPair.accountId);
     debugPrint('StellarDatasource: createAccount - Cuenta creada en testnet');
 
-    return StellarAccount(
+    final account = StellarAccountModel(
       publicKey: keyPair.accountId,
       secretKey: keyPair.secretSeed,
       balance: 0.0,
       mnemonic: mnemonic,
       createdAt: DateTime.now(),
     );
+
+    _accountProvider.setCurrentAccount(account);
+    return account;
   }
 
   /// Gets the current balance of a Stellar account
@@ -76,11 +96,16 @@ class StellarDatasource {
       }
 
       final balance = await getBalance(publicKey);
-      return StellarAccount(
+      final account = StellarAccountModel(
         publicKey: publicKey,
+        secretKey: _accountProvider.currentAccount?.secretKey ?? '',
         balance: balance,
-        createdAt: DateTime.now(),
+        mnemonic: _accountProvider.currentAccount?.mnemonic ?? '',
+        createdAt: _accountProvider.currentAccount?.createdAt ?? DateTime.now(),
       );
+
+      _accountProvider.setCurrentAccount(account);
+      return account;
     } catch (e) {
       debugPrint('StellarDatasource: getAccountBalance - Error: $e');
       if (e is StellarFailure) rethrow;
@@ -226,6 +251,76 @@ class StellarDatasource {
     }
   }
 
+  /// Gets the transaction history for the current account
+  /// @return List<StellarTransaction> The list of transactions
+  /// @throws StellarFailure if the account is not initialized or if there's an error
+  Future<List<StellarTransaction>> getTransactions() async {
+    try {
+      final publicKey = getCurrentPublicKey();
+      debugPrint(
+        'StellarDatasource: getTransactions - Obteniendo transacciones para: $publicKey',
+      );
+
+      final response = await _sdk.transactions.forAccount(publicKey).execute();
+      final transactions = response.records;
+
+      final List<StellarTransaction> result = [];
+      for (final tx in transactions) {
+        try {
+          // Obtener las operaciones de la transacción
+          final operations =
+              await _sdk.operations.forTransaction(tx.hash).execute();
+
+          // Buscar operación de pago
+          PaymentOperationResponse? paymentOp;
+          try {
+            paymentOp =
+                operations.records.firstWhere(
+                      (op) => op is PaymentOperationResponse,
+                    )
+                    as PaymentOperationResponse;
+          } catch (_) {
+            // Si no hay operación de pago, continuamos con valores por defecto
+          }
+
+          // Si no hay operación de pago, usar valores por defecto
+          result.add(
+            StellarTransaction(
+              hash: tx.hash,
+              sourceAccount: tx.sourceAccount,
+              destinationAccount: paymentOp?.to ?? 'Desconocido',
+              amount:
+                  paymentOp != null
+                      ? double.tryParse(paymentOp.amount) ?? 0.0
+                      : 0.0,
+              memo: tx.memo?.toString(),
+              successful: tx.successful,
+              ledger: tx.ledger,
+              createdAt: DateTime.parse(tx.createdAt),
+              feeCharged: tx.feeCharged.toString(),
+            ),
+          );
+        } catch (e) {
+          debugPrint(
+            'StellarDatasource: getTransactions - Error al procesar transacción ${tx.hash}: $e',
+          );
+          // Si hay error al procesar una transacción, la omitimos y continuamos con la siguiente
+          continue;
+        }
+      }
+
+      return result;
+    } catch (e) {
+      debugPrint('StellarDatasource: getTransactions - Error: $e');
+      if (e is StellarFailure) rethrow;
+
+      throw StellarFailure(
+        stellarCode: StellarErrorCode.unknown.code,
+        stellarMessage: 'Error al obtener las transacciones: $e',
+      );
+    }
+  }
+
   // Private helper methods
   Future<KeyPair> getKeyPairFromMnemonic(
     String mnemonic, {
@@ -257,6 +352,77 @@ class StellarDatasource {
     );
   }
 
+  // -----------------------------------------------------------------------------------
+  // Multiple Balances Handling
+  // -----------------------------------------------------------------------------------
+  /// Future implementation for handling multiple digital assets in a Stellar account.
+  /// This method retrieves all balances associated with a Stellar account, including:
+  /// - XLM (native asset)
+  /// - Custom tokens (credit_alphanum4)
+  /// - Long-named tokens (credit_alphanum12)
+  ///
+  /// Each balance contains:
+  /// - assetType: The type of asset ('native', 'credit_alphanum4', 'credit_alphanum12')
+  /// - assetCode: The code of the asset (null for XLM, e.g., 'USDC' for USD Coin)
+  /// - assetIssuer: The issuer of the asset (null for XLM, public key for other assets)
+  /// - balance: The current balance of the asset
+  /// - limit: The maximum balance allowed (for credit assets)
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final balances = await getBalances(publicKey);
+  /// for (var balance in balances) {
+  ///   print('Asset: ${balance.assetCode ?? 'XLM'}');
+  ///   print('Balance: ${balance.balance}');
+  /// }
+  /// ```
+  ///
+  /// Possible data type:
+  ///
+  /// class StellarBalance {
+  ///   final String assetType;  // 'native' o 'credit_alphanum4' o 'credit_alphanum12'
+  ///   final String? assetCode; // null para XLM, código para otros activos
+  ///   final String? assetIssuer; // null para XLM, emisor para otros activos
+  ///   final double balance;
+  ///   final double? limit;     // para activos de crédito
+  /// }
+  ///
+  /// StellarAccount would be modified like:
+  ///
+  /// class StellarAccount {
+  ///   final String publicKey;
+  ///   final String? secretKey;
+  ///   final List<StellarBalance> balances;  // Lista de balances
+  ///   final String? mnemonic;
+  ///   final DateTime createdAt;
+  ///   // ...
+  /// }
+  ///
+  /// ----------------------------------------------------------------------
+  ///
+  /// Note: This is a future implementation. Current implementation only handles XLM balance.
+  /// To implement this, you'll need to:
+  /// 1. Create a StellarBalance entity
+  /// 2. Update StellarAccount to handle multiple balances
+  /// 3. Modify the UI to display different assets
+  /// 4. Update transaction handling to support different assets
+  ///
+  /// Future<List<StellarBalance>> getBalances(String publicKey) async {
+  ///   final account = await _sdk.accounts.account(publicKey);
+  ///   return account.balances.map((b) => StellarBalance(
+  ///     assetType: b.assetType,
+  ///     assetCode: b.assetCode,
+  ///     assetIssuer: b.assetIssuer,
+  ///     balance: double.tryParse(b.balance) ?? 0.0,
+  ///     limit: b.limit != null ? double.tryParse(b.limit!) : null,
+  ///   )).toList();
+  /// }
+  ///
+
+  /// Gets the XLM balance for a given public key
+  /// @param publicKey The public key of the account
+  /// @return The XLM balance as a double
+  /// @throws Exception if no XLM balance is found
   Future<double> getBalance(String publicKey) async {
     final account = await _sdk.accounts.account(publicKey);
     final xlmBalance = account.balances.firstWhere(
@@ -265,6 +431,8 @@ class StellarDatasource {
     );
     return double.tryParse(xlmBalance.balance) ?? 0.0;
   }
+
+  // -----------------------------------------------------------------------------------
 
   Future<String> sendTransaction({
     required String sourceSecretSeed,

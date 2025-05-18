@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nemorixpay/shared/presentation/widgets/custom_back_button.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/custom_back_button.dart';
 
 /// @file        main_header.dart
 /// @brief       Reusable widget for the main header of the app.

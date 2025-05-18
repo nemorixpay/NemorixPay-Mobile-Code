@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/core/errors/failures.dart';
-import 'package:nemorixpay/core/errors/stellar_error_codes.dart';
+import 'package:nemorixpay/core/errors/stellar/stellar_error_codes.dart';
 
 /// @file        stellar_failure.dart
 /// @brief       Stellar network failure for NemorixPay.

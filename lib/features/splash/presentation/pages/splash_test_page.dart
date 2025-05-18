@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
-import 'package:nemorixpay/shared/presentation/widgets/rounded_elevated_button.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_button.dart';
 import 'package:nemorixpay/features/cryptocurrency/data/mock_cryptos.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
 import 'dart:math';
@@ -225,6 +225,15 @@ class _SplashTestPageState extends State<SplashTestPage> {
                   text: "Continue with Tetsing Page",
                   onPressed: () {
                     Navigator.pushNamed(context, RouteNames.testingPage);
+                  },
+                  backgroundColor: Colors.white,
+                  textColor: Colors.black,
+                ),
+                SizedBox(height: 20),
+                RoundedElevatedButton(
+                  text: "Continue with Transactions Page",
+                  onPressed: () {
+                    Navigator.pushNamed(context, RouteNames.testTransactions);
                   },
                   backgroundColor: Colors.white,
                   textColor: Colors.black,

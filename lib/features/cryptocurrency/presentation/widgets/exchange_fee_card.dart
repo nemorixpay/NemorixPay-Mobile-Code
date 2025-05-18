@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-import 'package:nemorixpay/shared/presentation/widgets/base_card.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import '../../domain/entities/commission_validator.dart';
 

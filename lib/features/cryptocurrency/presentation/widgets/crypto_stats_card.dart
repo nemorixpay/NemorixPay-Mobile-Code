@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/crypto_entity.dart';
-import 'package:nemorixpay/shared/presentation/widgets/base_card.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
 import 'crypto_stats_tile.dart';
 
 /// @file        crypto_stats_card.dart

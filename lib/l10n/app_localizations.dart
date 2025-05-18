@@ -982,6 +982,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Memo cannot be longer than 28 characters'**
   String get stellarErrorInvalidMemo;
+
+  /// No description provided for @stellarErrorAccountNotInitialized.
+  ///
+  /// In en, this message translates to:
+  /// **'No Stellar account has been initialized'**
+  String get stellarErrorAccountNotInitialized;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

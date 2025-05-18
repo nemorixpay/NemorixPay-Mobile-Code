@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nemorixpay/features/stellar/data/datasources/stellar_datasource.dart';
-import 'package:nemorixpay/features/stellar/domain/entities/stellar_account.dart';
-import 'package:nemorixpay/features/stellar/domain/entities/stellar_transaction.dart';
-import 'package:nemorixpay/core/errors/stellar_failure.dart';
+import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart';
+import 'package:nemorixpay/shared/stellar/domain/entities/stellar_account.dart';
+import 'package:nemorixpay/shared/stellar/domain/entities/stellar_transaction.dart';
+import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
 
 /// @file        stellar_datasource_test.dart
 /// @brief       Unit tests for StellarDatasource implementation.

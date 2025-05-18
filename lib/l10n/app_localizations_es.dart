@@ -453,4 +453,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get stellarErrorInvalidMemo => 'El memo no puede tener más de 28 caracteres';
+
+  @override
+  String get stellarErrorAccountNotInitialized => 'No hay una cuenta Stellar inicializada';
 }

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nemorixpay/core/errors/firebase_error_codes.dart';
-import 'package:nemorixpay/core/errors/firebase_failure.dart';
+import 'package:nemorixpay/core/errors/auth/firebase_error_codes.dart';
+import 'package:nemorixpay/core/errors/auth/firebase_failure.dart';
 
 void main() {
   group('FirebaseFailure Tests', () {

@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-import 'package:nemorixpay/core/errors/firebase_error_codes.dart';
-import 'package:nemorixpay/core/errors/firebase_failure.dart';
+import 'package:nemorixpay/core/errors/auth/firebase_error_codes.dart';
+import 'package:nemorixpay/core/errors/auth/firebase_failure.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_event.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
@@ -15,7 +15,7 @@ import 'package:nemorixpay/features/auth/presentation/widgets/widgets.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/password_field.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/email_field.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/social_login_buttons.dart';
-import 'package:nemorixpay/shared/presentation/widgets/nemorix_snackbar.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
 
 /// @file        sign_in_page.dart
 /// @brief       Sign In page implementation for NemorixPay authentication system.

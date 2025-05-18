@@ -4,9 +4,9 @@ import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-import 'package:nemorixpay/features/stellar/presentation/bloc/stellar_bloc.dart';
-import 'package:nemorixpay/features/stellar/presentation/bloc/stellar_event.dart';
-import 'package:nemorixpay/features/stellar/presentation/bloc/stellar_state.dart';
+import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_bloc.dart';
+import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_event.dart';
+import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_state.dart';
 
 /// @file        wallet_setup_page.dart
 /// @brief       Wallet Setup screen for NemorixPay.

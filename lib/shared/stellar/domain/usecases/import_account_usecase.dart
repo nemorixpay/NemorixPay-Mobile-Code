@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:nemorixpay/core/errors/failures.dart';
-import 'package:nemorixpay/features/stellar/data/repositories/stellar_repository_impl.dart';
-import 'package:nemorixpay/features/stellar/domain/entities/stellar_account.dart';
-import 'package:nemorixpay/features/stellar/domain/repositories/stellar_repository.dart';
+import 'package:nemorixpay/shared/stellar/data/repositories/stellar_repository_impl.dart';
+import 'package:nemorixpay/shared/stellar/domain/entities/stellar_account.dart';
+import 'package:nemorixpay/shared/stellar/domain/repositories/stellar_repository.dart';
 
 /// @file        import_account_usecase.dart
 /// @brief       Use case for importing a Stellar account.

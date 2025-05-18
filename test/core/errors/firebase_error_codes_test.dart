@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nemorixpay/core/errors/firebase_error_codes.dart';
+import 'package:nemorixpay/core/errors/auth/firebase_error_codes.dart';
 
 void main() {
   group('FirebaseErrorCode Tests', () {

@@ -175,5 +175,6 @@
   "stellarErrorInvalidMnemonic": "Frase mnemotécnica Stellar inválida",
   "stellarErrorInvalidSecretKey": "Clave secreta Stellar inválida",
   "stellarErrorInvalidPublicKey": "La clave pública no es válida",
-  "stellarErrorInvalidMemo": "El memo no puede tener más de 28 caracteres"
+  "stellarErrorInvalidMemo": "El memo no puede tener más de 28 caracteres",
+  "stellarErrorAccountNotInitialized": "No hay una cuenta Stellar inicializada"
 }

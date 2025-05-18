@@ -1,13 +1,13 @@
 import 'package:get_it/get_it.dart';
-import 'package:nemorixpay/features/stellar/data/datasources/stellar_datasource.dart';
-import 'package:nemorixpay/features/stellar/data/repositories/stellar_repository_impl.dart';
-import 'package:nemorixpay/features/stellar/domain/usecases/create_account_usecase.dart';
-import 'package:nemorixpay/features/stellar/domain/usecases/generate_mnemonic_usecase.dart';
-import 'package:nemorixpay/features/stellar/domain/usecases/get_account_balance_usecase.dart';
-import 'package:nemorixpay/features/stellar/domain/usecases/import_account_usecase.dart';
-import 'package:nemorixpay/features/stellar/domain/usecases/send_payment_usecase.dart';
-import 'package:nemorixpay/features/stellar/domain/usecases/validate_transaction_usecase.dart';
-import 'package:nemorixpay/features/stellar/presentation/bloc/stellar_bloc.dart';
+import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart';
+import 'package:nemorixpay/shared/stellar/data/repositories/stellar_repository_impl.dart';
+import 'package:nemorixpay/shared/stellar/domain/usecases/create_account_usecase.dart';
+import 'package:nemorixpay/shared/stellar/domain/usecases/generate_mnemonic_usecase.dart';
+import 'package:nemorixpay/shared/stellar/domain/usecases/get_account_balance_usecase.dart';
+import 'package:nemorixpay/shared/stellar/domain/usecases/import_account_usecase.dart';
+import 'package:nemorixpay/shared/stellar/domain/usecases/send_payment_usecase.dart';
+import 'package:nemorixpay/shared/stellar/domain/usecases/validate_transaction_usecase.dart';
+import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_bloc.dart';
 
 /// @file        stellar_injection_service.dart
 /// @brief       Dependency injection container implementation for Stellar feature in NemorixPay.

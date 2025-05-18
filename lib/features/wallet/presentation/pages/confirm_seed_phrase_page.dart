@@ -2,18 +2,17 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/seed_phrase_success_dialog.dart';
-import 'package:nemorixpay/shared/presentation/keys/app_keys.dart';
-import 'package:nemorixpay/shared/presentation/widgets/app_loader.dart';
-import 'package:nemorixpay/shared/presentation/widgets/main_header.dart';
-import 'package:nemorixpay/shared/presentation/widgets/base_card.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/app_loader.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/continue_button.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-import 'package:nemorixpay/shared/presentation/widgets/nemorix_snackbar.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nemorixpay/features/stellar/presentation/bloc/stellar_bloc.dart';
-import 'package:nemorixpay/features/stellar/presentation/bloc/stellar_event.dart';
-import 'package:nemorixpay/features/stellar/presentation/bloc/stellar_state.dart';
+import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_bloc.dart';
+import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_event.dart';
+import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_state.dart';
 
 /// @file        confirm_seed_phrase_page.dart
 /// @brief       Confirm Seed Phrase screen for NemorixPay wallet feature.

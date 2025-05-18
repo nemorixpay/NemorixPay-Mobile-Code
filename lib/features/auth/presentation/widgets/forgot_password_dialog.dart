@@ -7,9 +7,9 @@ import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_event.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/custom_text_form_field.dart';
-import 'package:nemorixpay/shared/presentation/widgets/nemorix_snackbar.dart';
-import 'package:nemorixpay/shared/presentation/widgets/rounded_elevated_button.dart';
-import 'package:nemorixpay/shared/presentation/widgets/single_action_dialog.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_button.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/single_action_dialog.dart';
 
 /// @file        forgot_password_dialog.dart
 /// @brief       Implementation of functions for resetting the user password.

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-import 'package:nemorixpay/shared/presentation/widgets/rounded_elevated_button.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_button.dart';
 
 /// @file        yes_no_dialog.dart
 /// @brief       Implementation of a reusable confirmation dialog with Yes/No options.

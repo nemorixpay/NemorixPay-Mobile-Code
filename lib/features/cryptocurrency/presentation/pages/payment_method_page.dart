@@ -4,11 +4,11 @@ import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/credit_card.dart';
 import 'package:nemorixpay/features/cryptocurrency/domain/entities/payment_method_validator.dart';
 import 'package:nemorixpay/features/cryptocurrency/presentation/widgets/credit_card_gradient.dart';
-import 'package:nemorixpay/shared/data/mock_credit_cards.dart';
-import 'package:nemorixpay/shared/presentation/widgets/base_card.dart';
-import 'package:nemorixpay/shared/presentation/widgets/custom_button_tile.dart';
-import 'package:nemorixpay/shared/presentation/widgets/main_header.dart';
-import 'package:nemorixpay/shared/presentation/widgets/rounded_elevated_button.dart';
+import 'package:nemorixpay/shared/common/data/mock_credit_cards.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/custom_button_tile.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_button.dart';
 
 /// @file        payment_method_page.dart
 /// @brief       Payment method page.

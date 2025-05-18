@@ -15,6 +15,10 @@ enum StellarErrorCode {
   accountNotFound('account-not-found', 'stellarErrorAccountNotFound'),
   accountExists('account-exists', 'stellarErrorAccountExists'),
   invalidAccount('invalid-account', 'stellarErrorInvalidAccount'),
+  accountNotInitialized(
+    'account-not-initialized',
+    'stellarErrorAccountNotInitialized',
+  ),
   insufficientBalance(
     'insufficient-balance',
     'stellarErrorInsufficientBalance',
@@ -70,6 +74,8 @@ enum StellarErrorCode {
         return AppLocalizations.of(context)!.stellarErrorAccountExists;
       case 'stellarErrorInvalidAccount':
         return AppLocalizations.of(context)!.stellarErrorInvalidAccount;
+      case 'stellarErrorAccountNotInitialized':
+        return AppLocalizations.of(context)!.stellarErrorAccountNotInitialized;
       case 'stellarErrorInsufficientBalance':
         return AppLocalizations.of(context)!.stellarErrorInsufficientBalance;
       case 'stellarErrorInvalidPublicKey':

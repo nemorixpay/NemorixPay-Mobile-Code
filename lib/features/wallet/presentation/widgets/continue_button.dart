@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nemorixpay/shared/presentation/widgets/rounded_elevated_button.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_button.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 
 /// @file        continue_button.dart

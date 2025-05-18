@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:nemorixpay/core/errors/failures.dart';
-import 'package:nemorixpay/core/errors/stellar_failure.dart';
-import 'package:nemorixpay/features/stellar/data/datasources/stellar_datasource.dart';
-import 'package:nemorixpay/features/stellar/domain/entities/stellar_account.dart';
-import 'package:nemorixpay/features/stellar/domain/entities/stellar_transaction.dart';
-import 'package:nemorixpay/features/stellar/domain/repositories/stellar_repository.dart';
+import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
+import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart';
+import 'package:nemorixpay/shared/stellar/domain/entities/stellar_account.dart';
+import 'package:nemorixpay/shared/stellar/domain/entities/stellar_transaction.dart';
+import 'package:nemorixpay/shared/stellar/domain/repositories/stellar_repository.dart';
 import 'package:flutter/foundation.dart';
 
 /// @file        stellar_repository_impl.dart

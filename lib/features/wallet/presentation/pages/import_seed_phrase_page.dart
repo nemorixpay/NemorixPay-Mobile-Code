@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
-import 'package:nemorixpay/shared/presentation/widgets/base_card.dart';
-import 'package:nemorixpay/shared/presentation/widgets/main_header.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/seed_phrase_input_grid.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/continue_button.dart';
 import '../../../../core/security/secure_screen_mixin.dart';
-import 'package:nemorixpay/features/stellar/presentation/bloc/stellar_bloc.dart';
-import 'package:nemorixpay/features/stellar/presentation/bloc/stellar_state.dart';
-import 'package:nemorixpay/features/stellar/presentation/bloc/stellar_event.dart';
-import 'package:nemorixpay/shared/presentation/widgets/nemorix_snackbar.dart';
-import 'package:nemorixpay/shared/presentation/widgets/app_loader.dart';
+import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_bloc.dart';
+import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_state.dart';
+import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_event.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/app_loader.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/wallet_success_page.dart';
 
 /// @file        import_seed_phrase_page.dart

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
-import 'package:nemorixpay/shared/presentation/widgets/single_action_dialog.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/single_action_dialog.dart';
 
 /// @file        seed_phrase_success_dialog.dart
 /// @brief       Implementation of seed phrase verification success dialog.

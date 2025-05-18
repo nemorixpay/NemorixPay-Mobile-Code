@@ -7,9 +7,9 @@ import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_event.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
 import 'package:nemorixpay/features/auth/presentation/controllers/email_verification_controller.dart';
-import 'package:nemorixpay/shared/presentation/widgets/nemorix_snackbar.dart';
-import 'package:nemorixpay/shared/presentation/widgets/rounded_elevated_button.dart';
-import 'package:nemorixpay/shared/presentation/widgets/single_action_dialog.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_button.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/single_action_dialog.dart';
 
 /// @file        verification_email_dialog.dart
 /// @brief       Implementation of email verification dialog.

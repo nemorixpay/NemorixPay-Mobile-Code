@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-import 'package:nemorixpay/shared/presentation/widgets/action_button.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/action_button.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 
 class DepositWithdrawButtons extends StatelessWidget {

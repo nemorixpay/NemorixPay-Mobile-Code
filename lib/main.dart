@@ -14,7 +14,7 @@ import 'package:nemorixpay/config/theme/nemorix_theme.dart';
 import 'package:nemorixpay/di/injection_container.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:nemorixpay/features/splash/presentation/bloc/splash_bloc.dart';
-import 'package:nemorixpay/features/stellar/presentation/bloc/stellar_bloc.dart';
+import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_bloc.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'firebase_options.dart';
 

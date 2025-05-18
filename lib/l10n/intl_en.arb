@@ -175,5 +175,6 @@
   "stellarErrorInvalidMnemonic": "Invalid Stellar mnemonic phrase",
   "stellarErrorInvalidSecretKey": "Invalid Stellar secret key",
   "stellarErrorInvalidPublicKey": "Invalid public key",
-  "stellarErrorInvalidMemo": "Memo cannot be longer than 28 characters"
+  "stellarErrorInvalidMemo": "Memo cannot be longer than 28 characters",
+  "stellarErrorAccountNotInitialized": "No Stellar account has been initialized"
 }

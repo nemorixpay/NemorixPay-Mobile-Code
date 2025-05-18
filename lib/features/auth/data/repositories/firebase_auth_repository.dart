@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:nemorixpay/core/errors/failures.dart';
-import 'package:nemorixpay/core/errors/firebase_error_codes.dart';
-import 'package:nemorixpay/core/errors/firebase_failure.dart';
+import 'package:nemorixpay/core/errors/auth/firebase_error_codes.dart';
+import 'package:nemorixpay/core/errors/auth/firebase_failure.dart';
 import 'package:nemorixpay/features/auth/data/datasources/firebase_auth_datasource.dart';
 import 'package:nemorixpay/features/auth/data/models/user_model.dart';
 import 'package:nemorixpay/features/auth/domain/entities/user_entity.dart';
