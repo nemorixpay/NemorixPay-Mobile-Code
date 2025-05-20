@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:nemorixpay/core/errors/failures.dart';
 import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
-import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart';
+import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource_impl.dart';
 import 'package:nemorixpay/shared/stellar/domain/entities/stellar_account.dart';
 import 'package:nemorixpay/shared/stellar/domain/entities/stellar_transaction.dart';
 import 'package:nemorixpay/shared/stellar/domain/repositories/stellar_repository.dart';
@@ -17,7 +17,7 @@ import 'package:flutter/foundation.dart';
 /// @copyright   Apache 2.0 License
 
 class StellarRepositoryImpl implements StellarRepository {
-  final StellarDatasource datasource;
+  final StellarDataSourceImpl datasource;
 
   StellarRepositoryImpl({required this.datasource});
 
@@ -57,7 +57,7 @@ class StellarRepositoryImpl implements StellarRepository {
       debugPrint(
         'StellarRepositoryImpl: createAccount - Cuenta creada exitosamente: ${account.publicKey}',
       );
-      return Right(account);
+      return Right(account.toEntity());
     } on Exception catch (e) {
       debugPrint('StellarRepositoryImpl: createAccount - Error: $e');
       return Left(StellarFailure.fromException(e));
@@ -81,7 +81,7 @@ class StellarRepositoryImpl implements StellarRepository {
       debugPrint(
         'StellarRepositoryImpl: importAccount - Cuenta importada exitosamente: ${account.publicKey}',
       );
-      return Right(account);
+      return Right(account.toEntity());
     } on Exception catch (e) {
       debugPrint('StellarRepositoryImpl: importAccount - Error: $e');
       return Left(StellarFailure.fromException(e));
@@ -100,7 +100,7 @@ class StellarRepositoryImpl implements StellarRepository {
       debugPrint(
         'StellarRepositoryImpl: getAccountBalance - Balance obtenido: ${account.balance}',
       );
-      return Right(account);
+      return Right(account.toEntity());
     } on Exception catch (e) {
       debugPrint('StellarRepositoryImpl: getAccountBalance - Error: $e');
       return Left(StellarFailure.fromException(e));

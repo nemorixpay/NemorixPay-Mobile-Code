@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart';
-import 'package:nemorixpay/shared/stellar/domain/entities/stellar_account.dart';
+import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource_impl.dart';
+import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart';
 import 'package:nemorixpay/shared/stellar/domain/entities/stellar_transaction.dart';
 import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
 
@@ -10,11 +10,11 @@ import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
 ///              account import, balance checking and transaction handling.
 /// @author      Miguel Fagundez
 /// @date        2025-05-15
-/// @version     1.0
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 
 void main() {
-  late StellarDatasource datasource;
+  late StellarDataSourceImpl datasource;
 
   // Test accounts
   const testAccount1Mnemonic =
@@ -32,7 +32,7 @@ void main() {
       'GDM23BBTRM7ZYLRVKK473RN374WOXP4B7IOQNFMBE7Y4YTDZW6BJZVJG';
 
   setUp(() {
-    datasource = StellarDatasource();
+    datasource = StellarDataSourceImpl();
   });
 
   group('StellarDatasource', () {
@@ -75,7 +75,7 @@ void main() {
       );
 
       // Assert
-      expect(account, isA<StellarAccount>());
+      expect(account, isA<StellarAccountModel>());
       expect(account.publicKey, equals(testAccount1PublicKey));
       expect(account.secretKey, equals(testAccount1SecretSeed));
       expect(account.mnemonic, equals(testAccount1Mnemonic));
@@ -88,7 +88,7 @@ void main() {
       );
 
       // Assert
-      expect(accountWithBalance, isA<StellarAccount>());
+      expect(accountWithBalance, isA<StellarAccountModel>());
       expect(accountWithBalance.publicKey, equals(testAccount1PublicKey));
       expect(accountWithBalance.balance, isA<double>());
       expect(accountWithBalance.balance, isNonNegative);
@@ -151,8 +151,7 @@ void main() {
             sourceSecretKey: testAccount1SecretSeed,
             destinationPublicKey: testAccount2PublicKey,
             amount: 1.0,
-            memo:
-                'This memo is too long and should cause an error', // Memo demasiado largo
+            memo: 'This memo is too long and should cause an error',
           ),
           throwsA(isA<StellarFailure>()),
         );

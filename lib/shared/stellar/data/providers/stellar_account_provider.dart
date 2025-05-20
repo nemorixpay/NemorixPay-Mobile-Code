@@ -6,7 +6,7 @@ import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart
 ///              Stellar account state throughout the application.
 /// @author      Miguel Fagundez
 /// @date        2025-05-17
-/// @version     1.0
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 
 class StellarAccountProvider {
@@ -64,4 +64,16 @@ class StellarAccountProvider {
 
   /// Gets the test account secret key
   String get testSecretKey => _testSecretKey;
+
+  /// Gets the secret key for the current account
+  /// Returns null if there is no current account or if the secret key is not available
+  String? getCurrentSecretKey() {
+    return _currentAccount?.secretKey;
+  }
+
+  /// Gets the mnemonic for the current account
+  /// Returns null if there is no current account or if the mnemonic is not available
+  String? getCurrentMnemonic() {
+    return _currentAccount?.mnemonic;
+  }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart';
+import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource_impl.dart';
 import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
 import 'package:nemorixpay/shared/stellar/domain/entities/stellar_transaction.dart';
 import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
@@ -21,7 +21,7 @@ class TestTransactionsPage extends StatefulWidget {
 }
 
 class _TestTransactionsPageState extends State<TestTransactionsPage> {
-  final _stellarDatasource = StellarDatasource();
+  final _stellarDatasource = StellarDataSourceImpl();
   final _accountProvider = StellarAccountProvider();
   List<StellarTransaction> _transactions = [];
   bool _isLoading = false;

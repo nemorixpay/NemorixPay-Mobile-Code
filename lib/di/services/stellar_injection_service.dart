@@ -1,5 +1,5 @@
 import 'package:get_it/get_it.dart';
-import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart';
+import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource_impl.dart';
 import 'package:nemorixpay/shared/stellar/data/repositories/stellar_repository_impl.dart';
 import 'package:nemorixpay/shared/stellar/domain/usecases/create_account_usecase.dart';
 import 'package:nemorixpay/shared/stellar/domain/usecases/generate_mnemonic_usecase.dart';
@@ -20,7 +20,7 @@ import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_bloc.dart';
 ///
 /// @section     Stellar Service Initialization
 /// The stellar service initialization follows this specific order:
-/// 1. StellarDatasource (Data Source)
+/// 1. StellarDataSourceImpl (Data Source)
 /// 2. StellarRepositoryImpl (Repository)
 /// 3. Use Cases (GenerateMnemonic, CreateAccount, etc.)
 /// 4. StellarBloc (State Management)
@@ -41,8 +41,8 @@ import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_bloc.dart';
 final di = GetIt.instance;
 Future<void> stellarInjectionServices() async {
   // Defining Stellar Datasources
-  final StellarDatasource stellarDatasource = di.registerSingleton(
-    StellarDatasource(),
+  final StellarDataSourceImpl stellarDatasource = di.registerSingleton(
+    StellarDataSourceImpl(),
   );
 
   // Defining Stellar Repositories

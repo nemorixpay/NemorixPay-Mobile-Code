@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart';
 
 /// @file        stellar_account.dart
 /// @brief       Entity representing a Stellar account.
@@ -6,7 +7,7 @@ import 'package:equatable/equatable.dart';
 ///              public key, balance, and associated key pairs.
 /// @author      Miguel Fagundez
 /// @date        2025-05-12
-/// @version     1.0
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 
 class StellarAccount extends Equatable {
@@ -32,6 +33,17 @@ class StellarAccount extends Equatable {
     mnemonic,
     createdAt,
   ];
+
+  /// Converts this StellarAccount entity to a StellarAccountModel
+  StellarAccountModel toModel() {
+    return StellarAccountModel(
+      publicKey: publicKey,
+      secretKey: secretKey ?? '',
+      balance: balance,
+      mnemonic: mnemonic ?? '',
+      createdAt: createdAt,
+    );
+  }
 
   StellarAccount copyWith({
     String? publicKey,
