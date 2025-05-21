@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
 import '../../domain/usecases/create_account_usecase.dart';
 import '../../domain/usecases/generate_mnemonic_usecase.dart';
 import '../../domain/usecases/get_account_balance_usecase.dart';
@@ -220,28 +221,39 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
       'StellarBloc: _onImportAccount - Passphrase: ${event.passphrase}',
     );
     emit(StellarLoading());
-    final result = await importAccountUseCase(
-      mnemonic: event.mnemonic,
-      passphrase: event.passphrase,
-    );
-    result.fold(
-      (failure) {
-        debugPrint('StellarBloc: _onImportAccount - Error: ${failure.message}');
-        debugPrint('StellarBloc: _onImportAccount - Código: ${failure.code}');
-        emit(StellarError(failure.message));
-      },
-      (account) {
-        debugPrint(
-          'StellarBloc: _onImportAccount - Cuenta importada exitosamente',
-        );
-        debugPrint(
-          'StellarBloc: _onImportAccount - PublicKey: ${account.publicKey}',
-        );
-        debugPrint(
-          'StellarBloc: _onImportAccount - Balance: ${account.balance}',
-        );
-        emit(AccountImported(account));
-      },
-    );
+    try {
+      final result = await importAccountUseCase(
+        mnemonic: event.mnemonic,
+        passphrase: event.passphrase,
+      );
+      result.fold(
+        (failure) {
+          debugPrint(
+            'StellarBloc: _onImportAccount - Error: ${failure.message}',
+          );
+          debugPrint('StellarBloc: _onImportAccount - Código: ${failure.code}');
+          emit(StellarError(failure.message));
+        },
+        (account) {
+          debugPrint(
+            'StellarBloc: _onImportAccount - Cuenta importada exitosamente',
+          );
+          debugPrint(
+            'StellarBloc: _onImportAccount - PublicKey: ${account.publicKey}',
+          );
+          debugPrint(
+            'StellarBloc: _onImportAccount - Balance: ${account.balance}',
+          );
+          emit(AccountImported(account));
+        },
+      );
+    } catch (e) {
+      debugPrint('StellarBloc: _onImportAccount - Error inesperado: $e');
+      if (e is StellarFailure) {
+        emit(StellarError(e.message));
+      } else {
+        emit(StellarError('Unexpected error. Try again!'));
+      }
+    }
   }
 }
