@@ -1,5 +1,5 @@
 import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart';
-import 'package:nemorixpay/shared/stellar/domain/entities/stellar_transaction.dart';
+import 'package:nemorixpay/shared/stellar/data/models/stellar_transaction_model.dart';
 import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
 
 /// @file        stellar_datasource.dart
@@ -43,7 +43,7 @@ abstract class StellarDataSource {
   ///
   /// Returns [StellarTransaction] with transaction details
   /// Throws [StellarFailure] if transaction fails
-  Future<StellarTransaction> sendPayment({
+  Future<StellarTransactionModel> sendPayment({
     required String sourceSecretKey,
     required String destinationPublicKey,
     required double amount,
@@ -54,7 +54,7 @@ abstract class StellarDataSource {
   ///
   /// Returns [StellarTransaction] with validation details
   /// Throws [StellarFailure] if validation fails
-  Future<StellarTransaction> validateTransaction(String transactionHash);
+  Future<StellarTransactionModel> validateTransaction(String transactionHash);
 
   /// Imports an existing Stellar account using a mnemonic phrase
   ///

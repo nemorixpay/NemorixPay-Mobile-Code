@@ -2,10 +2,10 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart';
+import 'package:nemorixpay/shared/stellar/data/models/stellar_transaction_model.dart';
 import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
 import 'package:dio/dio.dart';
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:nemorixpay/shared/stellar/domain/entities/stellar_transaction.dart';
 import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
 import 'package:nemorixpay/core/errors/stellar/stellar_error_codes.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart';
@@ -123,7 +123,7 @@ class StellarDataSourceImpl implements StellarDataSource {
 
   /// Sends XLM from source account to destination account
   @override
-  Future<StellarTransaction> sendPayment({
+  Future<StellarTransactionModel> sendPayment({
     required String sourceSecretKey,
     required String destinationPublicKey,
     required double amount,
@@ -154,7 +154,7 @@ class StellarDataSourceImpl implements StellarDataSource {
       );
 
       final details = await _validateTransaction(transactionHash);
-      return StellarTransaction(
+      return StellarTransactionModel(
         hash: transactionHash,
         sourceAccount: details['sourceAccount'] as String,
         destinationAccount: destinationPublicKey,
@@ -178,9 +178,11 @@ class StellarDataSourceImpl implements StellarDataSource {
 
   /// Validates a transaction by its hash
   @override
-  Future<StellarTransaction> validateTransaction(String transactionHash) async {
+  Future<StellarTransactionModel> validateTransaction(
+    String transactionHash,
+  ) async {
     final details = await _validateTransaction(transactionHash);
-    return StellarTransaction(
+    return StellarTransactionModel(
       hash: transactionHash,
       sourceAccount: details['sourceAccount'] as String,
       destinationAccount: '', // No disponible en la validación
@@ -261,7 +263,7 @@ class StellarDataSourceImpl implements StellarDataSource {
   /// Gets the transaction history for the current account
   /// @return List<StellarTransaction> The list of transactions
   /// @throws StellarFailure if the account is not initialized or if there's an error
-  Future<List<StellarTransaction>> getTransactions() async {
+  Future<List<StellarTransactionModel>> getTransactions() async {
     try {
       final publicKey = getCurrentPublicKey();
       debugPrint(
@@ -271,7 +273,7 @@ class StellarDataSourceImpl implements StellarDataSource {
       final response = await _sdk.transactions.forAccount(publicKey).execute();
       final transactions = response.records;
 
-      final List<StellarTransaction> result = [];
+      final List<StellarTransactionModel> result = [];
       for (final tx in transactions) {
         try {
           // Obtener las operaciones de la transacción
@@ -292,7 +294,7 @@ class StellarDataSourceImpl implements StellarDataSource {
 
           // Si no hay operación de pago, usar valores por defecto
           result.add(
-            StellarTransaction(
+            StellarTransactionModel(
               hash: tx.hash,
               sourceAccount: tx.sourceAccount,
               destinationAccount: paymentOp?.to ?? 'Desconocido',

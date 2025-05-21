@@ -129,7 +129,7 @@ class StellarRepositoryImpl implements StellarRepository {
       debugPrint(
         'StellarRepositoryImpl: sendPayment - Transacción exitosa: ${transaction.hash}',
       );
-      return Right(transaction);
+      return Right(transaction.toEntity());
     } on Exception catch (e) {
       debugPrint('StellarRepositoryImpl: sendPayment - Error: $e');
       return Left(StellarFailure.fromException(e));
@@ -148,7 +148,7 @@ class StellarRepositoryImpl implements StellarRepository {
       debugPrint(
         'StellarRepositoryImpl: validateTransaction - Transacción validada: ${transaction.successful}',
       );
-      return Right(transaction);
+      return Right(transaction.toEntity());
     } on Exception catch (e) {
       debugPrint('StellarRepositoryImpl: validateTransaction - Error: $e');
       return Left(StellarFailure.fromException(e));

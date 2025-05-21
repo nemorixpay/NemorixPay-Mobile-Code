@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:nemorixpay/shared/stellar/data/models/stellar_transaction_model.dart';
 
 /// @file        stellar_transaction.dart
 /// @brief       Entity representing a Stellar transaction.
@@ -66,6 +67,20 @@ class StellarTransaction extends Equatable {
       ledger: ledger ?? this.ledger,
       createdAt: createdAt ?? this.createdAt,
       feeCharged: feeCharged ?? this.feeCharged,
+    );
+  }
+
+  StellarTransactionModel toModel() {
+    return StellarTransactionModel(
+      hash: hash,
+      sourceAccount: sourceAccount,
+      destinationAccount: destinationAccount,
+      amount: amount,
+      memo: memo,
+      successful: successful,
+      ledger: ledger,
+      createdAt: createdAt,
+      feeCharged: feeCharged,
     );
   }
 }
