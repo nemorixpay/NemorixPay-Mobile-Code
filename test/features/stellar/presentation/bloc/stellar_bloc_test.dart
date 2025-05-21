@@ -3,9 +3,11 @@ import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
 import 'package:nemorixpay/shared/stellar/domain/entities/stellar_account.dart';
+import 'package:nemorixpay/shared/stellar/domain/entities/stellar_asset.dart';
 import 'package:nemorixpay/shared/stellar/domain/usecases/create_account_usecase.dart';
 import 'package:nemorixpay/shared/stellar/domain/usecases/generate_mnemonic_usecase.dart';
 import 'package:nemorixpay/shared/stellar/domain/usecases/get_account_balance_usecase.dart';
+import 'package:nemorixpay/shared/stellar/domain/usecases/get_account_assets_usecase.dart';
 import 'package:nemorixpay/shared/stellar/domain/usecases/import_account_usecase.dart';
 import 'package:nemorixpay/shared/stellar/domain/usecases/send_payment_usecase.dart';
 import 'package:nemorixpay/shared/stellar/domain/usecases/validate_transaction_usecase.dart';
@@ -22,6 +24,7 @@ import 'stellar_bloc_test.mocks.dart';
   SendPaymentUseCase,
   ValidateTransactionUseCase,
   ImportAccountUseCase,
+  GetAccountAssetsUseCase,
 ])
 void main() {
   late StellarBloc bloc;
@@ -31,6 +34,7 @@ void main() {
   late MockSendPaymentUseCase mockSendPaymentUseCase;
   late MockValidateTransactionUseCase mockValidateTransactionUseCase;
   late MockImportAccountUseCase mockImportAccountUseCase;
+  late MockGetAccountAssetsUseCase mockGetAccountAssetsUseCase;
 
   setUp(() {
     mockGenerateMnemonicUseCase = MockGenerateMnemonicUseCase();
@@ -39,6 +43,7 @@ void main() {
     mockSendPaymentUseCase = MockSendPaymentUseCase();
     mockValidateTransactionUseCase = MockValidateTransactionUseCase();
     mockImportAccountUseCase = MockImportAccountUseCase();
+    mockGetAccountAssetsUseCase = MockGetAccountAssetsUseCase();
 
     bloc = StellarBloc(
       generateMnemonicUseCase: mockGenerateMnemonicUseCase,
@@ -47,6 +52,7 @@ void main() {
       sendPaymentUseCase: mockSendPaymentUseCase,
       validateTransactionUseCase: mockValidateTransactionUseCase,
       importAccountUseCase: mockImportAccountUseCase,
+      getAccountAssetsUseCase: mockGetAccountAssetsUseCase,
     );
   });
 
@@ -157,7 +163,7 @@ void main() {
         // assert later
         final expected = [
           StellarLoading(),
-          StellarError('Unknow error. Try again!'),
+          StellarError('Unexpected error. Try again!'),
         ];
         expectLater(bloc.stream, emitsInOrder(expected));
 
@@ -181,5 +187,97 @@ void main() {
       // act
       bloc.add(ImportAccountEvent(mnemonic: tMnemonic, passphrase: ''));
     });
+  });
+
+  group('GetAccountAssets', () {
+    final tPublicKey = 'test_public_key';
+    final tAssets = [
+      StellarAsset(code: 'XLM', balance: 100.0, type: 'native'),
+      StellarAsset(
+        code: 'USDC',
+        balance: 50.0,
+        type: 'credit_alphanum4',
+        issuer: 'test_issuer',
+      ),
+    ];
+
+    test(
+      'should emit [AssetsLoading, AssetsLoaded] when getting assets is successful',
+      () async {
+        // arrange
+        when(
+          mockGetAccountAssetsUseCase(tPublicKey),
+        ).thenAnswer((_) async => Right(tAssets));
+
+        // assert later
+        final expected = [AssetsLoading(), AssetsLoaded(tAssets)];
+        expectLater(bloc.stream, emitsInOrder(expected));
+
+        // act
+        bloc.add(GetAccountAssetsEvent(tPublicKey));
+      },
+    );
+
+    test(
+      'should emit [AssetsLoading, Error] when getting assets fails with StellarFailure',
+      () async {
+        // arrange
+        final tFailure = StellarFailure(
+          stellarCode: 'INVALID_ACCOUNT',
+          stellarMessage: 'Invalid account',
+        );
+        when(
+          mockGetAccountAssetsUseCase(tPublicKey),
+        ).thenAnswer((_) async => Left(tFailure));
+
+        // assert later
+        final expected = [AssetsLoading(), StellarError(tFailure.message)];
+        expectLater(bloc.stream, emitsInOrder(expected));
+
+        // act
+        bloc.add(GetAccountAssetsEvent(tPublicKey));
+      },
+    );
+
+    test(
+      'should emit [AssetsLoading, Error] when getting assets throws StellarFailure',
+      () async {
+        // arrange
+        final tFailure = StellarFailure(
+          stellarCode: 'INVALID_ACCOUNT',
+          stellarMessage: 'Invalid account',
+        );
+        when(
+          mockGetAccountAssetsUseCase(tPublicKey),
+        ).thenAnswer((_) async => Left(tFailure));
+
+        // assert later
+        final expected = [AssetsLoading(), StellarError(tFailure.message)];
+        expectLater(bloc.stream, emitsInOrder(expected));
+
+        // act
+        bloc.add(GetAccountAssetsEvent(tPublicKey));
+      },
+    );
+
+    test(
+      'should emit [AssetsLoading, Error] when getting assets throws unexpected error',
+      () async {
+        // arrange
+        when(
+          mockGetAccountAssetsUseCase(tPublicKey),
+        ).thenAnswer((_) async => throw Exception('Unexpected error'));
+
+        // assert later
+        final expected = [
+          AssetsLoading(),
+          StellarError('Unexpected error. Try again!'),
+        ];
+        expectLater(bloc.stream, emitsInOrder(expected));
+
+        // act
+        bloc.add(GetAccountAssetsEvent(tPublicKey));
+      },
+    );
   });
 }

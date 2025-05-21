@@ -64,7 +64,7 @@ class _TestTransactionsPageState extends State<TestTransactionsPage> {
   }
 
   void _useTestAccount() {
-    _accountProvider.useTestAccount();
+    _accountProvider.setTestAccount();
     _loadTransactions();
   }
 

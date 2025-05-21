@@ -1,5 +1,6 @@
 import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_transaction_model.dart';
+import 'package:nemorixpay/shared/stellar/data/models/stellar_asset_model.dart';
 import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
 
 /// @file        stellar_datasource.dart
@@ -91,5 +92,9 @@ abstract class StellarDataSource {
     String? memo,
   });
 
-  // Future<Map<String, dynamic>> _validateTransaction(String transactionHash);
+  /// Gets all assets and their balances for a given Stellar account
+  ///
+  /// Returns [List<StellarAssetModel>] with all assets and their balances
+  /// Throws [StellarFailure] if the operation fails
+  Future<List<StellarAssetModel>> getAccountAssets(String publicKey);
 }

@@ -1,13 +1,14 @@
 import 'package:equatable/equatable.dart';
 import '../../domain/entities/stellar_account.dart';
 import '../../domain/entities/stellar_transaction.dart';
+import '../../domain/entities/stellar_asset.dart';
 
 /// @file        stellar_state.dart
 /// @brief       States for the Stellar feature bloc.
 /// @details     This file contains all possible states for the Stellar feature.
 /// @author      Miguel Fagundez
-/// @date        2025-05-12
-/// @version     1.0
+/// @date        2025-05-21
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 
 abstract class StellarState extends Equatable {
@@ -79,8 +80,21 @@ class TransactionValidated extends StellarState {
 class AccountImported extends StellarState {
   final StellarAccount account;
 
-  AccountImported(this.account);
+  const AccountImported(this.account);
 
   @override
   List<Object?> get props => [account];
+}
+
+/// State when assets are being loaded
+class AssetsLoading extends StellarState {}
+
+/// State when assets have been successfully loaded
+class AssetsLoaded extends StellarState {
+  final List<StellarAsset> assets;
+
+  const AssetsLoaded(this.assets);
+
+  @override
+  List<Object?> get props => [assets];
 }

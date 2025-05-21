@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart';
+import 'package:nemorixpay/shared/stellar/domain/entities/stellar_asset.dart';
 
 /// @file        stellar_account.dart
 /// @brief       Entity representing a Stellar account.
@@ -16,6 +17,7 @@ class StellarAccount extends Equatable {
   final double balance;
   final String? mnemonic;
   final DateTime createdAt;
+  final List<StellarAsset>? assets;
 
   const StellarAccount({
     required this.publicKey,
@@ -23,6 +25,7 @@ class StellarAccount extends Equatable {
     required this.balance,
     this.mnemonic,
     required this.createdAt,
+    this.assets,
   });
 
   @override
@@ -32,6 +35,7 @@ class StellarAccount extends Equatable {
     balance,
     mnemonic,
     createdAt,
+    assets,
   ];
 
   /// Converts this StellarAccount entity to a StellarAccountModel
@@ -42,6 +46,7 @@ class StellarAccount extends Equatable {
       balance: balance,
       mnemonic: mnemonic ?? '',
       createdAt: createdAt,
+      assets: assets?.map((asset) => asset.toModel()).toList(),
     );
   }
 
@@ -51,6 +56,7 @@ class StellarAccount extends Equatable {
     double? balance,
     String? mnemonic,
     DateTime? createdAt,
+    List<StellarAsset>? assets,
   }) {
     return StellarAccount(
       publicKey: publicKey ?? this.publicKey,
@@ -58,6 +64,7 @@ class StellarAccount extends Equatable {
       balance: balance ?? this.balance,
       mnemonic: mnemonic ?? this.mnemonic,
       createdAt: createdAt ?? this.createdAt,
+      assets: assets ?? this.assets,
     );
   }
 }

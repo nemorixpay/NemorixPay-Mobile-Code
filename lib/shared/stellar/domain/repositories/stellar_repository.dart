@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failures.dart';
 import '../entities/stellar_account.dart';
 import '../entities/stellar_transaction.dart';
+import '../entities/stellar_asset.dart';
 
 /// @file        stellar_repository.dart
 /// @brief       Repository interface for Stellar network operations.
@@ -47,5 +48,12 @@ abstract class StellarRepository {
   /// Validates a transaction by its hash
   Future<Either<Failure, StellarTransaction>> validateTransaction(
     String transactionHash,
+  );
+
+  /// Gets all assets and their balances for a given Stellar account
+  /// @param publicKey The public key of the account
+  /// @return Either<Failure, List<StellarAsset>> List of assets with their balances or error
+  Future<Either<Failure, List<StellarAsset>>> getAccountAssets(
+    String publicKey,
   );
 }

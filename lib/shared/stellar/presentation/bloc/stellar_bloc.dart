@@ -6,6 +6,7 @@ import '../../domain/usecases/get_account_balance_usecase.dart';
 import '../../domain/usecases/send_payment_usecase.dart';
 import '../../domain/usecases/validate_transaction_usecase.dart';
 import '../../domain/usecases/import_account_usecase.dart';
+import '../../domain/usecases/get_account_assets_usecase.dart';
 import 'stellar_event.dart';
 import 'stellar_state.dart';
 import 'package:flutter/foundation.dart';
@@ -25,6 +26,7 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
   final SendPaymentUseCase sendPaymentUseCase;
   final ValidateTransactionUseCase validateTransactionUseCase;
   final ImportAccountUseCase importAccountUseCase;
+  final GetAccountAssetsUseCase getAccountAssetsUseCase;
 
   StellarBloc({
     required this.generateMnemonicUseCase,
@@ -33,6 +35,7 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
     required this.sendPaymentUseCase,
     required this.validateTransactionUseCase,
     required this.importAccountUseCase,
+    required this.getAccountAssetsUseCase,
   }) : super(StellarInitial()) {
     on<GenerateMnemonicEvent>(_onGenerateMnemonic);
     on<CreateAccountEvent>(_onCreateAccount);
@@ -40,6 +43,7 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
     on<SendPaymentEvent>(_onSendPayment);
     on<ValidateTransactionEvent>(_onValidateTransaction);
     on<ImportAccountEvent>(_onImportAccount);
+    on<GetAccountAssetsEvent>(_onGetAccountAssets);
   }
 
   Future<void> _onGenerateMnemonic(
@@ -249,6 +253,49 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
       );
     } catch (e) {
       debugPrint('StellarBloc: _onImportAccount - Error inesperado: $e');
+      if (e is StellarFailure) {
+        emit(StellarError(e.message));
+      } else {
+        emit(StellarError('Unexpected error. Try again!'));
+      }
+    }
+  }
+
+  Future<void> _onGetAccountAssets(
+    GetAccountAssetsEvent event,
+    Emitter<StellarState> emit,
+  ) async {
+    debugPrint(
+      'StellarBloc: _onGetAccountAssets - Iniciando obtención de assets',
+    );
+    debugPrint(
+      'StellarBloc: _onGetAccountAssets - PublicKey: ${event.publicKey}',
+    );
+    emit(AssetsLoading());
+    try {
+      final result = await getAccountAssetsUseCase(event.publicKey);
+      result.fold(
+        (failure) {
+          debugPrint(
+            'StellarBloc: _onGetAccountAssets - Error: ${failure.message}',
+          );
+          debugPrint(
+            'StellarBloc: _onGetAccountAssets - Código: ${failure.code}',
+          );
+          emit(StellarError(failure.message));
+        },
+        (assets) {
+          debugPrint(
+            'StellarBloc: _onGetAccountAssets - Assets obtenidos exitosamente',
+          );
+          debugPrint(
+            'StellarBloc: _onGetAccountAssets - Cantidad de assets: ${assets.length}',
+          );
+          emit(AssetsLoaded(assets));
+        },
+      );
+    } catch (e) {
+      debugPrint('StellarBloc: _onGetAccountAssets - Error inesperado: $e');
       if (e is StellarFailure) {
         emit(StellarError(e.message));
       } else {

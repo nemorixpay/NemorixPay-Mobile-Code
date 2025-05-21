@@ -10,6 +10,8 @@ import 'package:mockito/mockito.dart' as _i1;
 import 'package:nemorixpay/core/errors/failures.dart' as _i6;
 import 'package:nemorixpay/shared/stellar/domain/entities/stellar_account.dart'
     as _i8;
+import 'package:nemorixpay/shared/stellar/domain/entities/stellar_asset.dart'
+    as _i15;
 import 'package:nemorixpay/shared/stellar/domain/entities/stellar_transaction.dart'
     as _i11;
 import 'package:nemorixpay/shared/stellar/domain/repositories/stellar_repository.dart'
@@ -18,6 +20,8 @@ import 'package:nemorixpay/shared/stellar/domain/usecases/create_account_usecase
     as _i7;
 import 'package:nemorixpay/shared/stellar/domain/usecases/generate_mnemonic_usecase.dart'
     as _i4;
+import 'package:nemorixpay/shared/stellar/domain/usecases/get_account_assets_usecase.dart'
+    as _i14;
 import 'package:nemorixpay/shared/stellar/domain/usecases/get_account_balance_usecase.dart'
     as _i9;
 import 'package:nemorixpay/shared/stellar/domain/usecases/import_account_usecase.dart'
@@ -301,4 +305,42 @@ class MockImportAccountUseCase extends _i1.Mock
                 ),
           )
           as _i5.Future<_i3.Either<_i6.Failure, _i8.StellarAccount>>);
+}
+
+/// A class which mocks [GetAccountAssetsUseCase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetAccountAssetsUseCase extends _i1.Mock
+    implements _i14.GetAccountAssetsUseCase {
+  MockGetAccountAssetsUseCase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.StellarRepository get repository =>
+      (super.noSuchMethod(
+            Invocation.getter(#repository),
+            returnValue: _FakeStellarRepository_0(
+              this,
+              Invocation.getter(#repository),
+            ),
+          )
+          as _i2.StellarRepository);
+
+  @override
+  _i5.Future<_i3.Either<_i6.Failure, List<_i15.StellarAsset>>> call(
+    String? publicKey,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#call, [publicKey]),
+            returnValue: _i5.Future<
+              _i3.Either<_i6.Failure, List<_i15.StellarAsset>>
+            >.value(
+              _FakeEither_1<_i6.Failure, List<_i15.StellarAsset>>(
+                this,
+                Invocation.method(#call, [publicKey]),
+              ),
+            ),
+          )
+          as _i5.Future<_i3.Either<_i6.Failure, List<_i15.StellarAsset>>>);
 }

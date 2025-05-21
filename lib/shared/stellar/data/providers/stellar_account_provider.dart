@@ -1,4 +1,5 @@
 import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart';
+import 'package:nemorixpay/shared/stellar/data/models/stellar_asset_model.dart';
 
 /// @file        stellar_account_provider.dart
 /// @brief       Provider for managing the current Stellar account.
@@ -40,17 +41,24 @@ class StellarAccountProvider {
     }
   }
 
+  /// Updates the current account assets
+  void updateAssets(List<StellarAssetModel> newAssets) {
+    if (_currentAccount != null) {
+      _currentAccount = _currentAccount!.copyWith(assets: newAssets);
+    }
+  }
+
   /// Clears the current account
   void clearCurrentAccount() {
     _currentAccount = null;
   }
 
   /// Sets the test account as the current account
-  void useTestAccount() {
+  void setTestAccount() {
     _currentAccount = StellarAccountModel(
       publicKey: _testPublicKey,
       secretKey: _testSecretKey,
-      balance: 0.0, // Se actualizará cuando se consulte el balance
+      balance: 100.0,
       mnemonic: _testMnemonic,
       createdAt: DateTime.now(),
     );

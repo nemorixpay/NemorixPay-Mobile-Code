@@ -79,8 +79,18 @@ class ImportAccountEvent extends StellarEvent {
   final String mnemonic;
   final String passphrase;
 
-  ImportAccountEvent({required this.mnemonic, this.passphrase = ""});
+  const ImportAccountEvent({required this.mnemonic, this.passphrase = ""});
 
   @override
   List<Object?> get props => [mnemonic, passphrase];
+}
+
+/// Event for getting all assets from a Stellar account
+class GetAccountAssetsEvent extends StellarEvent {
+  final String publicKey;
+
+  const GetAccountAssetsEvent(this.publicKey);
+
+  @override
+  List<Object?> get props => [publicKey];
 }

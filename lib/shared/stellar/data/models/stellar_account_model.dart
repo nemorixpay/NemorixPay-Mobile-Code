@@ -1,4 +1,5 @@
 import 'package:nemorixpay/shared/stellar/domain/entities/stellar_account.dart';
+import 'package:nemorixpay/shared/stellar/data/models/stellar_asset_model.dart';
 
 /// @file        stellar_account_model.dart
 /// @brief       Model class for Stellar account data.
@@ -15,6 +16,7 @@ class StellarAccountModel {
   final double balance;
   final String mnemonic;
   final DateTime createdAt;
+  final List<StellarAssetModel>? assets;
 
   const StellarAccountModel({
     required this.publicKey,
@@ -22,6 +24,7 @@ class StellarAccountModel {
     required this.balance,
     required this.mnemonic,
     required this.createdAt,
+    this.assets,
   });
 
   /// Creates a StellarAccountModel from a JSON map
@@ -32,6 +35,15 @@ class StellarAccountModel {
       balance: (json['balance'] as num).toDouble(),
       mnemonic: json['mnemonic'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
+      assets:
+          json['assets'] != null
+              ? (json['assets'] as List)
+                  .map(
+                    (e) =>
+                        StellarAssetModel.fromJson(e as Map<String, dynamic>),
+                  )
+                  .toList()
+              : null,
     );
   }
 
@@ -43,6 +55,7 @@ class StellarAccountModel {
       'balance': balance,
       'mnemonic': mnemonic,
       'createdAt': createdAt.toIso8601String(),
+      'assets': assets?.map((e) => e.toJson()).toList(),
     };
   }
 
@@ -65,6 +78,7 @@ class StellarAccountModel {
       balance: balance,
       mnemonic: mnemonic,
       createdAt: createdAt,
+      assets: assets?.map((asset) => asset.toEntity()).toList(),
     );
   }
 
@@ -75,6 +89,7 @@ class StellarAccountModel {
     double? balance,
     String? mnemonic,
     DateTime? createdAt,
+    List<StellarAssetModel>? assets,
   }) {
     return StellarAccountModel(
       publicKey: publicKey ?? this.publicKey,
@@ -82,6 +97,7 @@ class StellarAccountModel {
       balance: balance ?? this.balance,
       mnemonic: mnemonic ?? this.mnemonic,
       createdAt: createdAt ?? this.createdAt,
+      assets: assets ?? this.assets,
     );
   }
 }

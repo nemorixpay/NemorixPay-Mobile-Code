@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource_impl.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart';
+import 'package:nemorixpay/shared/stellar/data/models/stellar_asset_model.dart';
+import 'package:nemorixpay/shared/stellar/data/models/stellar_transaction_model.dart';
 import 'package:nemorixpay/shared/stellar/domain/entities/stellar_transaction.dart';
 import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
 
@@ -118,7 +120,7 @@ void main() {
       );
 
       // Assert
-      expect(transaction, isA<StellarTransaction>());
+      expect(transaction, isA<StellarTransactionModel>());
       expect(transaction.hash, isNotEmpty);
       expect(transaction.sourceAccount, equals(testAccount1PublicKey));
       expect(transaction.destinationAccount, equals(testAccount2PublicKey));
@@ -153,6 +155,47 @@ void main() {
             amount: 1.0,
             memo: 'This memo is too long and should cause an error',
           ),
+          throwsA(isA<StellarFailure>()),
+        );
+      },
+    );
+
+    test('should successfully get account assets', () async {
+      // Arrange
+      // Primero importamos la cuenta para asegurarnos que existe
+      await datasource.importAccount(mnemonic: testAccount1Mnemonic);
+
+      // Act
+      final assets = await datasource.getAccountAssets(testAccount1PublicKey);
+
+      // Assert
+      expect(assets, isA<List<StellarAssetModel>>());
+      expect(assets, isNotEmpty);
+
+      // Verificar que el primer asset es XLM
+      final xlmAsset = assets.firstWhere(
+        (asset) => asset.code == 'XLM',
+        orElse: () => throw Exception('No XLM asset found'),
+      );
+
+      expect(xlmAsset.code, equals('XLM'));
+      expect(xlmAsset.type, equals('native'));
+      expect(xlmAsset.issuer, isNull);
+      expect(xlmAsset.balance, isA<double>());
+      expect(xlmAsset.balance, isNonNegative);
+      expect(xlmAsset.isAuthorized, isTrue);
+      expect(xlmAsset.decimals, equals(7));
+    });
+
+    test(
+      'should throw StellarFailure when getting assets for invalid account',
+      () async {
+        // Arrange
+        const invalidPublicKey = 'invalid_public_key';
+
+        // Act & Assert
+        expect(
+          () => datasource.getAccountAssets(invalidPublicKey),
           throwsA(isA<StellarFailure>()),
         );
       },

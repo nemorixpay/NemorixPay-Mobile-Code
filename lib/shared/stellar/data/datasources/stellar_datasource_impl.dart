@@ -10,6 +10,7 @@ import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
 import 'package:nemorixpay/core/errors/stellar/stellar_error_codes.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart';
 import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
+import 'package:nemorixpay/shared/stellar/data/models/stellar_asset_model.dart';
 
 /// @file        stellar_datasource_impl.dart
 /// @brief       Service for Stellar network integration in NemorixPay.
@@ -447,6 +448,34 @@ class StellarDataSourceImpl implements StellarDataSource {
         'StellarDatasource: getBalance - Intentando devolver el balance de la cuenta: $publicKey',
       );
       return 0.0;
+    }
+  }
+
+  /// Gets all assets and their balances for a given Stellar account
+  @override
+  Future<List<StellarAssetModel>> getAccountAssets(String publicKey) async {
+    try {
+      final account = await _sdk.accounts.account(publicKey);
+      return account.balances.map((balance) {
+        return StellarAssetModel(
+          code: balance.assetCode ?? 'XLM',
+          balance: double.tryParse(balance.balance) ?? 0.0,
+          type: balance.assetType,
+          issuer: balance.assetIssuer,
+          limit: balance.limit != null ? double.tryParse(balance.limit!) : null,
+          isAuthorized: balance.isAuthorized ?? true,
+          decimals: 7, // Default for XLM, should be fetched from asset info
+        );
+      }).toList();
+    } catch (e) {
+      debugPrint('StellarDatasource: getAccountAssets - Error: $e');
+      if (e is StellarFailure) rethrow;
+
+      throw StellarFailure(
+        stellarCode: StellarErrorCode.unknown.code,
+        stellarMessage:
+            'Error al obtener los assets de la cuenta en el datasource: $e',
+      );
     }
   }
 
