@@ -3,6 +3,7 @@ import '../../../../core/errors/failures.dart';
 import '../entities/stellar_account.dart';
 import '../entities/stellar_transaction.dart';
 import '../entities/stellar_asset.dart';
+import '../entities/stellar_asset_info.dart';
 
 /// @file        stellar_repository.dart
 /// @brief       Repository interface for Stellar network operations.
@@ -56,4 +57,8 @@ abstract class StellarRepository {
   Future<Either<Failure, List<StellarAsset>>> getAccountAssets(
     String publicKey,
   );
+
+  /// Gets all available assets in the Stellar network
+  /// @return Either<Failure, List<StellarAssetInfo>> List of available assets or error
+  Future<Either<Failure, List<StellarAssetInfo>>> getAvailableAssets();
 }

@@ -3,10 +3,10 @@ import 'package:nemorixpay/core/errors/failures.dart';
 import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
 import 'package:nemorixpay/core/errors/stellar/stellar_error_codes.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource_impl.dart';
-import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart';
 import 'package:nemorixpay/shared/stellar/domain/entities/stellar_account.dart';
 import 'package:nemorixpay/shared/stellar/domain/entities/stellar_transaction.dart';
 import 'package:nemorixpay/shared/stellar/domain/entities/stellar_asset.dart';
+import 'package:nemorixpay/shared/stellar/domain/entities/stellar_asset_info.dart';
 import 'package:nemorixpay/shared/stellar/domain/repositories/stellar_repository.dart';
 import 'package:flutter/foundation.dart';
 
@@ -173,6 +173,34 @@ class StellarRepositoryImpl implements StellarRepository {
           stellarCode: StellarErrorCode.unknown.code,
           stellarMessage:
               'Error al obtener los assets de la cuenta en el repositorio: $e',
+        ),
+      );
+    }
+  }
+
+  /// Gets all available assets in the Stellar network
+  /// @return Either<Failure, List<StellarAssetInfo>> List of available assets or error
+  @override
+  Future<Either<Failure, List<StellarAssetInfo>>> getAvailableAssets() async {
+    try {
+      final assets = await datasource.getAvailableAssets();
+      debugPrint(
+        'StellarRepositoryImpl: getAvailableAssets - Assets length: ${assets.length}',
+      );
+      return Right(assets.map((asset) => asset.toEntity()).toList());
+    } on StellarFailure catch (failure) {
+      debugPrint(
+        'StellarRepositoryImpl: getAvailableAssets - StellarFailure: ${failure.message}',
+      );
+      return Left(failure);
+    } catch (e) {
+      debugPrint(
+        'StellarRepositoryImpl: getAvailableAssets - General Error: $e',
+      );
+      return Left(
+        StellarFailure(
+          stellarCode: StellarErrorCode.unknown.code,
+          stellarMessage: 'Error getting available assets in repository: $e',
         ),
       );
     }

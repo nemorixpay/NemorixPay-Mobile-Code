@@ -11,6 +11,7 @@ import 'package:nemorixpay/core/errors/stellar/stellar_error_codes.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart';
 import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_asset_model.dart';
+import 'package:nemorixpay/shared/stellar/data/models/stellar_asset_info_model.dart';
 
 /// @file        stellar_datasource_impl.dart
 /// @brief       Service for Stellar network integration in NemorixPay.
@@ -37,7 +38,7 @@ class StellarDataSourceImpl implements StellarDataSource {
     if (account == null) {
       throw StellarFailure(
         stellarCode: StellarErrorCode.accountNotInitialized.code,
-        stellarMessage: 'No hay una cuenta Stellar inicializada',
+        stellarMessage: 'No Stellar account initialized',
       );
     }
     return account.publicKey;
@@ -74,7 +75,7 @@ class StellarDataSourceImpl implements StellarDataSource {
     );
 
     await createAccountInTestnet(keyPair.accountId);
-    debugPrint('StellarDatasource: createAccount - Cuenta creada en testnet');
+    debugPrint('StellarDatasource: createAccount - Account created in testnet');
 
     final account = StellarAccountModel(
       publicKey: keyPair.accountId,
@@ -96,7 +97,7 @@ class StellarDataSourceImpl implements StellarDataSource {
       if (!publicKey.startsWith('G') || publicKey.length != 56) {
         throw StellarFailure(
           stellarCode: StellarErrorCode.invalidPublicKey.code,
-          stellarMessage: 'La clave pública no es válida',
+          stellarMessage: 'Invalid public key',
         );
       }
 
@@ -117,7 +118,7 @@ class StellarDataSourceImpl implements StellarDataSource {
 
       throw StellarFailure(
         stellarCode: StellarErrorCode.unknown.code,
-        stellarMessage: 'Error al obtener el balance: $e',
+        stellarMessage: 'Error getting balance: $e',
       );
     }
   }
@@ -135,7 +136,7 @@ class StellarDataSourceImpl implements StellarDataSource {
       if (memo != null && memo.length > 28) {
         throw StellarFailure(
           stellarCode: StellarErrorCode.invalidMemo.code,
-          stellarMessage: 'El memo no puede tener más de 28 caracteres',
+          stellarMessage: 'Memo cannot be longer than 28 characters',
         );
       }
 
@@ -143,7 +144,7 @@ class StellarDataSourceImpl implements StellarDataSource {
       if (amount <= 0) {
         throw StellarFailure(
           stellarCode: StellarErrorCode.invalidAmount.code,
-          stellarMessage: 'El monto debe ser mayor que 0',
+          stellarMessage: 'Amount must be greater than 0',
         );
       }
 
@@ -172,7 +173,7 @@ class StellarDataSourceImpl implements StellarDataSource {
 
       throw StellarFailure(
         stellarCode: StellarErrorCode.unknown.code,
-        stellarMessage: 'Error al enviar el pago: $e',
+        stellarMessage: 'Error sending payment: $e',
       );
     }
   }
@@ -235,7 +236,7 @@ class StellarDataSourceImpl implements StellarDataSource {
         final account = await _sdk.accounts.account(keyPair.accountId);
         final balance = await getBalance(keyPair.accountId);
 
-        debugPrint('StellarDatasource: importAccount - Cuenta encontrada');
+        debugPrint('StellarDatasource: importAccount - Account found');
         return StellarAccountModel(
           publicKey: keyPair.accountId,
           secretKey: keyPair.secretSeed,
@@ -244,7 +245,7 @@ class StellarDataSourceImpl implements StellarDataSource {
           createdAt: DateTime.now(),
         );
       } catch (e) {
-        debugPrint('StellarDatasource: importAccount - Cuenta no encontrada');
+        debugPrint('StellarDatasource: importAccount - Account not found');
         throw StellarFailure(
           stellarCode: StellarErrorCode.accountNotFound.code,
           stellarMessage: 'La cuenta no existe en la red Stellar',
@@ -256,7 +257,7 @@ class StellarDataSourceImpl implements StellarDataSource {
 
       throw StellarFailure(
         stellarCode: StellarErrorCode.unknown.code,
-        stellarMessage: 'Error al importar la cuenta: $e',
+        stellarMessage: 'Error importing account: $e',
       );
     }
   }
@@ -312,7 +313,7 @@ class StellarDataSourceImpl implements StellarDataSource {
           );
         } catch (e) {
           debugPrint(
-            'StellarDatasource: getTransactions - Error al procesar transacción ${tx.hash}: $e',
+            'StellarDatasource: getTransactions - Error processing transaction ${tx.hash}: $e',
           );
           // Si hay error al procesar una transacción, la omitimos y continuamos con la siguiente
           continue;
@@ -326,7 +327,7 @@ class StellarDataSourceImpl implements StellarDataSource {
 
       throw StellarFailure(
         stellarCode: StellarErrorCode.unknown.code,
-        stellarMessage: 'Error al obtener las transacciones: $e',
+        stellarMessage: 'Error getting transactions: $e',
       );
     }
   }
@@ -359,7 +360,7 @@ class StellarDataSourceImpl implements StellarDataSource {
       throw Exception('Error creating account in testnet: ${response.data}');
     }
     debugPrint(
-      'StellarDatasource: createAccountInTestnet - Cuenta creada exitosamente',
+      'StellarDatasource: createAccountInTestnet - Account created successfully',
     );
   }
 
@@ -473,8 +474,7 @@ class StellarDataSourceImpl implements StellarDataSource {
 
       throw StellarFailure(
         stellarCode: StellarErrorCode.unknown.code,
-        stellarMessage:
-            'Error al obtener los assets de la cuenta en el datasource: $e',
+        stellarMessage: 'Error getting account assets in datasource: $e',
       );
     }
   }
@@ -503,10 +503,10 @@ class StellarDataSourceImpl implements StellarDataSource {
 
       if (balance < amount) {
         debugPrint(
-          'StellarDatasource: sendTransaction - Error: Balance insuficiente',
+          'StellarDatasource: sendTransaction - Error: Insufficient balance',
         );
         throw Exception(
-          'Balance insuficiente. Balance actual: $balance XLM, Monto a enviar: $amount XLM',
+          'Insufficient balance. Current balance: $balance XLM, Amount to send: $amount XLM',
         );
       }
 
@@ -546,12 +546,12 @@ class StellarDataSourceImpl implements StellarDataSource {
           'StellarDatasource: sendTransaction - Error: ${response.extras?.resultCodes?.transactionResultCode}',
         );
         throw Exception(
-          'Error al enviar transacción: ${response.extras?.resultCodes?.transactionResultCode}',
+          'Error sending transaction: ${response.extras?.resultCodes?.transactionResultCode}',
         );
       }
     } catch (e) {
       debugPrint('StellarDatasource: sendTransaction - Excepción: $e');
-      throw Exception('Error al enviar transacción: $e');
+      throw Exception('Error sending transaction: $e');
     }
   }
 
@@ -569,7 +569,83 @@ class StellarDataSourceImpl implements StellarDataSource {
         'feeCharged': transaction.feeCharged,
       };
     } catch (e) {
-      throw Exception('Error al validar transacción: $e');
+      throw Exception('Error validating transaction: $e');
     }
+  }
+
+  /// Gets all available assets in the Stellar network
+  @override
+  Future<List<StellarAssetInfoModel>> getAvailableAssets() async {
+    try {
+      debugPrint(
+        'StellarDatasource: getAvailableAssets - Obteniendo assets disponibles',
+      );
+
+      // Obtener todos los assets de la red
+      final response =
+          await _sdk.assets
+              .order(RequestBuilderOrder.DESC)
+              .limit(200)
+              .execute();
+      final assets = response.records;
+
+      // Convertir a StellarAssetInfoModel
+      return assets.map((asset) {
+        return StellarAssetInfoModel(
+          code: asset.assetCode ?? 'XLM',
+          name: _getAssetName(asset.assetCode ?? 'XLM'),
+          description: _getAssetDescription(asset.assetCode ?? 'XLM'),
+          issuer: asset.assetIssuer ?? '',
+          issuerName: _getIssuerName(asset.assetIssuer ?? ''),
+          isVerified: _isAssetVerified(
+            asset.assetCode ?? 'XLM',
+            asset.assetIssuer ?? '',
+          ),
+          logoUrl: _getAssetLogoUrl(asset.assetCode ?? 'XLM'),
+          decimals:
+              7, // Por defecto, debería obtenerse de la información del asset
+          type: asset.assetType,
+        );
+      }).toList();
+    } catch (e) {
+      debugPrint('StellarDatasource: getAvailableAssets - Error: $e');
+      if (e is StellarFailure) rethrow;
+
+      throw StellarFailure(
+        stellarCode: StellarErrorCode.unknown.code,
+        stellarMessage: 'Error getting available assets: $e',
+      );
+    }
+  }
+
+  // Métodos auxiliares para obtener información adicional de los assets
+  String _getAssetName(String code) {
+    // TODO: Implementar lógica para obtener el nombre del asset
+    // Por ahora retornamos el código como nombre
+    return code;
+  }
+
+  String _getAssetDescription(String code) {
+    // TODO: Implementar lógica para obtener la descripción del asset
+    // Por ahora retornamos una descripción genérica
+    return '$code on Stellar';
+  }
+
+  String _getIssuerName(String issuer) {
+    // TODO: Implementar lógica para obtener el nombre del emisor
+    // Por ahora retornamos el issuer como nombre
+    return issuer;
+  }
+
+  bool _isAssetVerified(String code, String issuer) {
+    // TODO: Implementar lógica para verificar si el asset está verificado
+    // Por ahora retornamos true para XLM y false para otros
+    return code == 'XLM';
+  }
+
+  String? _getAssetLogoUrl(String code) {
+    // TODO: Implementar lógica para obtener la URL del logo
+    // Por ahora retornamos null
+    return null;
   }
 }

@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource_impl.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_transaction_model.dart';
 import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
 import 'package:nemorixpay/shared/stellar/domain/entities/stellar_transaction.dart';
 import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
+import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_bloc.dart';
+import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_event.dart';
+import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_state.dart';
+import 'package:nemorixpay/shared/stellar/domain/entities/stellar_asset_info.dart';
 
 /// @file        test_transactions_page.dart
 /// @brief       Test page for displaying Stellar transactions.
@@ -70,17 +76,20 @@ class _TestTransactionsPageState extends State<TestTransactionsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Test Transacciones'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _loadTransactions,
-          ),
-        ],
+    return BlocProvider(
+      create: (context) => GetIt.I<StellarBloc>(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Test Transacciones'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: _loadTransactions,
+            ),
+          ],
+        ),
+        body: _buildBody(),
       ),
-      body: _buildBody(),
     );
   }
 
@@ -90,6 +99,8 @@ class _TestTransactionsPageState extends State<TestTransactionsPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildAccountInfo(),
+          const Divider(),
+          _buildAvailableAssets(),
           const Divider(),
           _buildTransactionsList(),
         ],
@@ -144,6 +155,100 @@ class _TestTransactionsPageState extends State<TestTransactionsPage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildAvailableAssets() {
+    return Card(
+      margin: const EdgeInsets.all(16),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Assets Disponibles',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            BlocBuilder<StellarBloc, StellarState>(
+              builder: (context, state) {
+                if (state is AvailableAssetsLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is AvailableAssetsLoaded) {
+                  final assets = state.assets.take(10).toList();
+                  return Column(
+                    children:
+                        assets.map((asset) => _buildAssetItem(asset)).toList(),
+                  );
+                } else if (state is StellarError) {
+                  return Center(
+                    child: Column(
+                      children: [
+                        Text(
+                          state.message,
+                          style: const TextStyle(color: Colors.red),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            context.read<StellarBloc>().add(
+                              GetAvailableAssetsEvent(),
+                            );
+                          },
+                          child: const Text('Reintentar'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                return ElevatedButton(
+                  onPressed: () {
+                    context.read<StellarBloc>().add(GetAvailableAssetsEvent());
+                  },
+                  child: const Text('Cargar Assets Disponibles'),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAssetItem(StellarAssetInfo asset) {
+    Widget leadingWidget;
+    if (asset.logoUrl != null) {
+      leadingWidget = CircleAvatar(
+        backgroundImage: NetworkImage(asset.logoUrl!),
+        onBackgroundImageError: (_, __) {},
+        child: const Icon(Icons.currency_exchange),
+      );
+    } else {
+      leadingWidget = const CircleAvatar(child: Icon(Icons.currency_exchange));
+    }
+
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      child: ListTile(
+        leading: leadingWidget,
+        title: Text(asset.name),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Código: ${asset.code}'),
+            Text('Emisor: ${asset.issuerName}'),
+            if (asset.isVerified)
+              const Chip(
+                label: Text('Verificado'),
+                backgroundColor: Colors.green,
+                labelStyle: TextStyle(color: Colors.white),
+              ),
+          ],
+        ),
+        isThreeLine: true,
+      ),
     );
   }
 

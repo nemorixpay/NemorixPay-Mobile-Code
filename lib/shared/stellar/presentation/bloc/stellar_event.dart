@@ -94,3 +94,11 @@ class GetAccountAssetsEvent extends StellarEvent {
   @override
   List<Object?> get props => [publicKey];
 }
+
+/// Event for getting all available assets in the Stellar network
+class GetAvailableAssetsEvent extends StellarEvent {
+  const GetAvailableAssetsEvent();
+
+  @override
+  List<Object?> get props => [];
+}

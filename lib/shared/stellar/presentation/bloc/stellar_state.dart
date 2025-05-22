@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import '../../domain/entities/stellar_account.dart';
 import '../../domain/entities/stellar_transaction.dart';
 import '../../domain/entities/stellar_asset.dart';
+import '../../domain/entities/stellar_asset_info.dart';
 
 /// @file        stellar_state.dart
 /// @brief       States for the Stellar feature bloc.
@@ -94,6 +95,19 @@ class AssetsLoaded extends StellarState {
   final List<StellarAsset> assets;
 
   const AssetsLoaded(this.assets);
+
+  @override
+  List<Object?> get props => [assets];
+}
+
+/// State when available assets are being loaded
+class AvailableAssetsLoading extends StellarState {}
+
+/// State when available assets have been loaded successfully
+class AvailableAssetsLoaded extends StellarState {
+  final List<StellarAssetInfo> assets;
+
+  const AvailableAssetsLoaded(this.assets);
 
   @override
   List<Object?> get props => [assets];
