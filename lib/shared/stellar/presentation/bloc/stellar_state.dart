@@ -51,12 +51,12 @@ class AccountCreated extends StellarState {
 }
 
 class BalanceUpdated extends StellarState {
-  final StellarAccount account;
+  final double balance;
 
-  const BalanceUpdated(this.account);
+  const BalanceUpdated(this.balance);
 
   @override
-  List<Object?> get props => [account];
+  List<Object?> get props => [balance];
 }
 
 class PaymentSent extends StellarState {

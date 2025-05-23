@@ -85,15 +85,11 @@ void main() {
 
     test('should get correct balance for account', () async {
       // Act
-      final accountWithBalance = await datasource.getAccountBalance(
-        testAccount1PublicKey,
-      );
+      final balance = await datasource.getAccountBalance(testAccount1PublicKey);
 
       // Assert
-      expect(accountWithBalance, isA<StellarAccountModel>());
-      expect(accountWithBalance.publicKey, equals(testAccount1PublicKey));
-      expect(accountWithBalance.balance, isA<double>());
-      expect(accountWithBalance.balance, isNonNegative);
+      expect(balance, isA<double>());
+      expect(balance, isNonNegative);
     });
 
     test(

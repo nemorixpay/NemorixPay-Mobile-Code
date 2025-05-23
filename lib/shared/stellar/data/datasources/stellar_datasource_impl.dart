@@ -49,9 +49,17 @@ class StellarDataSourceImpl implements StellarDataSource {
   /// @return List of mnemonic words
   @override
   Future<List<String>> generateMnemonic({int strength = 256}) async {
+    debugPrint(
+      'StellarDatasource: generateMnemonic - Starting mnemonic generation',
+    );
+    debugPrint('StellarDatasource: generateMnemonic - Strength: $strength');
+
     final mnemonic = bip39.generateMnemonic(strength: strength);
-    debugPrint('StellarDatasource: generateMnemonic');
-    debugPrint(mnemonic);
+    debugPrint(
+      'StellarDatasource: generateMnemonic - Mnemonic generated successfully',
+    );
+    debugPrint('StellarDatasource: generateMnemonic - Mnemonic: $mnemonic');
+
     return mnemonic.split(' ');
   }
 
@@ -61,17 +69,16 @@ class StellarDataSourceImpl implements StellarDataSource {
     required String mnemonic,
     String passphrase = "",
   }) async {
-    debugPrint(
-      'StellarDatasource: createAccount - Iniciando creación de cuenta',
-    );
+    debugPrint('StellarDatasource: createAccount - Starting account creation');
     debugPrint('StellarDatasource: createAccount - Mnemonic: $mnemonic');
+    debugPrint('StellarDatasource: createAccount - Passphrase: $passphrase');
 
     final keyPair = await getKeyPairFromMnemonic(
       mnemonic,
       passphrase: passphrase,
     );
     debugPrint(
-      'StellarDatasource: createAccount - KeyPair generado: ${keyPair.accountId}',
+      'StellarDatasource: createAccount - KeyPair generated: ${keyPair.accountId}',
     );
 
     await createAccountInTestnet(keyPair.accountId);
@@ -84,38 +91,58 @@ class StellarDataSourceImpl implements StellarDataSource {
       mnemonic: mnemonic,
       createdAt: DateTime.now(),
     );
+    debugPrint(
+      'StellarDatasource: createAccount - Account model created successfully',
+    );
 
     _accountProvider.setCurrentAccount(account);
+    debugPrint('StellarDatasource: createAccount - Account set as current');
+
     return account;
   }
 
   /// Gets the current balance of a Stellar account
   @override
-  Future<StellarAccountModel> getAccountBalance(String publicKey) async {
+  Future<double> getAccountBalance(String publicKey) async {
     try {
+      debugPrint(
+        'StellarDatasource: getAccountBalance - Starting balance retrieval',
+      );
+      debugPrint(
+        'StellarDatasource: getAccountBalance - Public key: $publicKey',
+      );
+
       // Validate public key format
       if (!publicKey.startsWith('G') || publicKey.length != 56) {
+        debugPrint(
+          'StellarDatasource: getAccountBalance - Invalid public key format',
+        );
         throw StellarFailure(
           stellarCode: StellarErrorCode.invalidPublicKey.code,
           stellarMessage: 'Invalid public key',
         );
       }
 
+      // Only XLM
+      // TODO Check with other assets
       final balance = await getBalance(publicKey);
-      final account = StellarAccountModel(
-        publicKey: publicKey,
-        secretKey: _accountProvider.currentAccount?.secretKey ?? '',
-        balance: balance,
-        mnemonic: _accountProvider.currentAccount?.mnemonic ?? '',
-        createdAt: _accountProvider.currentAccount?.createdAt ?? DateTime.now(),
+      debugPrint(
+        'StellarDatasource: getAccountBalance - Balance retrieved successfully: $balance',
       );
 
-      _accountProvider.setCurrentAccount(account);
-      return account;
+      return balance;
     } catch (e) {
       debugPrint('StellarDatasource: getAccountBalance - Error: $e');
-      if (e is StellarFailure) rethrow;
+      if (e is StellarFailure) {
+        debugPrint(
+          'StellarDatasource: getAccountBalance - Re-throwing StellarFailure',
+        );
+        rethrow;
+      }
 
+      debugPrint(
+        'StellarDatasource: getAccountBalance - Converting to StellarFailure',
+      );
       throw StellarFailure(
         stellarCode: StellarErrorCode.unknown.code,
         stellarMessage: 'Error getting balance: $e',
@@ -132,8 +159,16 @@ class StellarDataSourceImpl implements StellarDataSource {
     String? memo,
   }) async {
     try {
+      debugPrint('StellarDatasource: sendPayment - Starting payment');
+      debugPrint(
+        'StellarDatasource: sendPayment - Destination: $destinationPublicKey',
+      );
+      debugPrint('StellarDatasource: sendPayment - Amount: $amount');
+      debugPrint('StellarDatasource: sendPayment - Memo: $memo');
+
       // Validate memo length if provided
       if (memo != null && memo.length > 28) {
+        debugPrint('StellarDatasource: sendPayment - Invalid memo length');
         throw StellarFailure(
           stellarCode: StellarErrorCode.invalidMemo.code,
           stellarMessage: 'Memo cannot be longer than 28 characters',
@@ -142,6 +177,7 @@ class StellarDataSourceImpl implements StellarDataSource {
 
       // Validate amount
       if (amount <= 0) {
+        debugPrint('StellarDatasource: sendPayment - Invalid amount');
         throw StellarFailure(
           stellarCode: StellarErrorCode.invalidAmount.code,
           stellarMessage: 'Amount must be greater than 0',
@@ -154,9 +190,16 @@ class StellarDataSourceImpl implements StellarDataSource {
         amount: amount,
         memo: memo,
       );
+      debugPrint(
+        'StellarDatasource: sendPayment - Transaction sent successfully',
+      );
 
       final details = await _validateTransaction(transactionHash);
-      return StellarTransactionModel(
+      debugPrint(
+        'StellarDatasource: sendPayment - Transaction validated successfully',
+      );
+
+      final transaction = StellarTransactionModel(
         hash: transactionHash,
         sourceAccount: details['sourceAccount'] as String,
         destinationAccount: destinationPublicKey,
@@ -167,10 +210,23 @@ class StellarDataSourceImpl implements StellarDataSource {
         createdAt: DateTime.parse(details['createdAt'] as String),
         feeCharged: details['feeCharged'].toString(),
       );
+      debugPrint(
+        'StellarDatasource: sendPayment - Transaction model created successfully',
+      );
+
+      return transaction;
     } catch (e) {
       debugPrint('StellarDatasource: sendPayment - Error: $e');
-      if (e is StellarFailure) rethrow;
+      if (e is StellarFailure) {
+        debugPrint(
+          'StellarDatasource: sendPayment - Re-throwing StellarFailure',
+        );
+        rethrow;
+      }
 
+      debugPrint(
+        'StellarDatasource: sendPayment - Converting to StellarFailure',
+      );
       throw StellarFailure(
         stellarCode: StellarErrorCode.unknown.code,
         stellarMessage: 'Error sending payment: $e',
@@ -233,7 +289,6 @@ class StellarDataSourceImpl implements StellarDataSource {
 
       // Check if account exists in Stellar
       try {
-        final account = await _sdk.accounts.account(keyPair.accountId);
         final balance = await getBalance(keyPair.accountId);
 
         debugPrint('StellarDatasource: importAccount - Account found');
@@ -446,7 +501,7 @@ class StellarDataSourceImpl implements StellarDataSource {
       return double.tryParse(xlmBalance.balance) ?? 0.0;
     } catch (e) {
       debugPrint(
-        'StellarDatasource: getBalance - Intentando devolver el balance de la cuenta: $publicKey',
+        'StellarDatasource: getBalanceError - Intentando devolver el balance de la cuenta: $publicKey',
       );
       return 0.0;
     }

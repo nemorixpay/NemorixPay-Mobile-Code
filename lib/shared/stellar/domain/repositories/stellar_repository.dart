@@ -36,7 +36,7 @@ abstract class StellarRepository {
   });
 
   /// Gets the current balance of a Stellar account
-  Future<Either<Failure, StellarAccount>> getAccountBalance(String publicKey);
+  Future<Either<Failure, double>> getAccountBalance(String publicKey);
 
   /// Sends XLM from one account to another
   Future<Either<Failure, StellarTransaction>> sendPayment({

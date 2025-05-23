@@ -456,4 +456,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stellarErrorAccountNotInitialized => 'No Stellar account has been initialized';
+
+  @override
+  String get walletErrorCreationFailed => 'Failed to create wallet. Please try again.';
+
+  @override
+  String get walletErrorInvalidMnemonic => 'Invalid mnemonic phrase. Please check and try again.';
+
+  @override
+  String get walletErrorMnemonicGenerationFailed => 'Failed to generate mnemonic phrase. Please try again.';
+
+  @override
+  String get walletErrorImportFailed => 'Failed to import wallet. Please check your mnemonic and try again.';
+
+  @override
+  String get walletErrorInvalidSecretKey => 'Invalid secret key. Please check and try again.';
+
+  @override
+  String get walletErrorBalanceRetrievalFailed => 'Failed to retrieve wallet balance. Please try again.';
+
+  @override
+  String get walletErrorInsufficientFunds => 'Insufficient funds to complete the transaction.';
+
+  @override
+  String get walletErrorAccountNotFound => 'Wallet account not found. Please check your credentials.';
+
+  @override
+  String get walletErrorNetworkError => 'Network error. Please check your connection and try again.';
+
+  @override
+  String get walletErrorTimeoutError => 'Request timed out. Please try again.';
+
+  @override
+  String get walletErrorUnknown => 'An unknown error occurred. Please try again.';
 }

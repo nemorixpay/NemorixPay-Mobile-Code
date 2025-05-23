@@ -176,5 +176,18 @@
   "stellarErrorInvalidSecretKey": "Clave secreta Stellar inválida",
   "stellarErrorInvalidPublicKey": "La clave pública no es válida",
   "stellarErrorInvalidMemo": "El memo no puede tener más de 28 caracteres",
-  "stellarErrorAccountNotInitialized": "No hay una cuenta Stellar inicializada"
+  "stellarErrorAccountNotInitialized": "No hay una cuenta Stellar inicializada",
+  "@_WALLET_ERROR_MESSAGES": {
+  },
+  "walletErrorCreationFailed": "Error al crear la wallet. Por favor, inténtalo de nuevo.",
+  "walletErrorInvalidMnemonic": "Frase mnemotécnica inválida. Por favor, verifica e inténtalo de nuevo.",
+  "walletErrorMnemonicGenerationFailed": "Error al generar la frase mnemotécnica. Por favor, inténtalo de nuevo.",
+  "walletErrorImportFailed": "Error al importar la wallet. Por favor, verifica tu frase mnemotécnica e inténtalo de nuevo.",
+  "walletErrorInvalidSecretKey": "Clave secreta inválida. Por favor, verifica e inténtalo de nuevo.",
+  "walletErrorBalanceRetrievalFailed": "Error al obtener el balance de la wallet. Por favor, inténtalo de nuevo.",
+  "walletErrorInsufficientFunds": "Fondos insuficientes para completar la transacción.",
+  "walletErrorAccountNotFound": "Cuenta de wallet no encontrada. Por favor, verifica tus credenciales.",
+  "walletErrorNetworkError": "Error de red. Por favor, verifica tu conexión e inténtalo de nuevo.",
+  "walletErrorTimeoutError": "La solicitud ha expirado. Por favor, inténtalo de nuevo.",
+  "walletErrorUnknown": "Ha ocurrido un error desconocido. Por favor, inténtalo de nuevo."
 }

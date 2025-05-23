@@ -39,7 +39,7 @@ abstract class StellarDataSource {
   ///
   /// Returns [StellarAccountModel] with updated balance
   /// Throws [StellarFailure] if balance check fails
-  Future<StellarAccountModel> getAccountBalance(String publicKey);
+  Future<double> getAccountBalance(String publicKey);
 
   /// Sends XLM from source account to destination account
   ///

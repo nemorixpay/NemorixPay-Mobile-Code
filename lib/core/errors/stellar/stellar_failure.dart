@@ -25,41 +25,6 @@ class StellarFailure extends Failure {
   StellarFailure({required this.stellarMessage, required this.stellarCode})
     : super(message: stellarMessage, code: stellarCode);
 
-  /// Creates a [StellarFailure] from a generic exception
-  ///
-  /// This factory constructor handles unknown errors and converts them
-  /// to our standardized failure format
-  factory StellarFailure.fromException(Exception exception) {
-    final errorMessage = exception.toString().toLowerCase();
-
-    if (errorMessage.contains('status code of 400')) {
-      return StellarFailure(
-        stellarCode: StellarErrorCode.accountExists.code,
-        stellarMessage:
-            'Esta wallet ya existe. Por favor, usa una frase semilla diferente.',
-      );
-    }
-
-    if (errorMessage.contains('insufficient balance')) {
-      return StellarFailure(
-        stellarCode: StellarErrorCode.insufficientBalance.code,
-        stellarMessage: 'Balance insuficiente para realizar la operación.',
-      );
-    }
-
-    if (errorMessage.contains('network error')) {
-      return StellarFailure(
-        stellarCode: StellarErrorCode.networkError.code,
-        stellarMessage: 'Error de conexión con la red Stellar.',
-      );
-    }
-
-    return StellarFailure(
-      stellarCode: StellarErrorCode.unknown.code,
-      stellarMessage: exception.toString(),
-    );
-  }
-
   /// Creates a [StellarFailure] for account-related errors
   factory StellarFailure.accountError(String message) {
     return StellarFailure(
@@ -80,6 +45,30 @@ class StellarFailure extends Failure {
   factory StellarFailure.networkError(String message) {
     return StellarFailure(
       stellarCode: StellarErrorCode.networkError.code,
+      stellarMessage: message,
+    );
+  }
+
+  /// Creates a [StellarFailure] for insufficient balance errors
+  factory StellarFailure.insufficientBalance(String message) {
+    return StellarFailure(
+      stellarCode: StellarErrorCode.insufficientBalance.code,
+      stellarMessage: message,
+    );
+  }
+
+  /// Creates a [StellarFailure] for account exists errors
+  factory StellarFailure.accountExists(String message) {
+    return StellarFailure(
+      stellarCode: StellarErrorCode.accountExists.code,
+      stellarMessage: message,
+    );
+  }
+
+  /// Creates a [StellarFailure] for unknown errors
+  factory StellarFailure.unknown(String message) {
+    return StellarFailure(
+      stellarCode: StellarErrorCode.unknown.code,
       stellarMessage: message,
     );
   }

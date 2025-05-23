@@ -176,5 +176,18 @@
   "stellarErrorInvalidSecretKey": "Invalid Stellar secret key",
   "stellarErrorInvalidPublicKey": "Invalid public key",
   "stellarErrorInvalidMemo": "Memo cannot be longer than 28 characters",
-  "stellarErrorAccountNotInitialized": "No Stellar account has been initialized"
+  "stellarErrorAccountNotInitialized": "No Stellar account has been initialized",
+  "@_WALLET_ERROR_MESSAGES": {
+  },
+  "walletErrorCreationFailed": "Failed to create wallet. Please try again.",
+  "walletErrorInvalidMnemonic": "Invalid mnemonic phrase. Please check and try again.",
+  "walletErrorMnemonicGenerationFailed": "Failed to generate mnemonic phrase. Please try again.",
+  "walletErrorImportFailed": "Failed to import wallet. Please check your mnemonic and try again.",
+  "walletErrorInvalidSecretKey": "Invalid secret key. Please check and try again.",
+  "walletErrorBalanceRetrievalFailed": "Failed to retrieve wallet balance. Please try again.",
+  "walletErrorInsufficientFunds": "Insufficient funds to complete the transaction.",
+  "walletErrorAccountNotFound": "Wallet account not found. Please check your credentials.",
+  "walletErrorNetworkError": "Network error. Please check your connection and try again.",
+  "walletErrorTimeoutError": "Request timed out. Please try again.",
+  "walletErrorUnknown": "An unknown error occurred. Please try again."
 }

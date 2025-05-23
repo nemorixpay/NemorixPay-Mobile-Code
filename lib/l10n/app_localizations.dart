@@ -988,6 +988,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No Stellar account has been initialized'**
   String get stellarErrorAccountNotInitialized;
+
+  /// No description provided for @walletErrorCreationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to create wallet. Please try again.'**
+  String get walletErrorCreationFailed;
+
+  /// No description provided for @walletErrorInvalidMnemonic.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid mnemonic phrase. Please check and try again.'**
+  String get walletErrorInvalidMnemonic;
+
+  /// No description provided for @walletErrorMnemonicGenerationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to generate mnemonic phrase. Please try again.'**
+  String get walletErrorMnemonicGenerationFailed;
+
+  /// No description provided for @walletErrorImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to import wallet. Please check your mnemonic and try again.'**
+  String get walletErrorImportFailed;
+
+  /// No description provided for @walletErrorInvalidSecretKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid secret key. Please check and try again.'**
+  String get walletErrorInvalidSecretKey;
+
+  /// No description provided for @walletErrorBalanceRetrievalFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to retrieve wallet balance. Please try again.'**
+  String get walletErrorBalanceRetrievalFailed;
+
+  /// No description provided for @walletErrorInsufficientFunds.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient funds to complete the transaction.'**
+  String get walletErrorInsufficientFunds;
+
+  /// No description provided for @walletErrorAccountNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet account not found. Please check your credentials.'**
+  String get walletErrorAccountNotFound;
+
+  /// No description provided for @walletErrorNetworkError.
+  ///
+  /// In en, this message translates to:
+  /// **'Network error. Please check your connection and try again.'**
+  String get walletErrorNetworkError;
+
+  /// No description provided for @walletErrorTimeoutError.
+  ///
+  /// In en, this message translates to:
+  /// **'Request timed out. Please try again.'**
+  String get walletErrorTimeoutError;
+
+  /// No description provided for @walletErrorUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown error occurred. Please try again.'**
+  String get walletErrorUnknown;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

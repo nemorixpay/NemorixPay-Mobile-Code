@@ -162,20 +162,17 @@ class MockGetAccountBalanceUseCase extends _i1.Mock
           as _i2.StellarRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, _i8.StellarAccount>> call(
-    String? publicKey,
-  ) =>
+  _i5.Future<_i3.Either<_i6.Failure, double>> call(String? publicKey) =>
       (super.noSuchMethod(
             Invocation.method(#call, [publicKey]),
-            returnValue:
-                _i5.Future<_i3.Either<_i6.Failure, _i8.StellarAccount>>.value(
-                  _FakeEither_1<_i6.Failure, _i8.StellarAccount>(
-                    this,
-                    Invocation.method(#call, [publicKey]),
-                  ),
-                ),
+            returnValue: _i5.Future<_i3.Either<_i6.Failure, double>>.value(
+              _FakeEither_1<_i6.Failure, double>(
+                this,
+                Invocation.method(#call, [publicKey]),
+              ),
+            ),
           )
-          as _i5.Future<_i3.Either<_i6.Failure, _i8.StellarAccount>>);
+          as _i5.Future<_i3.Either<_i6.Failure, double>>);
 }
 
 /// A class which mocks [SendPaymentUseCase].

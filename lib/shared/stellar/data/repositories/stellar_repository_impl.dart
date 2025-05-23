@@ -37,9 +37,18 @@ class StellarRepositoryImpl implements StellarRepository {
         'StellarRepositoryImpl: generateMnemonic - Mnemonic generado exitosamente',
       );
       return Right(mnemonic);
-    } on Exception catch (e) {
-      debugPrint('StellarRepositoryImpl: generateMnemonic - Error: $e');
-      return Left(StellarFailure.fromException(e));
+    } catch (failure) {
+      debugPrint('StellarRepositoryImpl: generateMnemonic - Error: $failure');
+      // Si ya es un StellarFailure, lo devolvemos como Left
+      if (failure is StellarFailure) {
+        return Left(failure);
+      }
+      // Si es otro tipo de error, lo convertimos a StellarFailure
+      return Left(
+        StellarFailure.unknown(
+          'Error al obtener el generateMnemonic: $failure',
+        ),
+      );
     }
   }
 
@@ -61,9 +70,18 @@ class StellarRepositoryImpl implements StellarRepository {
         'StellarRepositoryImpl: createAccount - Cuenta creada exitosamente: ${account.publicKey}',
       );
       return Right(account.toEntity());
-    } on Exception catch (e) {
-      debugPrint('StellarRepositoryImpl: createAccount - Error: $e');
-      return Left(StellarFailure.fromException(e));
+    } catch (failure) {
+      debugPrint('StellarRepositoryImpl: createAccount - Error: $failure');
+      // Si ya es un StellarFailure, lo devolvemos como Left
+      if (failure is StellarFailure) {
+        return Left(failure);
+      }
+      // Si es otro tipo de error, lo convertimos a StellarFailure
+      return Left(
+        StellarFailure.unknown(
+          'Error al obtener al crear la cuenta de Stellar: $failure',
+        ),
+      );
     }
   }
 
@@ -85,28 +103,44 @@ class StellarRepositoryImpl implements StellarRepository {
         'StellarRepositoryImpl: importAccount - Cuenta importada exitosamente: ${account.publicKey}',
       );
       return Right(account.toEntity());
-    } on Exception catch (e) {
-      debugPrint('StellarRepositoryImpl: importAccount - Error: $e');
-      return Left(StellarFailure.fromException(e));
+    } catch (failure) {
+      debugPrint('StellarRepositoryImpl: importAccount - Error: $failure');
+      // Si ya es un StellarFailure, lo devolvemos como Left
+      if (failure is StellarFailure) {
+        return Left(failure);
+      }
+      // Si es otro tipo de error, lo convertimos a StellarFailure
+      return Left(
+        StellarFailure.unknown(
+          'Error al obtener al importar la cuenta de Stellar: $failure',
+        ),
+      );
     }
   }
 
   @override
-  Future<Either<Failure, StellarAccount>> getAccountBalance(
-    String publicKey,
-  ) async {
+  Future<Either<Failure, double>> getAccountBalance(String publicKey) async {
     debugPrint(
       'StellarRepositoryImpl: getAccountBalance - Consultando balance para: $publicKey',
     );
     try {
-      final account = await datasource.getAccountBalance(publicKey);
+      final balance = await datasource.getAccountBalance(publicKey);
       debugPrint(
-        'StellarRepositoryImpl: getAccountBalance - Balance obtenido: ${account.balance}',
+        'StellarRepositoryImpl: getAccountBalance - Balance obtenido: $balance',
       );
-      return Right(account.toEntity());
-    } on Exception catch (e) {
-      debugPrint('StellarRepositoryImpl: getAccountBalance - Error: $e');
-      return Left(StellarFailure.fromException(e));
+      return Right(balance);
+    } catch (failure) {
+      debugPrint('StellarRepositoryImpl: getAccountBalance - Error: $failure');
+      // Si ya es un StellarFailure, lo devolvemos como Left
+      if (failure is StellarFailure) {
+        return Left(failure);
+      }
+      // Si es otro tipo de error, lo convertimos a StellarFailure
+      return Left(
+        StellarFailure.unknown(
+          'Error al obtener el balance de la cuenta de Stellar: $failure',
+        ),
+      );
     }
   }
 
@@ -133,9 +167,14 @@ class StellarRepositoryImpl implements StellarRepository {
         'StellarRepositoryImpl: sendPayment - Transacción exitosa: ${transaction.hash}',
       );
       return Right(transaction.toEntity());
-    } on Exception catch (e) {
-      debugPrint('StellarRepositoryImpl: sendPayment - Error: $e');
-      return Left(StellarFailure.fromException(e));
+    } catch (failure) {
+      debugPrint('StellarRepositoryImpl: sendPayment - Error: $failure');
+      // Si ya es un StellarFailure, lo devolvemos como Left
+      if (failure is StellarFailure) {
+        return Left(failure);
+      }
+      // Si es otro tipo de error, lo convertimos a StellarFailure
+      return Left(StellarFailure.unknown('Error al enviar un pago: $failure'));
     }
   }
 
@@ -152,9 +191,18 @@ class StellarRepositoryImpl implements StellarRepository {
         'StellarRepositoryImpl: validateTransaction - Transacción validada: ${transaction.successful}',
       );
       return Right(transaction.toEntity());
-    } on Exception catch (e) {
-      debugPrint('StellarRepositoryImpl: validateTransaction - Error: $e');
-      return Left(StellarFailure.fromException(e));
+    } catch (failure) {
+      debugPrint(
+        'StellarRepositoryImpl: validateTransaction - Error: $failure',
+      );
+      // Si ya es un StellarFailure, lo devolvemos como Left
+      if (failure is StellarFailure) {
+        return Left(failure);
+      }
+      // Si es otro tipo de error, lo convertimos a StellarFailure
+      return Left(
+        StellarFailure.unknown('Error al validar una transaccion: $failure'),
+      );
     }
   }
 

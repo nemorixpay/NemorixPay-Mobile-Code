@@ -139,11 +139,11 @@ class StellarBloc extends Bloc<StellarEvent, StellarState> {
         );
         emit(StellarError(failure.message));
       },
-      (account) {
+      (balance) {
         debugPrint(
-          'StellarBloc: _onGetAccountBalance - Balance obtenido: ${account.balance}',
+          'StellarBloc: _onGetAccountBalance - Balance obtenido: $balance',
         );
-        emit(BalanceUpdated(account));
+        emit(BalanceUpdated(balance));
       },
     );
   }

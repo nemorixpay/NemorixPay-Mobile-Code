@@ -456,4 +456,37 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get stellarErrorAccountNotInitialized => 'No hay una cuenta Stellar inicializada';
+
+  @override
+  String get walletErrorCreationFailed => 'Error al crear la wallet. Por favor, inténtalo de nuevo.';
+
+  @override
+  String get walletErrorInvalidMnemonic => 'Frase mnemotécnica inválida. Por favor, verifica e inténtalo de nuevo.';
+
+  @override
+  String get walletErrorMnemonicGenerationFailed => 'Error al generar la frase mnemotécnica. Por favor, inténtalo de nuevo.';
+
+  @override
+  String get walletErrorImportFailed => 'Error al importar la wallet. Por favor, verifica tu frase mnemotécnica e inténtalo de nuevo.';
+
+  @override
+  String get walletErrorInvalidSecretKey => 'Clave secreta inválida. Por favor, verifica e inténtalo de nuevo.';
+
+  @override
+  String get walletErrorBalanceRetrievalFailed => 'Error al obtener el balance de la wallet. Por favor, inténtalo de nuevo.';
+
+  @override
+  String get walletErrorInsufficientFunds => 'Fondos insuficientes para completar la transacción.';
+
+  @override
+  String get walletErrorAccountNotFound => 'Cuenta de wallet no encontrada. Por favor, verifica tus credenciales.';
+
+  @override
+  String get walletErrorNetworkError => 'Error de red. Por favor, verifica tu conexión e inténtalo de nuevo.';
+
+  @override
+  String get walletErrorTimeoutError => 'La solicitud ha expirado. Por favor, inténtalo de nuevo.';
+
+  @override
+  String get walletErrorUnknown => 'Ha ocurrido un error desconocido. Por favor, inténtalo de nuevo.';
 }

@@ -18,7 +18,7 @@ class GetAccountBalanceUseCase {
 
   GetAccountBalanceUseCase({required this.repository});
 
-  Future<Either<Failure, StellarAccount>> call(String publicKey) async {
+  Future<Either<Failure, double>> call(String publicKey) async {
     debugPrint('GetAccountBalanceUseCase');
     return await repository.getAccountBalance(publicKey);
   }
