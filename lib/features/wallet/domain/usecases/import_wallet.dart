@@ -14,13 +14,13 @@ import '../repositories/wallet_repository.dart';
 /// @version     1.0
 /// @copyright   Apache 2.0 License
 
-class ImportWallet {
+class ImportWalletUseCase {
   final WalletRepository repository;
 
-  ImportWallet({required this.repository});
+  ImportWalletUseCase({required this.repository});
 
   Future<Either<Failure, Wallet>> call(String mnemonic) async {
-    debugPrint('ImportWallet');
+    debugPrint('ImportWalletUseCase: ImportWallet');
     return await repository.importWallet(mnemonic);
   }
 }

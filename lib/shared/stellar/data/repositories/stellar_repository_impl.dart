@@ -78,9 +78,7 @@ class StellarRepositoryImpl implements StellarRepository {
       }
       // Si es otro tipo de error, lo convertimos a StellarFailure
       return Left(
-        StellarFailure.unknown(
-          'Error al obtener al crear la cuenta de Stellar: $failure',
-        ),
+        StellarFailure.unknown('Error creating stellar account. Try again!'),
       );
     }
   }

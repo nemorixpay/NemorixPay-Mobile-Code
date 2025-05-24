@@ -14,13 +14,13 @@ import '../repositories/wallet_repository.dart';
 /// @version     1.0
 /// @copyright   Apache 2.0 License
 
-class CreateWallet {
+class CreateWalletUseCase {
   final WalletRepository repository;
 
-  CreateWallet({required this.repository});
+  CreateWalletUseCase({required this.repository});
 
-  Future<Either<Failure, Wallet>> call() async {
-    debugPrint('CreateWallet');
-    return await repository.createWallet();
+  Future<Either<Failure, Wallet>> call(String mnemonic) async {
+    debugPrint('CreateWalletUseCase: CreateWallet');
+    return await repository.createWallet(mnemonic);
   }
 }

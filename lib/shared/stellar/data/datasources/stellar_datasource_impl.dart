@@ -83,7 +83,6 @@ class StellarDataSourceImpl implements StellarDataSource {
 
     await createAccountInTestnet(keyPair.accountId);
     debugPrint('StellarDatasource: createAccount - Account created in testnet');
-
     final account = StellarAccountModel(
       publicKey: keyPair.accountId,
       secretKey: keyPair.secretSeed,
@@ -99,6 +98,41 @@ class StellarDataSourceImpl implements StellarDataSource {
     debugPrint('StellarDatasource: createAccount - Account set as current');
 
     return account;
+  }
+
+  // Private helper methods
+  @override
+  Future<KeyPair> getKeyPairFromMnemonic(
+    String mnemonic, {
+    String passphrase = "",
+  }) async {
+    final seed = bip39.mnemonicToSeed(mnemonic, passphrase: passphrase);
+    final stellarSeed = seed.sublist(0, 32);
+    final secretSeed = StrKey.encodeStellarSecretSeed(stellarSeed);
+    return KeyPair.fromSecretSeed(secretSeed);
+  }
+
+  Future<void> createAccountInTestnet(String publicKey) async {
+    debugPrint(
+      'StellarDatasource: createAccountInTestnet - Intentando crear cuenta: $publicKey',
+    );
+    final url = 'https://friendbot.stellar.org/?addr=$publicKey';
+    final response = await Dio().get(url);
+    if (response.statusCode != 200) {
+      debugPrint(
+        'StellarDatasource: createAccountInTestnet - Error: ${response.statusCode}',
+      );
+      debugPrint(
+        'StellarDatasource: createAccountInTestnet - Response: ${response.data}',
+      );
+      throw StellarFailure(
+        stellarCode: StellarErrorCode.unknown.code,
+        stellarMessage: 'Error creating stellar account. Try again!',
+      );
+    }
+    debugPrint(
+      'StellarDatasource: createAccountInTestnet - Account created successfully',
+    );
   }
 
   /// Gets the current balance of a Stellar account
@@ -385,38 +419,6 @@ class StellarDataSourceImpl implements StellarDataSource {
         stellarMessage: 'Error getting transactions: $e',
       );
     }
-  }
-
-  // Private helper methods
-  @override
-  Future<KeyPair> getKeyPairFromMnemonic(
-    String mnemonic, {
-    String passphrase = "",
-  }) async {
-    final seed = bip39.mnemonicToSeed(mnemonic, passphrase: passphrase);
-    final stellarSeed = seed.sublist(0, 32);
-    final secretSeed = StrKey.encodeStellarSecretSeed(stellarSeed);
-    return KeyPair.fromSecretSeed(secretSeed);
-  }
-
-  Future<void> createAccountInTestnet(String publicKey) async {
-    debugPrint(
-      'StellarDatasource: createAccountInTestnet - Intentando crear cuenta: $publicKey',
-    );
-    final url = 'https://friendbot.stellar.org/?addr=$publicKey';
-    final response = await Dio().get(url);
-    if (response.statusCode != 200) {
-      debugPrint(
-        'StellarDatasource: createAccountInTestnet - Error: ${response.statusCode}',
-      );
-      debugPrint(
-        'StellarDatasource: createAccountInTestnet - Response: ${response.data}',
-      );
-      throw Exception('Error creating account in testnet: ${response.data}');
-    }
-    debugPrint(
-      'StellarDatasource: createAccountInTestnet - Account created successfully',
-    );
   }
 
   // -----------------------------------------------------------------------------------

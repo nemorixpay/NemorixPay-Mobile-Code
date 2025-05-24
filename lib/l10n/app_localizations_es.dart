@@ -314,6 +314,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get importUsingSeedPhrase => 'Importar Usando Frase Semilla';
 
   @override
+  String get creatingSeedPhrase => 'Creando Frase Semilla..';
+
+  @override
+  String get creatingNewAccount => 'Creando Nueva Wallet..';
+
+  @override
   String get createNewAccount => 'Crear Nueva Cuenta';
 
   @override

@@ -11,7 +11,8 @@ import '../models/wallet_model.dart';
 /// @copyright   Apache 2.0 License
 
 abstract class WalletDataSource {
-  Future<WalletModel> createWallet();
+  Future<WalletModel> createWallet(String nmemonic);
+  Future<List<String>> createSeedPhrase();
   Future<WalletModel> importWallet(String mnemonic);
   Future<double> getWalletBalance(String publicKey);
 }

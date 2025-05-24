@@ -1,6 +1,9 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
+import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_bloc.dart';
+import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_event.dart';
+import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_state.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/seed_phrase_success_dialog.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/app_loader.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
@@ -10,9 +13,6 @@ import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_bloc.dart';
-import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_event.dart';
-import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_state.dart';
 
 /// @file        confirm_seed_phrase_page.dart
 /// @brief       Confirm Seed Phrase screen for NemorixPay wallet feature.
@@ -111,10 +111,10 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
           builder:
               (context) => SeedPhraseSuccessDialog(
                 onContinue: () {
-                  debugPrint('onSuccess Pressed');
+                  debugPrint('SeedPhraseSuccessDialog - Pressed - WalletBloc');
                   Navigator.of(context).pop();
-                  context.read<StellarBloc>().add(
-                    CreateAccountEvent(mnemonic: widget.seedPhrase.join(' ')),
+                  context.read<WalletBloc>().add(
+                    CreateWalletRequested(widget.seedPhrase.join(' ')),
                   );
                 },
               ),
@@ -132,34 +132,36 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocListener<StellarBloc, StellarState>(
+    return BlocListener<WalletBloc, WalletState>(
       listener: (context, state) {
-        if (state is AccountCreated) {
-          debugPrint('WALLET CREATED!');
-          debugPrint('Public Key: ${state.account.publicKey}');
-          debugPrint('Secret Key: ${state.account.secretKey}');
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            RouteNames.successWalletCreation,
-            arguments: l10n.walletSuccessTitle,
-            (route) => false,
+        debugPrint('WalletBloc: ConfirmSeedPhrasePage');
+        if (state is WalletLoading) {
+          debugPrint('WALLET LOADING!');
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => AppLoader(message: l10n.creatingNewAccount),
           );
-        } else if (state is StellarError) {
-          debugPrint('StellarError - SnackBar!');
-          if (Navigator.canPop(context)) {
-            Navigator.of(context).pop();
-          }
+        } else if (state is WalletError) {
+          debugPrint('WALLET ERROR!');
+          Navigator.of(context).pop(); // Close loader if open
+          Navigator.of(context).pop(); // Closing setup wallet loading as well
           NemorixSnackBar.show(
             context,
             message: state.message,
             type: SnackBarType.error,
           );
-        } else if (state is StellarLoading) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder:
-                (context) => const AppLoader(message: 'Creating wallet...'),
+        } else if (state is WalletCreated) {
+          Navigator.of(context).pop(); // Close loader if open
+          Navigator.of(context).pop(); // Closing setup wallet loading as well
+          debugPrint('WALLET CREATED!');
+          debugPrint('New Public Key: ${state.wallet.publicKey}');
+          debugPrint('New Secret Key: ${state.wallet.secretKey}');
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            RouteNames.successWalletCreation,
+            arguments: l10n.walletSuccessTitle,
+            (route) => false,
           );
         }
       },

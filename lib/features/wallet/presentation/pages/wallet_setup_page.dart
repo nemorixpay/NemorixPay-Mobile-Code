@@ -4,9 +4,11 @@ import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_bloc.dart';
-import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_event.dart';
-import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_state.dart';
+import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_bloc.dart';
+import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_event.dart';
+import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_state.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/app_loader.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
 
 /// @file        wallet_setup_page.dart
 /// @brief       Wallet Setup screen for NemorixPay.
@@ -24,13 +26,34 @@ class WalletSetupPage extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocListener<StellarBloc, StellarState>(
-      listener: (context, state) {
-        if (state is MnemonicGenerated) {
+    return BlocListener<WalletBloc, WalletState>(
+      listener: (context, state) async {
+        debugPrint('WalletBloc: WalletSetupPage');
+        if (state is WalletLoading) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => AppLoader(message: l10n.creatingSeedPhrase),
+          );
+        }
+        if (state is SeedPhraseCreated) {
+          // TODO Checking this asyn gap
+          await Future.delayed(const Duration(seconds: 1));
+          debugPrint('WalletBloc: SeedPhraseCreated before pop');
+          Navigator.of(context).pop(); // Close loader if open
+
+          debugPrint('WalletBloc: SeedPhraseCreated after pop');
           Navigator.pushNamed(
             context,
             RouteNames.showSeedPhrase,
-            arguments: state.mnemonic,
+            arguments: state.seedPhrase,
+          );
+        } else if (state is WalletError) {
+          Navigator.of(context).pop(); // Close loader if open
+          NemorixSnackBar.show(
+            context,
+            message: state.message,
+            type: SnackBarType.error,
           );
         }
       },
@@ -98,10 +121,10 @@ class WalletSetupPage extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      // 12 words
-                      // context.read<StellarBloc>().add(GenerateMnemonicEvent(strength: 128));
-                      // 24 words
-                      context.read<StellarBloc>().add(GenerateMnemonicEvent());
+                      context.read<WalletBloc>().add(
+                        // const CreateWalletRequested(),
+                        const GenerateSeedPhraseRequested(),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: NemorixColors.primaryColor,

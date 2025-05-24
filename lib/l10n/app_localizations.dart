@@ -701,6 +701,18 @@ abstract class AppLocalizations {
   /// **'Import Using Seed Phrase'**
   String get importUsingSeedPhrase;
 
+  /// No description provided for @creatingSeedPhrase.
+  ///
+  /// In en, this message translates to:
+  /// **'Creating Seed Phrase..'**
+  String get creatingSeedPhrase;
+
+  /// No description provided for @creatingNewAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Creating a New Wallet..'**
+  String get creatingNewAccount;
+
   /// No description provided for @createNewAccount.
   ///
   /// In en, this message translates to:

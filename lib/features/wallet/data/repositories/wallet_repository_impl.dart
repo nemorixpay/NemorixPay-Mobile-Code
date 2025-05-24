@@ -19,28 +19,46 @@ import 'package:nemorixpay/features/wallet/domain/repositories/wallet_repository
 
 class WalletRepositoryImpl implements WalletRepository {
   final WalletDataSource _dataSource;
-  final BuildContext context;
 
-  WalletRepositoryImpl({
-    required WalletDataSource dataSource,
-    required this.context,
-  }) : _dataSource = dataSource;
+  WalletRepositoryImpl({required WalletDataSource dataSource})
+    : _dataSource = dataSource;
 
   @override
-  Future<Either<Failure, Wallet>> createWallet() async {
+  Future<Either<Failure, List<String>>> createSeedPhrase() async {
     try {
-      final walletModel = await _dataSource.createWallet();
+      final seedPhrase = await _dataSource.createSeedPhrase();
+      return Right(seedPhrase);
+    } catch (e) {
+      debugPrint('WalletRepositoryImpl: createSeedPhrase - Error: $e');
+      // Si ya es un WalletFailure, lo devolvemos como Left
+      if (e is WalletFailure) {
+        return Left(e);
+      }
+
+      // Si es otro tipo de error, lo convertimos a WalletFailure
+      return Left(
+        WalletFailure.unknown('Error al obtener el balance de la cuenta: $e'),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Wallet>> createWallet(String nmemonic) async {
+    try {
+      final walletModel = await _dataSource.createWallet(nmemonic);
       return Right(walletModel.toEntity());
     } catch (e) {
-      debugPrint('StellarRepository: getAccountBalance - Error: $e');
+      debugPrint('WalletRepositoryImpl: createWallet - Error: $e');
 
       // Si ya es un WalletFailure, lo devolvemos como Left
       if (e is WalletFailure) {
         return Left(e);
       }
 
-      // Si es otro tipo de error, lo convertimos a StellarFailure
-      return Left(WalletFailure.unknown('Error al crear la cuenta: $e'));
+      // Si es otro tipo de error, lo convertimos a WalletFailure
+      return Left(
+        WalletFailure.unknown('Error al crear la cuenta. Try again!'),
+      );
     }
   }
 
@@ -50,6 +68,7 @@ class WalletRepositoryImpl implements WalletRepository {
       final walletModel = await _dataSource.importWallet(mnemonic);
       return Right(walletModel.toEntity());
     } catch (e) {
+      debugPrint('WalletRepositoryImpl: importWallet - Error: $e');
       // Si ya es un WalletFailure, lo devolvemos como Left
       if (e is WalletFailure) {
         return Left(e);
@@ -66,14 +85,17 @@ class WalletRepositoryImpl implements WalletRepository {
       final balance = await _dataSource.getWalletBalance(publicKey);
       return Right(balance);
     } catch (e) {
+      debugPrint('WalletRepositoryImpl: getWalletBalance - Error: $e');
       // Si ya es un WalletFailure, lo devolvemos como Left
       if (e is WalletFailure) {
         return Left(e);
       }
 
-      // Si es otro tipo de error, lo convertimos a StellarFailure
+      // Si es otro tipo de error, lo convertimos a WalletFailure
       return Left(
-        WalletFailure.unknown('Error al obtener el balance de la cuenta: $e'),
+        WalletFailure.unknown(
+          'Error al obtener el balance de la cuenta. Try again!',
+        ),
       );
     }
   }

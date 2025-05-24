@@ -13,7 +13,8 @@ import '../entities/wallet.dart';
 /// @copyright   Apache 2.0 License
 
 abstract class WalletRepository {
-  Future<Either<Failure, Wallet>> createWallet();
+  Future<Either<Failure, Wallet>> createWallet(String mnemonic);
+  Future<Either<Failure, List<String>>> createSeedPhrase();
   Future<Either<Failure, Wallet>> importWallet(String mnemonic);
   Future<Either<Failure, double>> getWalletBalance(String publicKey);
 }

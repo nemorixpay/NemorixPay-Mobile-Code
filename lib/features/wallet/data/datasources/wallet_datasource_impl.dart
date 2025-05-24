@@ -23,18 +23,51 @@ class WalletDataSourceImpl implements WalletDataSource {
     : _stellarDatasource = stellarDatasource;
 
   @override
-  Future<WalletModel> createWallet() async {
+  Future<List<String>> createSeedPhrase() async {
+    try {
+      debugPrint(
+        'WalletDataSourceImpl - createSeedPhrase: Starting generateMnemonic creation',
+      );
+      final mnemonic = await _stellarDatasource.generateMnemonic();
+      debugPrint(
+        'WalletDataSourceImpl - createSeedPhrase: Mnemonic Phrase created successfully',
+      );
+      return mnemonic;
+    } catch (error) {
+      debugPrint(
+        'WalletDataSourceImpl - createSeedPhrase: Unexpected error: $error',
+      );
+      // Mapeamos el error específico
+      if (error.toString().contains('invalid mnemonic')) {
+        debugPrint(
+          'WalletDataSourceImpl - createSeedPhrase: Invalid mnemonic error',
+        );
+        throw WalletFailure.invalidMnemonic('Invalid Mnemonic. Try again!');
+      }
+
+      if (error.toString().contains('network error')) {
+        debugPrint('WalletDataSourceImpl - createSeedPhrase: Network error');
+        throw WalletFailure.networkError(
+          'Connection error with Stellar network',
+        );
+      }
+
+      debugPrint('WalletDataSourceImpl - createSeedPhrase: Unknown error');
+      throw WalletFailure(
+        walletMessage: 'An unexpected error occurred',
+        walletCode: WalletErrorCode.unknown.code,
+      );
+    }
+  }
+
+  @override
+  Future<WalletModel> createWallet(String mnemonic) async {
     try {
       debugPrint(
         'WalletDataSourceImpl - createWallet: Starting wallet creation',
       );
-      final mnemonic = await _stellarDatasource.generateMnemonic();
-      debugPrint(
-        'WalletDataSourceImpl - createWallet: Mnemonic generated successfully',
-      );
-
       final account = await _stellarDatasource.createAccount(
-        mnemonic: mnemonic.join(' '),
+        mnemonic: mnemonic,
       );
       debugPrint(
         'WalletDataSourceImpl - createWallet: Account created successfully',
@@ -44,7 +77,7 @@ class WalletDataSourceImpl implements WalletDataSource {
         publicKey: account.publicKey,
         secretKey: account.secretKey,
         balance: account.balance,
-        mnemonic: mnemonic.join(' '),
+        mnemonic: mnemonic,
         createdAt: DateTime.now(),
       );
       debugPrint(

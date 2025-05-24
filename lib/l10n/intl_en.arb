@@ -122,9 +122,13 @@
   "noPaymentMethodSelected": "Please select a payment method",
   "invalidCardSelected": "Please select a valid card",
   "cardExpired": "The selected card has expired",
+  "@_WALLET_SETUP_PAGE": {
+  },
   "walletSetupTitle": "Wallet Setup",
   "walletSetupSubtitle": "Import an existing wallet or create a new one",
   "importUsingSeedPhrase": "Import Using Seed Phrase",
+  "creatingSeedPhrase": "Creating Seed Phrase..",
+  "creatingNewAccount": "Creating a New Wallet..",
   "createNewAccount": "Create a New Account",
   "importSeedPhraseInstructions": "Enter Your Seed Phrase (12 or 24 words). NemorixPay will not store your mnemonic phrases.",
   "next": "Next",

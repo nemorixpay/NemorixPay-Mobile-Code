@@ -122,9 +122,13 @@
   "noPaymentMethodSelected": "Por favor selecciona un método de pago",
   "invalidCardSelected": "Por favor selecciona una tarjeta válida",
   "cardExpired": "La tarjeta seleccionada ha expirado",
+  "@_WALLET_SETUP_PAGE": {
+  },
   "walletSetupTitle": "Configuración de Billetera",
   "walletSetupSubtitle": "Importa una billetera existente o crea una nueva",
   "importUsingSeedPhrase": "Importar Usando Frase Semilla",
+  "creatingSeedPhrase": "Creando Frase Semilla..",
+  "creatingNewAccount": "Creando Nueva Wallet..",
   "createNewAccount": "Crear Nueva Cuenta",
   "importSeedPhraseInstructions": "Introduce tu frase semilla (12 o 24 palabras). NemorixPay no almacenará tus frases mnemotécnicas.",
   "next": "Siguiente",

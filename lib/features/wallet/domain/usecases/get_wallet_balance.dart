@@ -13,13 +13,13 @@ import 'package:nemorixpay/core/errors/failures.dart';
 /// @version     1.0
 /// @copyright   Apache 2.0 License
 
-class GetWalletBalance {
+class GetWalletBalanceUseCase {
   final WalletRepository repository;
 
-  GetWalletBalance({required this.repository});
+  GetWalletBalanceUseCase({required this.repository});
 
   Future<Either<Failure, double>> call(String publicKey) async {
-    debugPrint('GetWalletBalance');
+    debugPrint('GetWalletBalanceUseCase: GetWalletBalance');
     return await repository.getWalletBalance(publicKey);
   }
 }

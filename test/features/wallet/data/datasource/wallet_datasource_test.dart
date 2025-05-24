@@ -43,7 +43,7 @@ void main() {
       );
 
       // Act
-      final result = await walletDataSource.createWallet();
+      final result = await walletDataSource.createWallet(mnemonic);
 
       // Assert
       expect(result, isA<WalletModel>());

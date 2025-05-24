@@ -14,6 +14,7 @@ import 'package:nemorixpay/config/theme/nemorix_theme.dart';
 import 'package:nemorixpay/di/injection_container.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:nemorixpay/features/splash/presentation/bloc/splash_bloc.dart';
+import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_bloc.dart';
 import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_bloc.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'firebase_options.dart';
@@ -57,9 +58,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => SplashBloc()),
         BlocProvider(create: (_) => GetIt.instance.get<AuthBloc>()),
         BlocProvider(create: (_) => GetIt.instance.get<StellarBloc>()),
-        // BlocProvider(
-        //   create: (context) => AuthBloc(signInUseCase: signInUseCase),
-        // ),
+        BlocProvider(create: (_) => GetIt.instance.get<WalletBloc>()),
       ],
       child: MaterialApp(
         title: 'NemorixPay',
