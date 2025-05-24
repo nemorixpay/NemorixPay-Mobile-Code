@@ -71,7 +71,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     Emitter<WalletState> emit,
   ) async {
     debugPrint('WalletBloc - Begin create wallet process');
-    emit(const WalletLoading());
+    emit(const WalletLoading(isSecondLoading: true));
 
     try {
       debugPrint('WalletBloc - Calling create wallet use case');
@@ -98,7 +98,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     Emitter<WalletState> emit,
   ) async {
     debugPrint('WalletBloc - Begin import wallet process');
-    emit(const WalletLoading());
+    emit(const WalletLoading(isSecondLoading: true));
 
     try {
       debugPrint('WalletBloc - Calling import wallet use case');

@@ -18,8 +18,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// @brief       Confirm Seed Phrase screen for NemorixPay wallet feature.
 /// @details     This page verifies that the user has correctly written down their seed phrase by asking them to select specific words in the correct order. It supports both 12 and 24 word phrases and provides feedback on user selection.
 /// @author      Miguel Fagundez
-/// @date        2025-05-03
-/// @version     1.0
+/// @date        2025-05-24
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 class ConfirmSeedPhrasePage extends StatefulWidget {
   final List<String> seedPhrase;
@@ -145,7 +145,6 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
         } else if (state is WalletError) {
           debugPrint('WALLET ERROR!');
           Navigator.of(context).pop(); // Close loader if open
-          Navigator.of(context).pop(); // Closing setup wallet loading as well
           NemorixSnackBar.show(
             context,
             message: state.message,
@@ -153,7 +152,6 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
           );
         } else if (state is WalletCreated) {
           Navigator.of(context).pop(); // Close loader if open
-          Navigator.of(context).pop(); // Closing setup wallet loading as well
           debugPrint('WALLET CREATED!');
           debugPrint('New Public Key: ${state.wallet.publicKey}');
           debugPrint('New Secret Key: ${state.wallet.secretKey}');

@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
+import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_bloc.dart';
+import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_event.dart';
+import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_state.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/seed_phrase_input_grid.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/continue_button.dart';
 import '../../../../core/security/secure_screen_mixin.dart';
-import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_bloc.dart';
-import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_state.dart';
-import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_event.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/app_loader.dart';
-import 'package:nemorixpay/features/wallet/presentation/pages/wallet_success_page.dart';
 
 /// @file        import_seed_phrase_page.dart
 /// @brief       Import Seed Phrase screen for NemorixPay wallet feature.
 /// @details     This file contains the UI and logic for importing a Stellar account using a 12 or 24 word mnemonic phrase.
 /// @author      Miguel Fagundez
-/// @date        2025-05-03
-/// @version     1.1
+/// @date        2025-05-24
+/// @version     1.2
 /// @copyright   Apache 2.0 License
 
 /// @brief Page for importing a Stellar account using a seed phrase.
@@ -116,26 +114,25 @@ class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage>
   @override
   Widget buildSecureScreen(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return BlocListener<StellarBloc, StellarState>(
+    return BlocListener<WalletBloc, WalletState>(
       listener: (context, state) {
-        if (state is StellarLoading) {
+        if (state is WalletLoading) {
           showDialog(
             context: context,
             barrierDismissible: false,
             builder: (context) => AppLoader(message: l10n.importingWallet),
           );
-        } else if (state is StellarError) {
+        } else if (state is WalletError) {
           Navigator.of(context).pop(); // Close loader if open
           NemorixSnackBar.show(
             context,
             message: state.message,
             type: SnackBarType.error,
           );
-        } else if (state is AccountImported) {
+        } else if (state is WalletImported) {
           Navigator.of(context).pop(); // Close loader if open
-          debugPrint(
-            'Account imported - Secret Key: ${state.account.secretKey}',
-          );
+          debugPrint('Wallet imported - Secret Key: ${state.wallet.secretKey}');
+          debugPrint('Wallet imported - Seed Phrase: ${state.wallet.mnemonic}');
           Navigator.pushNamedAndRemoveUntil(
             context,
             RouteNames.successWalletCreation,
@@ -216,8 +213,11 @@ class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage>
                     onPressed:
                         _allFieldsFilled
                             ? () {
-                              context.read<StellarBloc>().add(
-                                ImportAccountEvent(mnemonic: _mnemonic),
+                              // context.read<StellarBloc>().add(
+                              //   ImportAccountEvent(mnemonic: _mnemonic),
+                              // );
+                              context.read<WalletBloc>().add(
+                                ImportWalletRequested(_mnemonic),
                               );
                             }
                             : () {},

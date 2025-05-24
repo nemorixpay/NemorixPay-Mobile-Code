@@ -305,7 +305,7 @@ class StellarDataSourceImpl implements StellarDataSource {
         debugPrint('StellarDatasource: importAccount - Mnemonic inválido');
         throw StellarFailure(
           stellarCode: StellarErrorCode.invalidMnemonic.code,
-          stellarMessage: 'La frase semilla no es válida',
+          stellarMessage: 'Invalid Seed Phrase. Please, try again!',
         );
       }
 

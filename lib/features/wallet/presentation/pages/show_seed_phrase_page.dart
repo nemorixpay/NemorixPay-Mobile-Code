@@ -10,8 +10,8 @@ import '../../../../core/security/secure_screen_mixin.dart';
 /// @brief       Show Seed Phrase screen for NemorixPay wallet feature.
 /// @details     This file displays the generated seed phrase (12 or 24 words) for the user to write down and keep safe. It reuses existing widgets and adapts the grid for display only.
 /// @author      Miguel Fagundez
-/// @date        2025-05-03
-/// @version     1.1
+/// @date        2025-05-24
+/// @version     1.2
 /// @copyright   Apache 2.0 License
 
 /// @brief Page to display the generated seed phrase for the user to write down.

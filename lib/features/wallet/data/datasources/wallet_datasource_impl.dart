@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
 import 'package:nemorixpay/core/errors/wallet/wallet_error_codes.dart';
 import 'package:nemorixpay/core/errors/wallet/wallet_failure.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart';
@@ -154,8 +155,10 @@ class WalletDataSourceImpl implements WalletDataSource {
 
       return wallet;
     } catch (error) {
+      final newError = error as StellarFailure;
+
       debugPrint(
-        'WalletDataSourceImpl - importWallet: Unexpected error: $error',
+        'WalletDataSourceImpl - importWallet: Unexpected error: ${newError.stellarMessage}',
       );
       if (error is WalletFailure) {
         debugPrint(
@@ -165,28 +168,30 @@ class WalletDataSourceImpl implements WalletDataSource {
       }
 
       // Mapeamos el error específico
-      if (error.toString().contains('invalid mnemonic')) {
+      if (error.stellarMessage.toString().contains('Invalid Seed')) {
         debugPrint(
           'WalletDataSourceImpl - importWallet: Invalid mnemonic error',
         );
-        throw WalletFailure.invalidMnemonic('Invalid Mnemonic. Try again!');
+        throw WalletFailure.invalidMnemonic(error.stellarMessage);
       }
 
-      if (error.toString().contains('import failed')) {
+      if (error.stellarMessage.toString().contains('import failed')) {
         debugPrint('WalletDataSourceImpl - importWallet: Import failed error');
-        throw WalletFailure.importFailed('Failed to import wallet');
+        throw WalletFailure.importFailed(
+          'Failed to import wallet. Please, try again!',
+        );
       }
 
-      if (error.toString().contains('network error')) {
+      if (error.stellarMessage.toString().contains('network error')) {
         debugPrint('WalletDataSourceImpl - importWallet: Network error');
         throw WalletFailure.networkError(
-          'Connection error with Stellar network',
+          'Connection error with Stellar network. Please, try again!',
         );
       }
 
       debugPrint('WalletDataSourceImpl - importWallet: Unknown error');
       throw WalletFailure(
-        walletMessage: 'An unexpected error occurred',
+        walletMessage: 'An unexpected error occurred. Please, try again!',
         walletCode: WalletErrorCode.unknown.code,
       );
     }

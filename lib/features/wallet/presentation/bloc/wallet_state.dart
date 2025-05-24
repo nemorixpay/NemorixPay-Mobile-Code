@@ -22,7 +22,11 @@ class WalletInitial extends WalletState {
 }
 
 class WalletLoading extends WalletState {
-  const WalletLoading();
+  final bool isSecondLoading;
+  const WalletLoading({this.isSecondLoading = false});
+
+  @override
+  List<Object?> get props => [isSecondLoading];
 }
 
 class SeedPhraseCreated extends WalletState {

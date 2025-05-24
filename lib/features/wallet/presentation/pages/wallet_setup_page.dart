@@ -14,8 +14,8 @@ import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.d
 /// @brief       Wallet Setup screen for NemorixPay.
 /// @details     This file contains the UI for the initial wallet setup, allowing users to import or create a new wallet.
 /// @author      Miguel Fagundez
-/// @date        2025-05-02
-/// @version     1.0
+/// @date        2025-05-24
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 
 class WalletSetupPage extends StatelessWidget {
@@ -30,11 +30,13 @@ class WalletSetupPage extends StatelessWidget {
       listener: (context, state) async {
         debugPrint('WalletBloc: WalletSetupPage');
         if (state is WalletLoading) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) => AppLoader(message: l10n.creatingSeedPhrase),
-          );
+          if (!state.isSecondLoading) {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => AppLoader(message: l10n.creatingSeedPhrase),
+            );
+          }
         }
         if (state is SeedPhraseCreated) {
           // TODO Checking this asyn gap
