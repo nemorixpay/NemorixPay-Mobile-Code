@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import '../../domain/entities/asset_price_point.dart';
 
 /// @file        asset_price_point_model.dart
@@ -7,11 +8,11 @@ import '../../domain/entities/asset_price_point.dart';
 ///              domain entities. Includes price, volume, market cap and timestamp
 ///              data for a specific point in time.
 /// @author      Miguel Fagundez
-/// @date        05/24/2025
+/// @date        2025-05-24
 /// @version     1.0
 /// @copyright   Apache 2.0 License
 
-class AssetPricePointModel {
+class AssetPricePointModel extends Equatable {
   final double price;
   final double volume;
   final double marketCap;
@@ -38,7 +39,7 @@ class AssetPricePointModel {
       'price': price,
       'volume': volume,
       'marketCap': marketCap,
-      'timestamp': timestamp.toIso8601String(),
+      'timestamp': timestamp.toUtc().toIso8601String(),
     };
   }
 
@@ -64,4 +65,7 @@ class AssetPricePointModel {
       timestamp: timestamp ?? this.timestamp,
     );
   }
+
+  @override
+  List<Object?> get props => [price, volume, marketCap, timestamp];
 }
