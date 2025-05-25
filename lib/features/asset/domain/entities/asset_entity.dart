@@ -1,13 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'dart:math';
+import '../../data/models/asset_model.dart';
 
 /// @file        asset_entity.dart
 /// @brief       Entity class representing an asset.
 /// @details     This class contains all the properties needed to represent an asset (cryptocurrency, token, fiat, etc),
 ///             including its price, market data, and historical information.
 /// @author      Miguel Fagundez
-/// @date        04/30/2025
-/// @version     1.1
+/// @date        05/24/2025
+/// @version     1.2
 /// @copyright   Apache 2.0 License
 class AssetEntity extends Equatable {
   final String name;
@@ -55,35 +56,6 @@ class AssetEntity extends Equatable {
     required this.lastUpdated,
     this.isFavorite = false,
   });
-
-  factory AssetEntity.fromJson(Map<String, dynamic> json) {
-    return AssetEntity(
-      name: json['name'] as String,
-      symbol: json['symbol'] as String,
-      logoPath: json['logoPath'] as String,
-      currentPrice: (json['currentPrice'] as num).toDouble(),
-      priceChange: (json['priceChange'] as num).toDouble(),
-      priceChangePercentage: (json['priceChangePercentage'] as num).toDouble(),
-      marketCap: (json['marketCap'] as num).toDouble(),
-      volume: (json['volume'] as num).toDouble(),
-      high24h: (json['high24h'] as num).toDouble(),
-      low24h: (json['low24h'] as num).toDouble(),
-      circulatingSupply: (json['circulatingSupply'] as num).toDouble(),
-      totalSupply: (json['totalSupply'] as num).toDouble(),
-      maxSupply:
-          json['maxSupply'] != null
-              ? (json['maxSupply'] as num).toDouble()
-              : null,
-      ath: (json['ath'] as num).toDouble(),
-      athChangePercentage: (json['athChangePercentage'] as num).toDouble(),
-      athDate: DateTime.parse(json['athDate'] as String),
-      atl: (json['atl'] as num).toDouble(),
-      atlChangePercentage: (json['atlChangePercentage'] as num).toDouble(),
-      atlDate: DateTime.parse(json['atlDate'] as String),
-      lastUpdated: DateTime.parse(json['lastUpdated'] as String),
-      isFavorite: json['isFavorite'] as bool? ?? false,
-    );
-  }
 
   AssetEntity copyWith({
     String? name,
@@ -142,6 +114,32 @@ class AssetEntity extends Equatable {
     final newPrice = currentPrice * (1 + variation);
 
     return copyWith(currentPrice: newPrice, lastUpdated: DateTime.now());
+  }
+
+  AssetModel toModel() {
+    return AssetModel(
+      name: name,
+      symbol: symbol,
+      logoPath: logoPath,
+      currentPrice: currentPrice,
+      priceChange: priceChange,
+      priceChangePercentage: priceChangePercentage,
+      marketCap: marketCap,
+      volume: volume,
+      high24h: high24h,
+      low24h: low24h,
+      circulatingSupply: circulatingSupply,
+      totalSupply: totalSupply,
+      maxSupply: maxSupply,
+      ath: ath,
+      athChangePercentage: athChangePercentage,
+      athDate: athDate,
+      atl: atl,
+      atlChangePercentage: atlChangePercentage,
+      atlDate: atlDate,
+      lastUpdated: lastUpdated,
+      isFavorite: isFavorite,
+    );
   }
 
   @override

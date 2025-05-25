@@ -1,5 +1,5 @@
-import '../../domain/entities/asset_entity.dart';
-import '../../domain/entities/asset_price_point.dart';
+import 'package:nemorixpay/features/asset/data/models/asset_model.dart';
+import 'package:nemorixpay/features/asset/data/models/asset_price_point_model.dart';
 
 /// @file        asset_price_datasource.dart
 /// @brief       Data source contract for asset operations.
@@ -9,9 +9,9 @@ import '../../domain/entities/asset_price_point.dart';
 /// @version     1.0
 /// @copyright   Apache 2.0 License
 abstract class AssetDataSource {
-  Future<AssetEntity> getCurrentPrice(String symbol);
-  Future<AssetEntity> updatePrice(String symbol);
-  Future<List<AssetPricePoint>> getPriceHistory(
+  Future<AssetModel> getCurrentPrice(String symbol);
+  Future<AssetModel> updatePrice(String symbol);
+  Future<List<AssetPricePointModel>> getPriceHistory(
     String symbol, {
     required DateTime start,
     required DateTime end,

@@ -1,10 +1,9 @@
-import 'package:nemorixpay/features/asset/data/datasources/asset_datasource.dart';
-
-import '../../domain/entities/asset_entity.dart';
-import '../../domain/entities/asset_price_point.dart';
 import 'dart:math';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:nemorixpay/features/asset/data/datasources/asset_datasource.dart';
+import 'package:nemorixpay/features/asset/data/models/asset_model.dart';
+import 'package:nemorixpay/features/asset/data/models/asset_price_point_model.dart';
 
 /// @file        asset_datasource_impl.dart
 /// @brief       Data source for asset price operations.
@@ -15,7 +14,7 @@ import 'dart:convert';
 /// @copyright   Apache 2.0 License
 
 class AssetDataSourceImpl implements AssetDataSource {
-  final Map<String, AssetEntity> _assetCache = {};
+  final Map<String, AssetModel> _assetCache = {};
   final Random _random = Random();
   final String _apiBaseUrl;
   final bool _useMockData;
@@ -25,7 +24,7 @@ class AssetDataSourceImpl implements AssetDataSource {
       _useMockData = useMockData;
 
   @override
-  Future<AssetEntity> getCurrentPrice(String symbol) async {
+  Future<AssetModel> getCurrentPrice(String symbol) async {
     if (_useMockData) {
       return _getMockPrice(symbol);
     }
@@ -33,7 +32,7 @@ class AssetDataSourceImpl implements AssetDataSource {
   }
 
   @override
-  Future<AssetEntity> updatePrice(String symbol) async {
+  Future<AssetModel> updatePrice(String symbol) async {
     if (_useMockData) {
       return _updateMockPrice(symbol);
     }
@@ -41,7 +40,7 @@ class AssetDataSourceImpl implements AssetDataSource {
   }
 
   @override
-  Future<List<AssetPricePoint>> getPriceHistory(
+  Future<List<AssetPricePointModel>> getPriceHistory(
     String symbol, {
     required DateTime start,
     required DateTime end,
@@ -53,14 +52,14 @@ class AssetDataSourceImpl implements AssetDataSource {
   }
 
   // Métodos para datos mock
-  Future<AssetEntity> _getMockPrice(String symbol) async {
+  Future<AssetModel> _getMockPrice(String symbol) async {
     if (!_assetCache.containsKey(symbol)) {
       throw Exception('Asset not found: $symbol');
     }
     return _assetCache[symbol]!;
   }
 
-  Future<AssetEntity> _updateMockPrice(String symbol) async {
+  Future<AssetModel> _updateMockPrice(String symbol) async {
     if (!_assetCache.containsKey(symbol)) {
       throw Exception('Asset not found: $symbol');
     }
@@ -78,12 +77,12 @@ class AssetDataSourceImpl implements AssetDataSource {
     return updatedAsset;
   }
 
-  Future<List<AssetPricePoint>> _getMockHistory(
+  Future<List<AssetPricePointModel>> _getMockHistory(
     String symbol,
     DateTime start,
     DateTime end,
   ) async {
-    final List<AssetPricePoint> history = [];
+    final List<AssetPricePointModel> history = [];
     final currentAsset = _assetCache[symbol]!;
 
     for (var i = 0; i < 24; i++) {
@@ -94,7 +93,7 @@ class AssetDataSourceImpl implements AssetDataSource {
       final price = currentAsset.currentPrice * (1 + variation);
 
       history.add(
-        AssetPricePoint(
+        AssetPricePointModel(
           price: price,
           volume: currentAsset.volume * (1 + variation),
           marketCap: currentAsset.marketCap * (1 + variation),
@@ -107,7 +106,7 @@ class AssetDataSourceImpl implements AssetDataSource {
   }
 
   // Métodos para API real
-  Future<AssetEntity> _getApiPrice(String symbol) async {
+  Future<AssetModel> _getApiPrice(String symbol) async {
     try {
       final response = await http.get(
         Uri.parse('$_apiBaseUrl/crypto/price/$symbol'),
@@ -115,7 +114,7 @@ class AssetDataSourceImpl implements AssetDataSource {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        return AssetEntity.fromJson(data);
+        return AssetModel.fromJson(data);
       } else {
         throw Exception('Failed to load price: ${response.statusCode}');
       }
@@ -128,7 +127,7 @@ class AssetDataSourceImpl implements AssetDataSource {
     }
   }
 
-  Future<List<AssetPricePoint>> _getApiHistory(
+  Future<List<AssetPricePointModel>> _getApiHistory(
     String symbol,
     DateTime start,
     DateTime end,
@@ -142,7 +141,7 @@ class AssetDataSourceImpl implements AssetDataSource {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body) as List;
-        return data.map((json) => AssetPricePoint.fromJson(json)).toList();
+        return data.map((json) => AssetPricePointModel.fromJson(json)).toList();
       } else {
         throw Exception('Failed to load history: ${response.statusCode}');
       }
@@ -156,7 +155,7 @@ class AssetDataSourceImpl implements AssetDataSource {
   }
 
   // Método para inicializar datos mock
-  void initializeMockData(AssetEntity asset) {
+  void initializeMockData(AssetModel asset) {
     _assetCache[asset.symbol] = asset;
   }
 }

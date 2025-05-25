@@ -72,7 +72,8 @@ class _AssetConversionCardState extends State<AssetConversionCard> {
     _assetBloc = AssetBloc(
       updateAssetPrice: UpdateAssetPriceUseCase(
         AssetRepositoryImpl(
-          AssetDataSourceImpl()..initializeMockData(widget.selectedAsset),
+          AssetDataSourceImpl()
+            ..initializeMockData(widget.selectedAsset.toModel()),
         ),
       ),
     );

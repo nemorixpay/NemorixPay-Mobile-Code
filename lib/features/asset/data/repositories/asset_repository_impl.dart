@@ -18,12 +18,14 @@ class AssetRepositoryImpl implements AssetRepository {
 
   @override
   Future<AssetEntity> getCurrentPrice(String symbol) async {
-    return await dataSource.getCurrentPrice(symbol);
+    final asset = await dataSource.getCurrentPrice(symbol);
+    return asset.toEntity();
   }
 
   @override
   Future<AssetEntity> updatePrice(String symbol) async {
-    return await dataSource.updatePrice(symbol);
+    final asset = await dataSource.updatePrice(symbol);
+    return asset.toEntity();
   }
 
   @override
@@ -32,6 +34,14 @@ class AssetRepositoryImpl implements AssetRepository {
     required DateTime start,
     required DateTime end,
   }) async {
-    return await dataSource.getPriceHistory(symbol, start: start, end: end);
+    final listOfAssetPointsModel = await dataSource.getPriceHistory(
+      symbol,
+      start: start,
+      end: end,
+    );
+    final List<AssetPricePoint> listOfAssetPoints =
+        listOfAssetPointsModel.map((model) => model.toEntity()).toList();
+
+    return listOfAssetPoints;
   }
 }
