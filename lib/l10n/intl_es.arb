@@ -193,5 +193,14 @@
   "walletErrorAccountNotFound": "Cuenta de wallet no encontrada. Por favor, verifica tus credenciales.",
   "walletErrorNetworkError": "Error de red. Por favor, verifica tu conexión e inténtalo de nuevo.",
   "walletErrorTimeoutError": "La solicitud ha expirado. Por favor, inténtalo de nuevo.",
-  "walletErrorUnknown": "Ha ocurrido un error desconocido. Por favor, inténtalo de nuevo."
+  "walletErrorUnknown": "Ha ocurrido un error desconocido. Por favor, inténtalo de nuevo.",
+  "@_ASSET_ERROR_MESSAGES": {},
+  "assetErrorPriceUpdateFailed": "Error al actualizar el precio del activo",
+  "assetErrorInvalidPriceData": "Datos de precio inválidos recibidos",
+  "assetErrorPriceHistoryNotFound": "Historial de precios no encontrado para este activo",
+  "assetErrorNetworkError": "Error de red al obtener datos del activo",
+  "assetErrorTimeoutError": "Tiempo de espera agotado al obtener datos del activo",
+  "assetErrorInvalidSymbol": "Símbolo de activo inválido",
+  "assetErrorDataParsingError": "Error al procesar los datos del activo",
+  "assetErrorUnknown": "Ocurrió un error inesperado con el activo"
 }

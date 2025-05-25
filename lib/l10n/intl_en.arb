@@ -193,5 +193,14 @@
   "walletErrorAccountNotFound": "Wallet account not found. Please check your credentials.",
   "walletErrorNetworkError": "Network error. Please check your connection and try again.",
   "walletErrorTimeoutError": "Request timed out. Please try again.",
-  "walletErrorUnknown": "An unknown error occurred. Please try again."
+  "walletErrorUnknown": "An unknown error occurred. Please try again.",
+  "@_ASSET_ERROR_MESSAGES": {},
+  "assetErrorPriceUpdateFailed": "Failed to update asset price",
+  "assetErrorInvalidPriceData": "Invalid price data received",
+  "assetErrorPriceHistoryNotFound": "Price history not found for this asset",
+  "assetErrorNetworkError": "Network error while fetching asset data",
+  "assetErrorTimeoutError": "Request timed out while fetching asset data",
+  "assetErrorInvalidSymbol": "Invalid asset symbol",
+  "assetErrorDataParsingError": "Error parsing asset data",
+  "assetErrorUnknown": "An unexpected error occurred with the asset"
 }

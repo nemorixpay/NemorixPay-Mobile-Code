@@ -1066,6 +1066,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An unknown error occurred. Please try again.'**
   String get walletErrorUnknown;
+
+  /// No description provided for @assetErrorPriceUpdateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update asset price'**
+  String get assetErrorPriceUpdateFailed;
+
+  /// No description provided for @assetErrorInvalidPriceData.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid price data received'**
+  String get assetErrorInvalidPriceData;
+
+  /// No description provided for @assetErrorPriceHistoryNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Price history not found for this asset'**
+  String get assetErrorPriceHistoryNotFound;
+
+  /// No description provided for @assetErrorNetworkError.
+  ///
+  /// In en, this message translates to:
+  /// **'Network error while fetching asset data'**
+  String get assetErrorNetworkError;
+
+  /// No description provided for @assetErrorTimeoutError.
+  ///
+  /// In en, this message translates to:
+  /// **'Request timed out while fetching asset data'**
+  String get assetErrorTimeoutError;
+
+  /// No description provided for @assetErrorInvalidSymbol.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid asset symbol'**
+  String get assetErrorInvalidSymbol;
+
+  /// No description provided for @assetErrorDataParsingError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error parsing asset data'**
+  String get assetErrorDataParsingError;
+
+  /// No description provided for @assetErrorUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred with the asset'**
+  String get assetErrorUnknown;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

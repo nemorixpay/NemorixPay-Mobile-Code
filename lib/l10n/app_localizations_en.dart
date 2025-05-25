@@ -495,4 +495,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walletErrorUnknown => 'An unknown error occurred. Please try again.';
+
+  @override
+  String get assetErrorPriceUpdateFailed => 'Failed to update asset price';
+
+  @override
+  String get assetErrorInvalidPriceData => 'Invalid price data received';
+
+  @override
+  String get assetErrorPriceHistoryNotFound => 'Price history not found for this asset';
+
+  @override
+  String get assetErrorNetworkError => 'Network error while fetching asset data';
+
+  @override
+  String get assetErrorTimeoutError => 'Request timed out while fetching asset data';
+
+  @override
+  String get assetErrorInvalidSymbol => 'Invalid asset symbol';
+
+  @override
+  String get assetErrorDataParsingError => 'Error parsing asset data';
+
+  @override
+  String get assetErrorUnknown => 'An unexpected error occurred with the asset';
 }
