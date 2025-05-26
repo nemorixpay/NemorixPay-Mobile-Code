@@ -1,3 +1,6 @@
+import 'package:dartz/dartz.dart';
+import 'package:nemorixpay/core/errors/failures.dart';
+import 'package:nemorixpay/core/errors/asset/asset_failure.dart';
 import 'package:nemorixpay/features/asset/data/datasources/asset_datasource.dart';
 
 import '../../domain/entities/asset_entity.dart';
@@ -17,31 +20,43 @@ class AssetRepositoryImpl implements AssetRepository {
   AssetRepositoryImpl(this.dataSource);
 
   @override
-  Future<AssetEntity> getCurrentPrice(String symbol) async {
-    final asset = await dataSource.getCurrentPrice(symbol);
-    return asset.toEntity();
+  Future<Either<Failure, AssetEntity>> getCurrentPrice(String symbol) async {
+    try {
+      final asset = await dataSource.getCurrentPrice(symbol);
+      return Right(asset.toEntity());
+    } catch (e) {
+      return Left(AssetFailure.priceUpdateFailed(e.toString()));
+    }
   }
 
   @override
-  Future<AssetEntity> updatePrice(String symbol) async {
-    final asset = await dataSource.updatePrice(symbol);
-    return asset.toEntity();
+  Future<Either<Failure, AssetEntity>> updatePrice(String symbol) async {
+    try {
+      final asset = await dataSource.updatePrice(symbol);
+      return Right(asset.toEntity());
+    } catch (e) {
+      return Left(AssetFailure.priceUpdateFailed(e.toString()));
+    }
   }
 
   @override
-  Future<List<AssetPricePoint>> getPriceHistory(
+  Future<Either<Failure, List<AssetPricePoint>>> getPriceHistory(
     String symbol, {
     required DateTime start,
     required DateTime end,
   }) async {
-    final listOfAssetPointsModel = await dataSource.getPriceHistory(
-      symbol,
-      start: start,
-      end: end,
-    );
-    final List<AssetPricePoint> listOfAssetPoints =
-        listOfAssetPointsModel.map((model) => model.toEntity()).toList();
+    try {
+      final listOfAssetPointsModel = await dataSource.getPriceHistory(
+        symbol,
+        start: start,
+        end: end,
+      );
+      final List<AssetPricePoint> listOfAssetPoints =
+          listOfAssetPointsModel.map((model) => model.toEntity()).toList();
 
-    return listOfAssetPoints;
+      return Right(listOfAssetPoints);
+    } catch (e) {
+      return Left(AssetFailure.priceHistoryNotFound(e.toString()));
+    }
   }
 }

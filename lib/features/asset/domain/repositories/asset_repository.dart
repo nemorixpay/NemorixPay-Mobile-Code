@@ -1,3 +1,5 @@
+import 'package:dartz/dartz.dart';
+import 'package:nemorixpay/core/errors/failures.dart';
 import '../entities/asset_entity.dart';
 import '../entities/asset_price_point.dart';
 
@@ -10,13 +12,13 @@ import '../entities/asset_price_point.dart';
 /// @copyright   Apache 2.0 License
 abstract class AssetRepository {
   /// Get current price for an asset
-  Future<AssetEntity> getCurrentPrice(String symbol);
+  Future<Either<Failure, AssetEntity>> getCurrentPrice(String symbol);
 
   /// Update price for an asset
-  Future<AssetEntity> updatePrice(String symbol);
+  Future<Either<Failure, AssetEntity>> updatePrice(String symbol);
 
   /// Get price history for an asset
-  Future<List<AssetPricePoint>> getPriceHistory(
+  Future<Either<Failure, List<AssetPricePoint>>> getPriceHistory(
     String symbol, {
     required DateTime start,
     required DateTime end,

@@ -1,3 +1,5 @@
+import 'package:dartz/dartz.dart';
+import 'package:nemorixpay/core/errors/failures.dart';
 import '../entities/asset_entity.dart';
 import '../repositories/asset_repository.dart';
 
@@ -14,7 +16,7 @@ class UpdateAssetPriceUseCase {
   UpdateAssetPriceUseCase(this.repository);
 
   /// Updates the price for a given asset symbol
-  Future<AssetEntity> call(String symbol) async {
+  Future<Either<Failure, AssetEntity>> call(String symbol) async {
     return await repository.updatePrice(symbol);
   }
 }

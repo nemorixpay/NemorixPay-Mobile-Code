@@ -1,5 +1,6 @@
 // States
 import 'package:equatable/equatable.dart';
+import 'package:nemorixpay/core/errors/failures.dart';
 import 'package:nemorixpay/features/asset/domain/entities/asset_entity.dart';
 
 abstract class AssetState extends Equatable {
@@ -23,10 +24,10 @@ class AssetPriceLoaded extends AssetState {
 }
 
 class AssetPriceError extends AssetState {
-  final String message;
+  final Failure failure;
 
-  const AssetPriceError(this.message);
+  const AssetPriceError(this.failure);
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [failure];
 }

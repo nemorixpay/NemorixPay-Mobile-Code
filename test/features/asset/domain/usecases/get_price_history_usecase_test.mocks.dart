@@ -5,11 +5,13 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i4;
 
+import 'package:dartz/dartz.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:nemorixpay/core/errors/failures.dart' as _i5;
 import 'package:nemorixpay/features/asset/domain/entities/asset_entity.dart'
-    as _i2;
+    as _i6;
 import 'package:nemorixpay/features/asset/domain/entities/asset_price_point.dart'
-    as _i5;
+    as _i7;
 import 'package:nemorixpay/features/asset/domain/repositories/asset_repository.dart'
     as _i3;
 
@@ -27,8 +29,8 @@ import 'package:nemorixpay/features/asset/domain/repositories/asset_repository.d
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeAssetEntity_0 extends _i1.SmartFake implements _i2.AssetEntity {
-  _FakeAssetEntity_0(Object parent, Invocation parentInvocation)
+class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
+  _FakeEither_0(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -41,33 +43,40 @@ class MockAssetRepository extends _i1.Mock implements _i3.AssetRepository {
   }
 
   @override
-  _i4.Future<_i2.AssetEntity> getCurrentPrice(String? symbol) =>
+  _i4.Future<_i2.Either<_i5.Failure, _i6.AssetEntity>> getCurrentPrice(
+    String? symbol,
+  ) =>
       (super.noSuchMethod(
             Invocation.method(#getCurrentPrice, [symbol]),
-            returnValue: _i4.Future<_i2.AssetEntity>.value(
-              _FakeAssetEntity_0(
-                this,
-                Invocation.method(#getCurrentPrice, [symbol]),
-              ),
-            ),
+            returnValue:
+                _i4.Future<_i2.Either<_i5.Failure, _i6.AssetEntity>>.value(
+                  _FakeEither_0<_i5.Failure, _i6.AssetEntity>(
+                    this,
+                    Invocation.method(#getCurrentPrice, [symbol]),
+                  ),
+                ),
           )
-          as _i4.Future<_i2.AssetEntity>);
+          as _i4.Future<_i2.Either<_i5.Failure, _i6.AssetEntity>>);
 
   @override
-  _i4.Future<_i2.AssetEntity> updatePrice(String? symbol) =>
+  _i4.Future<_i2.Either<_i5.Failure, _i6.AssetEntity>> updatePrice(
+    String? symbol,
+  ) =>
       (super.noSuchMethod(
             Invocation.method(#updatePrice, [symbol]),
-            returnValue: _i4.Future<_i2.AssetEntity>.value(
-              _FakeAssetEntity_0(
-                this,
-                Invocation.method(#updatePrice, [symbol]),
-              ),
-            ),
+            returnValue:
+                _i4.Future<_i2.Either<_i5.Failure, _i6.AssetEntity>>.value(
+                  _FakeEither_0<_i5.Failure, _i6.AssetEntity>(
+                    this,
+                    Invocation.method(#updatePrice, [symbol]),
+                  ),
+                ),
           )
-          as _i4.Future<_i2.AssetEntity>);
+          as _i4.Future<_i2.Either<_i5.Failure, _i6.AssetEntity>>);
 
   @override
-  _i4.Future<List<_i5.AssetPricePoint>> getPriceHistory(
+  _i4.Future<_i2.Either<_i5.Failure, List<_i7.AssetPricePoint>>>
+  getPriceHistory(
     String? symbol, {
     required DateTime? start,
     required DateTime? end,
@@ -78,9 +87,18 @@ class MockAssetRepository extends _i1.Mock implements _i3.AssetRepository {
               [symbol],
               {#start: start, #end: end},
             ),
-            returnValue: _i4.Future<List<_i5.AssetPricePoint>>.value(
-              <_i5.AssetPricePoint>[],
+            returnValue: _i4.Future<
+              _i2.Either<_i5.Failure, List<_i7.AssetPricePoint>>
+            >.value(
+              _FakeEither_0<_i5.Failure, List<_i7.AssetPricePoint>>(
+                this,
+                Invocation.method(
+                  #getPriceHistory,
+                  [symbol],
+                  {#start: start, #end: end},
+                ),
+              ),
             ),
           )
-          as _i4.Future<List<_i5.AssetPricePoint>>);
+          as _i4.Future<_i2.Either<_i5.Failure, List<_i7.AssetPricePoint>>>);
 }

@@ -1,3 +1,5 @@
+import 'package:dartz/dartz.dart';
+import 'package:nemorixpay/core/errors/failures.dart';
 import 'package:nemorixpay/features/asset/domain/entities/asset_price_point.dart';
 import 'package:nemorixpay/features/asset/domain/repositories/asset_repository.dart';
 
@@ -15,7 +17,7 @@ class GetPriceHistoryUseCase {
 
   GetPriceHistoryUseCase(this.repository);
 
-  Future<List<AssetPricePoint>> call(
+  Future<Either<Failure, List<AssetPricePoint>>> call(
     String symbol, {
     required DateTime start,
     required DateTime end,

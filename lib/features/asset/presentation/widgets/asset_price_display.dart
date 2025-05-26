@@ -31,7 +31,7 @@ class AssetPriceDisplay extends StatelessWidget {
         } else if (state is AssetPriceLoaded) {
           return _buildLoadedState(context, state.asset);
         } else if (state is AssetPriceError) {
-          return _buildErrorState(context, state.message);
+          return _buildErrorState(context, state.failure.message);
         }
         return _buildInitialState(context, initialAsset);
       },

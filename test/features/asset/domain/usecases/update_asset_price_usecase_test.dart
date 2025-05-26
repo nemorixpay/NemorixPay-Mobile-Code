@@ -1,6 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
+import 'package:dartz/dartz.dart';
+import 'package:nemorixpay/core/errors/failures.dart';
+import 'package:nemorixpay/core/errors/asset/asset_failure.dart';
 import 'package:nemorixpay/features/asset/domain/entities/asset_entity.dart';
 import 'package:nemorixpay/features/asset/domain/repositories/asset_repository.dart';
 import 'package:nemorixpay/features/asset/domain/usecases/update_asset_price_usecase.dart';
@@ -52,13 +55,61 @@ void main() {
 
   test('should update asset price from the repository', () async {
     // arrange
-    when(mockRepository.updatePrice(tSymbol)).thenAnswer((_) async => tAsset);
+    when(
+      mockRepository.updatePrice(tSymbol),
+    ).thenAnswer((_) async => Right(tAsset));
 
     // act
     final result = await useCase(tSymbol);
 
     // assert
-    expect(result, equals(tAsset));
+    expect(result, equals(Right(tAsset)));
+    verify(mockRepository.updatePrice(tSymbol));
+    verifyNoMoreInteractions(mockRepository);
+  });
+
+  test('should return failure when repository fails', () async {
+    // arrange
+    final failure = AssetFailure.priceUpdateFailed('Error');
+    when(
+      mockRepository.updatePrice(tSymbol),
+    ).thenAnswer((_) async => Left(failure));
+
+    // act
+    final result = await useCase(tSymbol);
+
+    // assert
+    expect(result, equals(Left(failure)));
+    verify(mockRepository.updatePrice(tSymbol));
+    verifyNoMoreInteractions(mockRepository);
+  });
+
+  test('should return failure for empty symbol', () async {
+    // arrange
+    final failure = AssetFailure.invalidSymbol('Symbol cannot be empty');
+    when(mockRepository.updatePrice('')).thenAnswer((_) async => Left(failure));
+
+    // act
+    final result = await useCase('');
+
+    // assert
+    expect(result, equals(Left(failure)));
+    verify(mockRepository.updatePrice(''));
+    verifyNoMoreInteractions(mockRepository);
+  });
+
+  test('should propagate network errors', () async {
+    // arrange
+    final failure = AssetFailure.networkError('Network error');
+    when(
+      mockRepository.updatePrice(tSymbol),
+    ).thenAnswer((_) async => Left(failure));
+
+    // act
+    final result = await useCase(tSymbol);
+
+    // assert
+    expect(result, equals(Left(failure)));
     verify(mockRepository.updatePrice(tSymbol));
     verifyNoMoreInteractions(mockRepository);
   });

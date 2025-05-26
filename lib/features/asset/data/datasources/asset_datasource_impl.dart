@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:nemorixpay/core/errors/asset/asset_failure.dart';
 import 'package:nemorixpay/features/asset/data/datasources/asset_datasource.dart';
 import 'package:nemorixpay/features/asset/data/models/asset_model.dart';
 import 'package:nemorixpay/features/asset/data/models/asset_price_point_model.dart';
@@ -54,14 +55,14 @@ class AssetDataSourceImpl implements AssetDataSource {
   // Métodos para datos mock
   Future<AssetModel> _getMockPrice(String symbol) async {
     if (!_assetCache.containsKey(symbol)) {
-      throw Exception('Asset not found: $symbol');
+      throw AssetFailure.invalidSymbol('Asset not found: $symbol');
     }
     return _assetCache[symbol]!;
   }
 
   Future<AssetModel> _updateMockPrice(String symbol) async {
     if (!_assetCache.containsKey(symbol)) {
-      throw Exception('Asset not found: $symbol');
+      throw AssetFailure.invalidSymbol('Asset not found: $symbol');
     }
 
     final currentAsset = _assetCache[symbol]!;
@@ -82,6 +83,10 @@ class AssetDataSourceImpl implements AssetDataSource {
     DateTime start,
     DateTime end,
   ) async {
+    if (!_assetCache.containsKey(symbol)) {
+      throw AssetFailure.invalidSymbol('Asset not found: $symbol');
+    }
+
     final List<AssetPricePointModel> history = [];
     final currentAsset = _assetCache[symbol]!;
 
@@ -116,14 +121,16 @@ class AssetDataSourceImpl implements AssetDataSource {
         final data = json.decode(response.body);
         return AssetModel.fromJson(data);
       } else {
-        throw Exception('Failed to load price: ${response.statusCode}');
+        throw AssetFailure.priceUpdateFailed(
+          'Failed to load price: ${response.statusCode}',
+        );
       }
     } catch (e) {
       // Fallback a datos mock si la API falla
       if (_assetCache.containsKey(symbol)) {
         return _getMockPrice(symbol);
       }
-      throw Exception('Failed to load price: $e');
+      throw AssetFailure.networkError('Failed to load price: _getApiPrice()');
     }
   }
 
@@ -143,14 +150,18 @@ class AssetDataSourceImpl implements AssetDataSource {
         final data = json.decode(response.body) as List;
         return data.map((json) => AssetPricePointModel.fromJson(json)).toList();
       } else {
-        throw Exception('Failed to load history: ${response.statusCode}');
+        throw AssetFailure.priceHistoryNotFound(
+          'Failed to load history: ${response.statusCode}',
+        );
       }
     } catch (e) {
       // Fallback a datos mock si la API falla
       if (_assetCache.containsKey(symbol)) {
         return _getMockHistory(symbol, start, end);
       }
-      throw Exception('Failed to load history: $e');
+      throw AssetFailure.networkError(
+        'Failed to load history: _getApiHistory()',
+      );
     }
   }
 

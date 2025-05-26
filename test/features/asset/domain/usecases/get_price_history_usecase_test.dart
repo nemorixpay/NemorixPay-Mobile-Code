@@ -1,6 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
+import 'package:dartz/dartz.dart';
+import 'package:nemorixpay/core/errors/failures.dart';
+import 'package:nemorixpay/core/errors/asset/asset_failure.dart';
 import 'package:nemorixpay/features/asset/domain/entities/asset_price_point.dart';
 import 'package:nemorixpay/features/asset/domain/repositories/asset_repository.dart';
 import 'package:nemorixpay/features/asset/domain/usecases/get_price_history_usecase.dart';
@@ -47,13 +50,77 @@ void main() {
     // arrange
     when(
       mockRepository.getPriceHistory(tSymbol, start: tStart, end: tEnd),
-    ).thenAnswer((_) async => tPriceHistory);
+    ).thenAnswer((_) async => Right(tPriceHistory));
 
     // act
     final result = await useCase(tSymbol, start: tStart, end: tEnd);
 
     // assert
-    expect(result, equals(tPriceHistory));
+    expect(result, equals(Right(tPriceHistory)));
+    verify(mockRepository.getPriceHistory(tSymbol, start: tStart, end: tEnd));
+    verifyNoMoreInteractions(mockRepository);
+  });
+
+  test('should return failure when repository fails', () async {
+    // arrange
+    final failure = AssetFailure.priceHistoryNotFound('Error');
+    when(
+      mockRepository.getPriceHistory(tSymbol, start: tStart, end: tEnd),
+    ).thenAnswer((_) async => Left(failure));
+
+    // act
+    final result = await useCase(tSymbol, start: tStart, end: tEnd);
+
+    // assert
+    expect(result, equals(Left(failure)));
+    verify(mockRepository.getPriceHistory(tSymbol, start: tStart, end: tEnd));
+    verifyNoMoreInteractions(mockRepository);
+  });
+
+  test('should return failure for invalid symbol', () async {
+    // arrange
+    final failure = AssetFailure.invalidSymbol('Invalid symbol');
+    when(
+      mockRepository.getPriceHistory('', start: tStart, end: tEnd),
+    ).thenAnswer((_) async => Left(failure));
+
+    // act
+    final result = await useCase('', start: tStart, end: tEnd);
+
+    // assert
+    expect(result, equals(Left(failure)));
+    verify(mockRepository.getPriceHistory('', start: tStart, end: tEnd));
+    verifyNoMoreInteractions(mockRepository);
+  });
+
+  test('should return failure for invalid date range', () async {
+    // arrange
+    final failure = AssetFailure.priceHistoryNotFound('Invalid date range');
+    when(
+      mockRepository.getPriceHistory(tSymbol, start: tEnd, end: tStart),
+    ).thenAnswer((_) async => Left(failure));
+
+    // act
+    final result = await useCase(tSymbol, start: tEnd, end: tStart);
+
+    // assert
+    expect(result, equals(Left(failure)));
+    verify(mockRepository.getPriceHistory(tSymbol, start: tEnd, end: tStart));
+    verifyNoMoreInteractions(mockRepository);
+  });
+
+  test('should propagate network errors', () async {
+    // arrange
+    final failure = AssetFailure.networkError('Network error');
+    when(
+      mockRepository.getPriceHistory(tSymbol, start: tStart, end: tEnd),
+    ).thenAnswer((_) async => Left(failure));
+
+    // act
+    final result = await useCase(tSymbol, start: tStart, end: tEnd);
+
+    // assert
+    expect(result, equals(Left(failure)));
     verify(mockRepository.getPriceHistory(tSymbol, start: tStart, end: tEnd));
     verifyNoMoreInteractions(mockRepository);
   });

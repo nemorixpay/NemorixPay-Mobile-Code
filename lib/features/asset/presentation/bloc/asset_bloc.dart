@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nemorixpay/core/errors/asset/asset_failure.dart';
 import 'package:nemorixpay/features/asset/presentation/bloc/asset_event.dart';
 import 'package:nemorixpay/features/asset/presentation/bloc/asset_state.dart';
 import '../../domain/usecases/update_asset_price_usecase.dart';
@@ -30,9 +32,21 @@ class AssetBloc extends Bloc<AssetEvent, AssetState> {
     emit(AssetPriceLoading());
     try {
       final asset = await updateAssetPrice(event.symbol);
-      emit(AssetPriceLoaded(asset));
+      asset.fold(
+        (failure) {
+          debugPrint('WalletBloc - Wallet import failed: ${failure.message}');
+          emit(AssetPriceError(failure));
+        },
+        (asset) {
+          debugPrint('WalletBloc - Wallet imported successfully');
+          emit(AssetPriceLoaded(asset));
+        },
+      );
     } catch (e) {
-      emit(AssetPriceError(e.toString()));
+      final AssetFailure failure = AssetFailure.unknown(
+        'Unknown Error. Try again!',
+      );
+      emit(AssetPriceError(failure));
     }
   }
 
