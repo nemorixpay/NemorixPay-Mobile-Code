@@ -202,5 +202,6 @@
   "assetErrorTimeoutError": "Request timed out while fetching asset data",
   "assetErrorInvalidSymbol": "Invalid asset symbol",
   "assetErrorDataParsingError": "Error parsing asset data",
-  "assetErrorUnknown": "An unexpected error occurred with the asset"
+  "assetErrorUnknown": "An unexpected error occurred with the asset",
+  "assetErrorAssetsListFailed": "Failed to get available assets"
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/core/errors/asset/asset_failure.dart';
+import 'package:nemorixpay/features/asset/domain/usecases/get_assets_list_usecase.dart';
 import 'package:nemorixpay/features/asset/presentation/bloc/asset_event.dart';
 import 'package:nemorixpay/features/asset/presentation/bloc/asset_state.dart';
 import '../../domain/usecases/update_asset_price_usecase.dart';
@@ -16,13 +17,20 @@ import '../../domain/usecases/update_asset_price_usecase.dart';
 
 // BloC
 class AssetBloc extends Bloc<AssetEvent, AssetState> {
-  final UpdateAssetPriceUseCase updateAssetPrice;
+  final UpdateAssetPriceUseCase _updateAssetPriceUseCase;
+  final GetAssetsListUseCase _getAssetsListUseCase;
   Timer? _autoUpdateTimer;
 
-  AssetBloc({required this.updateAssetPrice}) : super(AssetPriceInitial()) {
+  AssetBloc({
+    required UpdateAssetPriceUseCase updateAssetPriceUseCase,
+    required GetAssetsListUseCase getAssetsListUseCase,
+  }) : _updateAssetPriceUseCase = updateAssetPriceUseCase,
+       _getAssetsListUseCase = getAssetsListUseCase,
+       super(AssetPriceInitial()) {
     on<UpdateAssetPrice>(_onUpdateAssetPrice);
     on<StartAutoUpdate>(_onStartAutoUpdate);
     on<StopAutoUpdate>(_onStopAutoUpdate);
+    on<GetAssetsList>(_onGetAssetsList);
   }
 
   Future<void> _onUpdateAssetPrice(
@@ -31,7 +39,7 @@ class AssetBloc extends Bloc<AssetEvent, AssetState> {
   ) async {
     emit(AssetPriceLoading());
     try {
-      final asset = await updateAssetPrice(event.symbol);
+      final asset = await _updateAssetPriceUseCase(event.symbol);
       asset.fold(
         (failure) {
           debugPrint('WalletBloc - Wallet import failed: ${failure.message}');
@@ -69,6 +77,18 @@ class AssetBloc extends Bloc<AssetEvent, AssetState> {
   void _onStopAutoUpdate(StopAutoUpdate event, Emitter<AssetState> emit) {
     _autoUpdateTimer?.cancel();
     _autoUpdateTimer = null;
+  }
+
+  Future<void> _onGetAssetsList(
+    GetAssetsList event,
+    Emitter<AssetState> emit,
+  ) async {
+    emit(AssetListLoading());
+    final result = await _getAssetsListUseCase();
+    result.fold(
+      (failure) => emit(AssetListError(failure)),
+      (assets) => emit(AssetListLoaded(assets)),
+    );
   }
 
   @override

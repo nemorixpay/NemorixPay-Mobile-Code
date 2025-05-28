@@ -235,6 +235,15 @@ class _SplashTestPageState extends State<SplashTestPage> {
                   backgroundColor: Colors.white,
                   textColor: Colors.black,
                 ),
+                SizedBox(height: 20),
+                RoundedElevatedButton(
+                  text: "Continue with Test Assets List",
+                  onPressed: () {
+                    Navigator.pushNamed(context, RouteNames.testAssetsList);
+                  },
+                  backgroundColor: Colors.white,
+                  textColor: Colors.black,
+                ),
                 SizedBox(height: 40),
               ],
             ),

@@ -31,3 +31,26 @@ class AssetPriceError extends AssetState {
   @override
   List<Object> get props => [failure];
 }
+
+// Asset List States
+class AssetListInitial extends AssetState {}
+
+class AssetListLoading extends AssetState {}
+
+class AssetListLoaded extends AssetState {
+  final List<AssetEntity> assets;
+
+  const AssetListLoaded(this.assets);
+
+  @override
+  List<Object> get props => [assets];
+}
+
+class AssetListError extends AssetState {
+  final Failure failure;
+
+  const AssetListError(this.failure);
+
+  @override
+  List<Object> get props => [failure];
+}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/core/errors/failures.dart';
 import 'package:nemorixpay/core/errors/asset/asset_error_codes.dart';
+import 'package:equatable/equatable.dart';
 
 /// @file        asset_failure.dart
 /// @brief       Asset failure for NemorixPay.
@@ -77,6 +78,14 @@ class AssetFailure extends Failure {
   factory AssetFailure.dataParsingError(String message) {
     return AssetFailure(
       assetCode: AssetErrorCode.dataParsingError.code,
+      assetMessage: message,
+    );
+  }
+
+  /// Creates an [AssetFailure] for assets list errors
+  factory AssetFailure.assetsListFailed(String message) {
+    return AssetFailure(
+      assetCode: AssetErrorCode.assetsListFailed.code,
       assetMessage: message,
     );
   }

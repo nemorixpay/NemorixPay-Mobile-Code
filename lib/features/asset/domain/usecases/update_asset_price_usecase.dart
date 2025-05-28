@@ -13,7 +13,7 @@ import '../repositories/asset_repository.dart';
 class UpdateAssetPriceUseCase {
   final AssetRepository repository;
 
-  UpdateAssetPriceUseCase(this.repository);
+  UpdateAssetPriceUseCase({required this.repository});
 
   /// Updates the price for a given asset symbol
   Future<Either<Failure, AssetEntity>> call(String symbol) async {

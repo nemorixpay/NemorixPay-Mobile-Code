@@ -26,6 +26,7 @@ enum AssetErrorCode {
   // Data errors
   invalidSymbol('invalid-symbol', 'assetErrorInvalidSymbol'),
   dataParsingError('data-parsing-error', 'assetErrorDataParsingError'),
+  assetsListFailed('assets-list-failed', 'assetErrorAssetsListFailed'),
 
   // General errors
   unknown('unknown', 'assetErrorUnknown');
@@ -69,6 +70,8 @@ enum AssetErrorCode {
         return AppLocalizations.of(context)!.assetErrorInvalidSymbol;
       case 'assetErrorDataParsingError':
         return AppLocalizations.of(context)!.assetErrorDataParsingError;
+      case 'assetErrorAssetsListFailed':
+        return AppLocalizations.of(context)!.assetErrorAssetsListFailed;
       case 'assetErrorUnknown':
         return AppLocalizations.of(context)!.assetErrorUnknown;
       default:

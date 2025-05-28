@@ -31,3 +31,5 @@ class StartAutoUpdate extends AssetEvent {
 }
 
 class StopAutoUpdate extends AssetEvent {}
+
+class GetAssetsList extends AssetEvent {}

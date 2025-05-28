@@ -57,4 +57,7 @@ class RouteNames {
 
   /// Page for testing transactions
   static const testTransactions = "test_transactions";
+
+  /// Page for testing assets list
+  static const testAssetsList = "test_assets_list";
 }

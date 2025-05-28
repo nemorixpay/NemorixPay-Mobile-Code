@@ -202,5 +202,6 @@
   "assetErrorTimeoutError": "Tiempo de espera agotado al obtener datos del activo",
   "assetErrorInvalidSymbol": "Símbolo de activo inválido",
   "assetErrorDataParsingError": "Error al procesar los datos del activo",
-  "assetErrorUnknown": "Ocurrió un error inesperado con el activo"
+  "assetErrorUnknown": "Ocurrió un error inesperado con el activo",
+  "assetErrorAssetsListFailed": "No se pudieron obtener los activos disponibles"
 }

@@ -59,4 +59,14 @@ class AssetRepositoryImpl implements AssetRepository {
       return Left(AssetFailure.priceHistoryNotFound(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, List<AssetEntity>>> getAssetsList() async {
+    try {
+      final assets = await dataSource.getAssetsList();
+      return Right(assets.map((model) => model.toEntity()).toList());
+    } catch (e) {
+      return Left(AssetFailure.assetsListFailed(e.toString()));
+    }
+  }
 }

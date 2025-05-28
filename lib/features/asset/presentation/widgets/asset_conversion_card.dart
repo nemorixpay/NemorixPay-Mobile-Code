@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/features/asset/domain/entities/asset_entity.dart';
 import 'package:nemorixpay/features/asset/data/mock_cryptos.dart';
+import 'package:nemorixpay/features/asset/domain/usecases/get_assets_list_usecase.dart';
 import 'package:nemorixpay/features/asset/presentation/bloc/asset_bloc.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/features/asset/domain/entities/amount_validator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource_impl.dart';
 import 'asset_price_display.dart';
 import '../../domain/usecases/update_asset_price_usecase.dart';
 import '../../data/repositories/asset_repository_impl.dart';
@@ -70,9 +72,15 @@ class _AssetConversionCardState extends State<AssetConversionCard> {
   // Move to di/services
   void _initializeBloc() {
     _assetBloc = AssetBloc(
-      updateAssetPrice: UpdateAssetPriceUseCase(
-        AssetRepositoryImpl(
-          AssetDataSourceImpl()
+      updateAssetPriceUseCase: UpdateAssetPriceUseCase(
+        repository: AssetRepositoryImpl(
+          AssetDataSourceImpl(stellarDataSource: StellarDataSourceImpl())
+            ..initializeMockData(widget.selectedAsset.toModel()),
+        ),
+      ),
+      getAssetsListUseCase: GetAssetsListUseCase(
+        repository: AssetRepositoryImpl(
+          AssetDataSourceImpl(stellarDataSource: StellarDataSourceImpl())
             ..initializeMockData(widget.selectedAsset.toModel()),
         ),
       ),

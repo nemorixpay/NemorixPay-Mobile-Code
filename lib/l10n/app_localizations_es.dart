@@ -519,4 +519,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get assetErrorUnknown => 'Ocurrió un error inesperado con el activo';
+
+  @override
+  String get assetErrorAssetsListFailed => 'No se pudieron obtener los activos disponibles';
 }

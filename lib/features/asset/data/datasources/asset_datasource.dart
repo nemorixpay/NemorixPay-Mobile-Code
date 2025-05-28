@@ -16,4 +16,10 @@ abstract class AssetDataSource {
     required DateTime start,
     required DateTime end,
   });
+
+  /// Gets the list of available assets
+  ///
+  /// Returns [List<AssetModel>] with all available assets
+  /// Throws [AssetFailure] if the operation fails
+  Future<List<AssetModel>> getAssetsList();
 }

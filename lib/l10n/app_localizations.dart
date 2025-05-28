@@ -1114,6 +1114,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An unexpected error occurred with the asset'**
   String get assetErrorUnknown;
+
+  /// No description provided for @assetErrorAssetsListFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to get available assets'**
+  String get assetErrorAssetsListFailed;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

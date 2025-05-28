@@ -5,6 +5,7 @@ import 'package:nemorixpay/core/errors/asset/asset_failure.dart';
 import 'package:nemorixpay/features/asset/data/datasources/asset_datasource.dart';
 import 'package:nemorixpay/features/asset/data/models/asset_model.dart';
 import 'package:nemorixpay/features/asset/data/models/asset_price_point_model.dart';
+import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart';
 
 /// @file        asset_datasource_impl.dart
 /// @brief       Data source for asset price operations.
@@ -19,10 +20,15 @@ class AssetDataSourceImpl implements AssetDataSource {
   final Random _random = Random();
   final String _apiBaseUrl;
   final bool _useMockData;
+  final StellarDataSource _stellarDataSource;
 
-  AssetDataSourceImpl({String? apiBaseUrl, bool useMockData = true})
-    : _apiBaseUrl = apiBaseUrl ?? 'https://api.example.com',
-      _useMockData = useMockData;
+  AssetDataSourceImpl({
+    String? apiBaseUrl,
+    bool useMockData = true,
+    required StellarDataSource stellarDataSource,
+  }) : _apiBaseUrl = apiBaseUrl ?? 'https://api.example.com',
+       _useMockData = useMockData,
+       _stellarDataSource = stellarDataSource;
 
   @override
   Future<AssetModel> getCurrentPrice(String symbol) async {
@@ -50,6 +56,47 @@ class AssetDataSourceImpl implements AssetDataSource {
       return _getMockHistory(symbol, start, end);
     }
     return _getApiHistory(symbol, start, end);
+  }
+
+  @override
+  Future<List<AssetModel>> getAssetsList() async {
+    try {
+      // Get available assets from Stellar
+      final availableAssets = await _stellarDataSource.getAvailableAssets();
+
+      // Transform to AssetModel
+      final assets =
+          availableAssets.map((stellarAsset) {
+            return AssetModel(
+              name: stellarAsset.name,
+              symbol: stellarAsset.code,
+              logoPath:
+                  stellarAsset.logoUrl ?? 'assets/images/default_asset.png',
+              currentPrice: 0.0, // TODO: Implement price fetching
+              priceChange: 0.0,
+              priceChangePercentage: 0.0,
+              marketCap: 0.0,
+              volume: 0.0,
+              high24h: 0.0,
+              low24h: 0.0,
+              circulatingSupply: 0.0,
+              totalSupply: 0.0,
+              maxSupply: null,
+              ath: 0.0,
+              athChangePercentage: 0.0,
+              athDate: DateTime.now(),
+              atl: 0.0,
+              atlChangePercentage: 0.0,
+              atlDate: DateTime.now(),
+              lastUpdated: DateTime.now(),
+              isFavorite: false,
+            );
+          }).toList();
+
+      return assets;
+    } catch (e) {
+      throw AssetFailure.assetsListFailed(e.toString());
+    }
   }
 
   // Métodos para datos mock

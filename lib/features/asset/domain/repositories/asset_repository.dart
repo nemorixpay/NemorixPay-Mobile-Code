@@ -23,4 +23,7 @@ abstract class AssetRepository {
     required DateTime start,
     required DateTime end,
   });
+
+  /// Get list of all available assets
+  Future<Either<Failure, List<AssetEntity>>> getAssetsList();
 }

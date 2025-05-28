@@ -19,6 +19,7 @@ import 'package:nemorixpay/features/asset/presentation/pages/asset_details.dart'
 import 'package:nemorixpay/features/asset/domain/entities/asset_entity.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/wallet_success_page.dart';
 import 'package:nemorixpay/shared/stellar/presentation/pages/test_transactions_page.dart';
+import 'package:nemorixpay/features/asset/presentation/pages/test_assets_page.dart';
 
 /// @file        app_routes.dart
 /// @brief       Centralized route management for NemorixPay.
@@ -101,6 +102,12 @@ class AppRoutes {
       route: RouteNames.testTransactions,
       name: 'Test Transactions',
       screen: const TestTransactionsPage(),
+      icon: Icons.list_alt,
+    ),
+    RouteModel(
+      route: RouteNames.testAssetsList,
+      name: 'Test Assets List',
+      screen: const TestAssetsPage(),
       icon: Icons.list_alt,
     ),
   ];

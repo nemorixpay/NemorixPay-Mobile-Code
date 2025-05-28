@@ -25,7 +25,7 @@ void main() {
 
   setUp(() {
     mockRepository = MockAssetRepository();
-    useCase = UpdateAssetPriceUseCase(mockRepository);
+    useCase = UpdateAssetPriceUseCase(repository: mockRepository);
   });
 
   final tSymbol = 'BTC';
