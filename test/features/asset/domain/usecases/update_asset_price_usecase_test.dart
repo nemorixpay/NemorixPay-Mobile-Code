@@ -4,11 +4,11 @@ import 'package:mockito/annotations.dart';
 import 'package:dartz/dartz.dart';
 import 'package:nemorixpay/core/errors/failures.dart';
 import 'package:nemorixpay/core/errors/asset/asset_failure.dart';
-import 'package:nemorixpay/features/asset/domain/entities/asset_entity.dart';
-import 'package:nemorixpay/features/asset/domain/repositories/asset_repository.dart';
-import 'package:nemorixpay/features/asset/domain/usecases/update_asset_price_usecase.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/asset_entity.dart';
+import 'package:nemorixpay/features/crypto/domain/repositories/crypto_repository.dart';
+import 'package:nemorixpay/features/crypto/domain/usecases/update_crypto_price_usecase.dart';
 
-@GenerateMocks([AssetRepository])
+@GenerateMocks([CryptoRepository])
 import 'update_asset_price_usecase_test.mocks.dart';
 
 /// @file        update_asset_price_usecase_test.dart
@@ -20,12 +20,12 @@ import 'update_asset_price_usecase_test.mocks.dart';
 /// @copyright   Apache 2.0 License
 
 void main() {
-  late UpdateAssetPriceUseCase useCase;
+  late UpdateCryptoPriceUseCase useCase;
   late MockAssetRepository mockRepository;
 
   setUp(() {
     mockRepository = MockAssetRepository();
-    useCase = UpdateAssetPriceUseCase(repository: mockRepository);
+    useCase = UpdateCryptoPriceUseCase(repository: mockRepository);
   });
 
   final tSymbol = 'BTC';

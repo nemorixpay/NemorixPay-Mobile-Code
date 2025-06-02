@@ -1,0 +1,29 @@
+import 'package:dartz/dartz.dart';
+import 'package:nemorixpay/core/errors/failures.dart';
+import '../entities/asset_entity.dart';
+import '../entities/crypto_price_point.dart';
+
+/// @file        crypto_repository.dart
+/// @brief       Repository interface for crypto operations.
+/// @details     Defines the contract for crypto data operations.
+/// @author      Miguel Fagundez
+/// @date        04/30/2025
+/// @version     1.0
+/// @copyright   Apache 2.0 License
+abstract class CryptoRepository {
+  /// Get current price for an asset
+  Future<Either<Failure, AssetEntity>> getCurrentPrice(String symbol);
+
+  /// Update price for an asset
+  Future<Either<Failure, AssetEntity>> updatePrice(String symbol);
+
+  /// Get price history for an asset
+  Future<Either<Failure, List<CryptoPricePoint>>> getPriceHistory(
+    String symbol, {
+    required DateTime start,
+    required DateTime end,
+  });
+
+  /// Get list of all available assets
+  Future<Either<Failure, List<AssetEntity>>> getAssetsList();
+}

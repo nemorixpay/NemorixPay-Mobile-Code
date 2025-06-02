@@ -1,18 +1,18 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nemorixpay/features/asset/data/models/asset_price_point_model.dart';
-import 'package:nemorixpay/features/asset/domain/entities/asset_price_point.dart';
+import 'package:nemorixpay/features/crypto/data/models/crypto_price_point_model.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/crypto_price_point.dart';
 
 /// @file        asset_price_point_model_test.dart
-/// @brief       Unit tests for AssetPricePointModel.
+/// @brief       Unit tests for CryptoPricePointModel.
 /// @details     Tests the serialization, deserialization and conversion methods
-///             of the AssetPricePointModel class.
+///             of the CryptoPricePointModel class.
 /// @author      Miguel Fagundez
 /// @date        2025-05-24
 /// @version     1.0
 /// @copyright   Apache 2.0 License
 
 void main() {
-  final tAssetPricePointModel = AssetPricePointModel(
+  final tAssetPricePointModel = CryptoPricePointModel(
     price: 50000.0,
     volume: 1000000.0,
     marketCap: 1000000000.0,
@@ -30,7 +30,7 @@ void main() {
     group('fromJson', () {
       test('should return a valid model when the JSON is valid', () async {
         // act
-        final result = AssetPricePointModel.fromJson(tJson);
+        final result = CryptoPricePointModel.fromJson(tJson);
 
         // assert
         expect(result, equals(tAssetPricePointModel));
@@ -53,7 +53,7 @@ void main() {
         final result = tAssetPricePointModel.toEntity();
 
         // assert
-        expect(result, isA<AssetPricePoint>());
+        expect(result, isA<CryptoPricePoint>());
         expect(result.price, equals(tAssetPricePointModel.price));
         expect(result.volume, equals(tAssetPricePointModel.volume));
         expect(result.marketCap, equals(tAssetPricePointModel.marketCap));

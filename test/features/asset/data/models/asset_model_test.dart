@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nemorixpay/features/asset/data/models/asset_model.dart';
-import 'package:nemorixpay/features/asset/domain/entities/asset_entity.dart';
+import 'package:nemorixpay/features/crypto/data/models/asset_model.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/asset_entity.dart';
 
 /// @file        asset_model_test.dart
 /// @brief       Unit tests for AssetModel.

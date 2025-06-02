@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nemorixpay/shared/cache/core/managers/asset_cache_manager.dart';
-import 'package:nemorixpay/shared/common/domain/entities/asset.dart';
+import 'package:nemorixpay/shared/common/domain/entities/asset_entity.dart';
 
 void main() {
   late AssetCacheManager cacheManager;
-  late Asset testAsset1;
-  late Asset testAsset2;
+  late AssetEntity testAsset1;
+  late AssetEntity testAsset2;
 
   setUp(() {
     cacheManager = AssetCacheManager(
@@ -14,7 +14,7 @@ void main() {
     cacheManager.clearAssets();
 
     // Crear assets de prueba
-    testAsset1 = Asset(
+    testAsset1 = AssetEntity(
       id: '1',
       asset_code: 'XLM',
       name: 'Stellar Lumens',
@@ -33,7 +33,7 @@ void main() {
       is_clawback_enabled: false,
     );
 
-    testAsset2 = Asset(
+    testAsset2 = AssetEntity(
       id: '2',
       asset_code: 'USDC',
       name: 'USD Coin',
@@ -159,7 +159,7 @@ void main() {
       final futures = List.generate(
         5,
         (index) => cacheManager.updateAssets([
-          Asset(
+          AssetEntity(
             id: index.toString(),
             asset_code: 'TEST$index',
             name: 'Test Asset $index',

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../domain/entities/asset.dart';
+import '../../domain/entities/asset_entity.dart';
 
 /// @file        asset_model.dart
 /// @brief       Model representing a generic asset in the system.
@@ -324,8 +324,8 @@ class AssetModel extends Equatable {
   }
 
   /// Converts this AssetModel to an Asset entity
-  Asset toEntity() {
-    return Asset(
+  AssetEntity toEntity() {
+    return AssetEntity(
       id: id,
       asset_code: asset_code,
       name: name,

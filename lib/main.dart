@@ -12,7 +12,7 @@ import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/config/routes/app_routes.dart';
 import 'package:nemorixpay/config/theme/nemorix_theme.dart';
 import 'package:nemorixpay/di/injection_container.dart';
-import 'package:nemorixpay/features/asset/presentation/bloc/asset_bloc.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/crypto_bloc.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:nemorixpay/features/splash/presentation/bloc/splash_bloc.dart';
 import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_bloc.dart';
@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => GetIt.instance.get<AuthBloc>()),
         BlocProvider(create: (_) => GetIt.instance.get<StellarBloc>()),
         BlocProvider(create: (_) => GetIt.instance.get<WalletBloc>()),
-        BlocProvider(create: (_) => GetIt.instance.get<AssetBloc>()),
+        BlocProvider(create: (_) => GetIt.instance.get<CryptoBloc>()),
       ],
       child: MaterialApp(
         title: 'NemorixPay',

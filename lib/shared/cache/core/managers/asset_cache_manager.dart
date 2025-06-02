@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:nemorixpay/shared/common/domain/entities/asset.dart';
+import 'package:nemorixpay/shared/common/domain/entities/asset_entity.dart';
 
 /// @file        asset_cache_manager.dart
 /// @brief       Singleton class managing asset cache state.
@@ -31,7 +31,7 @@ class AssetCacheManager extends Equatable {
     : _expirationDuration = expirationDuration;
 
   /// Map of assets indexed by their ID
-  final Map<String, Asset> _assets = {};
+  final Map<String, AssetEntity> _assets = {};
 
   /// Timestamp of the last update
   DateTime? _lastUpdate;
@@ -40,10 +40,10 @@ class AssetCacheManager extends Equatable {
   bool _isLoading = false;
 
   /// List of all assets in the system
-  List<Asset> get allAssets => _assets.values.toList();
+  List<AssetEntity> get allAssets => _assets.values.toList();
 
   /// Get a specific asset by its ID
-  Asset? getAsset(String id) => _assets[id];
+  AssetEntity? getAsset(String id) => _assets[id];
 
   /// Whether an update operation is in progress
   bool get isLoading => _isLoading;
@@ -54,23 +54,23 @@ class AssetCacheManager extends Equatable {
       DateTime.now().difference(_lastUpdate!) > _expirationDuration;
 
   /// Gets all native assets (XLM in Stellar network)
-  List<Asset> get nativeAssets =>
+  List<AssetEntity> get nativeAssets =>
       _assets.values.where((asset) => asset.isNative()).toList();
 
   /// Gets all Stellar assets
-  List<Asset> get stellarAssets =>
+  List<AssetEntity> get stellarAssets =>
       _assets.values.where((asset) => asset.isStellar()).toList();
 
   /// Gets all verified assets
-  List<Asset> get verifiedAssets =>
+  List<AssetEntity> get verifiedAssets =>
       _assets.values.where((asset) => asset.isVerified()).toList();
 
   /// Gets all assets with positive balance
-  List<Asset> get assetsWithBalance =>
+  List<AssetEntity> get assetsWithBalance =>
       _assets.values.where((asset) => asset.hasBalance()).toList();
 
   /// Gets an asset by its code and network
-  Asset? getAssetByCode(String code, String network) {
+  AssetEntity? getAssetByCode(String code, String network) {
     try {
       return _assets.values.firstWhere(
         (asset) => asset.asset_code == code && asset.network == network,
@@ -81,33 +81,33 @@ class AssetCacheManager extends Equatable {
   }
 
   /// Gets all assets for a specific network
-  List<Asset> getAssetsByNetwork(String network) =>
+  List<AssetEntity> getAssetsByNetwork(String network) =>
       _assets.values.where((asset) => asset.network == network).toList();
 
   /// Gets all assets with a specific type
-  List<Asset> getAssetsByType(String type) =>
+  List<AssetEntity> getAssetsByType(String type) =>
       _assets.values.where((asset) => asset.asset_type == type).toList();
 
   /// Gets all assets from a specific issuer
-  List<Asset> getAssetsByIssuer(String issuer) =>
+  List<AssetEntity> getAssetsByIssuer(String issuer) =>
       _assets.values.where((asset) => asset.asset_issuer == issuer).toList();
 
   /// Gets all assets that can maintain liabilities
-  List<Asset> getAssetsWithLiabilitiesPermission() =>
+  List<AssetEntity> getAssetsWithLiabilitiesPermission() =>
       _assets.values.where((asset) => asset.canMaintainLiabilities()).toList();
 
   /// Gets all assets that can maintain offers
-  List<Asset> getAssetsWithOffersPermission() =>
+  List<AssetEntity> getAssetsWithOffersPermission() =>
       _assets.values.where((asset) => asset.canMaintainOffers()).toList();
 
   /// Gets all assets that can maintain trustlines
-  List<Asset> getAssetsWithTrustlinesPermission() =>
+  List<AssetEntity> getAssetsWithTrustlinesPermission() =>
       _assets.values.where((asset) => asset.canMaintainTrustlines()).toList();
 
   /// Updates the assets in the cache
   ///
   /// [assets] List of assets to update
-  Future<void> updateAssets(List<Asset> assets) async {
+  Future<void> updateAssets(List<AssetEntity> assets) async {
     if (_isLoading) return;
 
     try {
@@ -124,8 +124,8 @@ class AssetCacheManager extends Equatable {
   /// Gets assets from cache or fetches them if needed
   ///
   /// [fetchAssets] Function to fetch assets if cache is empty or stale
-  Future<List<Asset>> getAssetsIfNeeded(
-    Future<List<Asset>> Function() fetchAssets,
+  Future<List<AssetEntity>> getAssetsIfNeeded(
+    Future<List<AssetEntity>> Function() fetchAssets,
   ) async {
     if (!needsRefresh && _assets.isNotEmpty) {
       return allAssets;

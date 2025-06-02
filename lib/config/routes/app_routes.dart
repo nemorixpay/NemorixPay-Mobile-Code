@@ -5,8 +5,8 @@ import 'package:nemorixpay/config/routes/route_model.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:nemorixpay/features/auth/presentation/pages/sign_up_page.dart';
-import 'package:nemorixpay/features/asset/presentation/pages/buy_asset_page.dart';
-import 'package:nemorixpay/features/asset/presentation/pages/payment_method_page.dart';
+import 'package:nemorixpay/features/crypto/presentation/pages/buy_crypto_page.dart';
+import 'package:nemorixpay/features/crypto/presentation/pages/payment_method_page.dart';
 import 'package:nemorixpay/features/splash/presentation/pages/splash_native_page.dart';
 import 'package:nemorixpay/features/splash/presentation/pages/splash_test_page.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/confirm_seed_phrase_page.dart';
@@ -14,12 +14,12 @@ import 'package:nemorixpay/features/wallet/presentation/pages/import_seed_phrase
 import 'package:nemorixpay/features/wallet/presentation/pages/show_seed_phrase_page.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/stellar_service_test_page.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/wallet_setup_page.dart';
-import 'package:nemorixpay/features/asset/presentation/pages/home_page.dart';
-import 'package:nemorixpay/features/asset/presentation/pages/asset_details.dart';
-import 'package:nemorixpay/features/asset/domain/entities/asset_entity.dart';
+import 'package:nemorixpay/features/crypto/presentation/pages/home_page.dart';
+import 'package:nemorixpay/features/crypto/presentation/pages/crypto_details.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/asset_entity.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/wallet_success_page.dart';
 import 'package:nemorixpay/shared/stellar/presentation/pages/test_transactions_page.dart';
-import 'package:nemorixpay/features/asset/presentation/pages/test_assets_page.dart';
+import 'package:nemorixpay/features/crypto/presentation/pages/test_crypto_page.dart';
 
 /// @file        app_routes.dart
 /// @brief       Centralized route management for NemorixPay.
@@ -77,7 +77,7 @@ class AppRoutes {
     RouteModel(
       route: RouteNames.buyAsset,
       name: 'Buy',
-      screen: BuyAssetPage(),
+      screen: BuyCryptoPage(),
       icon: Icons.credit_card_rounded,
     ),
     RouteModel(
@@ -106,8 +106,8 @@ class AppRoutes {
     ),
     RouteModel(
       route: RouteNames.testAssetsList,
-      name: 'Test Assets List',
-      screen: const TestAssetsPage(),
+      name: 'Test Crypto List',
+      screen: const TestCryptoPage(),
       icon: Icons.list_alt,
     ),
   ];
@@ -141,16 +141,16 @@ class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RouteNames.assetDetails:
-        final assetArg = settings.arguments as AssetEntity;
+        final cryptoArg = settings.arguments as AssetEntity;
         return MaterialPageRoute(
-          builder: (context) => AssetDetailsPage(asset: assetArg),
+          builder: (context) => CryptoDetailsPage(crypto: cryptoArg),
         );
       case RouteNames.paymentMethod:
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder:
               (context) => PaymentMethodPage(
-                assetName: args['assetName'] as String,
+                cryptoName: args['assetName'] as String,
                 amount: args['amount'] as double,
                 currency: args['currency'] as String,
               ),

@@ -4,8 +4,8 @@ import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_button.dart';
-import 'package:nemorixpay/features/asset/data/mock_cryptos.dart';
-import 'package:nemorixpay/features/asset/domain/entities/asset_entity.dart';
+import 'package:nemorixpay/features/crypto/data/mock_cryptos.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/asset_entity.dart';
 import 'dart:math';
 
 /// @file        splash_test_page.dart
@@ -237,7 +237,7 @@ class _SplashTestPageState extends State<SplashTestPage> {
                 ),
                 SizedBox(height: 20),
                 RoundedElevatedButton(
-                  text: "Continue with Test Assets List",
+                  text: "Continue with Test Crypto List",
                   onPressed: () {
                     Navigator.pushNamed(context, RouteNames.testAssetsList);
                   },

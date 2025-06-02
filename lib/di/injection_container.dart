@@ -1,4 +1,4 @@
-import 'package:nemorixpay/di/services/asset_injection_service.dart';
+import 'package:nemorixpay/di/services/crypto_injection_service.dart';
 import 'package:nemorixpay/di/services/auth_injection_service.dart';
 import 'package:nemorixpay/di/services/stellar_injection_service.dart';
 import 'package:nemorixpay/di/services/wallet_injection_service.dart';
@@ -42,6 +42,6 @@ Future<void> initInjectionDependencies() async {
   await stellarInjectionServices();
   // Wallet
   await walletInjectionServices();
-  // Asset
-  await assetInjectionServices();
+  // Crypto
+  await cryptoInjectionServices();
 }

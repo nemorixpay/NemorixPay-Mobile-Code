@@ -4,11 +4,11 @@ import 'package:mockito/annotations.dart';
 import 'package:dartz/dartz.dart';
 import 'package:nemorixpay/core/errors/failures.dart';
 import 'package:nemorixpay/core/errors/asset/asset_failure.dart';
-import 'package:nemorixpay/features/asset/domain/entities/asset_price_point.dart';
-import 'package:nemorixpay/features/asset/domain/repositories/asset_repository.dart';
-import 'package:nemorixpay/features/asset/domain/usecases/get_price_history_usecase.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/crypto_price_point.dart';
+import 'package:nemorixpay/features/crypto/domain/repositories/crypto_repository.dart';
+import 'package:nemorixpay/features/crypto/domain/usecases/get_price_history_usecase.dart';
 
-@GenerateMocks([AssetRepository])
+@GenerateMocks([CryptoRepository])
 import 'get_price_history_usecase_test.mocks.dart';
 
 /// @file        get_price_history_usecase_test.dart
@@ -32,13 +32,13 @@ void main() {
   final tStart = DateTime.utc(2025, 5, 24, 0, 0);
   final tEnd = DateTime.utc(2025, 5, 24, 23, 59);
   final tPriceHistory = [
-    AssetPricePoint(
+    CryptoPricePoint(
       price: 50000.0,
       volume: 1000000.0,
       marketCap: 1000000000.0,
       timestamp: DateTime.utc(2025, 5, 24, 12, 0),
     ),
-    AssetPricePoint(
+    CryptoPricePoint(
       price: 51000.0,
       volume: 1100000.0,
       marketCap: 1100000000.0,

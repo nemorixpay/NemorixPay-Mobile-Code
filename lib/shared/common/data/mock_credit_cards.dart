@@ -1,4 +1,4 @@
-import 'package:nemorixpay/features/asset/domain/entities/credit_card.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/credit_card.dart';
 
 /// @file        mock_credit_cards.dart
 /// @brief       Mock data list for credit cards.
