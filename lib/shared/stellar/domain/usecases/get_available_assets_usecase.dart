@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
+import 'package:nemorixpay/shared/common/domain/entities/asset_entity.dart';
 import '../../../../core/errors/failures.dart';
-import '../entities/stellar_asset_info.dart';
 import '../repositories/stellar_repository.dart';
 
 /// @file        get_available_assets_usecase.dart
@@ -19,8 +19,8 @@ class GetAvailableAssetsUseCase {
   GetAvailableAssetsUseCase({required this.repository});
 
   /// Gets all available assets in the Stellar network
-  /// @return Either<Failure, List<StellarAssetInfo>> List of available assets or error
-  Future<Either<Failure, List<StellarAssetInfo>>> call() async {
+  /// @return Either<Failure, List<AssetEntity>> List of available assets or error
+  Future<Either<Failure, List<AssetEntity>>> call() async {
     debugPrint('GetAvailableAssetsUseCase: Getting available assets');
     return await repository.getAvailableAssets();
   }

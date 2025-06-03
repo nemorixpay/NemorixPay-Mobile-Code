@@ -1,5 +1,5 @@
+import 'package:nemorixpay/shared/common/data/models/asset_model.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart';
-import 'package:nemorixpay/shared/stellar/data/models/stellar_asset_model.dart';
 
 /// @file        stellar_account_provider.dart
 /// @brief       Provider for managing the current Stellar account.
@@ -42,7 +42,7 @@ class StellarAccountProvider {
   }
 
   /// Updates the current account assets
-  void updateAssets(List<StellarAssetModel> newAssets) {
+  void updateAssets(List<AssetModel> newAssets) {
     if (_currentAccount != null) {
       _currentAccount = _currentAccount!.copyWith(assets: newAssets);
     }

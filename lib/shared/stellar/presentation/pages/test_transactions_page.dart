@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:nemorixpay/shared/common/domain/entities/asset_entity.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource_impl.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_transaction_model.dart';
 import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
-import 'package:nemorixpay/shared/stellar/domain/entities/stellar_transaction.dart';
 import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
 import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_bloc.dart';
 import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_event.dart';
 import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_state.dart';
-import 'package:nemorixpay/shared/stellar/domain/entities/stellar_asset_info.dart';
 
 /// @file        test_transactions_page.dart
 /// @brief       Test page for displaying Stellar transactions.
@@ -217,7 +216,7 @@ class _TestTransactionsPageState extends State<TestTransactionsPage> {
     );
   }
 
-  Widget _buildAssetItem(StellarAssetInfo asset) {
+  Widget _buildAssetItem(AssetEntity asset) {
     Widget leadingWidget;
     if (asset.logoUrl != null) {
       leadingWidget = CircleAvatar(
@@ -237,7 +236,7 @@ class _TestTransactionsPageState extends State<TestTransactionsPage> {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Código: ${asset.code}'),
+            Text('Código: ${asset.assetCode}'),
             Text('Emisor: ${asset.issuerName}'),
             if (asset.isVerified)
               const Chip(

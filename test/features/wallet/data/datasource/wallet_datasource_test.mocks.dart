@@ -11,10 +11,6 @@ import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.da
     as _i5;
 import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart'
     as _i2;
-import 'package:nemorixpay/shared/stellar/data/models/stellar_asset_info_model.dart'
-    as _i9;
-import 'package:nemorixpay/shared/stellar/data/models/stellar_asset_model.dart'
-    as _i8;
 import 'package:nemorixpay/shared/stellar/data/models/stellar_transaction_model.dart'
     as _i3;
 import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart' as _i4;
@@ -232,23 +228,23 @@ class MockStellarDataSource extends _i1.Mock implements _i5.StellarDataSource {
           )
           as _i7.Future<String>);
 
-  @override
-  _i7.Future<List<_i8.StellarAssetModel>> getAccountAssets(String? publicKey) =>
-      (super.noSuchMethod(
-            Invocation.method(#getAccountAssets, [publicKey]),
-            returnValue: _i7.Future<List<_i8.StellarAssetModel>>.value(
-              <_i8.StellarAssetModel>[],
-            ),
-          )
-          as _i7.Future<List<_i8.StellarAssetModel>>);
+  // @override
+  // _i7.Future<List<_i8.StellarAssetModel>> getAccountAssets(String? publicKey) =>
+  //     (super.noSuchMethod(
+  //           Invocation.method(#getAccountAssets, [publicKey]),
+  //           returnValue: _i7.Future<List<_i8.StellarAssetModel>>.value(
+  //             <_i8.StellarAssetModel>[],
+  //           ),
+  //         )
+  //         as _i7.Future<List<_i8.StellarAssetModel>>);
 
-  @override
-  _i7.Future<List<_i9.StellarAssetInfoModel>> getAvailableAssets() =>
-      (super.noSuchMethod(
-            Invocation.method(#getAvailableAssets, []),
-            returnValue: _i7.Future<List<_i9.StellarAssetInfoModel>>.value(
-              <_i9.StellarAssetInfoModel>[],
-            ),
-          )
-          as _i7.Future<List<_i9.StellarAssetInfoModel>>);
+  // @override
+  // _i7.Future<List<_i9.StellarAssetInfoModel>> getAvailableAssets() =>
+  //     (super.noSuchMethod(
+  //           Invocation.method(#getAvailableAssets, []),
+  //           returnValue: _i7.Future<List<_i9.StellarAssetInfoModel>>.value(
+  //             <_i9.StellarAssetInfoModel>[],
+  //           ),
+  //         )
+  //         as _i7.Future<List<_i9.StellarAssetInfoModel>>);
 }

@@ -1,6 +1,7 @@
 // ignore_for_file: unintended_html_in_doc_comment
 
 import 'package:flutter/foundation.dart';
+import 'package:nemorixpay/shared/common/data/models/asset_model.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_transaction_model.dart';
 import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
@@ -10,8 +11,6 @@ import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
 import 'package:nemorixpay/core/errors/stellar/stellar_error_codes.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart';
 import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
-import 'package:nemorixpay/shared/stellar/data/models/stellar_asset_model.dart';
-import 'package:nemorixpay/shared/stellar/data/models/stellar_asset_info_model.dart';
 
 /// @file        stellar_datasource_impl.dart
 /// @brief       Service for Stellar network integration in NemorixPay.
@@ -511,18 +510,21 @@ class StellarDataSourceImpl implements StellarDataSource {
 
   /// Gets all assets and their balances for a given Stellar account
   @override
-  Future<List<StellarAssetModel>> getAccountAssets(String publicKey) async {
+  Future<List<AssetModel>> getAccountAssets(String publicKey) async {
     try {
       final account = await _sdk.accounts.account(publicKey);
       return account.balances.map((balance) {
-        return StellarAssetModel(
-          code: balance.assetCode ?? 'XLM',
+        return AssetModel(
+          id: '',
+          assetCode: balance.assetCode ?? 'XLM',
           balance: double.tryParse(balance.balance) ?? 0.0,
-          type: balance.assetType,
-          issuer: balance.assetIssuer,
+          assetType: balance.assetType,
+          assetIssuer: balance.assetIssuer,
           limit: balance.limit != null ? double.tryParse(balance.limit!) : null,
           isAuthorized: balance.isAuthorized ?? true,
-          decimals: 7, // Default for XLM, should be fetched from asset info
+          decimals: 7,
+          name: _getAssetName(balance.assetCode ?? 'XLM'),
+          network: '', // Default for XLM, should be fetched from asset info
         );
       }).toList();
     } catch (e) {
@@ -632,7 +634,7 @@ class StellarDataSourceImpl implements StellarDataSource {
 
   /// Gets all available assets in the Stellar network
   @override
-  Future<List<StellarAssetInfoModel>> getAvailableAssets() async {
+  Future<List<AssetModel>> getAvailableAssets() async {
     try {
       debugPrint(
         'StellarDatasource: getAvailableAssets - Obteniendo assets disponibles',
@@ -648,11 +650,12 @@ class StellarDataSourceImpl implements StellarDataSource {
 
       // Convertir a StellarAssetInfoModel
       return assets.map((asset) {
-        return StellarAssetInfoModel(
-          code: asset.assetCode ?? 'XLM',
+        return AssetModel(
+          id: '',
+          assetCode: asset.assetCode ?? 'XLM',
           name: _getAssetName(asset.assetCode ?? 'XLM'),
           description: _getAssetDescription(asset.assetCode ?? 'XLM'),
-          issuer: asset.assetIssuer ?? '',
+          assetIssuer: asset.assetIssuer ?? '',
           issuerName: _getIssuerName(asset.assetIssuer ?? ''),
           isVerified: _isAssetVerified(
             asset.assetCode ?? 'XLM',
@@ -661,7 +664,8 @@ class StellarDataSourceImpl implements StellarDataSource {
           logoUrl: _getAssetLogoUrl(asset.assetCode ?? 'XLM'),
           decimals:
               7, // Por defecto, debería obtenerse de la información del asset
-          type: asset.assetType,
+          assetType: asset.assetType,
+          network: '',
         );
       }).toList();
     } catch (e) {

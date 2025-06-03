@@ -2,11 +2,10 @@ import 'package:dartz/dartz.dart';
 import 'package:nemorixpay/core/errors/failures.dart';
 import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
 import 'package:nemorixpay/core/errors/stellar/stellar_error_codes.dart';
+import 'package:nemorixpay/shared/common/domain/entities/asset_entity.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource_impl.dart';
 import 'package:nemorixpay/shared/stellar/domain/entities/stellar_account.dart';
 import 'package:nemorixpay/shared/stellar/domain/entities/stellar_transaction.dart';
-import 'package:nemorixpay/shared/stellar/domain/entities/stellar_asset.dart';
-import 'package:nemorixpay/shared/stellar/domain/entities/stellar_asset_info.dart';
 import 'package:nemorixpay/shared/stellar/domain/repositories/stellar_repository.dart';
 import 'package:flutter/foundation.dart';
 
@@ -205,7 +204,7 @@ class StellarRepositoryImpl implements StellarRepository {
   }
 
   @override
-  Future<Either<Failure, List<StellarAsset>>> getAccountAssets(
+  Future<Either<Failure, List<AssetEntity>>> getAccountAssets(
     String publicKey,
   ) async {
     try {
@@ -225,9 +224,9 @@ class StellarRepositoryImpl implements StellarRepository {
   }
 
   /// Gets all available assets in the Stellar network
-  /// @return Either<Failure, List<StellarAssetInfo>> List of available assets or error
+  /// @return Either<Failure, List<AssetEntity>> List of available assets or error
   @override
-  Future<Either<Failure, List<StellarAssetInfo>>> getAvailableAssets() async {
+  Future<Either<Failure, List<AssetEntity>>> getAvailableAssets() async {
     try {
       final assets = await datasource.getAvailableAssets();
       debugPrint(

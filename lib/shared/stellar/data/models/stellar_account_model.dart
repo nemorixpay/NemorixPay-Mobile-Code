@@ -1,5 +1,5 @@
+import 'package:nemorixpay/shared/common/data/models/asset_model.dart';
 import 'package:nemorixpay/shared/stellar/domain/entities/stellar_account.dart';
-import 'package:nemorixpay/shared/stellar/data/models/stellar_asset_model.dart';
 
 /// @file        stellar_account_model.dart
 /// @brief       Model class for Stellar account data.
@@ -16,7 +16,7 @@ class StellarAccountModel {
   final double balance;
   final String mnemonic;
   final DateTime createdAt;
-  final List<StellarAssetModel>? assets;
+  final List<AssetModel>? assets;
 
   const StellarAccountModel({
     required this.publicKey,
@@ -38,10 +38,7 @@ class StellarAccountModel {
       assets:
           json['assets'] != null
               ? (json['assets'] as List)
-                  .map(
-                    (e) =>
-                        StellarAssetModel.fromJson(e as Map<String, dynamic>),
-                  )
+                  .map((e) => AssetModel.fromJson(e as Map<String, dynamic>))
                   .toList()
               : null,
     );
@@ -89,7 +86,7 @@ class StellarAccountModel {
     double? balance,
     String? mnemonic,
     DateTime? createdAt,
-    List<StellarAssetModel>? assets,
+    List<AssetModel>? assets,
   }) {
     return StellarAccountModel(
       publicKey: publicKey ?? this.publicKey,

@@ -1,8 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:nemorixpay/shared/common/domain/entities/asset_entity.dart';
 import '../../domain/entities/stellar_account.dart';
 import '../../domain/entities/stellar_transaction.dart';
-import '../../domain/entities/stellar_asset.dart';
-import '../../domain/entities/stellar_asset_info.dart';
 
 /// @file        stellar_state.dart
 /// @brief       States for the Stellar feature bloc.
@@ -92,7 +91,7 @@ class AssetsLoading extends StellarState {}
 
 /// State when assets have been successfully loaded
 class AssetsLoaded extends StellarState {
-  final List<StellarAsset> assets;
+  final List<AssetEntity> assets;
 
   const AssetsLoaded(this.assets);
 
@@ -105,7 +104,7 @@ class AvailableAssetsLoading extends StellarState {}
 
 /// State when available assets have been loaded successfully
 class AvailableAssetsLoaded extends StellarState {
-  final List<StellarAssetInfo> assets;
+  final List<AssetEntity> assets;
 
   const AvailableAssetsLoaded(this.assets);
 

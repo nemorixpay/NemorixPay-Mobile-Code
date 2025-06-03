@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:nemorixpay/shared/common/domain/entities/asset_entity.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart';
-import 'package:nemorixpay/shared/stellar/domain/entities/stellar_asset.dart';
 
 /// @file        stellar_account.dart
 /// @brief       Entity representing a Stellar account.
@@ -17,7 +17,7 @@ class StellarAccount extends Equatable {
   final double balance;
   final String? mnemonic;
   final DateTime createdAt;
-  final List<StellarAsset>? assets;
+  final List<AssetEntity>? assets;
 
   const StellarAccount({
     required this.publicKey,
@@ -56,7 +56,7 @@ class StellarAccount extends Equatable {
     double? balance,
     String? mnemonic,
     DateTime? createdAt,
-    List<StellarAsset>? assets,
+    List<AssetEntity>? assets,
   }) {
     return StellarAccount(
       publicKey: publicKey ?? this.publicKey,

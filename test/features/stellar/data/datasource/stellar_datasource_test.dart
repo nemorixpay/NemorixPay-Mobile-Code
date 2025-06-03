@@ -1,9 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nemorixpay/shared/common/data/models/asset_model.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource_impl.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart';
-import 'package:nemorixpay/shared/stellar/data/models/stellar_asset_model.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_transaction_model.dart';
-import 'package:nemorixpay/shared/stellar/domain/entities/stellar_transaction.dart';
 import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
 
 /// @file        stellar_datasource_test.dart
@@ -165,18 +164,18 @@ void main() {
       final assets = await datasource.getAccountAssets(testAccount1PublicKey);
 
       // Assert
-      expect(assets, isA<List<StellarAssetModel>>());
+      expect(assets, isA<List<AssetModel>>());
       expect(assets, isNotEmpty);
 
       // Verificar que el primer asset es XLM
       final xlmAsset = assets.firstWhere(
-        (asset) => asset.code == 'XLM',
+        (asset) => asset.assetCode == 'XLM',
         orElse: () => throw Exception('No XLM asset found'),
       );
 
-      expect(xlmAsset.code, equals('XLM'));
-      expect(xlmAsset.type, equals('native'));
-      expect(xlmAsset.issuer, isNull);
+      expect(xlmAsset.assetCode, equals('XLM'));
+      expect(xlmAsset.assetType, equals('native'));
+      expect(xlmAsset.assetIssuer, isNull);
       expect(xlmAsset.balance, isA<double>());
       expect(xlmAsset.balance, isNonNegative);
       expect(xlmAsset.isAuthorized, isTrue);

@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
+import 'package:nemorixpay/shared/common/domain/entities/asset_entity.dart';
 import '../../../../core/errors/failures.dart';
 import '../entities/stellar_account.dart';
 import '../entities/stellar_transaction.dart';
-import '../entities/stellar_asset.dart';
-import '../entities/stellar_asset_info.dart';
 
 /// @file        stellar_repository.dart
 /// @brief       Repository interface for Stellar network operations.
@@ -53,12 +52,10 @@ abstract class StellarRepository {
 
   /// Gets all assets and their balances for a given Stellar account
   /// @param publicKey The public key of the account
-  /// @return Either<Failure, List<StellarAsset>> List of assets with their balances or error
-  Future<Either<Failure, List<StellarAsset>>> getAccountAssets(
-    String publicKey,
-  );
+  /// @return Either<Failure, List<AssetEntity>> List of assets with their balances or error
+  Future<Either<Failure, List<AssetEntity>>> getAccountAssets(String publicKey);
 
   /// Gets all available assets in the Stellar network
-  /// @return Either<Failure, List<StellarAssetInfo>> List of available assets or error
-  Future<Either<Failure, List<StellarAssetInfo>>> getAvailableAssets();
+  /// @return Either<Failure, List<AssetEntity>> List of available assets or error
+  Future<Either<Failure, List<AssetEntity>>> getAvailableAssets();
 }

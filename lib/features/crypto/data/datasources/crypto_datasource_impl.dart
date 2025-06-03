@@ -69,7 +69,7 @@ class CryptoDataSourceImpl implements CryptoDataSource {
           availableAssets.map((stellarAsset) {
             return AssetModel(
               name: stellarAsset.name,
-              symbol: stellarAsset.code,
+              symbol: stellarAsset.assetCode,
               logoPath:
                   stellarAsset.logoUrl ?? 'assets/images/default_asset.png',
               currentPrice: 0.0, // TODO: Implement price fetching

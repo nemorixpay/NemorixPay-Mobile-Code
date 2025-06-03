@@ -63,7 +63,7 @@ class AssetCacheManager extends Equatable {
 
   /// Gets all verified assets
   List<AssetEntity> get verifiedAssets =>
-      _assets.values.where((asset) => asset.isVerified()).toList();
+      _assets.values.where((asset) => asset.checkIsVerified()).toList();
 
   /// Gets all assets with positive balance
   List<AssetEntity> get assetsWithBalance =>
@@ -73,7 +73,7 @@ class AssetCacheManager extends Equatable {
   AssetEntity? getAssetByCode(String code, String network) {
     try {
       return _assets.values.firstWhere(
-        (asset) => asset.asset_code == code && asset.network == network,
+        (asset) => asset.assetCode == code && asset.network == network,
       );
     } catch (e) {
       return null;
@@ -86,23 +86,11 @@ class AssetCacheManager extends Equatable {
 
   /// Gets all assets with a specific type
   List<AssetEntity> getAssetsByType(String type) =>
-      _assets.values.where((asset) => asset.asset_type == type).toList();
+      _assets.values.where((asset) => asset.assetType == type).toList();
 
   /// Gets all assets from a specific issuer
   List<AssetEntity> getAssetsByIssuer(String issuer) =>
-      _assets.values.where((asset) => asset.asset_issuer == issuer).toList();
-
-  /// Gets all assets that can maintain liabilities
-  List<AssetEntity> getAssetsWithLiabilitiesPermission() =>
-      _assets.values.where((asset) => asset.canMaintainLiabilities()).toList();
-
-  /// Gets all assets that can maintain offers
-  List<AssetEntity> getAssetsWithOffersPermission() =>
-      _assets.values.where((asset) => asset.canMaintainOffers()).toList();
-
-  /// Gets all assets that can maintain trustlines
-  List<AssetEntity> getAssetsWithTrustlinesPermission() =>
-      _assets.values.where((asset) => asset.canMaintainTrustlines()).toList();
+      _assets.values.where((asset) => asset.assetIssuer == issuer).toList();
 
   /// Updates the assets in the cache
   ///

@@ -16,40 +16,26 @@ void main() {
     // Crear assets de prueba
     testAsset1 = AssetEntity(
       id: '1',
-      asset_code: 'XLM',
+      assetCode: 'XLM',
       name: 'Stellar Lumens',
-      symbol: 'XLM',
-      asset_type: 'native',
-      asset_issuer: '',
+      assetType: 'native',
+      assetIssuer: '',
       network: 'stellar',
       balance: 100.0,
       limit: 0.0,
-      buying_liabilities: 0.0,
-      selling_liabilities: 0.0,
-      last_modified_ledger: 1,
-      last_modified_time: DateTime.now(),
-      is_authorized: true,
-      is_authorized_to_maintain_liabilities: true,
-      is_clawback_enabled: false,
+      decimals: 7,
     );
 
     testAsset2 = AssetEntity(
       id: '2',
-      asset_code: 'USDC',
+      assetCode: 'USDC',
       name: 'USD Coin',
-      symbol: 'USDC',
-      asset_type: 'credit_alphanum4',
-      asset_issuer: 'ISSUER123',
+      assetType: 'credit_alphanum4',
+      assetIssuer: 'ISSUER123',
       network: 'stellar',
       balance: 50.0,
       limit: 1000.0,
-      buying_liabilities: 0.0,
-      selling_liabilities: 0.0,
-      last_modified_ledger: 1,
-      last_modified_time: DateTime.now(),
-      is_authorized: true,
-      is_authorized_to_maintain_liabilities: true,
-      is_clawback_enabled: false,
+      decimals: 7,
     );
   });
 
@@ -92,7 +78,7 @@ void main() {
     test('should get native assets', () {
       final nativeAssets = cacheManager.nativeAssets;
       expect(nativeAssets.length, equals(1));
-      expect(nativeAssets.first.asset_code, equals('XLM'));
+      expect(nativeAssets.first.assetCode, equals('XLM'));
     });
 
     test('should get assets by network', () {
@@ -103,13 +89,13 @@ void main() {
     test('should get assets by type', () {
       final nativeAssets = cacheManager.getAssetsByType('native');
       expect(nativeAssets.length, equals(1));
-      expect(nativeAssets.first.asset_code, equals('XLM'));
+      expect(nativeAssets.first.assetCode, equals('XLM'));
     });
 
     test('should get assets by issuer', () {
       final issuerAssets = cacheManager.getAssetsByIssuer('ISSUER123');
       expect(issuerAssets.length, equals(1));
-      expect(issuerAssets.first.asset_code, equals('USDC'));
+      expect(issuerAssets.first.assetCode, equals('USDC'));
     });
   });
 
@@ -150,7 +136,7 @@ void main() {
 
       expect(fetchCount, equals(1));
       expect(assets.length, equals(1));
-      expect(assets.first.asset_code, equals('USDC'));
+      expect(assets.first.assetCode, equals('USDC'));
     });
   });
 
@@ -161,21 +147,14 @@ void main() {
         (index) => cacheManager.updateAssets([
           AssetEntity(
             id: index.toString(),
-            asset_code: 'TEST$index',
+            assetCode: 'TEST$index',
             name: 'Test Asset $index',
-            symbol: 'TEST$index',
-            asset_type: 'credit_alphanum4',
-            asset_issuer: 'ISSUER$index',
+            assetType: 'credit_alphanum4',
+            assetIssuer: 'ISSUER$index',
             network: 'stellar',
             balance: 100.0,
             limit: 0.0,
-            buying_liabilities: 0.0,
-            selling_liabilities: 0.0,
-            last_modified_ledger: 1,
-            last_modified_time: DateTime.now(),
-            is_authorized: true,
-            is_authorized_to_maintain_liabilities: true,
-            is_clawback_enabled: false,
+            decimals: 7,
           ),
         ]),
       );

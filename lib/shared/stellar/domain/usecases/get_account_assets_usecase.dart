@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:nemorixpay/core/errors/failures.dart';
-import 'package:nemorixpay/shared/stellar/data/repositories/stellar_repository_impl.dart';
-import 'package:nemorixpay/shared/stellar/domain/entities/stellar_asset.dart';
+import 'package:nemorixpay/shared/common/domain/entities/asset_entity.dart';
 import 'package:nemorixpay/shared/stellar/domain/repositories/stellar_repository.dart';
 
 /// @file        get_account_assets_usecase.dart
@@ -20,8 +19,8 @@ class GetAccountAssetsUseCase {
 
   /// Gets all assets and their balances for a given Stellar account
   /// @param publicKey The public key of the account
-  /// @return Either<Failure, List<StellarAsset>> List of assets with their balances or error
-  Future<Either<Failure, List<StellarAsset>>> call(String publicKey) async {
+  /// @return Either<Failure, List<AssetEntity>> List of assets with their balances or error
+  Future<Either<Failure, List<AssetEntity>>> call(String publicKey) async {
     return await repository.getAccountAssets(publicKey);
   }
 }

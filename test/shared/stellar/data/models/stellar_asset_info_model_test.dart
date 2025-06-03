@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nemorixpay/shared/stellar/data/models/stellar_asset_info_model.dart';
+import 'package:nemorixpay/shared/common/data/models/asset_model.dart';
 
 /// @file        stellar_asset_info_model_test.dart
 /// @brief       Tests for StellarAssetInfoModel class.
@@ -12,20 +12,22 @@ import 'package:nemorixpay/shared/stellar/data/models/stellar_asset_info_model.d
 
 void main() {
   group('StellarAssetInfoModel', () {
-    const tModel = StellarAssetInfoModel(
-      code: 'USDC',
+    const tModel = AssetModel(
+      assetCode: 'USDC',
       name: 'USD Coin',
       description: 'USD Coin on Stellar',
-      issuer: 'G...',
+      assetIssuer: 'G...',
       issuerName: 'Circle',
       isVerified: true,
       logoUrl: 'https://example.com/usdc.png',
       decimals: 7,
-      type: 'credit_alphanum4',
+      assetType: 'credit_alphanum4',
+      id: '',
+      network: '',
     );
 
     test('should be a subclass of StellarAssetInfoModel', () {
-      expect(tModel, isA<StellarAssetInfoModel>());
+      expect(tModel, isA<AssetModel>());
     });
 
     test('should create a valid model from json', () {
@@ -43,7 +45,7 @@ void main() {
       };
 
       // act
-      final result = StellarAssetInfoModel.fromJson(json);
+      final result = AssetModel.fromJson(json);
 
       // assert
       expect(result, equals(tModel));
@@ -72,15 +74,15 @@ void main() {
       final entity = tModel.toEntity();
 
       // assert
-      expect(entity.code, equals(tModel.code));
+      expect(entity.assetCode, equals(tModel.assetCode));
       expect(entity.name, equals(tModel.name));
       expect(entity.description, equals(tModel.description));
-      expect(entity.issuer, equals(tModel.issuer));
+      expect(entity.assetIssuer, equals(tModel.assetIssuer));
       expect(entity.issuerName, equals(tModel.issuerName));
       expect(entity.isVerified, equals(tModel.isVerified));
       expect(entity.logoUrl, equals(tModel.logoUrl));
       expect(entity.decimals, equals(tModel.decimals));
-      expect(entity.type, equals(tModel.type));
+      expect(entity.assetType, equals(tModel.assetType));
     });
 
     test('should create a copy with new values', () {
@@ -91,41 +93,45 @@ void main() {
       );
 
       // assert
-      expect(result.code, equals(tModel.code));
+      expect(result.assetCode, equals(tModel.assetCode));
       expect(result.name, equals('New Name'));
       expect(result.description, equals('New Description'));
-      expect(result.issuer, equals(tModel.issuer));
+      expect(result.assetIssuer, equals(tModel.assetIssuer));
       expect(result.issuerName, equals(tModel.issuerName));
       expect(result.isVerified, equals(tModel.isVerified));
       expect(result.logoUrl, equals(tModel.logoUrl));
       expect(result.decimals, equals(tModel.decimals));
-      expect(result.type, equals(tModel.type));
+      expect(result.assetType, equals(tModel.assetType));
     });
 
     test('should return true when comparing equal models', () {
       // arrange
-      final model1 = StellarAssetInfoModel(
-        code: 'USDC',
+      final model1 = AssetModel(
+        assetCode: 'USDC',
         name: 'USD Coin',
         description: 'USD Coin on Stellar',
-        issuer: 'G...',
+        assetIssuer: 'G...',
         issuerName: 'Circle',
         isVerified: true,
         logoUrl: 'https://example.com/usdc.png',
         decimals: 7,
-        type: 'credit_alphanum4',
+        assetType: 'credit_alphanum4',
+        id: '',
+        network: '',
       );
 
-      final model2 = StellarAssetInfoModel(
-        code: 'USDC',
+      final model2 = AssetModel(
+        assetCode: 'USDC',
         name: 'USD Coin',
         description: 'USD Coin on Stellar',
-        issuer: 'G...',
+        assetIssuer: 'G...',
         issuerName: 'Circle',
         isVerified: true,
         logoUrl: 'https://example.com/usdc.png',
         decimals: 7,
-        type: 'credit_alphanum4',
+        assetType: 'credit_alphanum4',
+        id: '',
+        network: '',
       );
 
       // assert
