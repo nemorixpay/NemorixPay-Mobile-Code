@@ -522,4 +522,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assetErrorAssetsListFailed => 'Failed to get available assets';
+
+  @override
+  String get assetErrorMarketDataNotFound => 'Market data for this asset is currently unavailable';
+
+  @override
+  String get assetErrorDetailsNotFound => 'Could not find detailed information for this asset';
+
+  @override
+  String get assetErrorMarketDataUpdateFailed => 'Failed to update market data. Please try again later.';
 }

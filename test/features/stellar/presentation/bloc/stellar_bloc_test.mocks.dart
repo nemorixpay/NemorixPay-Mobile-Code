@@ -8,6 +8,8 @@ import 'dart:async' as _i5;
 import 'package:dartz/dartz.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:nemorixpay/core/errors/failures.dart' as _i6;
+import 'package:nemorixpay/shared/common/domain/entities/asset_entity.dart'
+    as _i15;
 import 'package:nemorixpay/shared/stellar/domain/entities/stellar_account.dart'
     as _i8;
 import 'package:nemorixpay/shared/stellar/domain/entities/stellar_transaction.dart'
@@ -324,22 +326,22 @@ class MockGetAccountAssetsUseCase extends _i1.Mock
           )
           as _i2.StellarRepository);
 
-  // @override
-  // _i5.Future<_i3.Either<_i6.Failure, List<_i15.StellarAsset>>> call(
-  //   String? publicKey,
-  // ) =>
-  //     (super.noSuchMethod(
-  //           Invocation.method(#call, [publicKey]),
-  //           returnValue: _i5.Future<
-  //             _i3.Either<_i6.Failure, List<_i15.StellarAsset>>
-  //           >.value(
-  //             _FakeEither_1<_i6.Failure, List<_i15.StellarAsset>>(
-  //               this,
-  //               Invocation.method(#call, [publicKey]),
-  //             ),
-  //           ),
-  //         )
-  //         as _i5.Future<_i3.Either<_i6.Failure, List<_i15.StellarAsset>>>);
+  @override
+  _i5.Future<_i3.Either<_i6.Failure, List<_i15.AssetEntity>>> call(
+    String? publicKey,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#call, [publicKey]),
+            returnValue: _i5.Future<
+              _i3.Either<_i6.Failure, List<_i15.AssetEntity>>
+            >.value(
+              _FakeEither_1<_i6.Failure, List<_i15.AssetEntity>>(
+                this,
+                Invocation.method(#call, [publicKey]),
+              ),
+            ),
+          )
+          as _i5.Future<_i3.Either<_i6.Failure, List<_i15.AssetEntity>>>);
 }
 
 /// A class which mocks [GetAvailableAssetsUseCase].
@@ -362,18 +364,18 @@ class MockGetAvailableAssetsUseCase extends _i1.Mock
           )
           as _i2.StellarRepository);
 
-  // @override
-  // _i5.Future<_i3.Either<_i6.Failure, List<_i17.StellarAssetInfo>>> call() =>
-  //     (super.noSuchMethod(
-  //           Invocation.method(#call, []),
-  //           returnValue: _i5.Future<
-  //             _i3.Either<_i6.Failure, List<_i17.StellarAssetInfo>>
-  //           >.value(
-  //             _FakeEither_1<_i6.Failure, List<_i17.StellarAssetInfo>>(
-  //               this,
-  //               Invocation.method(#call, []),
-  //             ),
-  //           ),
-  //         )
-  //         as _i5.Future<_i3.Either<_i6.Failure, List<_i17.StellarAssetInfo>>>);
+  @override
+  _i5.Future<_i3.Either<_i6.Failure, List<_i15.AssetEntity>>> call() =>
+      (super.noSuchMethod(
+            Invocation.method(#call, []),
+            returnValue: _i5.Future<
+              _i3.Either<_i6.Failure, List<_i15.AssetEntity>>
+            >.value(
+              _FakeEither_1<_i6.Failure, List<_i15.AssetEntity>>(
+                this,
+                Invocation.method(#call, []),
+              ),
+            ),
+          )
+          as _i5.Future<_i3.Either<_i6.Failure, List<_i15.AssetEntity>>>);
 }

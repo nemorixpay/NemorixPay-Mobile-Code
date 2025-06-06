@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:nemorixpay/shared/common/domain/entities/asset_entity.dart';
+import 'package:nemorixpay/core/errors/asset/asset_failure.dart';
+import 'package:nemorixpay/shared/common/data/models/asset_model.dart';
+import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart';
+import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource_impl.dart';
 
 /// @file        asset_cache_manager.dart
 /// @brief       Singleton class managing asset cache state.
@@ -15,6 +18,9 @@ class AssetCacheManager extends Equatable {
   /// Singleton instance
   static AssetCacheManager? _instance;
 
+  /// StellarDataSource
+  final StellarDataSource _stellarDataSource;
+
   /// Expiration duration for cache
   final Duration _expirationDuration;
 
@@ -22,28 +28,26 @@ class AssetCacheManager extends Equatable {
   factory AssetCacheManager({Duration? expirationDuration}) {
     _instance ??= AssetCacheManager._internal(
       expirationDuration: expirationDuration ?? const Duration(minutes: 5),
+      stellarDataSource: StellarDataSourceImpl(),
     );
     return _instance!;
   }
 
   /// Private constructor for singleton pattern
-  AssetCacheManager._internal({required Duration expirationDuration})
-    : _expirationDuration = expirationDuration;
+  AssetCacheManager._internal({
+    required StellarDataSource stellarDataSource,
+    required Duration expirationDuration,
+  }) : _expirationDuration = expirationDuration,
+       _stellarDataSource = stellarDataSource;
 
   /// Map of assets indexed by their ID
-  final Map<String, AssetEntity> _assets = {};
+  final Map<String, AssetModel> _assets = {};
 
   /// Timestamp of the last update
   DateTime? _lastUpdate;
 
   /// Flag indicating if an update is in progress
   bool _isLoading = false;
-
-  /// List of all assets in the system
-  List<AssetEntity> get allAssets => _assets.values.toList();
-
-  /// Get a specific asset by its ID
-  AssetEntity? getAsset(String id) => _assets[id];
 
   /// Whether an update operation is in progress
   bool get isLoading => _isLoading;
@@ -53,55 +57,124 @@ class AssetCacheManager extends Equatable {
       _lastUpdate == null ||
       DateTime.now().difference(_lastUpdate!) > _expirationDuration;
 
-  /// Gets all native assets (XLM in Stellar network)
-  List<AssetEntity> get nativeAssets =>
-      _assets.values.where((asset) => asset.isNative()).toList();
-
-  /// Gets all Stellar assets
-  List<AssetEntity> get stellarAssets =>
-      _assets.values.where((asset) => asset.isStellar()).toList();
-
-  /// Gets all verified assets
-  List<AssetEntity> get verifiedAssets =>
-      _assets.values.where((asset) => asset.checkIsVerified()).toList();
-
-  /// Gets all assets with positive balance
-  List<AssetEntity> get assetsWithBalance =>
-      _assets.values.where((asset) => asset.hasBalance()).toList();
-
-  /// Gets an asset by its code and network
-  AssetEntity? getAssetByCode(String code, String network) {
-    try {
-      return _assets.values.firstWhere(
-        (asset) => asset.assetCode == code && asset.network == network,
-      );
-    } catch (e) {
-      return null;
+  Future<void> assetsEmpty() async {
+    if (_assets.isEmpty) {
+      await loadAssetsFromStellar();
     }
   }
 
+  /// Loads assets from StellarDataSource into the cache
+  Future<void> loadAssetsFromStellar() async {
+    if (_isLoading) return;
+
+    try {
+      _isLoading = true;
+      final stellarAssets = await _stellarDataSource.getAvailableAssets();
+
+      // Limpiar el caché actual
+      _assets.clear();
+
+      // Cargar los nuevos assets usando la clave única
+      for (var asset in stellarAssets) {
+        final key = _getAssetKey(asset.assetCode, asset.assetIssuer);
+        _assets[key] = asset;
+      }
+
+      _lastUpdate = DateTime.now();
+    } finally {
+      _isLoading = false;
+    }
+  }
+
+  /// Gets an asset by its code and network
+  Future<AssetModel> getAssetByCode(String code) async {
+    try {
+      await assetsEmpty();
+      return _assets.values.firstWhere((asset) => asset.assetCode == code);
+    } catch (e) {
+      throw AssetFailure.assetDetailsNotFound(
+        'Failed to get asset details bycode (Asset Cache Manager): $e',
+      );
+    }
+  }
+
+  /// Generates a unique key for an asset based on its assetCode and assetIssuer
+  String _getAssetKey(String assetCode, String? assetIssuer) {
+    if (assetCode == 'XLM') {
+      return 'XLM';
+    }
+    return assetIssuer != null ? '$assetCode:$assetIssuer' : assetCode;
+  }
+
+  /// Gets a specific asset by its assetCode and assetIssuer
+  AssetModel? getAsset(String assetCode, {String? assetIssuer}) {
+    try {
+      final key = _getAssetKey(assetCode, assetIssuer);
+      return _assets[key];
+    } catch (e) {
+      throw AssetFailure.assetDetailsNotFound(
+        'Failed to get asset details by key (Asset Cache Manager): $e',
+      );
+    }
+  }
+
+  /// Updates or adds an asset to the cache
+  void updateAsset(AssetModel asset) {
+    final key = _getAssetKey(asset.assetCode, asset.assetIssuer);
+    _assets[key] = asset;
+  }
+
+  /// Gets all stored assets
+  Future<List<AssetModel>> getAllAssets() async {
+    await assetsEmpty();
+    return _assets.values.toList();
+  }
+
+  /// Gets all assets of a specific type (by assetCode)
+  Future<List<AssetModel>> getAssetsByCode(String assetCode) async {
+    await assetsEmpty();
+    return _assets.values
+        .where((asset) => asset.assetCode == assetCode)
+        .toList();
+  }
+
+  /// Clears the cache
+  Future<void> clearCache() async {
+    _assets.clear();
+    await assetsEmpty();
+  }
+
   /// Gets all assets for a specific network
-  List<AssetEntity> getAssetsByNetwork(String network) =>
-      _assets.values.where((asset) => asset.network == network).toList();
+  Future<List<AssetModel>> getAssetsByNetwork(String network) async {
+    await assetsEmpty();
+    return _assets.values.where((asset) => asset.network == network).toList();
+  }
 
   /// Gets all assets with a specific type
-  List<AssetEntity> getAssetsByType(String type) =>
-      _assets.values.where((asset) => asset.assetType == type).toList();
+  Future<List<AssetModel>> getAssetsByType(String type) async {
+    await assetsEmpty();
+    return _assets.values.where((asset) => asset.assetType == type).toList();
+  }
 
   /// Gets all assets from a specific issuer
-  List<AssetEntity> getAssetsByIssuer(String issuer) =>
-      _assets.values.where((asset) => asset.assetIssuer == issuer).toList();
+  Future<List<AssetModel>> getAssetsByIssuer(String issuer) async {
+    await assetsEmpty();
+    return _assets.values
+        .where((asset) => asset.assetIssuer == issuer)
+        .toList();
+  }
 
   /// Updates the assets in the cache
   ///
   /// [assets] List of assets to update
-  Future<void> updateAssets(List<AssetEntity> assets) async {
+  Future<void> updateAssets(List<AssetModel> assets) async {
     if (_isLoading) return;
 
     try {
       _isLoading = true;
       for (var asset in assets) {
-        _assets[asset.id] = asset;
+        final key = _getAssetKey(asset.assetCode, asset.assetIssuer);
+        _assets[key] = asset;
       }
       _lastUpdate = DateTime.now();
     } finally {
@@ -112,18 +185,18 @@ class AssetCacheManager extends Equatable {
   /// Gets assets from cache or fetches them if needed
   ///
   /// [fetchAssets] Function to fetch assets if cache is empty or stale
-  Future<List<AssetEntity>> getAssetsIfNeeded(
-    Future<List<AssetEntity>> Function() fetchAssets,
+  Future<List<AssetModel>> getAssetsIfNeeded(
+    Future<List<AssetModel>> Function() fetchAssets,
   ) async {
     if (!needsRefresh && _assets.isNotEmpty) {
-      return allAssets;
+      return getAllAssets();
     }
 
     if (_isLoading) {
       while (_isLoading) {
         await Future.delayed(const Duration(milliseconds: 100));
       }
-      return allAssets;
+      return getAllAssets();
     }
 
     final assets = await fetchAssets();
@@ -138,21 +211,24 @@ class AssetCacheManager extends Equatable {
     _assets.remove(id);
   }
 
-  /// Clears all assets from the cache
-  void clearAssets() {
-    _assets.clear();
-    _lastUpdate = null;
-  }
-
   /// Gets the total number of assets
   int get assetCount => _assets.length;
 
   /// Gets the total number of assets for a specific network
-  int getAssetCountByNetwork(String network) =>
-      getAssetsByNetwork(network).length;
+  Future<int> getAssetCountByNetwork(String network) async {
+    final list = await getAssetsByNetwork(network);
+    return list.length;
+  }
+
+  /// Gets all native assets (XLM in Stellar network)
+  List<AssetModel> get nativeAssets =>
+      _assets.values.where((asset) => asset.assetType == 'native').toList();
 
   /// Gets the total number of assets with a specific type
-  int getAssetCountByType(String type) => getAssetsByType(type).length;
+  Future<int> getAssetCountByType(String type) async {
+    final list = await getAssetsByType(type);
+    return list.length;
+  }
 
   @override
   List<Object?> get props => [_assets, _lastUpdate, _isLoading];

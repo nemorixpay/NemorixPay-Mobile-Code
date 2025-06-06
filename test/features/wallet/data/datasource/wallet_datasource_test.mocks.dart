@@ -7,6 +7,7 @@ import 'dart:async' as _i7;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i6;
+import 'package:nemorixpay/shared/common/data/models/asset_model.dart' as _i8;
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart'
     as _i5;
 import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart'
@@ -228,23 +229,23 @@ class MockStellarDataSource extends _i1.Mock implements _i5.StellarDataSource {
           )
           as _i7.Future<String>);
 
-  // @override
-  // _i7.Future<List<_i8.StellarAssetModel>> getAccountAssets(String? publicKey) =>
-  //     (super.noSuchMethod(
-  //           Invocation.method(#getAccountAssets, [publicKey]),
-  //           returnValue: _i7.Future<List<_i8.StellarAssetModel>>.value(
-  //             <_i8.StellarAssetModel>[],
-  //           ),
-  //         )
-  //         as _i7.Future<List<_i8.StellarAssetModel>>);
+  @override
+  _i7.Future<List<_i8.AssetModel>> getAccountAssets(String? publicKey) =>
+      (super.noSuchMethod(
+            Invocation.method(#getAccountAssets, [publicKey]),
+            returnValue: _i7.Future<List<_i8.AssetModel>>.value(
+              <_i8.AssetModel>[],
+            ),
+          )
+          as _i7.Future<List<_i8.AssetModel>>);
 
-  // @override
-  // _i7.Future<List<_i9.StellarAssetInfoModel>> getAvailableAssets() =>
-  //     (super.noSuchMethod(
-  //           Invocation.method(#getAvailableAssets, []),
-  //           returnValue: _i7.Future<List<_i9.StellarAssetInfoModel>>.value(
-  //             <_i9.StellarAssetInfoModel>[],
-  //           ),
-  //         )
-  //         as _i7.Future<List<_i9.StellarAssetInfoModel>>);
+  @override
+  _i7.Future<List<_i8.AssetModel>> getAvailableAssets() =>
+      (super.noSuchMethod(
+            Invocation.method(#getAvailableAssets, []),
+            returnValue: _i7.Future<List<_i8.AssetModel>>.value(
+              <_i8.AssetModel>[],
+            ),
+          )
+          as _i7.Future<List<_i8.AssetModel>>);
 }

@@ -1120,6 +1120,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to get available assets'**
   String get assetErrorAssetsListFailed;
+
+  /// No description provided for @assetErrorMarketDataNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Market data for this asset is currently unavailable'**
+  String get assetErrorMarketDataNotFound;
+
+  /// No description provided for @assetErrorDetailsNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not find detailed information for this asset'**
+  String get assetErrorDetailsNotFound;
+
+  /// No description provided for @assetErrorMarketDataUpdateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update market data. Please try again later.'**
+  String get assetErrorMarketDataUpdateFailed;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/core/errors/failures.dart';
 import 'package:nemorixpay/core/errors/asset/asset_error_codes.dart';
-import 'package:equatable/equatable.dart';
 
 /// @file        asset_failure.dart
 /// @brief       Asset failure for NemorixPay.
@@ -94,6 +93,28 @@ class AssetFailure extends Failure {
   factory AssetFailure.unknown(String message) {
     return AssetFailure(
       assetCode: AssetErrorCode.unknown.code,
+      assetMessage: message,
+    );
+  }
+
+  /// Creates an [AssetFailure] for MarketData Errors
+  factory AssetFailure.marketDataNotFound(String message) {
+    return AssetFailure(
+      assetCode: AssetErrorCode.marketDataNotFound.code,
+      assetMessage: message,
+    );
+  }
+
+  factory AssetFailure.assetDetailsNotFound(String message) {
+    return AssetFailure(
+      assetCode: AssetErrorCode.assetDetailsNotFound.code,
+      assetMessage: message,
+    );
+  }
+
+  factory AssetFailure.marketDataUpdateFailed(String message) {
+    return AssetFailure(
+      assetCode: AssetErrorCode.marketDataUpdateFailed.code,
       assetMessage: message,
     );
   }

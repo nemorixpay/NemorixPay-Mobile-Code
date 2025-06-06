@@ -203,5 +203,8 @@
   "assetErrorInvalidSymbol": "Invalid asset symbol",
   "assetErrorDataParsingError": "Error parsing asset data",
   "assetErrorUnknown": "An unexpected error occurred with the asset",
-  "assetErrorAssetsListFailed": "Failed to get available assets"
+  "assetErrorAssetsListFailed": "Failed to get available assets",
+  "assetErrorMarketDataNotFound": "Market data for this asset is currently unavailable",
+  "assetErrorDetailsNotFound": "Could not find detailed information for this asset",
+  "assetErrorMarketDataUpdateFailed": "Failed to update market data. Please try again later."
 }

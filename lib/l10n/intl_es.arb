@@ -203,5 +203,8 @@
   "assetErrorInvalidSymbol": "Símbolo de activo inválido",
   "assetErrorDataParsingError": "Error al procesar los datos del activo",
   "assetErrorUnknown": "Ocurrió un error inesperado con el activo",
-  "assetErrorAssetsListFailed": "No se pudieron obtener los activos disponibles"
+  "assetErrorAssetsListFailed": "No se pudieron obtener los activos disponibles",
+  "assetErrorMarketDataNotFound": "Los datos de mercado para este activo no están disponibles actualmente",
+  "assetErrorDetailsNotFound": "No se pudo encontrar información detallada para este activo",
+  "assetErrorMarketDataUpdateFailed": "Error al actualizar los datos de mercado. Por favor, intente más tarde."
 }

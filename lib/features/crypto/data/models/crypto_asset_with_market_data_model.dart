@@ -21,6 +21,19 @@ class CryptoAssetWithMarketDataModel extends Equatable {
     this.isFavorite = false,
   });
 
+  /// Creates a copy of this model with the given fields replaced with the new values
+  CryptoAssetWithMarketDataModel copyWith({
+    AssetModel? asset,
+    MarketDataModel? marketData,
+    bool? isFavorite,
+  }) {
+    return CryptoAssetWithMarketDataModel(
+      asset: asset ?? this.asset,
+      marketData: marketData ?? this.marketData,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
+
   factory CryptoAssetWithMarketDataModel.fromJson(Map<String, dynamic> json) {
     return CryptoAssetWithMarketDataModel(
       asset: AssetModel.fromJson(json['asset'] as Map<String, dynamic>),

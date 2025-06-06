@@ -28,6 +28,11 @@ enum AssetErrorCode {
   dataParsingError('data-parsing-error', 'assetErrorDataParsingError'),
   assetsListFailed('assets-list-failed', 'assetErrorAssetsListFailed'),
 
+  // Market Data Errors
+  marketDataNotFound('market-data-not-found', 'marketDataNotFound'),
+  assetDetailsNotFound('asset-details-not-found', 'assetDetailsNotFound'),
+  marketDataUpdateFailed('market-data-update-failed', 'marketDataUpdateFailed'),
+
   // General errors
   unknown('unknown', 'assetErrorUnknown');
 
@@ -74,6 +79,12 @@ enum AssetErrorCode {
         return AppLocalizations.of(context)!.assetErrorAssetsListFailed;
       case 'assetErrorUnknown':
         return AppLocalizations.of(context)!.assetErrorUnknown;
+      case 'assetErrorMarketDataNotFound':
+        return AppLocalizations.of(context)!.assetErrorMarketDataNotFound;
+      case 'assetErrorDetailsNotFound':
+        return AppLocalizations.of(context)!.assetErrorDetailsNotFound;
+      case 'assetErrorMarketDataUpdateFailed':
+        return AppLocalizations.of(context)!.assetErrorMarketDataUpdateFailed;
       default:
         return AppLocalizations.of(context)!.assetErrorUnknown;
     }

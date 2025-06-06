@@ -1,20 +1,21 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nemorixpay/shared/cache/core/managers/asset_cache_manager.dart';
+import 'package:nemorixpay/shared/common/data/models/asset_model.dart';
 import 'package:nemorixpay/shared/common/domain/entities/asset_entity.dart';
 
 void main() {
   late AssetCacheManager cacheManager;
-  late AssetEntity testAsset1;
-  late AssetEntity testAsset2;
+  late AssetModel testAsset1;
+  late AssetModel testAsset2;
 
   setUp(() {
     cacheManager = AssetCacheManager(
       expirationDuration: const Duration(seconds: 1),
     );
-    cacheManager.clearAssets();
+    cacheManager.clearCache();
 
     // Crear assets de prueba
-    testAsset1 = AssetEntity(
+    testAsset1 = AssetModel(
       id: '1',
       assetCode: 'XLM',
       name: 'Stellar Lumens',
@@ -26,7 +27,7 @@ void main() {
       decimals: 7,
     );
 
-    testAsset2 = AssetEntity(
+    testAsset2 = AssetModel(
       id: '2',
       assetCode: 'USDC',
       name: 'USD Coin',
@@ -51,22 +52,22 @@ void main() {
     test('should update assets in cache', () async {
       await cacheManager.updateAssets([testAsset1, testAsset2]);
       expect(cacheManager.assetCount, equals(2));
-      expect(cacheManager.getAsset('1'), equals(testAsset1));
-      expect(cacheManager.getAsset('2'), equals(testAsset2));
+      expect(cacheManager.getAssetByCode('1'), equals(testAsset1));
+      expect(cacheManager.getAssetByCode('2'), equals(testAsset2));
     });
 
     test('should clear cache', () {
-      cacheManager.clearAssets();
+      cacheManager.clearCache();
       expect(cacheManager.assetCount, equals(0));
-      expect(cacheManager.getAsset('1'), isNull);
+      expect(cacheManager.getAssetByCode('1'), isNull);
     });
 
     test('should remove specific asset', () async {
       await cacheManager.updateAssets([testAsset1, testAsset2]);
       cacheManager.removeAsset('1');
       expect(cacheManager.assetCount, equals(1));
-      expect(cacheManager.getAsset('1'), isNull);
-      expect(cacheManager.getAsset('2'), equals(testAsset2));
+      expect(cacheManager.getAssetByCode('1'), isNull);
+      expect(cacheManager.getAssetByCode('2'), equals(testAsset2));
     });
   });
 
@@ -81,19 +82,19 @@ void main() {
       expect(nativeAssets.first.assetCode, equals('XLM'));
     });
 
-    test('should get assets by network', () {
-      final stellarAssets = cacheManager.getAssetsByNetwork('stellar');
+    test('should get assets by network', () async {
+      final stellarAssets = await cacheManager.getAssetsByNetwork('stellar');
       expect(stellarAssets.length, equals(2));
     });
 
-    test('should get assets by type', () {
-      final nativeAssets = cacheManager.getAssetsByType('native');
+    test('should get assets by type', () async {
+      final nativeAssets = await cacheManager.getAssetsByType('native');
       expect(nativeAssets.length, equals(1));
       expect(nativeAssets.first.assetCode, equals('XLM'));
     });
 
-    test('should get assets by issuer', () {
-      final issuerAssets = cacheManager.getAssetsByIssuer('ISSUER123');
+    test('should get assets by issuer', () async {
+      final issuerAssets = await cacheManager.getAssetsByIssuer('ISSUER123');
       expect(issuerAssets.length, equals(1));
       expect(issuerAssets.first.assetCode, equals('USDC'));
     });
@@ -145,7 +146,7 @@ void main() {
       final futures = List.generate(
         5,
         (index) => cacheManager.updateAssets([
-          AssetEntity(
+          AssetModel(
             id: index.toString(),
             assetCode: 'TEST$index',
             name: 'Test Asset $index',
