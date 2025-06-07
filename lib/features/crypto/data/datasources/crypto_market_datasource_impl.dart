@@ -7,7 +7,6 @@ import 'package:nemorixpay/features/crypto/data/datasources/crypto_market_dataso
 import 'package:nemorixpay/features/crypto/data/models/crypto_asset_with_market_data_model.dart';
 import 'package:nemorixpay/features/crypto/data/models/market_data_model.dart';
 import 'package:nemorixpay/shared/cache/core/managers/asset_cache_manager.dart';
-import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart';
 
 /// @file        crypto_market_datasource_impl.dart
 /// @brief       Implementation of crypto market data operations.
@@ -20,7 +19,7 @@ import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.da
 /// @copyright   Apache 2.0 License
 
 class CryptoMarketDataSourceImpl implements CryptoMarketDataSource {
-  final Map<String, CryptoAssetWithMarketDataModel> _assetCache = {};
+  final Map<String, CryptoAssetWithMarketDataModel> _cryptoCache = {};
   final Random _random = Random();
   final String _apiBaseUrl;
   final bool _useMockData;
@@ -133,18 +132,18 @@ class CryptoMarketDataSourceImpl implements CryptoMarketDataSource {
 
   // Métodos privados para datos mock
   MarketDataModel _getMockMarketData(String symbol) {
-    if (!_assetCache.containsKey(symbol)) {
+    if (!_cryptoCache.containsKey(symbol)) {
       return _generateMockMarketData();
     }
-    return _assetCache[symbol]!.marketData;
+    return _cryptoCache[symbol]!.marketData;
   }
 
   MarketDataModel _updateMockMarketData(String symbol) {
     final updatedMarketData = _generateMockMarketData();
 
-    if (_assetCache.containsKey(symbol)) {
-      final currentAsset = _assetCache[symbol]!;
-      _assetCache[symbol] = currentAsset.copyWith(
+    if (_cryptoCache.containsKey(symbol)) {
+      final currentAsset = _cryptoCache[symbol]!;
+      _cryptoCache[symbol] = currentAsset.copyWith(
         marketData: updatedMarketData,
       );
     }
