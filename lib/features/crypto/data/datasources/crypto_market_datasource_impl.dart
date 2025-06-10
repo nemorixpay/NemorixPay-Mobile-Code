@@ -65,6 +65,45 @@ class CryptoMarketDataSourceImpl implements CryptoMarketDataSource {
   }
 
   @override
+  Future<List<CryptoAssetWithMarketDataModel>> getCryptoAccountAssets() async {
+    try {
+      debugPrint(
+        'CryptoMarketDataSourceImpl - getCryptoAccountAssets: Starting',
+      );
+
+      // Get only account assets from Stellar
+      final accountAssets = await _assetCacheManager.getAccountAssets();
+      debugPrint(
+        'CryptoMarketDataSourceImpl - getCryptoAccountAssets: list = ${accountAssets.length}',
+      );
+      // Transform to CryptoAssetWithMarketDataModel
+      final assets = await Future.wait(
+        accountAssets.map((asset) async {
+          final marketData =
+              _useMockData
+                  ? _generateMockMarketData()
+                  : await getMarketData(asset.assetCode);
+
+          return CryptoAssetWithMarketDataModel(
+            asset: asset,
+            marketData: marketData,
+            isFavorite: false,
+          );
+        }),
+      );
+
+      return assets;
+    } catch (e) {
+      debugPrint(
+        'CryptoMarketDataSourceImpl - getCryptoAccountAssets: Error: $e',
+      );
+      throw AssetFailure.assetsListFailed(
+        'Failed to get account assets list: $e',
+      );
+    }
+  }
+
+  @override
   Future<MarketDataModel> getMarketData(String symbol) async {
     try {
       debugPrint(

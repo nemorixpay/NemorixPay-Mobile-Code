@@ -61,7 +61,10 @@ class _HomeHeaderState extends State<HomeHeader> {
                     widget.isSearching ? Icons.close : Icons.search,
                     color: Colors.black,
                   ),
-                  onPressed: widget.onSearchToggle,
+                  onPressed: () {
+                    _searchController.clear();
+                    widget.onSearchToggle();
+                  },
                 ),
               widget.isSearching
                   ? Expanded(
@@ -88,7 +91,10 @@ class _HomeHeaderState extends State<HomeHeader> {
               if (widget.isSearching)
                 IconButton(
                   icon: Icon(Icons.close, color: Colors.black),
-                  onPressed: widget.onSearchToggle,
+                  onPressed: () {
+                    _searchController.clear();
+                    widget.onSearchToggle();
+                  },
                 ),
               IconButton(
                 icon: const Icon(Icons.notifications_none, color: Colors.black),

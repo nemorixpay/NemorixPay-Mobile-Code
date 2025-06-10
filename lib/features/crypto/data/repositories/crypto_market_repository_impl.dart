@@ -51,6 +51,21 @@ class CryptoMarketRepositoryImpl implements CryptoMarketRepository {
   }
 
   @override
+  Future<Either<Failure, List<CryptoAssetWithMarketData>>>
+  getCryptoAccountAssets() async {
+    try {
+      final listOfCryptos = await dataSource.getCryptoAccountAssets();
+      return Right(listOfCryptos.map((crypto) => crypto.toEntity()).toList());
+    } catch (e) {
+      debugPrint(
+        'CryptoMarketRepositoryImpl - getCryptoAccountAssets: Error: $e',
+      );
+      if (e is AssetFailure) return Left(e);
+      return Left(AssetFailure.assetsListFailed(e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, MarketDataEntity>> getMarketData(String symbol) async {
     try {
       final marketData = await dataSource.getMarketData(symbol);

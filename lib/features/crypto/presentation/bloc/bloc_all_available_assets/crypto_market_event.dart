@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 /// @brief       Events for the CryptoMarketBloc.
 /// @details     Defines all possible events that can be triggered in the crypto market feature.
 /// @author      Miguel Fagundez
-/// @date        2025-06-06
+/// @date        06/06/2025
 /// @version     1.0
 /// @copyright   Apache 2.0 License
 

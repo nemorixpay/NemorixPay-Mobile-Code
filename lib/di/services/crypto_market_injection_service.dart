@@ -1,6 +1,9 @@
 import 'package:get_it/get_it.dart';
+import 'package:nemorixpay/features/crypto/domain/usecases/get_crypto_account_assets_usecase.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_bloc.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_home_bloc.dart';
 import 'package:nemorixpay/shared/cache/core/managers/asset_cache_manager.dart';
-import 'package:nemorixpay/features/crypto/presentation/bloc/crypto_market_bloc.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_all_available_assets/crypto_market_bloc.dart';
 import 'package:nemorixpay/features/crypto/domain/usecases/get_market_data_usecase.dart';
 import 'package:nemorixpay/features/crypto/domain/usecases/get_crypto_assets_usecase.dart';
 import 'package:nemorixpay/features/crypto/domain/usecases/update_market_data_usecase.dart';
@@ -48,6 +51,11 @@ Future<void> cryptoMarketInjectionServices() async {
     GetCryptoAssetsUseCase(repository: cryptoMarketRepositoryImpl),
   );
 
+  final GetCryptoAccountAssetsUseCase getCryptoAccountAssetsUseCase = di
+      .registerSingleton(
+        GetCryptoAccountAssetsUseCase(repository: cryptoMarketRepositoryImpl),
+      );
+
   final GetMarketDataUseCase getMarketDataUseCase = di.registerSingleton(
     GetMarketDataUseCase(repository: cryptoMarketRepositoryImpl),
   );
@@ -63,6 +71,22 @@ Future<void> cryptoMarketInjectionServices() async {
       getCryptoAssetDetailsUseCase: getCryptoAssetDetailsUseCase,
       getMarketDataUseCase: getMarketDataUseCase,
       updateMarketDataUseCase: updateMarketDataUseCase,
+    ),
+  );
+
+  // Define CryptoAccount Bloc
+  di.registerFactory(
+    () => CryptoAccountBloc(
+      getCryptoAssetDetailsUseCase: getCryptoAssetDetailsUseCase,
+      getCryptoAccountAssetsUseCase: getCryptoAccountAssetsUseCase,
+    ),
+  );
+
+  // Define CryptoHome Bloc
+  di.registerFactory(
+    () => CryptoHomeBloc(
+      marketBloc: GetIt.instance.get<CryptoMarketBloc>(),
+      accountBloc: GetIt.instance.get<CryptoAccountBloc>(),
     ),
   );
 }

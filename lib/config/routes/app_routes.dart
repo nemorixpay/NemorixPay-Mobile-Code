@@ -6,6 +6,7 @@ import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:nemorixpay/features/auth/presentation/pages/sign_up_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/buy_crypto_page.dart';
+import 'package:nemorixpay/features/crypto/presentation/pages/home_page_2.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/payment_method_page.dart';
 import 'package:nemorixpay/features/splash/presentation/pages/splash_native_page.dart';
 import 'package:nemorixpay/features/splash/presentation/pages/splash_test_page.dart';
@@ -14,7 +15,6 @@ import 'package:nemorixpay/features/wallet/presentation/pages/import_seed_phrase
 import 'package:nemorixpay/features/wallet/presentation/pages/show_seed_phrase_page.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/stellar_service_test_page.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/wallet_setup_page.dart';
-import 'package:nemorixpay/features/crypto/presentation/pages/home_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/crypto_details.dart';
 import 'package:nemorixpay/features/crypto/domain/entities/asset_entity.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/wallet_success_page.dart';
@@ -69,9 +69,9 @@ class AppRoutes {
       icon: Icons.app_registration,
     ),
     RouteModel(
-      route: RouteNames.home,
-      name: 'Home',
-      screen: const HomePage(),
+      route: RouteNames.home2,
+      name: 'Home2',
+      screen: const HomePage2(),
       icon: Icons.home,
     ),
     RouteModel(

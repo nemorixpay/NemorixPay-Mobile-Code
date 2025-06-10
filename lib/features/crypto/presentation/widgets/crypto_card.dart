@@ -1,18 +1,18 @@
 // Reusable Widget for My Assets
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:nemorixpay/features/crypto/domain/entities/asset_entity.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_market_data.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 
 class CryptoCard extends StatelessWidget {
-  final AssetEntity crypto;
+  final CryptoAssetWithMarketData crypto;
   const CryptoCard({super.key, required this.crypto});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        debugPrint('CryptoCard: ${crypto.name}');
+        debugPrint('CryptoCard: ${crypto.asset.name}');
       },
       child: Container(
         width: 140,
@@ -25,17 +25,21 @@ class CryptoCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(crypto.logoPath, width: 30),
+            Image.asset(
+              // TODO - Check general image
+              crypto.asset.logoUrl ?? 'assets/logos/btc.png',
+              width: 30,
+            ),
             const SizedBox(height: 8),
             Text(
-              crypto.symbol,
+              crypto.asset.assetCode,
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
             Text(
-              '\$${crypto.currentPrice.toStringAsFixed(2)}',
+              '\$${crypto.marketData.currentPrice.toStringAsFixed(2)}',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 8),
@@ -51,7 +55,7 @@ class CryptoCard extends StatelessWidget {
                         30,
                         (i) => FlSpot(
                           i.toDouble(),
-                          crypto.currentPrice * (1 + (i % 10) / 100),
+                          crypto.marketData.currentPrice * (1 + (i % 10) / 100),
                         ),
                       ),
                       isCurved: true,

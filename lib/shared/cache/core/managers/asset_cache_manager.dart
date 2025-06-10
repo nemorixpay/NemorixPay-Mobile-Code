@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:nemorixpay/core/errors/asset/asset_failure.dart';
 import 'package:nemorixpay/shared/common/data/models/asset_model.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart';
@@ -42,6 +43,7 @@ class AssetCacheManager extends Equatable {
 
   /// Map of assets indexed by their ID
   final Map<String, AssetModel> _assets = {};
+  final Map<String, AssetModel> _accountAssets = {};
 
   /// Timestamp of the last update
   DateTime? _lastUpdate;
@@ -70,14 +72,31 @@ class AssetCacheManager extends Equatable {
     try {
       _isLoading = true;
       final stellarAssets = await _stellarDataSource.getAvailableAssets();
+      // TODO - Necesitamos pasar la clave publica desde la creacion de la cuenta
+      final accountAssets = await _stellarDataSource.getAccountAssets(
+        'GCDILZUJ5QR2MYSE4JSNANNKGTRSGOJ7WGMRDCJX6EBEVG6Z4VOVJ5Y4',
+      );
+
+      debugPrint(
+        'AssetCacheManager - loadAssetsFromStellar: list = ${accountAssets.length}',
+      );
 
       // Limpiar el caché actual
       _assets.clear();
+      _accountAssets.clear();
 
       // Cargar los nuevos assets usando la clave única
       for (var asset in stellarAssets) {
         final key = _getAssetKey(asset.assetCode, asset.assetIssuer);
         _assets[key] = asset;
+      }
+      // Cargar los assets de la cuenta usando la clave única
+      for (var accountAsset in accountAssets) {
+        final key = _getAssetKey(
+          accountAsset.assetCode,
+          accountAsset.assetIssuer,
+        );
+        _accountAssets[key] = accountAsset;
       }
 
       _lastUpdate = DateTime.now();
@@ -127,7 +146,21 @@ class AssetCacheManager extends Equatable {
   /// Gets all stored assets
   Future<List<AssetModel>> getAllAssets() async {
     await assetsEmpty();
+    final list = _assets.values.toList();
+    debugPrint(
+      'AssetCacheManager - getAllAssets: list (_assets lenght) = ${list.length}',
+    );
     return _assets.values.toList();
+  }
+
+  /// Gets all account assets
+  Future<List<AssetModel>> getAccountAssets() async {
+    await assetsEmpty();
+    final list = _accountAssets.values.toList();
+    debugPrint(
+      'AssetCacheManager - getAccountAssets: list (_accountAssets lenght) = ${list.length}',
+    );
+    return list;
   }
 
   /// Gets all assets of a specific type (by assetCode)

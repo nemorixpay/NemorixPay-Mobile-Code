@@ -9,9 +9,9 @@ import 'package:nemorixpay/features/crypto/domain/usecases/get_crypto_assets_use
 import 'package:nemorixpay/features/crypto/domain/usecases/get_crypto_asset_details_usecase.dart';
 import 'package:nemorixpay/features/crypto/domain/usecases/get_market_data_usecase.dart';
 import 'package:nemorixpay/features/crypto/domain/usecases/update_market_data_usecase.dart';
-import 'package:nemorixpay/features/crypto/presentation/bloc/crypto_market_bloc.dart';
-import 'package:nemorixpay/features/crypto/presentation/bloc/crypto_market_event.dart';
-import 'package:nemorixpay/features/crypto/presentation/bloc/crypto_market_state.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_all_available_assets/crypto_market_bloc.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_all_available_assets/crypto_market_event.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_all_available_assets/crypto_market_state.dart';
 import 'package:nemorixpay/shared/common/domain/entities/asset_entity.dart';
 import 'crypto_market_bloc_test.mocks.dart';
 

@@ -507,37 +507,6 @@ class StellarDataSourceImpl implements StellarDataSource {
       return 0.0;
     }
   }
-
-  /// Gets all assets and their balances for a given Stellar account
-  @override
-  Future<List<AssetModel>> getAccountAssets(String publicKey) async {
-    try {
-      final account = await _sdk.accounts.account(publicKey);
-      return account.balances.map((balance) {
-        return AssetModel(
-          id: '',
-          assetCode: balance.assetCode ?? 'XLM',
-          balance: double.tryParse(balance.balance) ?? 0.0,
-          assetType: balance.assetType,
-          assetIssuer: balance.assetIssuer,
-          limit: balance.limit != null ? double.tryParse(balance.limit!) : null,
-          isAuthorized: balance.isAuthorized ?? true,
-          decimals: 7,
-          name: _getAssetName(balance.assetCode ?? 'XLM'),
-          network: '', // Default for XLM, should be fetched from asset info
-        );
-      }).toList();
-    } catch (e) {
-      debugPrint('StellarDatasource: getAccountAssets - Error: $e');
-      if (e is StellarFailure) rethrow;
-
-      throw StellarFailure(
-        stellarCode: StellarErrorCode.unknown.code,
-        stellarMessage: 'Error getting account assets in datasource: $e',
-      );
-    }
-  }
-
   // -----------------------------------------------------------------------------------
 
   @override
@@ -675,6 +644,39 @@ class StellarDataSourceImpl implements StellarDataSource {
       throw StellarFailure(
         stellarCode: StellarErrorCode.unknown.code,
         stellarMessage: 'Error getting available assets: $e',
+      );
+    }
+  }
+
+  /// Gets all assets and their balances for a given Stellar account
+  @override
+  Future<List<AssetModel>> getAccountAssets(String publicKey) async {
+    try {
+      debugPrint(
+        'StellarDatasource: getAccountAssets - Obteniendo account assets disponibles',
+      );
+      final account = await _sdk.accounts.account(publicKey);
+      return account.balances.map((balance) {
+        return AssetModel(
+          id: '',
+          assetCode: balance.assetCode ?? 'XLM',
+          balance: double.tryParse(balance.balance) ?? 0.0,
+          assetType: balance.assetType,
+          assetIssuer: balance.assetIssuer,
+          limit: balance.limit != null ? double.tryParse(balance.limit!) : null,
+          isAuthorized: balance.isAuthorized ?? true,
+          decimals: 7,
+          name: _getAssetName(balance.assetCode ?? 'XLM'),
+          network: '', // Default for XLM, should be fetched from asset info
+        );
+      }).toList();
+    } catch (e) {
+      debugPrint('StellarDatasource: getAccountAssets - Error: $e');
+      if (e is StellarFailure) rethrow;
+
+      throw StellarFailure(
+        stellarCode: StellarErrorCode.unknown.code,
+        stellarMessage: 'Error getting account assets in datasource: $e',
       );
     }
   }

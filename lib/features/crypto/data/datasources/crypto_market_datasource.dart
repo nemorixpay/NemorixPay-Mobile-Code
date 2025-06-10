@@ -16,6 +16,12 @@ abstract class CryptoMarketDataSource {
   /// Throws [AssetFailure] if the operation fails
   Future<List<CryptoAssetWithMarketDataModel>> getCryptoAssets();
 
+  /// Gets the list of the account crypto assets with their market data
+  ///
+  /// Returns [List<CryptoAssetWithMarketDataModel>] with all account assets
+  /// Throws [AssetFailure] if the operation fails
+  Future<List<CryptoAssetWithMarketDataModel>> getCryptoAccountAssets();
+
   /// Gets the market data for a specific crypto asset
   ///
   /// Returns [MarketDataModel] with the current market data

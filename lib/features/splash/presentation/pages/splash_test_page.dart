@@ -85,9 +85,9 @@ class _SplashTestPageState extends State<SplashTestPage> {
                 ),
                 SizedBox(height: 20),
                 RoundedElevatedButton(
-                  text: "Continue with Home",
+                  text: "Continue with Home2",
                   onPressed: () {
-                    Navigator.pushNamed(context, RouteNames.home);
+                    Navigator.pushNamed(context, RouteNames.home2);
                   },
                   backgroundColor: Colors.white,
                   textColor: Colors.black,

@@ -1,27 +1,32 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:nemorixpay/features/crypto/domain/entities/asset_entity.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_market_data.dart';
 
 class LivePriceTile extends StatelessWidget {
-  final AssetEntity asset;
+  final CryptoAssetWithMarketData asset;
   const LivePriceTile({super.key, required this.asset});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Image.asset(asset.logoPath, width: 32, height: 32),
+      leading: Image.asset(
+        // TODO - Check general image
+        asset.asset.logoUrl ?? 'assets/logos/btc.png',
+        width: 32,
+        height: 32,
+      ),
       title: Text(
-        asset.name,
+        asset.asset.name,
         style: Theme.of(
           context,
         ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
       ),
       subtitle: Text(
-        asset.symbol,
+        asset.asset.assetCode,
         style: Theme.of(context).textTheme.bodyMedium,
       ),
       trailing: Text(
-        asset.currentPrice.toStringAsFixed(2),
+        '\$${asset.marketData.currentPrice.toStringAsFixed(2)}',
         style: Theme.of(
           context,
         ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
@@ -29,7 +34,7 @@ class LivePriceTile extends StatelessWidget {
       onTap: () {
         // TODO: Navigate to detail or show more info
         if (kDebugMode) {
-          print('Tapped on ${asset.name}');
+          print('Tapped on ${asset.asset.name}');
         }
       },
     );

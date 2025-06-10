@@ -94,7 +94,7 @@ class WalletSuccessPage extends StatelessWidget {
                           onPressed: () {
                             Navigator.pushNamedAndRemoveUntil(
                               context,
-                              RouteNames.home,
+                              RouteNames.home2,
                               (route) => false,
                             );
                           },

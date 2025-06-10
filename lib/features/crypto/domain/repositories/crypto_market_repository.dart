@@ -20,6 +20,13 @@ abstract class CryptoMarketRepository {
   /// Throws [AssetFailure] if the operation fails
   Future<Either<Failure, List<CryptoAssetWithMarketData>>> getCryptoAssets();
 
+  /// Gets the list of the account crypto assets with their market data
+  ///
+  /// Returns [List<CryptoAssetWithMarketData>] with all account assets
+  /// Throws [AssetFailure] if the operation fails
+  Future<Either<Failure, List<CryptoAssetWithMarketData>>>
+  getCryptoAccountAssets();
+
   /// Gets the market data for a specific crypto asset
   ///
   /// Returns [MarketDataEntity] with the current market data

@@ -6,15 +6,15 @@ import 'package:nemorixpay/features/crypto/domain/usecases/get_crypto_assets_use
 import 'package:nemorixpay/features/crypto/domain/usecases/get_crypto_asset_details_usecase.dart';
 import 'package:nemorixpay/features/crypto/domain/usecases/get_market_data_usecase.dart';
 import 'package:nemorixpay/features/crypto/domain/usecases/update_market_data_usecase.dart';
-import 'package:nemorixpay/features/crypto/presentation/bloc/crypto_market_event.dart';
-import 'package:nemorixpay/features/crypto/presentation/bloc/crypto_market_state.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_all_available_assets/crypto_market_event.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_all_available_assets/crypto_market_state.dart';
 
 /// @file        crypto_market_bloc.dart
 /// @brief       BLoC for managing crypto market operations.
 /// @details     Handles the state management for crypto market operations like
 ///             getting crypto assets, market data, and price updates.
 /// @author      Miguel Fagundez
-/// @date        2025-06-06
+/// @date        06/06/2025
 /// @version     1.0
 /// @copyright   Apache 2.0 License
 
@@ -55,9 +55,6 @@ class CryptoMarketBloc extends Bloc<CryptoMarketEvent, CryptoMarketState> {
         (failure) => emit(CryptoMarketError(failure)),
         (assets) => emit(CryptoAssetsLoaded(assets)),
       );
-      debugPrint(
-        'CryptoMarketBloc -_onGetCryptoAssets- result.fold(): ${result.toString()}',
-      );
     } on AssetFailure catch (failure) {
       debugPrint(
         'CryptoMarketBloc -_onGetCryptoAssets- Error (AssetFailure): ${failure.assetMessage}',
@@ -81,9 +78,6 @@ class CryptoMarketBloc extends Bloc<CryptoMarketEvent, CryptoMarketState> {
       result.fold(
         (failure) => emit(CryptoMarketError(failure)),
         (asset) => emit(CryptoAssetDetailsLoaded(asset)),
-      );
-      debugPrint(
-        'CryptoMarketBloc -_onGetCryptoAssetDetails- result.fold(): ${result.toString()}',
       );
     } on AssetFailure catch (failure) {
       debugPrint(

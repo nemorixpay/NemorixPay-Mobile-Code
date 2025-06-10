@@ -7,7 +7,7 @@ import 'package:nemorixpay/features/crypto/domain/entities/market_data_entity.da
 /// @brief       States for the CryptoMarketBloc.
 /// @details     Defines all possible states that can be emitted by the crypto market feature.
 /// @author      Miguel Fagundez
-/// @date        2025-06-06
+/// @date        06/06/2025
 /// @version     1.0
 /// @copyright   Apache 2.0 License
 

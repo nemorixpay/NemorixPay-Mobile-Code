@@ -26,7 +26,7 @@ class RouteNames {
   // static const homeAnalytics = "home_analytics";
 
   /// Main home page with assets overview
-  static const home = "home";
+  static const home2 = "home_2";
 
   /// Detailed view of a specific asset
   static const assetDetails = "asset_details";
