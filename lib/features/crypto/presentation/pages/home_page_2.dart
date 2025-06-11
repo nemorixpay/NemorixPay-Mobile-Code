@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nemorixpay/core/utils/api_extensions.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/features/crypto/presentation/widgets/crypto_card.dart';
 import 'package:nemorixpay/features/crypto/presentation/widgets/home_header.dart';
@@ -8,6 +9,8 @@ import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_mar
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_home_bloc.dart';
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_home_event.dart';
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_home_state.dart';
+import 'package:nemorixpay/shared/cache/core/managers/asset_cache_manager.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/app_loader.dart';
 
 /// @file        home_page_2.dart
 /// @brief       New implementation of the main screen using CryptoMarketBloc.
@@ -33,6 +36,18 @@ class _HomePage2State extends State<HomePage2> {
   void initState() {
     super.initState();
     // Fire main event: Get all available/account assets
+    AssetCacheManager cache = AssetCacheManager();
+
+    // TODO Include publicKey in SignIn or WalletCreation process
+    // TODO This is Temporal
+    if (cache.isPublicKeyAvailable()) {
+      debugPrint('PublicKey is available');
+    } else {
+      debugPrint('PublicKey is not available');
+      cache.setPublicAccountKey(
+        'GCDILZUJ5QR2MYSE4JSNANNKGTRSGOJ7WGMRDCJX6EBEVG6Z4VOVJ5Y4',
+      );
+    }
     context.read<CryptoHomeBloc>().add(LoadAllCryptoData());
   }
 
@@ -65,14 +80,16 @@ class _HomePage2State extends State<HomePage2> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: SafeArea(
+        // TODO: Need to check with BlocListener
         child: BlocBuilder<CryptoHomeBloc, CryptoHomeState>(
           builder: (context, homeState) {
             debugPrint('Home State: $homeState');
 
             if (homeState is CryptoHomeLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return AppLoader(message: l10n.loading);
             }
 
             if (homeState is CryptoHomeError) {
@@ -99,6 +116,7 @@ class _HomePage2State extends State<HomePage2> {
   }
 
   Widget mainWidget(CryptoHomeLoaded homeState) {
+    final walletBalance = calculateWalletBalance(homeState.accountAssets);
     return GestureDetector(
       onTap: () {
         if (_isSearching) _toggleSearch();
@@ -110,6 +128,7 @@ class _HomePage2State extends State<HomePage2> {
             isSearching: _isSearching,
             onSearchToggle: _toggleSearch,
             onSearchChanged: _searchCrypto,
+            walletBalance: walletBalance,
           ),
           Expanded(
             child: _buildContent(
@@ -182,5 +201,21 @@ class _HomePage2State extends State<HomePage2> {
     );
 
     // return const SizedBox.shrink();
+  }
+
+  String calculateWalletBalance(List<CryptoAssetWithMarketData> accountAssets) {
+    try {
+      double balance = 0.0;
+      for (var asset in accountAssets) {
+        balance += asset.asset.balance ?? 0.0;
+        debugPrint('Asset: ${asset.asset.assetCode}');
+        debugPrint('Balance: ${asset.asset.balance}');
+      }
+      debugPrint('Balance Total: $balance');
+      return balance.truncateToDecimalPlaces(2);
+    } catch (e) {
+      debugPrint('Error calculating wallet balance: ${e.toString()}');
+      return '0.0';
+    }
   }
 }

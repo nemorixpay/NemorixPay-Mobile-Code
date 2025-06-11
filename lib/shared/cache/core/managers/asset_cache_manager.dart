@@ -25,6 +25,9 @@ class AssetCacheManager extends Equatable {
   /// Expiration duration for cache
   final Duration _expirationDuration;
 
+  /// Public account key
+  String _publicAccountKey = '';
+
   /// Factory constructor to get the singleton instance
   factory AssetCacheManager({Duration? expirationDuration}) {
     _instance ??= AssetCacheManager._internal(
@@ -59,6 +62,14 @@ class AssetCacheManager extends Equatable {
       _lastUpdate == null ||
       DateTime.now().difference(_lastUpdate!) > _expirationDuration;
 
+  bool isPublicKeyAvailable() {
+    return _publicAccountKey.contains('G');
+  }
+
+  void setPublicAccountKey(String key) {
+    _publicAccountKey = key;
+  }
+
   Future<void> assetsEmpty() async {
     if (_assets.isEmpty) {
       await loadAssetsFromStellar();
@@ -71,26 +82,29 @@ class AssetCacheManager extends Equatable {
 
     try {
       _isLoading = true;
+      // All available Stellar assets
       final stellarAssets = await _stellarDataSource.getAvailableAssets();
-      // TODO - Necesitamos pasar la clave publica desde la creacion de la cuenta
+      // Only Account assets
       final accountAssets = await _stellarDataSource.getAccountAssets(
-        'GCDILZUJ5QR2MYSE4JSNANNKGTRSGOJ7WGMRDCJX6EBEVG6Z4VOVJ5Y4',
+        _publicAccountKey ??
+            // TODO After integrating, the default value needs to be deleted
+            'GCDILZUJ5QR2MYSE4JSNANNKGTRSGOJ7WGMRDCJX6EBEVG6Z4VOVJ5Y4',
       );
 
       debugPrint(
         'AssetCacheManager - loadAssetsFromStellar: list = ${accountAssets.length}',
       );
 
-      // Limpiar el caché actual
+      // Clean onl cache values
       _assets.clear();
       _accountAssets.clear();
 
-      // Cargar los nuevos assets usando la clave única
+      // Upload the new assets using the unique key
       for (var asset in stellarAssets) {
         final key = _getAssetKey(asset.assetCode, asset.assetIssuer);
         _assets[key] = asset;
       }
-      // Cargar los assets de la cuenta usando la clave única
+      // Load the account assets using the unique key
       for (var accountAsset in accountAssets) {
         final key = _getAssetKey(
           accountAsset.assetCode,
@@ -100,7 +114,12 @@ class AssetCacheManager extends Equatable {
       }
 
       _lastUpdate = DateTime.now();
+    } catch (e) {
+      throw AssetFailure.unknown(
+        'loadAssetsFromStellar - Failed to get account asset by Public key (Asset Cache Manager): $e',
+      );
     } finally {
+      debugPrint('loadAssetsFromStellar - _isLoading = false;');
       _isLoading = false;
     }
   }

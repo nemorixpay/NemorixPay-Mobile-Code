@@ -2,6 +2,7 @@
   "@_APP_GENERAL": {
   },
   "appName": "NemorixPay",
+  "loading": "Se esta cargando",
   "@_SIGN_IN_PAGE": {
   },
   "welcomeBack": "Bienvenido de nuevo",

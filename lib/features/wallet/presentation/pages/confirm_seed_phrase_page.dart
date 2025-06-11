@@ -5,6 +5,7 @@ import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_bloc.dart';
 import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_event.dart';
 import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_state.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/seed_phrase_success_dialog.dart';
+import 'package:nemorixpay/shared/cache/core/managers/asset_cache_manager.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/app_loader.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
@@ -155,6 +156,9 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
           debugPrint('WALLET CREATED!');
           debugPrint('New Public Key: ${state.wallet.publicKey}');
           debugPrint('New Secret Key: ${state.wallet.secretKey}');
+          AssetCacheManager cache = AssetCacheManager();
+          // TODO Include publicKey in SignIn process
+          cache.setPublicAccountKey(state.wallet.publicKey);
           Navigator.pushNamedAndRemoveUntil(
             context,
             RouteNames.successWalletCreation,

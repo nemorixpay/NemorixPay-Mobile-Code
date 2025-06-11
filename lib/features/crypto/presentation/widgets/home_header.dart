@@ -22,11 +22,15 @@ class HomeHeader extends StatefulWidget {
   /// Current search state
   final bool isSearching;
 
+  /// Current wallet balance
+  final String? walletBalance;
+
   const HomeHeader({
     super.key,
     required this.onSearchToggle,
     required this.onSearchChanged,
     required this.isSearching,
+    this.walletBalance,
   });
 
   @override
@@ -102,7 +106,7 @@ class _HomeHeaderState extends State<HomeHeader> {
               ),
             ],
           ),
-          const WalletBalance(balance: '\$12,345.67'),
+          WalletBalance(balance: '\$${widget.walletBalance ?? 0.0}'),
           const DepositWithdrawButtons(),
         ],
       ),

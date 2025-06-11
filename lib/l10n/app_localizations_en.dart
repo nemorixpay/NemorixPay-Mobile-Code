@@ -12,6 +12,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appName => 'NemorixPay';
 
   @override
+  String get loading => 'It is loading';
+
+  @override
   String get welcomeBack => 'Welcome Back';
 
   @override

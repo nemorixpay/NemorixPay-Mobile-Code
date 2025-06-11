@@ -101,6 +101,12 @@ abstract class AppLocalizations {
   /// **'NemorixPay'**
   String get appName;
 
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'It is loading'**
+  String get loading;
+
   /// No description provided for @welcomeBack.
   ///
   /// In en, this message translates to:
