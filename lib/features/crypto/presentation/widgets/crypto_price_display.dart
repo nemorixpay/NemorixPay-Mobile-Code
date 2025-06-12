@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_market_data.dart';
 import 'package:nemorixpay/features/crypto/presentation/bloc/crypto_event.dart';
 import 'package:nemorixpay/features/crypto/presentation/bloc/crypto_state.dart';
 import '../../domain/entities/asset_entity.dart';
@@ -9,12 +10,12 @@ import '../bloc/crypto_bloc.dart';
 /// @brief       Widget for displaying crypto prices.
 /// @details     Shows current price and price changes for a crypto.
 /// @author      Miguel Fagundez
-/// @date        04/30/2025
-/// @version     1.0
+/// @date        06/12/2025
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 class CryptoPriceDisplay extends StatelessWidget {
   final String symbol;
-  final AssetEntity initialCrypto;
+  final CryptoAssetWithMarketData initialCrypto;
 
   const CryptoPriceDisplay({
     super.key,
@@ -82,17 +83,20 @@ class CryptoPriceDisplay extends StatelessWidget {
     );
   }
 
-  Widget _buildInitialState(BuildContext context, AssetEntity asset) {
+  Widget _buildInitialState(
+    BuildContext context,
+    CryptoAssetWithMarketData asset,
+  ) {
     return Column(
       children: [
         Text(
-          '\$${asset.currentPrice.toStringAsFixed(2)}',
+          '\$${asset.marketData.currentPrice.toStringAsFixed(2)}',
           style: Theme.of(
             context,
           ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         Text(
-          'Última actualización: ${_formatDateTime(asset.lastUpdated)}',
+          'Última actualización: ${_formatDateTime(asset.marketData.lastUpdated)}',
           style: Theme.of(context).textTheme.bodySmall,
         ),
         const SizedBox(height: 8),

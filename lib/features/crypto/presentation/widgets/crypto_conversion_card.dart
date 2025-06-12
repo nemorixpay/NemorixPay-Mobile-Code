@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-import 'package:nemorixpay/features/crypto/domain/entities/asset_entity.dart';
-import 'package:nemorixpay/features/crypto/data/mock_cryptos.dart';
-import 'package:nemorixpay/features/crypto/domain/usecases/get_crypto_list_usecase.dart';
-import 'package:nemorixpay/features/crypto/presentation/bloc/crypto_bloc.dart';
-import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
-import 'package:nemorixpay/l10n/app_localizations.dart';
-import 'package:nemorixpay/features/crypto/domain/entities/amount_validator.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource_impl.dart';
 import 'crypto_price_display.dart';
-import '../../domain/usecases/update_crypto_price_usecase.dart';
-import '../../data/repositories/crypto_repository_impl.dart';
-import '../../data/datasources/crypto_datasource_impl.dart';
+import 'package:nemorixpay/l10n/app_localizations.dart';
+import 'package:nemorixpay/config/theme/nemorix_colors.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/amount_validator.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_market_data.dart';
 
 /// @file        crypto_conversion_card.dart
 /// @brief       Widget for conversion between fiat and cryptocurrencies.
@@ -20,23 +12,23 @@ import '../../data/datasources/crypto_datasource_impl.dart';
 ///              including fiat currency selection, amount input, cryptocurrency selection,
 ///              and exchange rate display.
 /// @author      Miguel Fagundez
-/// @date        04/30/2025
-/// @version     1.1
+/// @date        06/12/2025
+/// @version     1.2
 /// @copyright   Apache 2.0 License
 class CryptoConversionCard extends StatefulWidget {
   final String selectedFiat;
-  final AssetEntity selectedAsset;
+  final List<CryptoAssetWithMarketData> listOfAssets;
   final TextEditingController payController;
   final double assetPrice;
   final double receiveAmount;
   final Function(String) onFiatChanged;
-  final Function(AssetEntity) onAssetChanged;
+  final Function(CryptoAssetWithMarketData) onAssetChanged;
   final Function(String) onPayAmountChanged;
 
   const CryptoConversionCard({
     super.key,
     required this.selectedFiat,
-    required this.selectedAsset,
+    required this.listOfAssets,
     required this.payController,
     required this.assetPrice,
     required this.receiveAmount,
@@ -51,40 +43,17 @@ class CryptoConversionCard extends StatefulWidget {
 
 class _CryptoConversionCardState extends State<CryptoConversionCard> {
   AmountValidationState _validationState = AmountValidationState.valid;
-  late CryptoBloc _assetBloc;
-
+  late CryptoAssetWithMarketData selectedAsset;
   @override
   void initState() {
+    selectedAsset = widget.listOfAssets[0];
     super.initState();
-    _initializeBloc();
   }
 
   @override
   void didUpdateWidget(CryptoConversionCard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.selectedAsset.symbol != widget.selectedAsset.symbol) {
-      _initializeBloc();
-    }
-  }
-
-  // TODO This needs to be deleted
-  // Temporal bloc initialization
-  // Move to di/services
-  void _initializeBloc() {
-    _assetBloc = CryptoBloc(
-      updateCryptoPriceUseCase: UpdateCryptoPriceUseCase(
-        repository: CryptoRepositoryImpl(
-          CryptoDataSourceImpl(stellarDataSource: StellarDataSourceImpl())
-            ..initializeMockData(widget.selectedAsset.toModel()),
-        ),
-      ),
-      getCryptoListUseCase: GetCryptoListUseCase(
-        repository: CryptoRepositoryImpl(
-          CryptoDataSourceImpl(stellarDataSource: StellarDataSourceImpl())
-            ..initializeMockData(widget.selectedAsset.toModel()),
-        ),
-      ),
-    );
+    if (selectedAsset.asset.assetCode != selectedAsset.asset.assetCode) {}
   }
 
   void _validateAmount(String amount) {
@@ -109,97 +78,94 @@ class _CryptoConversionCardState extends State<CryptoConversionCard> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _assetBloc,
-      child: BaseCard(
-        cardWidget: Column(
-          children: [
-            Text(
-              AppLocalizations.of(context)!.youPay,
-              style: Theme.of(context).textTheme.labelLarge,
-            ),
-            const SizedBox(height: 12),
-            CryptoPriceDisplay(
-              symbol: widget.selectedAsset.symbol,
-              initialCrypto: widget.selectedAsset,
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Text(
-                  AppLocalizations.of(context)!.youPay,
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-                const Spacer(),
-                _buildFiatDropdown(context),
-              ],
-            ),
-            TextField(
-              controller: widget.payController,
-              keyboardType: TextInputType.number,
-              style: Theme.of(context).textTheme.titleLarge,
-              inputFormatters: [AmountInputFormatter()],
-              decoration: InputDecoration(
-                hintText: '0.00',
-                hintStyle: const TextStyle(color: Colors.grey),
-                border: InputBorder.none,
-                errorText:
-                    _validationState != AmountValidationState.valid
-                        ? _getErrorMessage(context)
-                        : null,
+    return BaseCard(
+      cardWidget: Column(
+        children: [
+          Text(
+            AppLocalizations.of(context)!.youPay,
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
+          const SizedBox(height: 12),
+          CryptoPriceDisplay(
+            symbol: selectedAsset.asset.assetCode,
+            initialCrypto: selectedAsset,
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Text(
+                AppLocalizations.of(context)!.youPay,
+                style: Theme.of(context).textTheme.labelLarge,
               ),
-              onChanged: _validateAmount,
+              const Spacer(),
+              _buildFiatDropdown(context),
+            ],
+          ),
+          TextField(
+            controller: widget.payController,
+            keyboardType: TextInputType.number,
+            style: Theme.of(context).textTheme.titleLarge,
+            inputFormatters: [AmountInputFormatter()],
+            decoration: InputDecoration(
+              hintText: '0.00',
+              hintStyle: const TextStyle(color: Colors.grey),
+              border: InputBorder.none,
+              errorText:
+                  _validationState != AmountValidationState.valid
+                      ? _getErrorMessage(context)
+                      : null,
             ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                const Expanded(child: Divider()),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: const Icon(
-                    Icons.swap_vert,
-                    color: NemorixColors.primaryColor,
-                  ),
-                ),
-                const Expanded(child: Divider()),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Text(
-                  AppLocalizations.of(context)!.youReceive,
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-                const Spacer(),
-                _buildAssetDropdown(context),
-              ],
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                widget.receiveAmount.toStringAsFixed(4),
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.circle,
+            onChanged: _validateAmount,
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              const Expanded(child: Divider()),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: const Icon(
+                  Icons.swap_vert,
                   color: NemorixColors.primaryColor,
-                  size: 8,
                 ),
-                const SizedBox(width: 4),
-                Text(
-                  '1 USD = ${(1 / widget.assetPrice).toStringAsFixed(6)} ${widget.selectedAsset.symbol.toUpperCase()}',
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-              ],
+              ),
+              const Expanded(child: Divider()),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Text(
+                AppLocalizations.of(context)!.youReceive,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+              const Spacer(),
+              _buildAssetDropdown(context),
+            ],
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              widget.receiveAmount.toStringAsFixed(4),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.circle,
+                color: NemorixColors.primaryColor,
+                size: 8,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                '1 USD = ${(1 / widget.assetPrice).toStringAsFixed(6)} ${selectedAsset.asset.assetCode.toUpperCase()}',
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -221,16 +187,16 @@ class _CryptoConversionCardState extends State<CryptoConversionCard> {
   }
 
   Widget _buildAssetDropdown(BuildContext context) {
-    return DropdownButton<AssetEntity>(
-      value: widget.selectedAsset,
+    return DropdownButton<CryptoAssetWithMarketData>(
+      value: selectedAsset,
       style: Theme.of(context).textTheme.labelLarge,
       underline: const SizedBox(),
       items:
-          mockCryptos
+          widget.listOfAssets
               .map(
                 (asset) => DropdownMenuItem(
                   value: asset,
-                  child: Text(asset.symbol.toUpperCase()),
+                  child: Text(asset.asset.assetCode.toUpperCase()),
                 ),
               )
               .toList(),
@@ -240,7 +206,6 @@ class _CryptoConversionCardState extends State<CryptoConversionCard> {
 
   @override
   void dispose() {
-    _assetBloc.close();
     super.dispose();
   }
 }
