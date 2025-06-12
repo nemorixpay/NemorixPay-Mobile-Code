@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nemorixpay/features/crypto/domain/entities/asset_entity.dart';
-import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
 import 'crypto_stats_tile.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_market_data.dart';
 
 /// @file        crypto_stats_card.dart
 /// @brief       Reusable widget to display a card with multiple crypto statistics.
@@ -12,7 +12,7 @@ import 'crypto_stats_tile.dart';
 /// @version     1.0
 /// @copyright   Apache 2.0 License
 class CryptoStatsCard extends StatelessWidget {
-  final AssetEntity crypto;
+  final CryptoAssetWithMarketData crypto;
 
   const CryptoStatsCard({super.key, required this.crypto});
 
@@ -31,24 +31,25 @@ class CryptoStatsCard extends StatelessWidget {
           const SizedBox(height: 16),
           CryptoStatsTile(
             label: 'Capitalización de Mercado',
-            value: '\$${crypto.marketCap.toStringAsFixed(2)}',
+            value: '\$${crypto.marketData.marketCap.toStringAsFixed(2)}',
           ),
           CryptoStatsTile(
             label: 'Volumen 24h',
-            value: '\$${crypto.volume.toStringAsFixed(2)}',
+            value: '\$${crypto.marketData.volume.toStringAsFixed(2)}',
           ),
           CryptoStatsTile(
             label: 'Suministro Circulante',
             value:
-                '${crypto.circulatingSupply.toStringAsFixed(2)} ${crypto.symbol}',
+                '${crypto.marketData.circulatingSupply.toStringAsFixed(2)} ${crypto.asset.assetCode}',
           ),
           CryptoStatsTile(
             label: 'Máximo Histórico',
-            value: '\$${crypto.ath.toStringAsFixed(2)}',
+            value: '\$${crypto.marketData.ath.toStringAsFixed(2)}',
           ),
           CryptoStatsTile(
             label: 'Cambio 24h',
-            value: '${crypto.priceChangePercentage.toStringAsFixed(2)}%',
+            value:
+                '${crypto.marketData.priceChangePercentage.toStringAsFixed(2)}%',
           ),
         ],
       ),

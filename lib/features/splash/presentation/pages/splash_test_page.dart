@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_market_data.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_home_bloc.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_home_state.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_button.dart';
-import 'package:nemorixpay/features/crypto/data/mock_cryptos.dart';
-import 'package:nemorixpay/features/crypto/domain/entities/asset_entity.dart';
-import 'dart:math';
 
 /// @file        splash_test_page.dart
 /// @brief       Temporary test page for NemorixPay UI components.
@@ -25,17 +26,10 @@ class SplashTestPage extends StatefulWidget {
 }
 
 class _SplashTestPageState extends State<SplashTestPage> {
-  // TODO For testing purposes ----------------------------------
-  AssetEntity get randomAsset {
-    final random = Random();
-    final index = random.nextInt(mockCryptos.length);
-    return mockCryptos[index];
-  }
-  // TODO For testing purposes ----------------------------------
+  late final CryptoAssetWithMarketData asset;
 
   @override
   void initState() {
-    // TODO: implement initState
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
@@ -49,6 +43,13 @@ class _SplashTestPageState extends State<SplashTestPage> {
       debugPrint('Error _SplashTestPageState: $e');
     }
     super.initState();
+  }
+
+  CryptoAssetWithMarketData getRandomAsset() {
+    final listOfAssets =
+        context.read<CryptoHomeBloc>().state as CryptoHomeLoaded;
+    final asset = listOfAssets.accountAssets[0];
+    return asset;
   }
 
   @override
@@ -99,7 +100,7 @@ class _SplashTestPageState extends State<SplashTestPage> {
                     Navigator.pushNamed(
                       context,
                       RouteNames.assetDetails,
-                      arguments: randomAsset,
+                      arguments: getRandomAsset(),
                     );
                   },
                   backgroundColor: Colors.white,

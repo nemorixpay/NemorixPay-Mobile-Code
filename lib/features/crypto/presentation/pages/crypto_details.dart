@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:nemorixpay/features/crypto/domain/entities/asset_entity.dart';
-import 'package:nemorixpay/features/crypto/presentation/widgets/crypto_stats_card.dart';
-import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
-import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
-import 'package:nemorixpay/features/crypto/data/mock_cryptos.dart';
+import 'package:nemorixpay/config/theme/nemorix_colors.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
+import 'package:nemorixpay/features/crypto/presentation/widgets/crypto_stats_card.dart';
 import 'package:nemorixpay/features/crypto/presentation/widgets/custom_two_buttons.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_market_data.dart';
 
 /// @file        crypto_details.dart
 /// @brief       Screen to display detailed information about a crypto.
@@ -17,7 +16,8 @@ import 'package:nemorixpay/features/crypto/presentation/widgets/custom_two_butto
 /// @version     1.2
 /// @copyright   Apache 2.0 License
 class CryptoDetailsPage extends StatefulWidget {
-  final AssetEntity crypto;
+  // final AssetEntity crypto;
+  final CryptoAssetWithMarketData crypto;
 
   const CryptoDetailsPage({super.key, required this.crypto});
 
@@ -34,18 +34,13 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
   @override
   void initState() {
     super.initState();
-    _isFav = favoriteCryptos.contains(widget.crypto);
+    _isFav = widget.crypto.isFavorite;
   }
 
-  void toggleFavorite(AssetEntity asset) {
+  void toggleFavorite(CryptoAssetWithMarketData crypto) {
     setState(() {
-      if (favoriteCryptos.contains(asset)) {
-        favoriteCryptos.remove(asset);
-        _isFav = false;
-      } else {
-        favoriteCryptos.add(asset);
-        _isFav = true;
-      }
+      crypto.isFavorite = !crypto.isFavorite;
+      _isFav = crypto.isFavorite;
     });
   }
 
@@ -55,7 +50,7 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
       30,
       (i) => FlSpot(
         i.toDouble(),
-        widget.crypto.currentPrice * (1 + (i % 10) / 100),
+        widget.crypto.marketData.currentPrice * (1 + (i % 10) / 100),
       ),
     );
   }
@@ -77,7 +72,7 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
                   // Back button/Asset Name
                   // --------------------
                   MainHeader(
-                    title: widget.crypto.name,
+                    title: widget.crypto.asset.name,
                     showBackButton: true,
                     showSearchButton: false,
                   ),
@@ -92,7 +87,8 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
                         Row(
                           children: [
                             Image.asset(
-                              widget.crypto.logoPath,
+                              widget.crypto.asset.logoUrl ??
+                                  'assets/logos/btc.png',
                               width: 50,
                               height: 50,
                             ),
@@ -101,16 +97,17 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  widget.crypto.symbol,
+                                  widget.crypto.asset.assetCode,
                                   style: Theme.of(context).textTheme.titleLarge,
                                 ),
                                 Text(
-                                  '\$${widget.crypto.currentPrice.toStringAsFixed(2)}',
+                                  '\$${widget.crypto.marketData.currentPrice.toStringAsFixed(2)}',
                                   style: Theme.of(
                                     context,
                                   ).textTheme.headlineMedium?.copyWith(
                                     color:
-                                        widget.crypto.priceChange >= 0
+                                        widget.crypto.marketData.priceChange >=
+                                                0
                                             ? NemorixColors.successColor
                                             : NemorixColors.errorColor,
                                   ),

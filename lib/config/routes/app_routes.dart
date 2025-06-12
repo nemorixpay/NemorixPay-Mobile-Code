@@ -5,6 +5,7 @@ import 'package:nemorixpay/config/routes/route_model.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:nemorixpay/features/auth/presentation/pages/sign_up_page.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_market_data.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/buy_crypto_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/home_page_2.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/payment_method_page.dart';
@@ -16,7 +17,6 @@ import 'package:nemorixpay/features/wallet/presentation/pages/show_seed_phrase_p
 import 'package:nemorixpay/features/wallet/presentation/pages/stellar_service_test_page.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/wallet_setup_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/crypto_details.dart';
-import 'package:nemorixpay/features/crypto/domain/entities/asset_entity.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/wallet_success_page.dart';
 import 'package:nemorixpay/shared/stellar/presentation/pages/test_transactions_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/test_crypto_page.dart';
@@ -141,7 +141,7 @@ class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RouteNames.assetDetails:
-        final cryptoArg = settings.arguments as AssetEntity;
+        final cryptoArg = settings.arguments as CryptoAssetWithMarketData;
         return MaterialPageRoute(
           builder: (context) => CryptoDetailsPage(crypto: cryptoArg),
         );

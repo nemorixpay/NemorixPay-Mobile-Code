@@ -14,9 +14,9 @@ import 'market_data_entity.dart';
 class CryptoAssetWithMarketData extends Equatable {
   final AssetEntity asset;
   final MarketDataEntity marketData;
-  final bool isFavorite;
+  bool isFavorite;
 
-  const CryptoAssetWithMarketData({
+  CryptoAssetWithMarketData({
     required this.asset,
     required this.marketData,
     this.isFavorite = false,

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_market_data.dart';
 
 class LivePriceTile extends StatelessWidget {
@@ -36,6 +37,7 @@ class LivePriceTile extends StatelessWidget {
         if (kDebugMode) {
           print('Tapped on ${asset.asset.name}');
         }
+        Navigator.pushNamed(context, RouteNames.assetDetails, arguments: asset);
       },
     );
   }

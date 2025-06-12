@@ -1,6 +1,7 @@
 // Reusable Widget for My Assets
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_market_data.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 
@@ -13,6 +14,11 @@ class CryptoCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         debugPrint('CryptoCard: ${crypto.asset.name}');
+        Navigator.pushNamed(
+          context,
+          RouteNames.assetDetails,
+          arguments: crypto,
+        );
       },
       child: Container(
         width: 140,
