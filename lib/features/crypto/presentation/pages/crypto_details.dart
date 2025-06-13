@@ -41,6 +41,7 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
     setState(() {
       crypto.isFavorite = !crypto.isFavorite;
       _isFav = crypto.isFavorite;
+      // Need to connect with database local/remote
     });
   }
 

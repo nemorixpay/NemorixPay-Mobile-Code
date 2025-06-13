@@ -12,7 +12,7 @@ import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_ho
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_home_event.dart';
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_home_state.dart';
 
-/// @file        home_page_2.dart
+/// @file        home_page.dart
 /// @brief       New implementation of the main screen using CryptoMarketBloc.
 /// @details     This version uses the new CryptoMarketBloc to handle state
 ///              and operations related to the cryptocurrency market.
@@ -20,14 +20,14 @@ import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_ho
 /// @date        06/09/2025
 /// @version     1
 /// @copyright   Apache 2.0 License
-class HomePage2 extends StatefulWidget {
-  const HomePage2({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<HomePage2> createState() => _HomePage2State();
+  State<HomePage> createState() => _HomePage2State();
 }
 
-class _HomePage2State extends State<HomePage2> {
+class _HomePage2State extends State<HomePage> {
   bool _isSearching = false;
   final TextEditingController _searchController = TextEditingController();
   List<CryptoAssetWithMarketData> _searchResults = [];
@@ -48,7 +48,13 @@ class _HomePage2State extends State<HomePage2> {
         'GCDILZUJ5QR2MYSE4JSNANNKGTRSGOJ7WGMRDCJX6EBEVG6Z4VOVJ5Y4',
       );
     }
-    context.read<CryptoHomeBloc>().add(LoadAllCryptoData());
+    debugPrint('cache.assetCount == ${cache.assetCount}');
+    if (cache.assetCount == 0) {
+      debugPrint('Calling...');
+      context.read<CryptoHomeBloc>().add(LoadAllCryptoData());
+    } else {
+      debugPrint('it has assets..');
+    }
   }
 
   void _toggleSearch() {
