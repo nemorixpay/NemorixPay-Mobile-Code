@@ -19,7 +19,6 @@ import 'package:nemorixpay/features/wallet/presentation/pages/wallet_setup_page.
 import 'package:nemorixpay/features/crypto/presentation/pages/crypto_details.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/wallet_success_page.dart';
 import 'package:nemorixpay/shared/stellar/presentation/pages/test_transactions_page.dart';
-import 'package:nemorixpay/features/crypto/presentation/pages/test_crypto_page.dart';
 
 /// @file        app_routes.dart
 /// @brief       Centralized route management for NemorixPay.
@@ -102,12 +101,6 @@ class AppRoutes {
       route: RouteNames.testTransactions,
       name: 'Test Transactions',
       screen: const TestTransactionsPage(),
-      icon: Icons.list_alt,
-    ),
-    RouteModel(
-      route: RouteNames.testAssetsList,
-      name: 'Test Crypto List',
-      screen: const TestCryptoPage(),
       icon: Icons.list_alt,
     ),
   ];

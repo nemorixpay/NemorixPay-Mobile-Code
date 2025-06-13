@@ -1,7 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:nemorixpay/core/errors/failures.dart';
-import 'package:nemorixpay/features/crypto/data/models/crypto_asset_with_market_data_model.dart';
-import 'package:nemorixpay/features/crypto/data/models/market_data_model.dart';
 import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_market_data.dart';
 import 'package:nemorixpay/features/crypto/domain/entities/market_data_entity.dart';
 
