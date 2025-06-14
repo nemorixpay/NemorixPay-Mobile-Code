@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class CustomTwoButtons extends StatelessWidget {
   final String textButton1;
   final Color? backgroundColorButton1;
-  final VoidCallback onFunctionButton1;
+  final Function()? onFunctionButton1;
   final String textButton2;
   final Color? backgroundColorButton2;
-  final VoidCallback onFunctionButton2;
+  final Function()? onFunctionButton2;
   final double height;
   final Color? textColor1;
   final Color? textColor2;
@@ -52,6 +52,7 @@ class CustomTwoButtons extends StatelessWidget {
             ),
           ),
         ),
+        SizedBox(width: 8),
         SizedBox(
           width: size,
           height: sizeH,

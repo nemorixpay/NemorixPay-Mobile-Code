@@ -1144,6 +1144,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to update market data. Please try again later.'**
   String get assetErrorMarketDataUpdateFailed;
+
+  /// No description provided for @termsOfServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Services'**
+  String get termsOfServices;
+
+  /// No description provided for @lastUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Last update on'**
+  String get lastUpdate;
+
+  /// No description provided for @termsContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to NemorixPay. Please read these Terms of Services carefully before using our application.'**
+  String get termsContent;
+
+  /// No description provided for @termsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms'**
+  String get termsTitle;
+
+  /// No description provided for @termsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dictum, urna eu facilisis cursus, enim libero dictum enim, nec scelerisque enim enim nec enim. \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dictum, urna eu facilisis cursus, enim libero dictum enim, nec scelerisque enim enim nec enim.'**
+  String get termsBody;
+
+  /// No description provided for @licenseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Use License'**
+  String get licenseTitle;
+
+  /// No description provided for @licenseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Adipiscing tempus feugiat viverra iaculis. Odio et a ac pretium nulla pharetra in. Cursus aenean condimentum volutpat ullamcorper eu, feugiat sed massa. \nAdipiscing tempus feugiat viverra iaculis. Odio et a ac pretium nulla pharetra in. Cursus aenean condimentum volutpat ullamcorper eu, feugiat sed massa.'**
+  String get licenseBody;
+
+  /// No description provided for @accept.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get accept;
+
+  /// No description provided for @decline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get decline;
+
+  /// No description provided for @acceptTermsCheckbox.
+  ///
+  /// In en, this message translates to:
+  /// **'I accept the terms and conditions'**
+  String get acceptTermsCheckbox;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -207,5 +207,16 @@
   "assetErrorAssetsListFailed": "No se pudieron obtener los activos disponibles",
   "assetErrorMarketDataNotFound": "Los datos de mercado para este activo no están disponibles actualmente",
   "assetErrorDetailsNotFound": "No se pudo encontrar información detallada para este activo",
-  "assetErrorMarketDataUpdateFailed": "Error al actualizar los datos de mercado. Por favor, intente más tarde."
+  "assetErrorMarketDataUpdateFailed": "Error al actualizar los datos de mercado. Por favor, intente más tarde.",
+  "@_TERMIS_AND_CONDITIONS": {},
+  "termsOfServices": "Términos y Condiciones",
+  "lastUpdate": "Última actualización en",
+  "termsContent": "Bienvenido a NemorixPay. Por favor, lea estos Términos y Condiciones cuidadosamente antes de usar nuestra aplicación.",
+  "termsTitle": "Términos",
+  "termsBody": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dictum, urna eu facilisis cursus, enim libero dictum enim, nec scelerisque enim enim nec enim. \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dictum, urna eu facilisis cursus, enim libero dictum enim, nec scelerisque enim enim nec enim.",
+  "licenseTitle": "Licencia de Uso",
+  "licenseBody": "Adipiscing tempus feugiat viverra iaculis. Odio et a ac pretium nulla pharetra in. Cursus aenean condimentum volutpat ullamcorper eu, feugiat sed massa. \nAdipiscing tempus feugiat viverra iaculis. Odio et a ac pretium nulla pharetra in. Cursus aenean condimentum volutpat ullamcorper eu, feugiat sed massa.",
+  "accept": "Aceptar",
+  "decline": "Rechazar",
+  "acceptTermsCheckbox": "Acepto los términos y condiciones"
 }

@@ -10,6 +10,19 @@ class NemorixTheme {
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: NemorixColors.primaryColor,
     ),
+    checkboxTheme: CheckboxThemeData(
+      fillColor: WidgetStateProperty.resolveWith<Color?>((
+        Set<WidgetState> states,
+      ) {
+        if (states.contains(WidgetState.selected)) {
+          return NemorixColors.primaryColor; // Fill color when selected
+        }
+        if (states.contains(WidgetState.disabled)) {
+          return Colors.blue; // Fill color when selected
+        }
+        return null; // Use the default fill color when not selected
+      }),
+    ),
     primaryColor: NemorixColors.primaryColor,
     cardColor: NemorixColors.greyLevel1,
     textTheme: TextTheme(
@@ -34,9 +47,19 @@ class NemorixTheme {
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: NemorixColors.primaryColor,
     ),
-    // checkboxTheme: const CheckboxThemeData(
-    //   checkColor:
-    // ),
+    checkboxTheme: CheckboxThemeData(
+      fillColor: WidgetStateProperty.resolveWith<Color?>((
+        Set<WidgetState> states,
+      ) {
+        if (states.contains(WidgetState.selected)) {
+          return NemorixColors.primaryColor; // Fill color when selected
+        }
+        if (states.contains(WidgetState.disabled)) {
+          return Colors.blue; // Fill color when selected
+        }
+        return null; // Use the default fill color when not selected
+      }),
+    ),
     primaryColor: NemorixColors.primaryColor,
     cardColor: NemorixColors.greyLevel6,
     textTheme: TextTheme(

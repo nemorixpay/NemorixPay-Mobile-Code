@@ -534,4 +534,34 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get assetErrorMarketDataUpdateFailed => 'Error al actualizar los datos de mercado. Por favor, intente más tarde.';
+
+  @override
+  String get termsOfServices => 'Términos y Condiciones';
+
+  @override
+  String get lastUpdate => 'Última actualización en';
+
+  @override
+  String get termsContent => 'Bienvenido a NemorixPay. Por favor, lea estos Términos y Condiciones cuidadosamente antes de usar nuestra aplicación.';
+
+  @override
+  String get termsTitle => 'Términos';
+
+  @override
+  String get termsBody => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dictum, urna eu facilisis cursus, enim libero dictum enim, nec scelerisque enim enim nec enim. \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dictum, urna eu facilisis cursus, enim libero dictum enim, nec scelerisque enim enim nec enim.';
+
+  @override
+  String get licenseTitle => 'Licencia de Uso';
+
+  @override
+  String get licenseBody => 'Adipiscing tempus feugiat viverra iaculis. Odio et a ac pretium nulla pharetra in. Cursus aenean condimentum volutpat ullamcorper eu, feugiat sed massa. \nAdipiscing tempus feugiat viverra iaculis. Odio et a ac pretium nulla pharetra in. Cursus aenean condimentum volutpat ullamcorper eu, feugiat sed massa.';
+
+  @override
+  String get accept => 'Aceptar';
+
+  @override
+  String get decline => 'Rechazar';
+
+  @override
+  String get acceptTermsCheckbox => 'Acepto los términos y condiciones';
 }

@@ -236,6 +236,15 @@ class _SplashTestPageState extends State<SplashTestPage> {
                   backgroundColor: Colors.white,
                   textColor: Colors.black,
                 ),
+                SizedBox(height: 20),
+                RoundedElevatedButton(
+                  text: "Continue with Terms Page",
+                  onPressed: () {
+                    Navigator.pushNamed(context, RouteNames.termsAndConditions);
+                  },
+                  backgroundColor: Colors.white,
+                  textColor: Colors.black,
+                ),
                 SizedBox(height: 40),
               ],
             ),

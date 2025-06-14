@@ -11,6 +11,7 @@ import 'package:nemorixpay/features/crypto/presentation/pages/home_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/payment_method_page.dart';
 import 'package:nemorixpay/features/splash/presentation/pages/splash_native_page.dart';
 import 'package:nemorixpay/features/splash/presentation/pages/splash_test_page.dart';
+import 'package:nemorixpay/features/terms/presentation/pages/terms_page.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/confirm_seed_phrase_page.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/import_seed_phrase_page.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/show_seed_phrase_page.dart';
@@ -101,6 +102,12 @@ class AppRoutes {
       route: RouteNames.testTransactions,
       name: 'Test Transactions',
       screen: const TestTransactionsPage(),
+      icon: Icons.list_alt,
+    ),
+    RouteModel(
+      route: RouteNames.termsAndConditions,
+      name: 'Test Terms and Conditions',
+      screen: const TermsPage(),
       icon: Icons.list_alt,
     ),
   ];
