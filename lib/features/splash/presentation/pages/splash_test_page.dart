@@ -209,10 +209,10 @@ class _SplashTestPageState extends State<SplashTestPage> {
                     Navigator.pushNamed(
                       context,
                       RouteNames.successWalletCreation,
-                      arguments:
-                          AppLocalizations.of(
-                            context,
-                          )!.importWalletSuccessTitle,
+                      arguments: AppLocalizations.of(
+                        context,
+                      )!
+                          .importWalletSuccessTitle,
                     );
                   },
                   backgroundColor: Colors.white,
@@ -241,6 +241,16 @@ class _SplashTestPageState extends State<SplashTestPage> {
                   text: "Continue with Terms Page",
                   onPressed: () {
                     Navigator.pushNamed(context, RouteNames.termsAndConditions);
+                  },
+                  backgroundColor: Colors.white,
+                  textColor: Colors.black,
+                ),
+                SizedBox(height: 20),
+                RoundedElevatedButton(
+                  text: "Continue with Onboarding Security",
+                  onPressed: () {
+                    Navigator.pushNamed(
+                        context, RouteNames.onboardingPageSecurity);
                   },
                   backgroundColor: Colors.white,
                   textColor: Colors.black,

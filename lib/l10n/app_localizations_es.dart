@@ -564,4 +564,34 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get acceptTermsCheckbox => 'Acepto los términos y condiciones';
+
+  @override
+  String get onboarding_security_title => 'Tu Seguridad es Nuestra Prioridad';
+
+  @override
+  String get onboarding_security_subtitle => 'Protegemos tus fondos y datos personales';
+
+  @override
+  String get onboarding_security_feature_biometric_title => 'Autenticación Biométrica';
+
+  @override
+  String get onboarding_security_feature_biometric_desc => 'Accede de forma segura con tu huella digital';
+
+  @override
+  String get onboarding_security_feature_encryption_title => 'Encriptación de Extremo a Extremo';
+
+  @override
+  String get onboarding_security_feature_encryption_desc => 'Tus datos siempre protegidos';
+
+  @override
+  String get onboarding_security_feature_monitoring_title => 'Monitoreo 24/7';
+
+  @override
+  String get onboarding_security_feature_monitoring_desc => 'Vigilancia constante de tus transacciones';
+
+  @override
+  String get onboarding_button_skip => 'Saltar';
+
+  @override
+  String get onboarding_button_next => 'Siguiente';
 }

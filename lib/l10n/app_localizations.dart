@@ -1204,6 +1204,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'I accept the terms and conditions'**
   String get acceptTermsCheckbox;
+
+  /// No description provided for @onboarding_security_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Security is Our Priority'**
+  String get onboarding_security_title;
+
+  /// No description provided for @onboarding_security_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We protect your funds and personal data'**
+  String get onboarding_security_subtitle;
+
+  /// No description provided for @onboarding_security_feature_biometric_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric Authentication'**
+  String get onboarding_security_feature_biometric_title;
+
+  /// No description provided for @onboarding_security_feature_biometric_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Access securely with your fingerprint'**
+  String get onboarding_security_feature_biometric_desc;
+
+  /// No description provided for @onboarding_security_feature_encryption_title.
+  ///
+  /// In en, this message translates to:
+  /// **'End-to-End Encryption'**
+  String get onboarding_security_feature_encryption_title;
+
+  /// No description provided for @onboarding_security_feature_encryption_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data is always protected'**
+  String get onboarding_security_feature_encryption_desc;
+
+  /// No description provided for @onboarding_security_feature_monitoring_title.
+  ///
+  /// In en, this message translates to:
+  /// **'24/7 Monitoring'**
+  String get onboarding_security_feature_monitoring_title;
+
+  /// No description provided for @onboarding_security_feature_monitoring_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Constant surveillance of your transactions'**
+  String get onboarding_security_feature_monitoring_desc;
+
+  /// No description provided for @onboarding_button_skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get onboarding_button_skip;
+
+  /// No description provided for @onboarding_button_next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get onboarding_button_next;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

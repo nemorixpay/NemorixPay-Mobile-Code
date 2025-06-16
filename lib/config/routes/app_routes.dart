@@ -9,6 +9,7 @@ import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_mar
 import 'package:nemorixpay/features/crypto/presentation/pages/buy_crypto_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/home_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/payment_method_page.dart';
+import 'package:nemorixpay/features/onboarding/presentation/pages/security_slide.dart';
 import 'package:nemorixpay/features/splash/presentation/pages/splash_native_page.dart';
 import 'package:nemorixpay/features/splash/presentation/pages/splash_test_page.dart';
 import 'package:nemorixpay/features/terms/presentation/pages/terms_page.dart';
@@ -110,6 +111,15 @@ class AppRoutes {
       screen: const TermsPage(),
       icon: Icons.list_alt,
     ),
+    RouteModel(
+      route: RouteNames.onboardingPageSecurity,
+      name: 'Onboarding Security',
+      screen: SecuritySlide(
+        onNext: () {},
+        onSkip: () {},
+      ),
+      icon: Icons.lock,
+    ),
   ];
 
   /// Generates a map of all available routes for the MaterialApp
@@ -148,12 +158,11 @@ class AppRoutes {
       case RouteNames.paymentMethod:
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-          builder:
-              (context) => PaymentMethodPage(
-                cryptoName: args['assetName'] as String,
-                amount: args['amount'] as double,
-                currency: args['currency'] as String,
-              ),
+          builder: (context) => PaymentMethodPage(
+            cryptoName: args['assetName'] as String,
+            amount: args['amount'] as double,
+            currency: args['currency'] as String,
+          ),
         );
       case RouteNames.showSeedPhrase:
         final args = settings.arguments as List<String>;

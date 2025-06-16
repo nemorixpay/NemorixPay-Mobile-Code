@@ -60,4 +60,7 @@ class RouteNames {
 
   /// Page for testing terms and conditions
   static const termsAndConditions = "terms_and_conditions";
+
+  /// Page for onboarding page: Security
+  static const onboardingPageSecurity = "onboarding_security";
 }

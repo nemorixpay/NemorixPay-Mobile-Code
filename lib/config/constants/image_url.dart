@@ -15,4 +15,7 @@ class ImageUrl {
   static const String nemorixpayLogo = 'assets/logos/nemorix_pay_logo.png';
   static const String googleLogo = 'assets/logos/google_logo.png';
   static const String appleLogo = 'assets/logos/nemorix_pay_logo.png';
+  // Onboarding
+  static const String onboardingSlideSecurity =
+      'assets/images/onboarding/seguridad.jpg';
 }

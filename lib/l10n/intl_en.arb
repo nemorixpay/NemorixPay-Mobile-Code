@@ -218,5 +218,16 @@
   "licenseBody": "Adipiscing tempus feugiat viverra iaculis. Odio et a ac pretium nulla pharetra in. Cursus aenean condimentum volutpat ullamcorper eu, feugiat sed massa. \nAdipiscing tempus feugiat viverra iaculis. Odio et a ac pretium nulla pharetra in. Cursus aenean condimentum volutpat ullamcorper eu, feugiat sed massa.",
   "accept": "Accept",
   "decline": "Decline",
-  "acceptTermsCheckbox": "I accept the terms and conditions"
+  "acceptTermsCheckbox": "I accept the terms and conditions",
+  "@_ONBOARDING_SECURITY": {},
+  "onboarding_security_title": "Your Security is Our Priority",
+  "onboarding_security_subtitle": "We protect your funds and personal data",
+  "onboarding_security_feature_biometric_title": "Biometric Authentication",
+  "onboarding_security_feature_biometric_desc": "Access securely with your fingerprint",
+  "onboarding_security_feature_encryption_title": "End-to-End Encryption",
+  "onboarding_security_feature_encryption_desc": "Your data is always protected",
+  "onboarding_security_feature_monitoring_title": "24/7 Monitoring",
+  "onboarding_security_feature_monitoring_desc": "Constant surveillance of your transactions",
+  "onboarding_button_skip": "Skip",
+  "onboarding_button_next": "Next"
 }

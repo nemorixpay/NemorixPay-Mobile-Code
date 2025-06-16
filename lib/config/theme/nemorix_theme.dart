@@ -28,7 +28,7 @@ class NemorixTheme {
     textTheme: TextTheme(
       labelSmall: TextStyle(color: NemorixColors.greyLevel4),
       labelMedium: TextStyle(color: NemorixColors.greyLevel4),
-      labelLarge: TextStyle(color: Colors.white),
+      labelLarge: TextStyle(color: NemorixColors.greyLevel6),
       bodyMedium: TextStyle(color: NemorixColors.greyLevel6),
       bodyLarge: TextStyle(color: NemorixColors.greyLevel6),
       titleLarge: TextStyle(color: Colors.white),
@@ -65,7 +65,7 @@ class NemorixTheme {
     textTheme: TextTheme(
       labelSmall: TextStyle(color: NemorixColors.greyLevel3),
       labelMedium: TextStyle(color: NemorixColors.greyLevel3),
-      labelLarge: TextStyle(color: Colors.black),
+      labelLarge: TextStyle(color: NemorixColors.greyLevel2),
       bodyMedium: TextStyle(color: NemorixColors.greyLevel2),
       bodyLarge: TextStyle(color: NemorixColors.greyLevel2),
       titleLarge: TextStyle(color: Colors.black),

@@ -27,7 +27,7 @@ class RouteModel {
   /// @param name The display name of the route
   /// @param screen The screen widget to display
   /// @param icon The icon to use in navigation elements
-  const RouteModel({
+  RouteModel({
     required this.route,
     required this.name,
     required this.screen,
