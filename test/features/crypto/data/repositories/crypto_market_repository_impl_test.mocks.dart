@@ -62,6 +62,18 @@ class MockCryptoMarketDataSource extends _i1.Mock
           as _i5.Future<List<_i3.CryptoAssetWithMarketDataModel>>);
 
   @override
+  _i5.Future<List<_i3.CryptoAssetWithMarketDataModel>>
+  getCryptoAccountAssets() =>
+      (super.noSuchMethod(
+            Invocation.method(#getCryptoAccountAssets, []),
+            returnValue:
+                _i5.Future<List<_i3.CryptoAssetWithMarketDataModel>>.value(
+                  <_i3.CryptoAssetWithMarketDataModel>[],
+                ),
+          )
+          as _i5.Future<List<_i3.CryptoAssetWithMarketDataModel>>);
+
+  @override
   _i5.Future<_i2.MarketDataModel> getMarketData(String? symbol) =>
       (super.noSuchMethod(
             Invocation.method(#getMarketData, [symbol]),

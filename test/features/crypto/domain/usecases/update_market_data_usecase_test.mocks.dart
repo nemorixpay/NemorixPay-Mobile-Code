@@ -62,6 +62,24 @@ class MockCryptoMarketRepository extends _i1.Mock
           >);
 
   @override
+  _i4.Future<_i2.Either<_i5.Failure, List<_i6.CryptoAssetWithMarketData>>>
+  getCryptoAccountAssets() =>
+      (super.noSuchMethod(
+            Invocation.method(#getCryptoAccountAssets, []),
+            returnValue: _i4.Future<
+              _i2.Either<_i5.Failure, List<_i6.CryptoAssetWithMarketData>>
+            >.value(
+              _FakeEither_0<_i5.Failure, List<_i6.CryptoAssetWithMarketData>>(
+                this,
+                Invocation.method(#getCryptoAccountAssets, []),
+              ),
+            ),
+          )
+          as _i4.Future<
+            _i2.Either<_i5.Failure, List<_i6.CryptoAssetWithMarketData>>
+          >);
+
+  @override
   _i4.Future<_i2.Either<_i5.Failure, _i7.MarketDataEntity>> getMarketData(
     String? symbol,
   ) =>
