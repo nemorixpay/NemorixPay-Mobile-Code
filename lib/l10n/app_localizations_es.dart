@@ -594,4 +594,40 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get onboarding_button_next => 'Siguiente';
+
+  @override
+  String get onboarding_features_title => 'Todo lo que Necesitas en un Solo Lugar';
+
+  @override
+  String get onboarding_features_subtitle => 'Gestiona tus criptomonedas de forma sencilla';
+
+  @override
+  String get onboarding_features_trading_title => 'Compra y Vende al Instante';
+
+  @override
+  String get onboarding_features_trading_desc => 'Opera criptomonedas de forma rápida y segura';
+
+  @override
+  String get onboarding_features_monitoring_title => 'Monitoreo en Tiempo Real';
+
+  @override
+  String get onboarding_features_monitoring_desc => 'Sigue los precios del mercado al instante';
+
+  @override
+  String get onboarding_features_history_title => 'Historial de Transacciones';
+
+  @override
+  String get onboarding_features_history_desc => 'Accede a tu historial completo de operaciones';
+
+  @override
+  String get onboarding_features_notifications_title => 'Notificaciones de Mercado';
+
+  @override
+  String get onboarding_features_notifications_desc => 'Recibe alertas sobre movimientos importantes';
+
+  @override
+  String get onboarding_features_wallets_title => 'Múltiples Wallets';
+
+  @override
+  String get onboarding_features_wallets_desc => 'Gestiona todas tus carteras en un solo lugar';
 }

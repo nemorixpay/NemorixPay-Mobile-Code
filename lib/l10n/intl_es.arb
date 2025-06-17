@@ -229,5 +229,18 @@
   "onboarding_security_feature_monitoring_title": "Monitoreo 24/7",
   "onboarding_security_feature_monitoring_desc": "Vigilancia constante de tus transacciones",
   "onboarding_button_skip": "Saltar",
-  "onboarding_button_next": "Siguiente"
+  "onboarding_button_next": "Siguiente",
+  "@_ONBOARDING_FEATURES": {},
+  "onboarding_features_title": "Todo lo que Necesitas en un Solo Lugar",
+  "onboarding_features_subtitle": "Gestiona tus criptomonedas de forma sencilla",
+  "onboarding_features_trading_title": "Compra y Vende al Instante",
+  "onboarding_features_trading_desc": "Opera criptomonedas de forma rápida y segura",
+  "onboarding_features_monitoring_title": "Monitoreo en Tiempo Real",
+  "onboarding_features_monitoring_desc": "Sigue los precios del mercado al instante",
+  "onboarding_features_history_title": "Historial de Transacciones",
+  "onboarding_features_history_desc": "Accede a tu historial completo de operaciones",
+  "onboarding_features_notifications_title": "Notificaciones de Mercado",
+  "onboarding_features_notifications_desc": "Recibe alertas sobre movimientos importantes",
+  "onboarding_features_wallets_title": "Múltiples Wallets",
+  "onboarding_features_wallets_desc": "Gestiona todas tus carteras en un solo lugar"
 }

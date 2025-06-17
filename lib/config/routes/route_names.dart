@@ -63,4 +63,7 @@ class RouteNames {
 
   /// Page for onboarding page: Security
   static const onboardingPageSecurity = "onboarding_security";
+
+  /// Page for onboarding page: Features
+  static const onboardingPageFeatures = "onboarding_features";
 }

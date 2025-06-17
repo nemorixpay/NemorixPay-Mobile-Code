@@ -594,4 +594,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboarding_button_next => 'Next';
+
+  @override
+  String get onboarding_features_title => 'Everything You Need in One Place';
+
+  @override
+  String get onboarding_features_subtitle => 'Manage your cryptocurrencies easily';
+
+  @override
+  String get onboarding_features_trading_title => 'Instant Trading';
+
+  @override
+  String get onboarding_features_trading_desc => 'Trade cryptocurrencies quickly and securely';
+
+  @override
+  String get onboarding_features_monitoring_title => 'Real-Time Monitoring';
+
+  @override
+  String get onboarding_features_monitoring_desc => 'Track market prices instantly';
+
+  @override
+  String get onboarding_features_history_title => 'Transaction History';
+
+  @override
+  String get onboarding_features_history_desc => 'Access your complete operation history';
+
+  @override
+  String get onboarding_features_notifications_title => 'Market Notifications';
+
+  @override
+  String get onboarding_features_notifications_desc => 'Receive alerts about important movements';
+
+  @override
+  String get onboarding_features_wallets_title => 'Multiple Wallets';
+
+  @override
+  String get onboarding_features_wallets_desc => 'Manage all your wallets in one place';
 }

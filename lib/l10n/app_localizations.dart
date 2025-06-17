@@ -1264,6 +1264,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next'**
   String get onboarding_button_next;
+
+  /// No description provided for @onboarding_features_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything You Need in One Place'**
+  String get onboarding_features_title;
+
+  /// No description provided for @onboarding_features_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your cryptocurrencies easily'**
+  String get onboarding_features_subtitle;
+
+  /// No description provided for @onboarding_features_trading_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Instant Trading'**
+  String get onboarding_features_trading_title;
+
+  /// No description provided for @onboarding_features_trading_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Trade cryptocurrencies quickly and securely'**
+  String get onboarding_features_trading_desc;
+
+  /// No description provided for @onboarding_features_monitoring_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Real-Time Monitoring'**
+  String get onboarding_features_monitoring_title;
+
+  /// No description provided for @onboarding_features_monitoring_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Track market prices instantly'**
+  String get onboarding_features_monitoring_desc;
+
+  /// No description provided for @onboarding_features_history_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction History'**
+  String get onboarding_features_history_title;
+
+  /// No description provided for @onboarding_features_history_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Access your complete operation history'**
+  String get onboarding_features_history_desc;
+
+  /// No description provided for @onboarding_features_notifications_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Market Notifications'**
+  String get onboarding_features_notifications_title;
+
+  /// No description provided for @onboarding_features_notifications_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive alerts about important movements'**
+  String get onboarding_features_notifications_desc;
+
+  /// No description provided for @onboarding_features_wallets_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Multiple Wallets'**
+  String get onboarding_features_wallets_title;
+
+  /// No description provided for @onboarding_features_wallets_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage all your wallets in one place'**
+  String get onboarding_features_wallets_desc;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

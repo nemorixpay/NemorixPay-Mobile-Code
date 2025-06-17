@@ -9,6 +9,7 @@ import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_mar
 import 'package:nemorixpay/features/crypto/presentation/pages/buy_crypto_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/home_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/payment_method_page.dart';
+import 'package:nemorixpay/features/onboarding/presentation/pages/features_slide.dart';
 import 'package:nemorixpay/features/onboarding/presentation/pages/security_slide.dart';
 import 'package:nemorixpay/features/splash/presentation/pages/splash_native_page.dart';
 import 'package:nemorixpay/features/splash/presentation/pages/splash_test_page.dart';
@@ -115,6 +116,15 @@ class AppRoutes {
       route: RouteNames.onboardingPageSecurity,
       name: 'Onboarding Security',
       screen: SecuritySlide(
+        onNext: () {},
+        onSkip: () {},
+      ),
+      icon: Icons.lock,
+    ),
+    RouteModel(
+      route: RouteNames.onboardingPageFeatures,
+      name: 'Onboarding Features',
+      screen: FeaturesSlide(
         onNext: () {},
         onSkip: () {},
       ),
