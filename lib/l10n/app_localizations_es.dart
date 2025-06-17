@@ -630,4 +630,40 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get onboarding_features_wallets_desc => 'Gestiona todas tus carteras en un solo lugar';
+
+  @override
+  String get onboarding_benefits_title => 'La Mejor Experiencia Cripto';
+
+  @override
+  String get onboarding_benefits_subtitle => 'Disfruta de ventajas exclusivas';
+
+  @override
+  String get onboarding_benefits_fees_title => 'Comisiones Competitivas';
+
+  @override
+  String get onboarding_benefits_fees_desc => 'Las comisiones más bajas del mercado';
+
+  @override
+  String get onboarding_benefits_support_title => 'Soporte 24/7';
+
+  @override
+  String get onboarding_benefits_support_desc => 'Atención técnica disponible en todo momento';
+
+  @override
+  String get onboarding_benefits_ui_title => 'Interfaz Intuitiva';
+
+  @override
+  String get onboarding_benefits_ui_desc => 'Diseño fácil de usar y entender';
+
+  @override
+  String get onboarding_benefits_speed_title => 'Transacciones Instantáneas';
+
+  @override
+  String get onboarding_benefits_speed_desc => 'Operaciones rápidas y eficientes';
+
+  @override
+  String get onboarding_benefits_coins_title => 'Amplia Selección';
+
+  @override
+  String get onboarding_benefits_coins_desc => 'Acceso a más de 100 criptomonedas';
 }

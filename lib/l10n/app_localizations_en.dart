@@ -630,4 +630,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboarding_features_wallets_desc => 'Manage all your wallets in one place';
+
+  @override
+  String get onboarding_benefits_title => 'The Best Crypto Experience';
+
+  @override
+  String get onboarding_benefits_subtitle => 'Enjoy exclusive advantages';
+
+  @override
+  String get onboarding_benefits_fees_title => 'Competitive Fees';
+
+  @override
+  String get onboarding_benefits_fees_desc => 'The lowest fees in the market';
+
+  @override
+  String get onboarding_benefits_support_title => '24/7 Support';
+
+  @override
+  String get onboarding_benefits_support_desc => 'Technical support available at all times';
+
+  @override
+  String get onboarding_benefits_ui_title => 'Intuitive Interface';
+
+  @override
+  String get onboarding_benefits_ui_desc => 'Easy to use and understand design';
+
+  @override
+  String get onboarding_benefits_speed_title => 'Instant Transactions';
+
+  @override
+  String get onboarding_benefits_speed_desc => 'Fast and efficient operations';
+
+  @override
+  String get onboarding_benefits_coins_title => 'Wide Selection';
+
+  @override
+  String get onboarding_benefits_coins_desc => 'Access to over 100 cryptocurrencies';
 }

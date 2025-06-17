@@ -5,18 +5,18 @@ import 'package:nemorixpay/features/onboarding/presentation/widgets/onboarding_f
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/custom_button.dart';
 
-/// @file        features_slide.dart
-/// @brief       Features slide for onboarding flow.
-/// @details     Displays main features of the app with icons and descriptions.
+/// @file        benefits_slide.dart
+/// @brief       Benefits slide for onboarding flow.
+/// @details     Displays main benefits of the app with icons and descriptions.
 /// @author      Miguel Fagundez
 /// @date        06/17/2025
 /// @version     1.0
 /// @copyright   Apache 2.0 License
-class FeaturesSlide extends StatelessWidget {
+class BenefitsSlide extends StatelessWidget {
   final VoidCallback onNext;
   final VoidCallback onSkip;
 
-  const FeaturesSlide({super.key, required this.onNext, required this.onSkip});
+  const BenefitsSlide({super.key, required this.onNext, required this.onSkip});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class FeaturesSlide extends StatelessWidget {
               // Imagen
               Center(
                 child: Image.asset(
-                  ImageUrl.onboardingSlideFeatures,
+                  ImageUrl.onboardingSlideBenefits,
                   height: 180,
                   fit: BoxFit.contain,
                 ),
@@ -41,7 +41,7 @@ class FeaturesSlide extends StatelessWidget {
               const SizedBox(height: 40),
               // Título
               Text(
-                l10n.onboarding_features_title,
+                l10n.onboarding_benefits_title,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -50,7 +50,7 @@ class FeaturesSlide extends StatelessWidget {
               const SizedBox(height: 8),
               // Subtítulo
               Text(
-                l10n.onboarding_features_subtitle,
+                l10n.onboarding_benefits_subtitle,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
@@ -60,33 +60,27 @@ class FeaturesSlide extends StatelessWidget {
               // Características
               OnboardingFeature(
                 icon: Icons.currency_exchange,
-                title: l10n.onboarding_features_trading_title,
-                description: l10n.onboarding_features_trading_desc,
+                title: l10n.onboarding_benefits_fees_title,
+                description: l10n.onboarding_benefits_fees_desc,
               ),
               const SizedBox(height: 16),
               OnboardingFeature(
-                icon: Icons.trending_up,
-                title: l10n.onboarding_features_monitoring_title,
-                description: l10n.onboarding_features_monitoring_desc,
+                icon: Icons.support_agent_outlined,
+                title: l10n.onboarding_benefits_support_title,
+                description: l10n.onboarding_benefits_support_desc,
               ),
               const SizedBox(height: 16),
               OnboardingFeature(
-                icon: Icons.history,
-                title: l10n.onboarding_features_history_title,
-                description: l10n.onboarding_features_history_desc,
+                icon: Icons.touch_app_outlined,
+                title: l10n.onboarding_benefits_ui_title,
+                description: l10n.onboarding_benefits_ui_desc,
               ),
               const SizedBox(height: 16),
               OnboardingFeature(
-                icon: Icons.notifications,
-                title: l10n.onboarding_features_notifications_title,
-                description: l10n.onboarding_features_notifications_desc,
+                icon: Icons.fast_forward_outlined,
+                title: l10n.onboarding_benefits_speed_title,
+                description: l10n.onboarding_benefits_speed_desc,
               ),
-              // const SizedBox(height: 16),
-              // OnboardingFeature(
-              //   icon: Icons.account_balance_wallet,
-              //   title: l10n.onboarding_features_wallets_title,
-              //   description: l10n.onboarding_features_wallets_desc,
-              // ),
               const Spacer(),
               // Botones
               Row(
@@ -124,21 +118,21 @@ class FeaturesSlide extends StatelessWidget {
                   Container(
                     width: 12,
                     height: 12,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: NemorixColors.primaryColor,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    width: 12,
-                    height: 12,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Theme.of(context)
                           .colorScheme
                           .onSurfaceVariant
                           .withOpacity(0.5),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 12,
+                    height: 12,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: NemorixColors.primaryColor,
                     ),
                   ),
                 ],

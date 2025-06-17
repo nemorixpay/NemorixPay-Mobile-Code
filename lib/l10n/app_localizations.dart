@@ -1336,6 +1336,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Manage all your wallets in one place'**
   String get onboarding_features_wallets_desc;
+
+  /// No description provided for @onboarding_benefits_title.
+  ///
+  /// In en, this message translates to:
+  /// **'The Best Crypto Experience'**
+  String get onboarding_benefits_title;
+
+  /// No description provided for @onboarding_benefits_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enjoy exclusive advantages'**
+  String get onboarding_benefits_subtitle;
+
+  /// No description provided for @onboarding_benefits_fees_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Competitive Fees'**
+  String get onboarding_benefits_fees_title;
+
+  /// No description provided for @onboarding_benefits_fees_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'The lowest fees in the market'**
+  String get onboarding_benefits_fees_desc;
+
+  /// No description provided for @onboarding_benefits_support_title.
+  ///
+  /// In en, this message translates to:
+  /// **'24/7 Support'**
+  String get onboarding_benefits_support_title;
+
+  /// No description provided for @onboarding_benefits_support_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Technical support available at all times'**
+  String get onboarding_benefits_support_desc;
+
+  /// No description provided for @onboarding_benefits_ui_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Intuitive Interface'**
+  String get onboarding_benefits_ui_title;
+
+  /// No description provided for @onboarding_benefits_ui_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy to use and understand design'**
+  String get onboarding_benefits_ui_desc;
+
+  /// No description provided for @onboarding_benefits_speed_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Instant Transactions'**
+  String get onboarding_benefits_speed_title;
+
+  /// No description provided for @onboarding_benefits_speed_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Fast and efficient operations'**
+  String get onboarding_benefits_speed_desc;
+
+  /// No description provided for @onboarding_benefits_coins_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Wide Selection'**
+  String get onboarding_benefits_coins_title;
+
+  /// No description provided for @onboarding_benefits_coins_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Access to over 100 cryptocurrencies'**
+  String get onboarding_benefits_coins_desc;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

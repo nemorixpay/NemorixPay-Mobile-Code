@@ -20,4 +20,6 @@ class ImageUrl {
       'assets/images/onboarding/seguridad.jpg';
   static const String onboardingSlideFeatures =
       'assets/images/onboarding/funcionalidades.jpg';
+  static const String onboardingSlideBenefits =
+      'assets/images/onboarding/beneficios.png';
 }

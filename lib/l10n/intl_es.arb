@@ -242,5 +242,18 @@
   "onboarding_features_notifications_title": "Notificaciones de Mercado",
   "onboarding_features_notifications_desc": "Recibe alertas sobre movimientos importantes",
   "onboarding_features_wallets_title": "Múltiples Wallets",
-  "onboarding_features_wallets_desc": "Gestiona todas tus carteras en un solo lugar"
+  "onboarding_features_wallets_desc": "Gestiona todas tus carteras en un solo lugar",
+  "@_ONBOARDING_BENEFITS": {},
+  "onboarding_benefits_title": "La Mejor Experiencia Cripto",
+  "onboarding_benefits_subtitle": "Disfruta de ventajas exclusivas",
+  "onboarding_benefits_fees_title": "Comisiones Competitivas",
+  "onboarding_benefits_fees_desc": "Las comisiones más bajas del mercado",
+  "onboarding_benefits_support_title": "Soporte 24/7",
+  "onboarding_benefits_support_desc": "Atención técnica disponible en todo momento",
+  "onboarding_benefits_ui_title": "Interfaz Intuitiva",
+  "onboarding_benefits_ui_desc": "Diseño fácil de usar y entender",
+  "onboarding_benefits_speed_title": "Transacciones Instantáneas",
+  "onboarding_benefits_speed_desc": "Operaciones rápidas y eficientes",
+  "onboarding_benefits_coins_title": "Amplia Selección",
+  "onboarding_benefits_coins_desc": "Acceso a más de 100 criptomonedas"
 }

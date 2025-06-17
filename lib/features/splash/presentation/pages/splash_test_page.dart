@@ -265,6 +265,16 @@ class _SplashTestPageState extends State<SplashTestPage> {
                   backgroundColor: Colors.white,
                   textColor: Colors.black,
                 ),
+                SizedBox(height: 20),
+                RoundedElevatedButton(
+                  text: "Continue with Onboarding Benefits",
+                  onPressed: () {
+                    Navigator.pushNamed(
+                        context, RouteNames.onboardingPageBenefits);
+                  },
+                  backgroundColor: Colors.white,
+                  textColor: Colors.black,
+                ),
                 SizedBox(height: 40),
               ],
             ),
