@@ -16,10 +16,12 @@ import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_home_bloc.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_all_available_assets/crypto_market_bloc.dart';
+import 'package:nemorixpay/features/onboarding/presentation/bloc/onboarding_state.dart';
 import 'package:nemorixpay/features/splash/presentation/bloc/splash_bloc.dart';
 import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_bloc.dart';
 import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_bloc.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
+import 'package:nemorixpay/features/onboarding/presentation/bloc/onboarding_bloc.dart';
 import 'firebase_options.dart';
 
 /// Global key for accessing the ScaffoldMessenger from anywhere in the app
@@ -38,45 +40,70 @@ Future<void> main() async {
   // Init Bloc dependencies
   await initInjectionDependencies();
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // ---------------------------------------------------
-    // Inicializar las dependencias de autenticación
-    // final authDataSource = FirebaseAuthDataSource();
-    // final authRepository = FirebaseAuthRepository(
-    //   firebaseAuthDataSource: authDataSource,
-    // );
-    // final signInUseCase = SignInUseCase(authRepository: authRepository);
-    // Inicializar las dependencias de autenticación
-    // ---------------------------------------------------
+  State<MyApp> createState() => _MyAppState();
+}
 
+class _MyAppState extends State<MyApp> {
+  String? _currentLanguage;
+
+  @override
+  Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => SplashBloc()),
+        BlocProvider(create: (context) => GetIt.instance.get<SplashBloc>()),
         BlocProvider(create: (_) => GetIt.instance.get<AuthBloc>()),
         BlocProvider(create: (_) => GetIt.instance.get<StellarBloc>()),
         BlocProvider(create: (_) => GetIt.instance.get<WalletBloc>()),
         BlocProvider(create: (_) => GetIt.instance.get<CryptoMarketBloc>()),
         BlocProvider(create: (_) => GetIt.instance.get<CryptoAccountBloc>()),
         BlocProvider(create: (_) => GetIt.instance.get<CryptoHomeBloc>()),
+        BlocProvider(create: (_) => GetIt.instance.get<OnboardingBloc>()),
       ],
-      child: MaterialApp(
-        title: 'NemorixPay',
-        debugShowCheckedModeBanner: false,
-        scaffoldMessengerKey: scaffoldKey,
-        theme: NemorixTheme.darkThemeMode,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        locale: const Locale('es'),
-        initialRoute: RouteNames.splashNative,
-        routes: AppRoutes.getAppRoutes(),
-        onGenerateRoute: AppRoutes.onGenerateRoute,
+      child: BlocListener<OnboardingBloc, OnboardingState>(
+        listener: (context, state) {
+          if (state is LanguageSelection) {
+            setState(() {
+              _currentLanguage = state.currentLanguage;
+            });
+            debugPrint(
+                'LanguageSelection (main.dart): ${state.currentLanguage}');
+          } else if (state is OnboardingInProgress) {
+            setState(() {
+              _currentLanguage = state.currentLanguage;
+            });
+            debugPrint(
+                'OnboardingInProgress (main.dart): ${state.currentLanguage}');
+          } else if (state is OnboardingCompleted) {
+            setState(() {
+              _currentLanguage = state.selectedLanguage;
+            });
+            debugPrint(
+                'OnboardingCompleted (main.dart): ${state.selectedLanguage}');
+          } else if (state is OnboardingAlreadyCompleted) {
+            debugPrint('OnboardingAlreadyCompleted (main.dart):');
+          } else {
+            debugPrint('Another state (main.dart):');
+          }
+        },
+        child: MaterialApp(
+          title: 'NemorixPay',
+          debugShowCheckedModeBanner: false,
+          scaffoldMessengerKey: scaffoldKey,
+          theme: NemorixTheme.darkThemeMode,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: Locale(_currentLanguage ?? 'en'),
+          initialRoute: RouteNames.splashNative,
+          routes: AppRoutes.getAppRoutes(),
+          onGenerateRoute: AppRoutes.onGenerateRoute,
+        ),
       ),
     );
   }

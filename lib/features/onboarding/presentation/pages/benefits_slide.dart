@@ -14,9 +14,9 @@ import 'package:nemorixpay/shared/common/presentation/widgets/custom_button.dart
 /// @copyright   Apache 2.0 License
 class BenefitsSlide extends StatelessWidget {
   final VoidCallback onNext;
-  final VoidCallback onSkip;
+  final VoidCallback onBack;
 
-  const BenefitsSlide({super.key, required this.onNext, required this.onSkip});
+  const BenefitsSlide({super.key, required this.onNext, required this.onBack});
 
   @override
   Widget build(BuildContext context) {
@@ -84,56 +84,23 @@ class BenefitsSlide extends StatelessWidget {
               const Spacer(),
               // Botones
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CustomButton(
-                    onTap: () => debugPrint('Skip pressed'),
-                    label: l10n.onboarding_button_skip,
+                    onTap: () {
+                      debugPrint('Back pressed');
+                      onBack();
+                    },
+                    label: l10n.onboarding_button_back,
                   ),
                   CustomButton(
-                    onTap: () => debugPrint('Next pressed'),
+                    onTap: () {
+                      debugPrint('Next pressed');
+                      onNext();
+                    },
                     label: l10n.onboarding_button_next,
                     backgroundColor: NemorixColors.primaryColor,
                     textColor: NemorixColors.greyLevel1,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              // Progress Indicator
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurfaceVariant
-                          .withOpacity(0.5),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    width: 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurfaceVariant
-                          .withOpacity(0.5),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    width: 12,
-                    height: 12,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: NemorixColors.primaryColor,
-                    ),
                   ),
                 ],
               ),

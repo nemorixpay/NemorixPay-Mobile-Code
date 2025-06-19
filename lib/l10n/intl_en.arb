@@ -231,6 +231,7 @@
   "onboarding_button_skip": "Skip",
   "onboarding_button_next": "Next",
   "@_ONBOARDING_FEATURES": {},
+  "onboarding_button_back": "Back",
   "onboarding_features_title": "Everything You Need in One Place",
   "onboarding_features_subtitle": "Manage your cryptocurrencies easily",
   "onboarding_features_trading_title": "Instant Trading",

@@ -596,6 +596,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get onboarding_button_next => 'Siguiente';
 
   @override
+  String get onboarding_button_back => 'Atras';
+
+  @override
   String get onboarding_features_title => 'Todo lo que Necesitas en un Solo Lugar';
 
   @override

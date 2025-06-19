@@ -69,4 +69,7 @@ class RouteNames {
 
   /// Page for onboarding page: Benefits
   static const onboardingPageBenefits = "onboarding_benefits";
+
+  /// Main onboarding page that handles the complete flow
+  static const onboarding = "onboarding";
 }

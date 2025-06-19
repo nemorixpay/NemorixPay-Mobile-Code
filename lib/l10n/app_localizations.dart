@@ -1265,6 +1265,12 @@ abstract class AppLocalizations {
   /// **'Next'**
   String get onboarding_button_next;
 
+  /// No description provided for @onboarding_button_back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get onboarding_button_back;
+
   /// No description provided for @onboarding_features_title.
   ///
   /// In en, this message translates to:

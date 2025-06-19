@@ -596,6 +596,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboarding_button_next => 'Next';
 
   @override
+  String get onboarding_button_back => 'Back';
+
+  @override
   String get onboarding_features_title => 'Everything You Need in One Place';
 
   @override

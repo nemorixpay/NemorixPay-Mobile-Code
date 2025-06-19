@@ -12,6 +12,7 @@ import 'package:nemorixpay/features/crypto/presentation/pages/payment_method_pag
 import 'package:nemorixpay/features/onboarding/presentation/pages/benefits_slide.dart';
 import 'package:nemorixpay/features/onboarding/presentation/pages/features_slide.dart';
 import 'package:nemorixpay/features/onboarding/presentation/pages/security_slide.dart';
+import 'package:nemorixpay/features/onboarding/presentation/pages/onboarding_page.dart';
 import 'package:nemorixpay/features/splash/presentation/pages/splash_native_page.dart';
 import 'package:nemorixpay/features/splash/presentation/pages/splash_test_page.dart';
 import 'package:nemorixpay/features/terms/presentation/pages/terms_page.dart';
@@ -118,7 +119,6 @@ class AppRoutes {
       name: 'Onboarding Security',
       screen: SecuritySlide(
         onNext: () {},
-        onSkip: () {},
       ),
       icon: Icons.lock,
     ),
@@ -127,7 +127,7 @@ class AppRoutes {
       name: 'Onboarding Features',
       screen: FeaturesSlide(
         onNext: () {},
-        onSkip: () {},
+        onBack: () {},
       ),
       icon: Icons.lock,
     ),
@@ -136,9 +136,15 @@ class AppRoutes {
       name: 'Onboarding Benefits',
       screen: BenefitsSlide(
         onNext: () {},
-        onSkip: () {},
+        onBack: () {},
       ),
       icon: Icons.lock,
+    ),
+    RouteModel(
+      route: RouteNames.onboarding,
+      name: 'Onboarding',
+      screen: const OnboardingPage(),
+      icon: Icons.rocket_launch,
     ),
   ];
 
