@@ -18,10 +18,12 @@ import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_all_available_assets/crypto_market_bloc.dart';
 import 'package:nemorixpay/features/onboarding/presentation/bloc/onboarding_state.dart';
 import 'package:nemorixpay/features/splash/presentation/bloc/splash_bloc.dart';
+import 'package:nemorixpay/features/splash/presentation/bloc/splash_state.dart';
 import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_bloc.dart';
 import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_bloc.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/features/onboarding/presentation/bloc/onboarding_bloc.dart';
+import 'package:nemorixpay/features/onboarding/presentation/bloc/onboarding_event.dart';
 import 'firebase_options.dart';
 
 /// Global key for accessing the ScaffoldMessenger from anywhere in the app
@@ -66,32 +68,54 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => GetIt.instance.get<CryptoHomeBloc>()),
         BlocProvider(create: (_) => GetIt.instance.get<OnboardingBloc>()),
       ],
-      child: BlocListener<OnboardingBloc, OnboardingState>(
-        listener: (context, state) {
-          if (state is LanguageSelection) {
-            setState(() {
-              _currentLanguage = state.currentLanguage;
-            });
-            debugPrint(
-                'LanguageSelection (main.dart): ${state.currentLanguage}');
-          } else if (state is OnboardingInProgress) {
-            setState(() {
-              _currentLanguage = state.currentLanguage;
-            });
-            debugPrint(
-                'OnboardingInProgress (main.dart): ${state.currentLanguage}');
-          } else if (state is OnboardingCompleted) {
-            setState(() {
-              _currentLanguage = state.selectedLanguage;
-            });
-            debugPrint(
-                'OnboardingCompleted (main.dart): ${state.selectedLanguage}');
-          } else if (state is OnboardingAlreadyCompleted) {
-            debugPrint('OnboardingAlreadyCompleted (main.dart):');
-          } else {
-            debugPrint('Another state (main.dart):');
-          }
-        },
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<SplashBloc, SplashState>(
+            listener: (context, state) {
+              if (state is SplashLoaded) {
+                debugPrint('MyApp: Splash loaded, triggering onboarding check');
+                // Trigger onboarding check when splash is loaded
+                context.read<OnboardingBloc>().add(CheckOnboardingStatus());
+              }
+            },
+          ),
+          BlocListener<OnboardingBloc, OnboardingState>(
+            listener: (context, state) {
+              if (state is LanguageSelection) {
+                setState(() {
+                  _currentLanguage = state.currentLanguage;
+                });
+                debugPrint(
+                    'LanguageSelection (main.dart): ${state.currentLanguage}');
+              } else if (state is OnboardingInProgress) {
+                setState(() {
+                  _currentLanguage = state.currentLanguage;
+                });
+                debugPrint(
+                    'OnboardingInProgress (main.dart): ${state.currentLanguage}');
+              } else if (state is OnboardingCompleted) {
+                setState(() {
+                  _currentLanguage = state.selectedLanguage;
+                });
+                debugPrint(
+                    'OnboardingCompleted (main.dart): ${state.selectedLanguage}');
+              } else if (state is OnboardingAlreadyCompleted) {
+                if (state.selectedLanguage != null) {
+                  setState(() {
+                    _currentLanguage = state.selectedLanguage;
+                  });
+                  debugPrint(
+                      'OnboardingAlreadyCompleted (main.dart): ${state.selectedLanguage}');
+                } else {
+                  debugPrint(
+                      'OnboardingAlreadyCompleted (main.dart): no language saved');
+                }
+              } else {
+                debugPrint('Another state (main.dart): ${state.toString()}');
+              }
+            },
+          ),
+        ],
         child: MaterialApp(
           title: 'NemorixPay',
           debugShowCheckedModeBanner: false,

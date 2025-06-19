@@ -75,6 +75,7 @@ Future<void> onboardingInjectionServices() async {
   di.registerFactory(
     () => SplashBloc(
       checkOnboardingStatus: checkOnboardingStatusUsecase,
+      getLanguage: getLanguageUsecase,
     ),
   );
 }

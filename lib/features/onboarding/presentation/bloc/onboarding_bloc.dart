@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/foundation.dart';
 import '../../domain/usecases/save_language_usecase.dart';
 import '../../domain/usecases/get_language_usecase.dart';
 import '../../domain/usecases/complete_onboarding_usecase.dart';
@@ -41,35 +42,58 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
     CheckOnboardingStatus event,
     Emitter<OnboardingState> emit,
   ) async {
+    debugPrint('OnboardingBloc: Starting onboarding status check');
     emit(const OnboardingChecking());
 
     // First, check if onboarding has been completed
     final checkingOnboarding = await checkOnboardingStatus();
 
+    bool isCompleted = false;
     checkingOnboarding.fold(
       (failure) {
+        debugPrint(
+            'OnboardingBloc: Error checking onboarding status - ${failure.message}');
         emit(OnboardingError(failure.message));
         return;
       },
-      (isCompleted) {
-        if (isCompleted) {
-          emit(const OnboardingAlreadyCompleted());
-          return;
-        }
+      (completed) {
+        isCompleted = completed;
+        debugPrint(
+            'OnboardingBloc: Onboarding completed status - $isCompleted');
+        // Continue to check language regardless of onboarding status
       },
     );
 
-    // If not completed, check the language
+    // Always check the language, regardless of onboarding status
+    debugPrint('OnboardingBloc: Checking saved language');
     final result = await getLanguage();
-    result.fold((failure) => emit(OnboardingError(failure.message)), (
-      language,
-    ) {
-      if (language == null) {
-        // First run, no language saved
-        emit(const OnboardingInitial());
+    result.fold((failure) {
+      debugPrint('OnboardingBloc: Error getting language - ${failure.message}');
+      emit(OnboardingError(failure.message));
+    }, (language) {
+      debugPrint('OnboardingBloc: Saved language - $language');
+      if (isCompleted) {
+        // Onboarding completed, but still emit the saved language
+        if (language != null) {
+          debugPrint(
+              'OnboardingBloc: Emitting OnboardingAlreadyCompleted with language - $language');
+          emit(OnboardingAlreadyCompleted(selectedLanguage: language));
+        } else {
+          debugPrint(
+              'OnboardingBloc: Emitting OnboardingAlreadyCompleted without language');
+          emit(const OnboardingAlreadyCompleted());
+        }
       } else {
-        // User already has a language saved
-        emit(LanguageSelection(currentLanguage: language));
+        // Onboarding not completed
+        if (language == null) {
+          debugPrint('OnboardingBloc: First run, no language saved');
+          // First run, no language saved
+          emit(const OnboardingInitial());
+        } else {
+          debugPrint('OnboardingBloc: User has language saved - $language');
+          // User already has a language saved
+          emit(LanguageSelection(currentLanguage: language));
+        }
       }
     });
   }

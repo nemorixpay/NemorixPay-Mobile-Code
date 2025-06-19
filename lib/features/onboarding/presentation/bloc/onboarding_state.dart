@@ -62,7 +62,12 @@ class OnboardingCompleted extends OnboardingState {
 
 /// State when onboarding was previously completed
 class OnboardingAlreadyCompleted extends OnboardingState {
-  const OnboardingAlreadyCompleted();
+  final String? selectedLanguage;
+
+  const OnboardingAlreadyCompleted({this.selectedLanguage});
+
+  @override
+  List<Object?> get props => [selectedLanguage];
 }
 
 /// State when an error occurs
