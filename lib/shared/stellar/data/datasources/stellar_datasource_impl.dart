@@ -3,6 +3,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:nemorixpay/shared/common/data/models/asset_model.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart';
+import 'package:nemorixpay/shared/stellar/data/datasources/stellar_secure_storage_datasource.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_transaction_model.dart';
 import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
 import 'package:dio/dio.dart';
@@ -16,15 +17,17 @@ import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provide
 /// @brief       Service for Stellar network integration in NemorixPay.
 /// @details     Provides methods for mnemonic generation, key derivation, account creation
 ///              and create/validate transactions on the Stellar testnet using the official Flutter SDK.
+///              Now includes secure storage for private keys using biometric authentication.
 /// @author      Miguel Fagundez
-/// @date        2025-05-20
-/// @version     1.2
+/// @date        06/20/2025
+/// @version     1.3
 /// @copyright   Apache 2.0 License
 
 /// Service responsible for interacting with the Stellar network
 class StellarDataSourceImpl implements StellarDataSource {
   late final StellarSDK _sdk;
   final _accountProvider = StellarAccountProvider();
+  final _secureStorage = StellarSecureStorageDataSource();
 
   StellarDataSourceImpl() {
     _sdk = StellarSDK.TESTNET;
@@ -82,6 +85,32 @@ class StellarDataSourceImpl implements StellarDataSource {
 
     await createAccountInTestnet(keyPair.accountId);
     debugPrint('StellarDatasource: createAccount - Account created in testnet');
+
+    debugPrint(
+        'StellarDatasource: createAccount (accountId): ${keyPair.accountId}');
+    debugPrint(
+        'StellarDatasource: createAccount (publicKey): ${keyPair.publicKey}');
+    debugPrint(
+        'StellarDatasource: createAccount (secretSeed): ${keyPair.secretSeed}');
+    debugPrint(
+        'StellarDatasource: createAccount (privateKey): ${keyPair.privateKey}');
+
+    // Save private key securely
+    final saved = await _secureStorage.savePrivateKey(
+      publicKey: keyPair.accountId,
+      privateKey: keyPair.secretSeed,
+    );
+
+    if (!saved) {
+      debugPrint(
+          'StellarDatasource: createAccount - Failed to save private key securely');
+      throw StellarFailure(
+        stellarCode: StellarErrorCode.unknown.code,
+        stellarMessage: 'Error saving private key securely',
+      );
+    }
+    debugPrint('StellarDatasource: createAccount - Private key saved securely');
+
     final account = StellarAccountModel(
       publicKey: keyPair.accountId,
       secretKey: keyPair.secretSeed,
@@ -325,6 +354,24 @@ class StellarDataSourceImpl implements StellarDataSource {
         final balance = await getBalance(keyPair.accountId);
 
         debugPrint('StellarDatasource: importAccount - Account found');
+
+        // Save private key securely
+        final saved = await _secureStorage.savePrivateKey(
+          publicKey: keyPair.accountId,
+          privateKey: keyPair.secretSeed,
+        );
+
+        if (!saved) {
+          debugPrint(
+              'StellarDatasource: importAccount - Failed to save private key securely');
+          throw StellarFailure(
+            stellarCode: StellarErrorCode.unknown.code,
+            stellarMessage: 'Error saving private key securely',
+          );
+        }
+        debugPrint(
+            'StellarDatasource: importAccount - Private key saved securely');
+
         return StellarAccountModel(
           publicKey: keyPair.accountId,
           secretKey: keyPair.secretSeed,
@@ -373,11 +420,9 @@ class StellarDataSourceImpl implements StellarDataSource {
           // Buscar operación de pago
           PaymentOperationResponse? paymentOp;
           try {
-            paymentOp =
-                operations.records.firstWhere(
-                      (op) => op is PaymentOperationResponse,
-                    )
-                    as PaymentOperationResponse;
+            paymentOp = operations.records.firstWhere(
+              (op) => op is PaymentOperationResponse,
+            ) as PaymentOperationResponse;
           } catch (_) {
             // Si no hay operación de pago, continuamos con valores por defecto
           }
@@ -388,10 +433,9 @@ class StellarDataSourceImpl implements StellarDataSource {
               hash: tx.hash,
               sourceAccount: tx.sourceAccount,
               destinationAccount: paymentOp?.to ?? 'Desconocido',
-              amount:
-                  paymentOp != null
-                      ? double.tryParse(paymentOp.amount) ?? 0.0
-                      : 0.0,
+              amount: paymentOp != null
+                  ? double.tryParse(paymentOp.amount) ?? 0.0
+                  : 0.0,
               memo: tx.memo?.toString(),
               successful: tx.successful,
               ledger: tx.ledger,
@@ -543,17 +587,16 @@ class StellarDataSourceImpl implements StellarDataSource {
       );
       debugPrint('StellarDatasource: sendTransaction - Cuenta fuente cargada');
 
-      final transaction =
-          TransactionBuilder(sourceAccount)
-              .addOperation(
-                PaymentOperationBuilder(
-                  destinationPublicKey,
-                  Asset.NATIVE,
-                  amount.toString(),
-                ).build(),
-              )
-              .addMemo(Memo.text("NemorixPay Transfer: $memo"))
-              .build();
+      final transaction = TransactionBuilder(sourceAccount)
+          .addOperation(
+            PaymentOperationBuilder(
+              destinationPublicKey,
+              Asset.NATIVE,
+              amount.toString(),
+            ).build(),
+          )
+          .addMemo(Memo.text("NemorixPay Transfer: $memo"))
+          .build();
 
       transaction.sign(sourceKeyPair, Network.TESTNET);
       debugPrint('StellarDatasource: sendTransaction - Transacción firmada');
@@ -610,11 +653,10 @@ class StellarDataSourceImpl implements StellarDataSource {
       );
 
       // Obtener todos los assets de la red
-      final response =
-          await _sdk.assets
-              .order(RequestBuilderOrder.DESC)
-              .limit(200)
-              .execute();
+      final response = await _sdk.assets
+          .order(RequestBuilderOrder.DESC)
+          .limit(200)
+          .execute();
       final assets = response.records;
 
       // Convertir a StellarAssetInfoModel
@@ -710,5 +752,130 @@ class StellarDataSourceImpl implements StellarDataSource {
     // TODO: Implementar lógica para obtener la URL del logo
     // Por ahora retornamos null
     return null;
+  }
+
+  // -----------------------------------------------------------------------------------
+  // Secure Key Management Methods
+  // -----------------------------------------------------------------------------------
+
+  /// Retrieves a private key securely from storage
+  ///
+  /// [publicKey] The public key that identifies the wallet
+  /// Returns the private key if found, null otherwise
+  Future<String?> getSecurePrivateKey({
+    required String publicKey,
+  }) async {
+    try {
+      debugPrint(
+          'StellarDatasource: getSecurePrivateKey - Retrieving private key for: $publicKey');
+
+      final privateKey =
+          await _secureStorage.getPrivateKey(publicKey: publicKey);
+
+      if (privateKey != null) {
+        debugPrint(
+            'StellarDatasource: getSecurePrivateKey - Private key retrieved successfully');
+      } else {
+        debugPrint(
+            'StellarDatasource: getSecurePrivateKey - No private key found');
+      }
+
+      return privateKey;
+    } catch (e) {
+      debugPrint('StellarDatasource: getSecurePrivateKey - Error: $e');
+      return null;
+    }
+  }
+
+  /// Checks if a private key exists securely for a given public key
+  ///
+  /// [publicKey] The public key to check
+  /// Returns true if a private key exists, false otherwise
+  Future<bool> hasSecurePrivateKey({
+    required String publicKey,
+  }) async {
+    try {
+      debugPrint(
+          'StellarDatasource: hasSecurePrivateKey - Checking for public key: $publicKey');
+
+      final exists = await _secureStorage.hasPrivateKey(publicKey: publicKey);
+
+      debugPrint('StellarDatasource: hasSecurePrivateKey - Result: $exists');
+      return exists;
+    } catch (e) {
+      debugPrint('StellarDatasource: hasSecurePrivateKey - Error: $e');
+      return false;
+    }
+  }
+
+  /// Deletes a private key securely from storage
+  ///
+  /// [publicKey] The public key that identifies the wallet to delete
+  /// Returns true if the key was deleted successfully, false otherwise
+  Future<bool> deleteSecurePrivateKey({
+    required String publicKey,
+  }) async {
+    try {
+      debugPrint(
+          'StellarDatasource: deleteSecurePrivateKey - Deleting private key for: $publicKey');
+
+      final deleted =
+          await _secureStorage.deletePrivateKey(publicKey: publicKey);
+
+      if (deleted) {
+        debugPrint(
+            'StellarDatasource: deleteSecurePrivateKey - Private key deleted successfully');
+      } else {
+        debugPrint(
+            'StellarDatasource: deleteSecurePrivateKey - Failed to delete private key');
+      }
+
+      return deleted;
+    } catch (e) {
+      debugPrint('StellarDatasource: deleteSecurePrivateKey - Error: $e');
+      return false;
+    }
+  }
+
+  /// Deletes all private keys securely from storage
+  /// Returns true if all keys were deleted successfully, false otherwise
+  Future<bool> deleteAllSecurePrivateKeys() async {
+    try {
+      debugPrint(
+          'StellarDatasource: deleteAllSecurePrivateKeys - Deleting all private keys');
+
+      final deleted = await _secureStorage.deleteAllPrivateKeys();
+
+      if (deleted) {
+        debugPrint(
+            'StellarDatasource: deleteAllSecurePrivateKeys - All private keys deleted successfully');
+      } else {
+        debugPrint(
+            'StellarDatasource: deleteAllSecurePrivateKeys - Failed to delete all private keys');
+      }
+
+      return deleted;
+    } catch (e) {
+      debugPrint('StellarDatasource: deleteAllSecurePrivateKeys - Error: $e');
+      return false;
+    }
+  }
+
+  /// Gets all stored public keys that have associated private keys
+  /// Returns a list of public keys
+  Future<List<String>> getAllStoredPublicKeys() async {
+    try {
+      debugPrint(
+          'StellarDatasource: getAllStoredPublicKeys - Getting all stored public keys');
+
+      final publicKeys = await _secureStorage.getAllPublicKeys();
+
+      debugPrint(
+          'StellarDatasource: getAllStoredPublicKeys - Found ${publicKeys.length} public keys');
+      return publicKeys;
+    } catch (e) {
+      debugPrint('StellarDatasource: getAllStoredPublicKeys - Error: $e');
+      return [];
+    }
   }
 }

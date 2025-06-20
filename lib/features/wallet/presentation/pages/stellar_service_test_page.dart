@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nemorixpay/shared/stellar/data/datasources/stellar_secure_storage_datasource.dart';
 import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
 import 'package:nemorixpay/features/wallet/data/datasources/stellar_service.dart';
 import 'dart:convert';
@@ -19,12 +20,15 @@ class StellarServiceTestPage extends StatefulWidget {
 
 class _StellarServiceTestPageState extends State<StellarServiceTestPage> {
   late final StellarService _stellarService;
+  final StellarSecureStorageDataSource _stellarSecureStorageDataSource =
+      StellarSecureStorageDataSource();
   String? _mnemonic;
   String? _publicKey;
   String? _secretSeed;
   String? _friendbotResult;
   String? _transactionHash;
   String? _transactionResult;
+  String? _privateKeyResult;
   bool _loading = false;
   double? _currentBalance;
 
@@ -33,6 +37,7 @@ class _StellarServiceTestPageState extends State<StellarServiceTestPage> {
   final _destinationController = TextEditingController();
   final _amountController = TextEditingController();
   final _hashController = TextEditingController();
+  final _secureStorageController = TextEditingController();
   final _memoController = TextEditingController();
 
   @override
@@ -47,6 +52,7 @@ class _StellarServiceTestPageState extends State<StellarServiceTestPage> {
     _destinationController.dispose();
     _amountController.dispose();
     _hashController.dispose();
+    _secureStorageController.dispose();
     _memoController.dispose();
     super.dispose();
   }
@@ -182,6 +188,64 @@ class _StellarServiceTestPageState extends State<StellarServiceTestPage> {
       debugPrint('Error sending transaction: $e');
     } finally {
       setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _getPrivateKey() async {
+    if (_secureStorageController.text.isEmpty) {
+      debugPrint('Por favor, ingrese la llave publica de la cuenta');
+      setState(() {
+        _privateKeyResult =
+            'Error: Por favor, ingrese la llave publica de la cuenta..';
+      });
+      return;
+    }
+
+    try {
+      String? privateKey = await _stellarSecureStorageDataSource.getPrivateKey(
+          publicKey: _secureStorageController.text);
+
+      privateKey ??= 'Private key no fue encontrada';
+      setState(() {
+        _privateKeyResult = privateKey;
+      });
+    } catch (e) {
+      setState(() {
+        _privateKeyResult =
+            'Hubo un error al tratar de recuperar la llave privada..';
+      });
+      return;
+    }
+  }
+
+  Future<void> _deletePrivateKey() async {
+    if (_secureStorageController.text.isEmpty) {
+      debugPrint('Por favor, ingrese la llave publica de la cuenta');
+      setState(() {
+        _privateKeyResult =
+            'Error: Por favor, ingrese la llave publica de la cuenta..';
+      });
+      return;
+    }
+
+    try {
+      debugPrint('Public Key: ${_secureStorageController.text}');
+      final isDeleted = await _stellarSecureStorageDataSource.deletePrivateKey(
+          publicKey: _secureStorageController.text);
+      debugPrint('isDeleted: ${isDeleted.toString()}');
+      setState(() {
+        if (isDeleted) {
+          _privateKeyResult = 'Private key was deleted succesfully!';
+        } else {
+          _privateKeyResult = 'Private key no fue encontrad o fue borrada!';
+        }
+      });
+    } catch (e) {
+      setState(() {
+        _privateKeyResult =
+            'Hubo un error al tratar de borrar la llave privada..';
+      });
+      return;
     }
   }
 
@@ -331,11 +395,10 @@ class _StellarServiceTestPageState extends State<StellarServiceTestPage> {
                 _transactionResult!,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color:
-                      _transactionResult!.contains('Error') ||
-                              _transactionResult!.contains('⚠️')
-                          ? Colors.red
-                          : Colors.green,
+                  color: _transactionResult!.contains('Error') ||
+                          _transactionResult!.contains('⚠️')
+                      ? Colors.red
+                      : Colors.green,
                 ),
               ),
             const SizedBox(height: 24),
@@ -357,6 +420,43 @@ class _StellarServiceTestPageState extends State<StellarServiceTestPage> {
             ElevatedButton(
               onPressed: _loading ? null : _validateTransaction,
               child: const Text('Validate Transaction'),
+            ),
+            const SizedBox(height: 12),
+            if (_privateKeyResult != null)
+              Text(
+                _privateKeyResult!,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: _privateKeyResult!.contains('Error') ||
+                          _privateKeyResult!.contains('⚠️')
+                      ? Colors.red
+                      : Colors.green,
+                ),
+              ),
+            const SizedBox(height: 24),
+
+            // Sección de validación de almacenamiento seguro (private key)
+            const Text(
+              'Validate Secure Storage:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _secureStorageController,
+              decoration: const InputDecoration(
+                labelText: 'Public Key',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: _getPrivateKey,
+              child: const Text('Get Private Key'),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: _deletePrivateKey,
+              child: const Text('Delete Private Key'),
             ),
             const SizedBox(height: 12),
             if (_loading)
