@@ -185,6 +185,18 @@ abstract class AppLocalizations {
   /// **'Continue with Apple'**
   String get continueWithApple;
 
+  /// No description provided for @googleSignInNotImplemented.
+  ///
+  /// In en, this message translates to:
+  /// **'Google Sign-In not implemented yet'**
+  String get googleSignInNotImplemented;
+
+  /// No description provided for @appleSignInNotImplemented.
+  ///
+  /// In en, this message translates to:
+  /// **'Apple Sign-In not implemented yet'**
+  String get appleSignInNotImplemented;
+
   /// No description provided for @dontHaveAnAccount.
   ///
   /// In en, this message translates to:

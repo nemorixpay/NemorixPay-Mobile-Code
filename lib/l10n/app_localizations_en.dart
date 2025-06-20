@@ -54,6 +54,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get continueWithApple => 'Continue with Apple';
 
   @override
+  String get googleSignInNotImplemented => 'Google Sign-In not implemented yet';
+
+  @override
+  String get appleSignInNotImplemented => 'Apple Sign-In not implemented yet';
+
+  @override
   String get dontHaveAnAccount => 'Don\'t have an account';
 
   @override

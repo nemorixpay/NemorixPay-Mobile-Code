@@ -91,15 +91,15 @@ class _SignUpPageState extends State<SignUpPage> {
         return;
       }
       context.read<AuthBloc>().add(
-        SignUpRequested(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-          firstName: _firstNameController.text.trim(),
-          lastName: _lastNameController.text.trim(),
-          birthDate: _birthDate!,
-          securityWord: _securityWordController.text.trim(),
-        ),
-      );
+            SignUpRequested(
+              email: _emailController.text.trim(),
+              password: _passwordController.text,
+              firstName: _firstNameController.text.trim(),
+              lastName: _lastNameController.text.trim(),
+              birthDate: _birthDate!,
+              securityWord: _securityWordController.text.trim(),
+            ),
+          );
       return;
     }
     NemorixSnackBar.show(
@@ -122,12 +122,11 @@ class _SignUpPageState extends State<SignUpPage> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthError) {
-          final message =
-              state.error is FirebaseFailure
-                  ? (state.error as FirebaseFailure).getLocalizedMessage(
-                    context,
-                  )
-                  : state.error.message;
+          final message = state.error is FirebaseFailure
+              ? (state.error as FirebaseFailure).getLocalizedMessage(
+                  context,
+                )
+              : state.error.message;
 
           NemorixSnackBar.show(
             context,
@@ -147,9 +146,8 @@ class _SignUpPageState extends State<SignUpPage> {
           showDialog(
             context: context,
             barrierDismissible: false,
-            builder:
-                (BuildContext dialogContext) =>
-                    const VerificationEmailDialog(isFromSignUp: true),
+            builder: (BuildContext dialogContext) =>
+                const VerificationEmailDialog(isFromSignUp: true),
           );
         }
       },
@@ -165,18 +163,18 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Image.asset(
                         ImageUrl.nemorixpayLogo,
                         width: 100,
                         height: 100,
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           AppLocalizations.of(context)!.signUp,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
                           ),
@@ -190,7 +188,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                       const SizedBox(height: 24),
-
                       FormSection(
                         title:
                             AppLocalizations.of(context)!.personalInformation,
@@ -202,13 +199,13 @@ class _SignUpPageState extends State<SignUpPage> {
                               Expanded(
                                 child: CustomTextFormField(
                                   controller: _firstNameController,
-                                  validator:
-                                      (value) =>
-                                          value == null || value.isEmpty
-                                              ? AppLocalizations.of(
-                                                context,
-                                              )!.firstNameRequired
-                                              : null,
+                                  validator: (value) =>
+                                      value == null || value.isEmpty
+                                          ? AppLocalizations.of(
+                                              context,
+                                            )!
+                                              .firstNameRequired
+                                          : null,
                                   keyboardType: TextInputType.name,
                                   obscureText: false,
                                   hintText:
@@ -219,13 +216,13 @@ class _SignUpPageState extends State<SignUpPage> {
                               Expanded(
                                 child: CustomTextFormField(
                                   controller: _lastNameController,
-                                  validator:
-                                      (value) =>
-                                          value == null || value.isEmpty
-                                              ? AppLocalizations.of(
-                                                context,
-                                              )!.lastNameRequired
-                                              : null,
+                                  validator: (value) =>
+                                      value == null || value.isEmpty
+                                          ? AppLocalizations.of(
+                                              context,
+                                            )!
+                                              .lastNameRequired
+                                          : null,
                                   keyboardType: TextInputType.name,
                                   obscureText: false,
                                   hintText:
@@ -236,20 +233,20 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                           BirthdatePickerField(
                             selectedDate: _birthDate,
-                            onDateSelected:
-                                (date) => setState(() => _birthDate = date),
+                            onDateSelected: (date) =>
+                                setState(() => _birthDate = date),
                             validator: (value) {
                               if (value == null) {
                                 return AppLocalizations.of(
                                   context,
-                                )!.birthdateRequired;
+                                )!
+                                    .birthdateRequired;
                               }
                               return null;
                             },
                           ),
                         ],
                       ),
-
                       FormSection(
                         title: AppLocalizations.of(context)!.accountInformation,
                         description:
@@ -266,27 +263,28 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                           PasswordField(
                             controller: _confirmPasswordController,
-                            hintText:
-                                AppLocalizations.of(
-                                  context,
-                                )!.confirmYourPassword,
+                            hintText: AppLocalizations.of(
+                              context,
+                            )!
+                                .confirmYourPassword,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return AppLocalizations.of(
                                   context,
-                                )!.confirmYourPassword;
+                                )!
+                                    .confirmYourPassword;
                               }
                               if (value != _passwordController.text) {
                                 return AppLocalizations.of(
                                   context,
-                                )!.passwordsDoNotMatch;
+                                )!
+                                    .passwordsDoNotMatch;
                               }
                               return null;
                             },
                           ),
                         ],
                       ),
-
                       FormSection(
                         title: AppLocalizations.of(context)!.security,
                         description:
@@ -294,13 +292,12 @@ class _SignUpPageState extends State<SignUpPage> {
                         children: [
                           CustomTextFormField(
                             controller: _securityWordController,
-                            validator:
-                                (value) =>
-                                    value == null || value.isEmpty
-                                        ? AppLocalizations.of(
-                                          context,
-                                        )!.securityWordRequired
-                                        : null,
+                            validator: (value) => value == null || value.isEmpty
+                                ? AppLocalizations.of(
+                                    context,
+                                  )!
+                                    .securityWordRequired
+                                : null,
                             keyboardType: TextInputType.text,
                             obscureText: false,
                             hintText:
@@ -308,21 +305,19 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                         ],
                       ),
-
                       const SizedBox(height: 24),
                       Row(
                         children: [
                           Checkbox(
                             value: _agreedToTerms,
-                            onChanged:
-                                (value) => setState(
-                                  () => _agreedToTerms = value ?? false,
-                                ),
+                            onChanged: (value) => setState(
+                              () => _agreedToTerms = value ?? false,
+                            ),
                           ),
                           Expanded(
                             child: Text(
                               AppLocalizations.of(context)!.agreeToTerms,
-                              style: TextStyle(fontSize: 12),
+                              style: const TextStyle(fontSize: 12),
                             ),
                           ),
                         ],
@@ -349,22 +344,13 @@ class _SignUpPageState extends State<SignUpPage> {
                           AppLocalizations.of(context)!.alreadyHaveAnAccount,
                         ),
                       ),
-                      const SizedBox(height: 24),
-                      SocialLoginButtons(
-                        onGooglePressed: () {
-                          // TODO: Implement Google Sign In
-                        },
-                        onApplePressed: () {
-                          // TODO: Implement Apple Sign In
-                        },
-                      ),
                     ],
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: const CustomBackButton(),
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: CustomBackButton(),
               ),
             ],
           ),

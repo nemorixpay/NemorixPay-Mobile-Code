@@ -54,6 +54,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get continueWithApple => 'Continuar con Apple';
 
   @override
+  String get googleSignInNotImplemented => 'Inicio de sesión con Google aún no implementado';
+
+  @override
+  String get appleSignInNotImplemented => 'Inicio de sesión con Apple aún no implementado';
+
+  @override
   String get dontHaveAnAccount => '¿No tienes una cuenta?';
 
   @override

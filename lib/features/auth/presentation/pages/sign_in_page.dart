@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
@@ -61,11 +62,11 @@ class _LoginPageState extends State<LoginPage> {
   void _handleSignIn() {
     if (_formKey.currentState?.validate() ?? false) {
       context.read<AuthBloc>().add(
-        SignInRequested(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-        ),
-      );
+            SignInRequested(
+              email: _emailController.text.trim(),
+              password: _passwordController.text,
+            ),
+          );
     } else {
       NemorixSnackBar.show(
         context,
@@ -100,12 +101,11 @@ class _LoginPageState extends State<LoginPage> {
           debugPrint('Auth State Changed: $state');
 
           if (state is AuthError) {
-            final message =
-                state.error is FirebaseFailure
-                    ? (state.error as FirebaseFailure).getLocalizedMessage(
-                      context,
-                    )
-                    : state.error.message;
+            final message = state.error is FirebaseFailure
+                ? (state.error as FirebaseFailure).getLocalizedMessage(
+                    context,
+                  )
+                : state.error.message;
 
             debugPrint('Displaying error message: $message');
 
@@ -122,9 +122,8 @@ class _LoginPageState extends State<LoginPage> {
               showDialog(
                 context: context,
                 barrierDismissible: false,
-                builder:
-                    (BuildContext dialogContext) =>
-                        const VerificationEmailDialog(),
+                builder: (BuildContext dialogContext) =>
+                    const VerificationEmailDialog(),
               );
             }
           } else if (state is AuthAuthenticated) {
@@ -147,24 +146,24 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context, state) {
           return SafeArea(
             child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Padding(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Image.asset(
                       ImageUrl.nemorixpayLogo,
                       width: 100,
                       height: 100,
                     ),
-                    SizedBox(height: 60),
+                    const SizedBox(height: 60),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         AppLocalizations.of(context)!.welcomeBack,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
                         ),
@@ -174,10 +173,11 @@ class _LoginPageState extends State<LoginPage> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         AppLocalizations.of(context)!.youHaveBeenMissed,
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                        style:
+                            const TextStyle(fontSize: 16, color: Colors.grey),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Form(
                       key: _formKey,
                       child: FormSection(
@@ -200,14 +200,13 @@ class _LoginPageState extends State<LoginPage> {
                               onPressed: () async {
                                 await showDialog(
                                   context: context,
-                                  builder:
-                                      (BuildContext context) =>
-                                          ForgotPasswordDialog(),
+                                  builder: (BuildContext context) =>
+                                      const ForgotPasswordDialog(),
                                 );
                               },
                               child: Text(
                                 "${AppLocalizations.of(context)!.forgotPassword}?",
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: NemorixColors.primaryColor,
                                 ),
                               ),
@@ -216,10 +215,9 @@ class _LoginPageState extends State<LoginPage> {
                           const SizedBox(height: 16),
                           RoundedElevatedButton(
                             text: AppLocalizations.of(context)!.signIn,
-                            onPressed:
-                                state is AuthLoading
-                                    ? null
-                                    : _handleSignIn, // Flutter bloc action
+                            onPressed: state is AuthLoading
+                                ? null
+                                : _handleSignIn, // Flutter bloc action
                             backgroundColor: NemorixColors.primaryColor,
                             textColor: Colors.black,
                             isLoading: state is AuthLoading,
@@ -235,26 +233,35 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         Row(
                           children: [
-                            Expanded(child: Divider()),
+                            const Expanded(child: Divider()),
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: Text(AppLocalizations.of(context)!.or),
                             ),
-                            Expanded(child: Divider()),
+                            const Expanded(child: Divider()),
                           ],
                         ),
                         const SizedBox(height: 16),
                         SocialLoginButtons(
                           onGooglePressed: () {
                             // TODO: Implement Google Sign In
+                            // NemorixSnackBar.show(context,
+                            //     message: AppLocalizations.of(context)!
+                            //         .googleSignInNotImplemented);
+
+                            Navigator.pushNamed(context, RouteNames.splashTest);
                           },
                           onApplePressed: () {
                             // TODO: Implement Apple Sign In
+                            NemorixSnackBar.show(context,
+                                message: AppLocalizations.of(context)!
+                                    .appleSignInNotImplemented);
                           },
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Center(
                       child: GestureDetector(
                         onTap: () {},
@@ -265,10 +272,12 @@ class _LoginPageState extends State<LoginPage> {
                               "${AppLocalizations.of(context)!.dontHaveAnAccount}?",
                             ),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushNamed(context, RouteNames.signUp);
+                              },
                               child: Text(
                                 AppLocalizations.of(context)!.signUp,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: NemorixColors.primaryColor,
                                 ),
                               ),
