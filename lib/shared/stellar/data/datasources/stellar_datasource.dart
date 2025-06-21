@@ -103,4 +103,42 @@ abstract class StellarDataSource {
   /// Returns [List<AssetModel>] with all available assets and their details
   /// Throws [StellarFailure] if the operation fails
   Future<List<AssetModel>> getAvailableAssets();
+
+  // -----------------------------------------------------------------------------------
+  // Secure Key Management Methods
+  // -----------------------------------------------------------------------------------
+
+  /// Retrieves a private key securely from storage
+  ///
+  /// [publicKey] The public key that identifies the wallet
+  /// Returns the private key if found, null otherwise
+  Future<String?> getSecurePrivateKey({
+    required String publicKey,
+  });
+
+  /// Checks if a private key exists securely for a given public key
+  ///
+  /// [publicKey] The public key to check
+  /// Returns true if a private key exists, false otherwise
+  Future<bool> hasSecurePrivateKey({
+    required String publicKey,
+  });
+
+  /// Deletes a private key securely from storage
+  ///
+  /// [publicKey] The public key that identifies the wallet to delete
+  /// Returns true if the key was deleted successfully, false otherwise
+  Future<bool> deleteSecurePrivateKey({
+    required String publicKey,
+  });
+
+  /// Deletes all private keys securely from storage
+  /// Returns true if all keys were deleted successfully, false otherwise
+  /// Return false, if the operation fails
+  Future<bool> deleteAllSecurePrivateKeys();
+
+  /// Gets all stored public keys that have associated private keys
+  /// Returns a list of public keys
+  /// Throws [StellarFailure] if the operation fails
+  Future<List<String>> getAllStoredPublicKeys();
 }

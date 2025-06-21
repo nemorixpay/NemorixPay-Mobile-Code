@@ -28,6 +28,7 @@ class StellarDataSourceImpl implements StellarDataSource {
   late final StellarSDK _sdk;
   final _accountProvider = StellarAccountProvider();
   final _secureStorage = StellarSecureStorageDataSource();
+  final bool isAppInProduction = false;
 
   StellarDataSourceImpl() {
     _sdk = StellarSDK.TESTNET;
@@ -83,8 +84,11 @@ class StellarDataSourceImpl implements StellarDataSource {
       'StellarDatasource: createAccount - KeyPair generated: ${keyPair.accountId}',
     );
 
-    await createAccountInTestnet(keyPair.accountId);
-    debugPrint('StellarDatasource: createAccount - Account created in testnet');
+    if (!isAppInProduction) {
+      await createAccountInTestnet(keyPair.accountId);
+      debugPrint(
+          'StellarDatasource: createAccount - Account created in testnet');
+    }
 
     debugPrint(
         'StellarDatasource: createAccount (accountId): ${keyPair.accountId}');
@@ -762,6 +766,7 @@ class StellarDataSourceImpl implements StellarDataSource {
   ///
   /// [publicKey] The public key that identifies the wallet
   /// Returns the private key if found, null otherwise
+  @override
   Future<String?> getSecurePrivateKey({
     required String publicKey,
   }) async {
@@ -791,6 +796,7 @@ class StellarDataSourceImpl implements StellarDataSource {
   ///
   /// [publicKey] The public key to check
   /// Returns true if a private key exists, false otherwise
+  @override
   Future<bool> hasSecurePrivateKey({
     required String publicKey,
   }) async {
@@ -812,6 +818,7 @@ class StellarDataSourceImpl implements StellarDataSource {
   ///
   /// [publicKey] The public key that identifies the wallet to delete
   /// Returns true if the key was deleted successfully, false otherwise
+  @override
   Future<bool> deleteSecurePrivateKey({
     required String publicKey,
   }) async {
@@ -839,6 +846,7 @@ class StellarDataSourceImpl implements StellarDataSource {
 
   /// Deletes all private keys securely from storage
   /// Returns true if all keys were deleted successfully, false otherwise
+  @override
   Future<bool> deleteAllSecurePrivateKeys() async {
     try {
       debugPrint(
@@ -863,6 +871,7 @@ class StellarDataSourceImpl implements StellarDataSource {
 
   /// Gets all stored public keys that have associated private keys
   /// Returns a list of public keys
+  @override
   Future<List<String>> getAllStoredPublicKeys() async {
     try {
       debugPrint(
