@@ -11,6 +11,7 @@ import 'package:nemorixpay/features/wallet/domain/usecases/create_wallet.dart';
 import 'package:nemorixpay/features/wallet/domain/usecases/import_wallet.dart';
 import 'package:nemorixpay/features/wallet/domain/usecases/get_wallet_balance.dart';
 import 'package:nemorixpay/features/wallet/domain/usecases/seed_phrase_usecase.dart';
+import 'package:nemorixpay/features/wallet/domain/usecases/save_public_key_usecase.dart';
 
 import 'wallet_bloc_test.mocks.dart';
 
@@ -19,14 +20,16 @@ import 'wallet_bloc_test.mocks.dart';
   ImportWalletUseCase,
   GetWalletBalanceUseCase,
   CreateSeedPhraseUseCase,
+  SavePublicKeyUseCase,
 ])
+
 /// @file        wallet_bloc_test.dart
 /// @brief       Tests for the Wallet Bloc implementation
 /// @details     Verifies the behavior of the Wallet Bloc, including wallet creation,
 ///             import, and balance retrieval operations.
 /// @author      Miguel Fagundez
 /// @date        23/05/2024
-/// @version     1.0
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 void main() {
   late WalletBloc walletBloc;
@@ -34,17 +37,20 @@ void main() {
   late MockImportWalletUseCase mockImportWallet;
   late MockGetWalletBalanceUseCase mockGetWalletBalance;
   late MockCreateSeedPhraseUseCase mockCreateSeedPhrase;
+  late MockSavePublicKeyUseCase mockSavePublicKey;
 
   setUp(() {
     mockCreateWallet = MockCreateWalletUseCase();
     mockImportWallet = MockImportWalletUseCase();
     mockGetWalletBalance = MockGetWalletBalanceUseCase();
     mockCreateSeedPhrase = MockCreateSeedPhraseUseCase();
+    mockSavePublicKey = MockSavePublicKeyUseCase();
     walletBloc = WalletBloc(
       createWalletUseCase: mockCreateWallet,
       importWalletUseCase: mockImportWallet,
       getWalletBalanceUseCase: mockGetWalletBalance,
       createSeedPhraseUseCase: mockCreateSeedPhrase,
+      savePublicKeyUseCase: mockSavePublicKey,
     );
   });
 
@@ -74,7 +80,10 @@ void main() {
         ).thenAnswer((_) async => Right(tWallet));
 
         // assert later
-        final expected = [const WalletLoading(), WalletCreated(tWallet)];
+        final expected = [
+          const WalletLoading(isSecondLoading: true),
+          WalletCreated(tWallet)
+        ];
         expectLater(walletBloc.stream, emitsInOrder(expected));
 
         // act
@@ -93,7 +102,7 @@ void main() {
 
         // assert later
         final expected = [
-          const WalletLoading(),
+          const WalletLoading(isSecondLoading: true),
           const WalletError('Error creating wallet'),
         ];
         expectLater(walletBloc.stream, emitsInOrder(expected));
@@ -123,7 +132,10 @@ void main() {
         ).thenAnswer((_) async => Right(tWallet));
 
         // assert later
-        final expected = [const WalletLoading(), WalletImported(tWallet)];
+        final expected = [
+          const WalletLoading(isSecondLoading: true),
+          WalletImported(tWallet)
+        ];
         expectLater(walletBloc.stream, emitsInOrder(expected));
 
         // act
@@ -142,7 +154,7 @@ void main() {
 
         // assert later
         final expected = [
-          const WalletLoading(),
+          const WalletLoading(isSecondLoading: true),
           const WalletError('Error importing wallet'),
         ];
         expectLater(walletBloc.stream, emitsInOrder(expected));
@@ -236,6 +248,83 @@ void main() {
 
         // act
         walletBloc.add(const GenerateSeedPhraseRequested());
+      },
+    );
+  });
+
+  group('SavePublicKeyRequested', () {
+    const tPublicKey = 'test_public_key';
+    const tUserId = 'test_user_id';
+
+    test(
+      'should emit [WalletLoading, PublicKeySaved] when public key is saved successfully',
+      () async {
+        // arrange
+        when(
+          mockSavePublicKey(tPublicKey, tUserId),
+        ).thenAnswer((_) async => true);
+
+        // assert later
+        final expected = [
+          const WalletLoading(),
+          const PublicKeySaved(
+            publicKey: tPublicKey,
+            userId: tUserId,
+          ),
+        ];
+        expectLater(walletBloc.stream, emitsInOrder(expected));
+
+        // act
+        walletBloc.add(const SavePublicKeyRequested(
+          publicKey: tPublicKey,
+          userId: tUserId,
+        ));
+      },
+    );
+
+    test(
+      'should emit [WalletLoading, WalletError] when public key saving fails',
+      () async {
+        // arrange
+        when(mockSavePublicKey(tPublicKey, tUserId)).thenAnswer(
+          (_) async => false,
+        );
+
+        // assert later
+        final expected = [
+          const WalletLoading(),
+          const WalletError('Failed to save public key'),
+        ];
+        expectLater(walletBloc.stream, emitsInOrder(expected));
+
+        // act
+        walletBloc.add(const SavePublicKeyRequested(
+          publicKey: tPublicKey,
+          userId: tUserId,
+        ));
+      },
+    );
+
+    test(
+      'should emit [WalletLoading, WalletError] when save public key use case throws exception',
+      () async {
+        // arrange
+        when(mockSavePublicKey(tPublicKey, tUserId)).thenAnswer(
+          (_) async => throw Exception('Error saving public key'),
+        );
+
+        // assert later
+        final expected = [
+          const WalletLoading(),
+          const WalletError('Exception: Error saving public key'),
+        ];
+        expectLater(walletBloc.stream, emitsInOrder(expected));
+
+        // act
+        walletBloc.add(const SavePublicKeyRequested(
+          publicKey: tPublicKey,
+          userId: tUserId,
+        ));
       },
     );
   });

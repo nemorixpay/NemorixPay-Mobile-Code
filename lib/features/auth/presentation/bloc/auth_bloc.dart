@@ -5,6 +5,7 @@ import 'package:nemorixpay/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/sign_up_usecase.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/forgot_password_usecase.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/send_verification_email_usecase.dart';
+import 'package:nemorixpay/features/auth/domain/usecases/check_wallet_exists_usecase.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_event.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,29 +16,33 @@ import 'package:nemorixpay/features/auth/data/models/user_model.dart';
 /// @details     Handles authentication state management and user interactions.
 /// @author      Miguel Fagundez
 /// @date        2024-05-08
-/// @version     1.1
+/// @version     1.2
 /// @copyright   Apache 2.0 License
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignInUseCase _signInUseCase;
   final SignUpUseCase _signUpUseCase;
   final ForgotPasswordUseCase _forgotPasswordUseCase;
   final SendVerificationEmailUseCase _sendVerificationEmailUseCase;
+  final CheckWalletExistsUseCase _checkWalletExistsUseCase;
 
   AuthBloc({
     required SignInUseCase signInUseCase,
     required SignUpUseCase signUpUseCase,
     required ForgotPasswordUseCase forgotPasswordUseCase,
     required SendVerificationEmailUseCase sendVerificationEmailUseCase,
-  }) : _signInUseCase = signInUseCase,
-       _signUpUseCase = signUpUseCase,
-       _forgotPasswordUseCase = forgotPasswordUseCase,
-       _sendVerificationEmailUseCase = sendVerificationEmailUseCase,
-       super(const AuthInitial()) {
+    required CheckWalletExistsUseCase checkWalletExistsUseCase,
+  })  : _signInUseCase = signInUseCase,
+        _signUpUseCase = signUpUseCase,
+        _forgotPasswordUseCase = forgotPasswordUseCase,
+        _sendVerificationEmailUseCase = sendVerificationEmailUseCase,
+        _checkWalletExistsUseCase = checkWalletExistsUseCase,
+        super(const AuthInitial()) {
     on<SignInRequested>(_onSignInRequested);
     on<SignUpRequested>(_onSignUpRequested);
     on<ForgotPasswordRequested>(_onForgotPasswordRequested);
     on<SendVerificationEmailRequested>(_onSendVerificationEmailRequested);
     on<CheckEmailVerificationStatus>(_onCheckEmailVerificationStatus);
+    on<CheckWalletExists>(_onCheckWalletExists);
   }
 
   Future<void> _onSignInRequested(
@@ -68,7 +73,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           debugPrint(
             'AuthBloc - User authenticated successfully: ${user.email}',
           );
-          emit(AuthAuthenticated(user));
+          // After successful authentication, check if user has a wallet
+          add(CheckWalletExists(userId: user.id, user: user));
         },
       );
     } on FirebaseFailure catch (failure) {
@@ -293,6 +299,33 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } else {
       debugPrint('AuthBloc - No user found');
       emit(const AuthUnauthenticated());
+    }
+  }
+
+  Future<void> _onCheckWalletExists(
+    CheckWalletExists event,
+    Emitter<AuthState> emit,
+  ) async {
+    debugPrint(
+        'AuthBloc - Checking wallet existence for userId: ${event.userId}');
+    emit(const AuthLoading());
+
+    try {
+      final hasWallet = await _checkWalletExistsUseCase(event.userId);
+
+      if (hasWallet) {
+        debugPrint(
+            'AuthBloc - User has wallet, emitting AuthAuthenticatedWithWallet');
+        emit(AuthAuthenticatedWithWallet(event.user));
+      } else {
+        debugPrint(
+            'AuthBloc - User does not have wallet, emitting AuthAuthenticatedWithoutWallet');
+        emit(AuthAuthenticatedWithoutWallet(event.user));
+      }
+    } catch (e) {
+      debugPrint('AuthBloc - Error checking wallet: $e');
+      // In case of error, emit AuthError instead of assuming no wallet
+      emit(AuthError(FirebaseFailure.unknown(e.toString())));
     }
   }
 }

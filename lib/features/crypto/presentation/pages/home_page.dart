@@ -38,16 +38,6 @@ class _HomePage2State extends State<HomePage> {
     // Fire main event: Get all available/account assets
     AssetCacheManager cache = AssetCacheManager();
 
-    // TODO Include publicKey in SignIn or WalletCreation process
-    // TODO This is Temporal
-    if (cache.isPublicKeyAvailable()) {
-      debugPrint('PublicKey is available');
-    } else {
-      debugPrint('PublicKey is not available');
-      cache.setPublicAccountKey(
-        'GCDILZUJ5QR2MYSE4JSNANNKGTRSGOJ7WGMRDCJX6EBEVG6Z4VOVJ5Y4',
-      );
-    }
     debugPrint('cache.assetCount == ${cache.assetCount}');
     if (cache.assetCount == 0) {
       debugPrint('Calling...');
@@ -72,14 +62,13 @@ class _HomePage2State extends State<HomePage> {
     if (state is CryptoHomeLoaded) {
       debugPrint('state is CryptoHomeLoaded in _searchCrypto');
       setState(() {
-        _searchResults =
-            state.marketAssets
-                .where(
-                  (crypto) => crypto.asset.name.toLowerCase().contains(
+        _searchResults = state.marketAssets
+            .where(
+              (crypto) => crypto.asset.name.toLowerCase().contains(
                     query.toLowerCase(),
                   ),
-                )
-                .toList();
+            )
+            .toList();
       });
     }
   }
@@ -191,7 +180,6 @@ class _HomePage2State extends State<HomePage> {
               },
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             child: Text(

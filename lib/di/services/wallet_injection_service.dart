@@ -5,8 +5,10 @@ import 'package:nemorixpay/features/wallet/domain/usecases/create_wallet.dart';
 import 'package:nemorixpay/features/wallet/domain/usecases/get_wallet_balance.dart';
 import 'package:nemorixpay/features/wallet/domain/usecases/import_wallet.dart';
 import 'package:nemorixpay/features/wallet/domain/usecases/seed_phrase_usecase.dart';
+import 'package:nemorixpay/features/wallet/domain/usecases/save_public_key_usecase.dart';
 import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_bloc.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource_impl.dart';
+import 'package:nemorixpay/shared/stellar/data/datasources/stellar_secure_storage_datasource.dart';
 
 /// @file        wallet_injection_service.dart
 /// @brief       Dependency injection container implementation for Wallet feature in NemorixPay.
@@ -54,6 +56,10 @@ Future<void> walletInjectionServices() async {
     GetWalletBalanceUseCase(repository: walletRepositoryImpl),
   );
 
+  final SavePublicKeyUseCase savePublicKeyUseCase = di.registerSingleton(
+    SavePublicKeyUseCase(StellarSecureStorageDataSource()),
+  );
+
   // Define Wallet Bloc
   di.registerFactory(
     () => WalletBloc(
@@ -61,6 +67,7 @@ Future<void> walletInjectionServices() async {
       createWalletUseCase: createWalletUseCase,
       importWalletUseCase: importWalletUseCase,
       getWalletBalanceUseCase: getAccountBalanceUseCase,
+      savePublicKeyUseCase: savePublicKeyUseCase,
     ),
   );
 }

@@ -127,6 +127,36 @@ class MockStellarSecureStorageDataSource extends _i1.Mock
           as _i7.Future<bool>);
 
   @override
+  _i7.Future<bool> savePublicKey({
+    required String? publicKey,
+    required String? userId,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#savePublicKey, [], {
+              #publicKey: publicKey,
+              #userId: userId,
+            }),
+            returnValue: _i7.Future<bool>.value(false),
+          )
+          as _i7.Future<bool>);
+
+  @override
+  _i7.Future<String?> getPublicKey({required String? userId}) =>
+      (super.noSuchMethod(
+            Invocation.method(#getPublicKey, [], {#userId: userId}),
+            returnValue: _i7.Future<String?>.value(),
+          )
+          as _i7.Future<String?>);
+
+  @override
+  _i7.Future<bool> hasPublicKey({required String? userId}) =>
+      (super.noSuchMethod(
+            Invocation.method(#hasPublicKey, [], {#userId: userId}),
+            returnValue: _i7.Future<bool>.value(false),
+          )
+          as _i7.Future<bool>);
+
+  @override
   _i7.Future<String?> getPrivateKey({required String? publicKey}) =>
       (super.noSuchMethod(
             Invocation.method(#getPrivateKey, [], {#publicKey: publicKey}),

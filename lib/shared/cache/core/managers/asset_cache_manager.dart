@@ -26,7 +26,10 @@ class AssetCacheManager extends Equatable {
   final Duration _expirationDuration;
 
   /// Public account key
-  String _publicAccountKey = '';
+  String? publicAccountKey;
+
+  /// Firebase user account id
+  String? userId;
 
   /// Factory constructor to get the singleton instance
   factory AssetCacheManager({Duration? expirationDuration}) {
@@ -41,8 +44,8 @@ class AssetCacheManager extends Equatable {
   AssetCacheManager._internal({
     required StellarDataSource stellarDataSource,
     required Duration expirationDuration,
-  }) : _expirationDuration = expirationDuration,
-       _stellarDataSource = stellarDataSource;
+  })  : _expirationDuration = expirationDuration,
+        _stellarDataSource = stellarDataSource;
 
   /// Map of assets indexed by their ID
   final Map<String, AssetModel> _assets = {};
@@ -63,11 +66,15 @@ class AssetCacheManager extends Equatable {
       DateTime.now().difference(_lastUpdate!) > _expirationDuration;
 
   bool isPublicKeyAvailable() {
-    return _publicAccountKey.contains('G');
+    return publicAccountKey?.contains('G') ?? false;
   }
 
-  void setPublicAccountKey(String key) {
-    _publicAccountKey = key;
+  void setPublicKey(String key) {
+    publicAccountKey = key;
+  }
+
+  void setUserId(String newUserId) {
+    userId = newUserId;
   }
 
   Future<void> assetsEmpty() async {
@@ -85,11 +92,8 @@ class AssetCacheManager extends Equatable {
       // All available Stellar assets
       final stellarAssets = await _stellarDataSource.getAvailableAssets();
       // Only Account assets
-      final accountAssets = await _stellarDataSource.getAccountAssets(
-        _publicAccountKey ??
-            // TODO After integrating, the default value needs to be deleted
-            'GCDILZUJ5QR2MYSE4JSNANNKGTRSGOJ7WGMRDCJX6EBEVG6Z4VOVJ5Y4',
-      );
+      final accountAssets =
+          await _stellarDataSource.getAccountAssets(publicAccountKey ?? '');
 
       debugPrint(
         'AssetCacheManager - loadAssetsFromStellar: list = ${accountAssets.length}',

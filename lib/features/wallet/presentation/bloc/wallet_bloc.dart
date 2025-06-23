@@ -4,6 +4,7 @@ import 'package:nemorixpay/features/wallet/domain/usecases/create_wallet.dart';
 import 'package:nemorixpay/features/wallet/domain/usecases/get_wallet_balance.dart';
 import 'package:nemorixpay/features/wallet/domain/usecases/import_wallet.dart';
 import 'package:nemorixpay/features/wallet/domain/usecases/seed_phrase_usecase.dart';
+import 'package:nemorixpay/features/wallet/domain/usecases/save_public_key_usecase.dart';
 import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_event.dart';
 import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_state.dart';
 
@@ -13,28 +14,32 @@ import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_state.dart';
 ///             including creation, import, and balance retrieval.
 /// @author      Miguel Fagundez
 /// @date        2025-05-24
-/// @version     1.0
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 class WalletBloc extends Bloc<WalletEvent, WalletState> {
   final CreateSeedPhraseUseCase _createSeedPhraseUseCase;
   final CreateWalletUseCase _createWalletUseCase;
   final ImportWalletUseCase _importWalletUseCase;
   final GetWalletBalanceUseCase _getWalletBalanceUseCase;
+  final SavePublicKeyUseCase _savePublicKeyUseCase;
 
   WalletBloc({
     required CreateSeedPhraseUseCase createSeedPhraseUseCase,
     required CreateWalletUseCase createWalletUseCase,
     required ImportWalletUseCase importWalletUseCase,
     required GetWalletBalanceUseCase getWalletBalanceUseCase,
-  }) : _createSeedPhraseUseCase = createSeedPhraseUseCase,
-       _createWalletUseCase = createWalletUseCase,
-       _importWalletUseCase = importWalletUseCase,
-       _getWalletBalanceUseCase = getWalletBalanceUseCase,
-       super(const WalletInitial()) {
+    required SavePublicKeyUseCase savePublicKeyUseCase,
+  })  : _createSeedPhraseUseCase = createSeedPhraseUseCase,
+        _createWalletUseCase = createWalletUseCase,
+        _importWalletUseCase = importWalletUseCase,
+        _getWalletBalanceUseCase = getWalletBalanceUseCase,
+        _savePublicKeyUseCase = savePublicKeyUseCase,
+        super(const WalletInitial()) {
     on<GenerateSeedPhraseRequested>(_onGenerateSeedPhrase);
     on<CreateWalletRequested>(_onCreateWallet);
     on<ImportWalletRequested>(_onImportWallet);
     on<GetWalletBalanceRequested>(_onGetWalletBalance);
+    on<SavePublicKeyRequested>(_onSavePublicKey);
   }
 
   Future<void> _onGenerateSeedPhrase(
@@ -143,6 +148,35 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       );
     } catch (e) {
       debugPrint('WalletBloc - Unexpected error: $e');
+      emit(WalletError(e.toString()));
+    }
+  }
+
+  Future<void> _onSavePublicKey(
+    SavePublicKeyRequested event,
+    Emitter<WalletState> emit,
+  ) async {
+    debugPrint('WalletBloc - Begin save public key process');
+    debugPrint('WalletBloc - Public key: ${event.publicKey}');
+    debugPrint('WalletBloc - User ID: ${event.userId}');
+    emit(const WalletLoading());
+
+    try {
+      debugPrint('WalletBloc - Calling save public key use case');
+      final saved = await _savePublicKeyUseCase(event.publicKey, event.userId);
+
+      if (saved) {
+        debugPrint('WalletBloc - Public key saved successfully');
+        emit(PublicKeySaved(
+          publicKey: event.publicKey,
+          userId: event.userId,
+        ));
+      } else {
+        debugPrint('WalletBloc - Failed to save public key');
+        emit(const WalletError('Failed to save public key'));
+      }
+    } catch (e) {
+      debugPrint('WalletBloc - Unexpected error saving public key: $e');
       emit(WalletError(e.toString()));
     }
   }

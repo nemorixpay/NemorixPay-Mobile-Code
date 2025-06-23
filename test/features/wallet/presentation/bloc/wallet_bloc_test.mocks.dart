@@ -17,6 +17,8 @@ import 'package:nemorixpay/features/wallet/domain/usecases/get_wallet_balance.da
     as _i9;
 import 'package:nemorixpay/features/wallet/domain/usecases/import_wallet.dart'
     as _i8;
+import 'package:nemorixpay/features/wallet/domain/usecases/save_public_key_usecase.dart'
+    as _i11;
 import 'package:nemorixpay/features/wallet/domain/usecases/seed_phrase_usecase.dart'
     as _i10;
 
@@ -180,4 +182,22 @@ class MockCreateSeedPhraseUseCase extends _i1.Mock
                 ),
           )
           as _i5.Future<_i3.Either<_i6.Failure, List<String>>>);
+}
+
+/// A class which mocks [SavePublicKeyUseCase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSavePublicKeyUseCase extends _i1.Mock
+    implements _i11.SavePublicKeyUseCase {
+  MockSavePublicKeyUseCase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.Future<bool> call(String? publicKey, String? userId) =>
+      (super.noSuchMethod(
+            Invocation.method(#call, [publicKey, userId]),
+            returnValue: _i5.Future<bool>.value(false),
+          )
+          as _i5.Future<bool>);
 }

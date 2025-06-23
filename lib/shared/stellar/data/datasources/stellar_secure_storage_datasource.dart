@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:nemorixpay/config/constants/app_constants.dart';
+import 'package:nemorixpay/shared/cache/core/managers/asset_cache_manager.dart';
 
 /// @file        stellar_secure_storage_datasource.dart
 /// @brief       Secure storage data source for Stellar private keys.
@@ -17,6 +18,7 @@ import 'package:nemorixpay/config/constants/app_constants.dart';
 class StellarSecureStorageDataSource {
   static const FlutterSecureStorage _storage = FlutterSecureStorage();
   static const String _baseKey = AppConstants.baseStellarKey;
+  static const String _baseUserKey = AppConstants.baseUserKey;
 
   /// Saves a Stellar private key securely
   ///
@@ -46,6 +48,97 @@ class StellarSecureStorageDataSource {
       return true;
     } catch (e) {
       debugPrint('Error saving Stellar private key: $e');
+      return false;
+    }
+  }
+
+  /// Saves a Stellar public key securely
+  ///
+  /// [publicKey] The public key that identifies the wallet
+  /// [userId] The userId that identify every user
+  /// Returns true if the key was saved successfully, false otherwise
+  Future<bool> savePublicKey({
+    required String publicKey,
+    required String userId,
+  }) async {
+    try {
+      final String storagePublicKey = '$_baseUserKey$userId';
+
+      await _storage.write(
+        key: storagePublicKey,
+        value: publicKey,
+        aOptions: const AndroidOptions(
+          encryptedSharedPreferences: true,
+        ),
+        iOptions: const IOSOptions(
+          accessibility: KeychainAccessibility.first_unlock_this_device,
+        ),
+      );
+
+      debugPrint(
+          'Stellar public key saved successfully for userId: $publicKey');
+      return true;
+    } catch (e) {
+      debugPrint('Error saving Stellar public key: $e');
+      return false;
+    }
+  }
+
+  /// Retrieves a Stellar public key securely
+  ///
+  /// [userId] The userId that identify every user
+  /// Returns the public key if found, null otherwise
+  Future<String?> getPublicKey({
+    required String userId,
+  }) async {
+    try {
+      final String storageKey = '$_baseUserKey$userId';
+
+      final String? publicKey = await _storage.read(
+        key: storageKey,
+        aOptions: const AndroidOptions(
+          encryptedSharedPreferences: true,
+        ),
+        iOptions: const IOSOptions(
+          accessibility: KeychainAccessibility.first_unlock_this_device,
+        ),
+      );
+
+      if (publicKey != null) {
+        debugPrint(
+            'Stellar public key retrieved successfully for this userId: $publicKey');
+      } else {
+        debugPrint('No Stellar public key found for this userId.');
+      }
+
+      return publicKey;
+    } catch (e) {
+      debugPrint('Error retrieving Stellar public key: $e');
+      return null;
+    }
+  }
+
+  /// Checks if a public key exists for a given public key
+  ///
+  /// [userId] The userId that identify every user
+  /// Returns true if a public key exists, false otherwise
+  Future<bool> hasPublicKey({
+    required String userId,
+  }) async {
+    try {
+      final String storageKey = '$_baseUserKey$userId';
+      final bool exists = await _storage.containsKey(key: storageKey);
+
+      if (exists) {
+        AssetCacheManager assetCacheManager = AssetCacheManager();
+        assetCacheManager.publicAccountKey = await getPublicKey(userId: userId);
+        assetCacheManager.userId = userId;
+      }
+
+      debugPrint('Public key exists for public key: $exists');
+      return exists;
+    } catch (e) {
+      debugPrint('Error checking if public key exists: $e');
       return false;
     }
   }

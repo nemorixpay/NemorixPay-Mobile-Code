@@ -41,3 +41,17 @@ class GetWalletBalanceRequested extends WalletEvent {
   @override
   List<Object?> get props => [publicKey];
 }
+
+/// Event to save public key for the authenticated user
+class SavePublicKeyRequested extends WalletEvent {
+  final String publicKey;
+  final String userId;
+
+  const SavePublicKeyRequested({
+    required this.publicKey,
+    required this.userId,
+  });
+
+  @override
+  List<Object?> get props => [publicKey, userId];
+}

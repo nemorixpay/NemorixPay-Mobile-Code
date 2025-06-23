@@ -133,6 +133,25 @@ class _LoginPageState extends State<LoginPage> {
               message: AppLocalizations.of(context)!.welcomeBack,
               type: SnackBarType.success,
             );
+          } else if (state is AuthAuthenticatedWithWallet) {
+            debugPrint('User authenticated with wallet: ${state.user.email}');
+            NemorixSnackBar.show(
+              context,
+              message: AppLocalizations.of(context)!.welcomeBack,
+              type: SnackBarType.success,
+            );
+            // Navigate to home since user has wallet
+            Navigator.pushReplacementNamed(context, RouteNames.home2);
+          } else if (state is AuthAuthenticatedWithoutWallet) {
+            debugPrint(
+                'User authenticated without wallet: ${state.user.email}');
+            NemorixSnackBar.show(
+              context,
+              message: AppLocalizations.of(context)!.welcomeBack,
+              type: SnackBarType.success,
+            );
+            // Navigate to wallet setup since user doesn't have wallet
+            Navigator.pushReplacementNamed(context, RouteNames.walletSetup);
           } else if (state is AuthUnauthenticated) {
             debugPrint('User Unauthenticated');
           } else if (state is AuthLoading) {

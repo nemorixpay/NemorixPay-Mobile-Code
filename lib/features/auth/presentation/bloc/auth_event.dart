@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:nemorixpay/features/auth/domain/entities/user_entity.dart';
 
 /// @file        auth_event.dart
 /// @brief       Authentication events for NemorixPay auth feature.
@@ -35,13 +36,13 @@ class SignUpRequested extends AuthEvent {
 
   @override
   List<Object?> get props => [
-    email,
-    password,
-    firstName,
-    lastName,
-    birthDate,
-    securityWord,
-  ];
+        email,
+        password,
+        firstName,
+        lastName,
+        birthDate,
+        securityWord,
+      ];
 }
 
 /// Event to request user sign in
@@ -83,4 +84,18 @@ class SendVerificationEmailRequested extends AuthEvent {
 /// Event to check email verification status
 class CheckEmailVerificationStatus extends AuthEvent {
   const CheckEmailVerificationStatus();
+}
+
+/// Event to check if user has a wallet configured
+class CheckWalletExists extends AuthEvent {
+  final String userId;
+  final UserEntity user;
+
+  const CheckWalletExists({
+    required this.userId,
+    required this.user,
+  });
+
+  @override
+  List<Object?> get props => [userId, user];
 }

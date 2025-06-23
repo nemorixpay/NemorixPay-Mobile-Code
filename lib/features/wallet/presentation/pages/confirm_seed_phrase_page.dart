@@ -14,6 +14,7 @@ import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 /// @file        confirm_seed_phrase_page.dart
 /// @brief       Confirm Seed Phrase screen for NemorixPay wallet feature.
@@ -109,16 +110,15 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder:
-              (context) => SeedPhraseSuccessDialog(
-                onContinue: () {
-                  debugPrint('SeedPhraseSuccessDialog - Pressed - WalletBloc');
-                  Navigator.of(context).pop();
-                  context.read<WalletBloc>().add(
+          builder: (context) => SeedPhraseSuccessDialog(
+            onContinue: () {
+              debugPrint('SeedPhraseSuccessDialog - Pressed - WalletBloc');
+              Navigator.of(context).pop();
+              context.read<WalletBloc>().add(
                     CreateWalletRequested(widget.seedPhrase.join(' ')),
                   );
-                },
-              ),
+            },
+          ),
         );
         debugPrint('After SeedPhraseSuccessDialog');
       }
@@ -141,7 +141,8 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
           showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (context) => AppLoader(message: l10n.creatingNewAccount),
+            builder: (context) => const AppLoader(
+                message: 'Helloooo aqui estoy'), //l10n.creatingNewAccount),
           );
         } else if (state is WalletError) {
           debugPrint('WALLET ERROR!');
@@ -156,15 +157,38 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
           debugPrint('WALLET CREATED!');
           debugPrint('New Public Key: ${state.wallet.publicKey}');
           debugPrint('New Secret Key: ${state.wallet.secretKey}');
+          // Get current user ID from Firebase and save public key
+          final firebaseUser = FirebaseAuth.instance.currentUser;
+
           AssetCacheManager cache = AssetCacheManager();
-          // TODO Include publicKey in SignIn process
-          cache.setPublicAccountKey(state.wallet.publicKey);
+
+          cache.setPublicKey(state.wallet.publicKey);
+          cache.setUserId(firebaseUser!.uid);
+
+          if (firebaseUser != null) {
+            debugPrint('Saving public key for user: ${firebaseUser.uid}');
+            context.read<WalletBloc>().add(
+                  SavePublicKeyRequested(
+                    publicKey: state.wallet.publicKey,
+                    userId: firebaseUser.uid,
+                  ),
+                );
+          } else {
+            debugPrint('No Firebase user found, cannot save public key');
+          }
+
           Navigator.pushNamedAndRemoveUntil(
             context,
             RouteNames.successWalletCreation,
             arguments: l10n.walletSuccessTitle,
             (route) => false,
           );
+        } else if (state is PublicKeySaved) {
+          AssetCacheManager cache = AssetCacheManager();
+
+          cache.setPublicKey(state.publicKey);
+          cache.setUserId(state.userId);
+          debugPrint('Public key saved successfully for user: ${state.userId}');
         }
       },
       child: Scaffold(
@@ -192,8 +216,8 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
                 child: Text(
                   '${_randomIndex + 1}.',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ),
               const SizedBox(height: 24),
@@ -208,26 +232,24 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 12,
-                              crossAxisSpacing: 12,
-                              childAspectRatio: 2.8,
-                            ),
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 12,
+                          crossAxisSpacing: 12,
+                          childAspectRatio: 2.8,
+                        ),
                         itemCount: _options.length,
                         itemBuilder: (context, index) {
                           final isSelected = _selectedIndex == index;
                           return ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  isSelected
-                                      ? Theme.of(context).primaryColor
-                                      : Theme.of(
-                                        context,
-                                      ).colorScheme.surfaceContainerHighest,
-                              foregroundColor:
-                                  isSelected
-                                      ? NemorixColors.mainBlack
-                                      : Theme.of(context).colorScheme.onSurface,
+                              backgroundColor: isSelected
+                                  ? Theme.of(context).primaryColor
+                                  : Theme.of(
+                                      context,
+                                    ).colorScheme.surfaceContainerHighest,
+                              foregroundColor: isSelected
+                                  ? NemorixColors.mainBlack
+                                  : Theme.of(context).colorScheme.onSurface,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
@@ -239,11 +261,10 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
                               style: Theme.of(
                                 context,
                               ).textTheme.bodyLarge?.copyWith(
-                                fontWeight:
-                                    isSelected
+                                    fontWeight: isSelected
                                         ? FontWeight.bold
                                         : FontWeight.normal,
-                              ),
+                                  ),
                             ),
                           );
                         },
@@ -259,9 +280,9 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
                             style: Theme.of(
                               context,
                             ).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.error,
-                              fontWeight: FontWeight.bold,
-                            ),
+                                  color: Theme.of(context).colorScheme.error,
+                                  fontWeight: FontWeight.bold,
+                                ),
                             textAlign: TextAlign.center,
                           ),
                         ),

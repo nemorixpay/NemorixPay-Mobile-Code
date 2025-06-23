@@ -5,7 +5,9 @@ import 'package:nemorixpay/features/auth/domain/usecases/forgot_password_usecase
 import 'package:nemorixpay/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/sign_up_usecase.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/send_verification_email_usecase.dart';
+import 'package:nemorixpay/features/auth/domain/usecases/check_wallet_exists_usecase.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:nemorixpay/shared/stellar/data/datasources/stellar_secure_storage_datasource.dart';
 
 /// @file        auth_injection_service.dart
 /// @brief       Dependency injection container implementation for Auth feature in NemorixPay.
@@ -61,10 +63,17 @@ Future<void> authInjectionServices() async {
     SignUpUseCase(authRepository: firebaseAuthRepository),
   );
 
-  final SendVerificationEmailUseCase sendVerificationEmailUseCase = di
-      .registerSingleton(
-        SendVerificationEmailUseCase(authRepository: firebaseAuthRepository),
-      );
+  final SendVerificationEmailUseCase sendVerificationEmailUseCase =
+      di.registerSingleton(
+    SendVerificationEmailUseCase(authRepository: firebaseAuthRepository),
+  );
+
+  final CheckWalletExistsUseCase checkWalletExistsUseCase =
+      di.registerSingleton(
+    CheckWalletExistsUseCase(
+      StellarSecureStorageDataSource(),
+    ),
+  );
 
   // Define Auth Bloc
   di.registerFactory(
@@ -73,6 +82,7 @@ Future<void> authInjectionServices() async {
       signUpUseCase: signUpUseCase,
       forgotPasswordUseCase: forgotPasswordUseCase,
       sendVerificationEmailUseCase: sendVerificationEmailUseCase,
+      checkWalletExistsUseCase: checkWalletExistsUseCase,
     ),
   );
 }

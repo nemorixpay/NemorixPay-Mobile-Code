@@ -73,3 +73,17 @@ class WalletError extends WalletState {
   @override
   List<Object?> get props => [message];
 }
+
+/// State when public key is successfully saved
+class PublicKeySaved extends WalletState {
+  final String publicKey;
+  final String userId;
+
+  const PublicKeySaved({
+    required this.publicKey,
+    required this.userId,
+  });
+
+  @override
+  List<Object?> get props => [publicKey, userId];
+}

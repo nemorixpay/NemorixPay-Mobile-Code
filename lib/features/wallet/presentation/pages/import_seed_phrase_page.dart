@@ -4,6 +4,7 @@ import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_bloc.dart';
 import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_event.dart';
 import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_state.dart';
+import 'package:nemorixpay/shared/cache/core/managers/asset_cache_manager.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/seed_phrase_input_grid.dart';
@@ -12,6 +13,7 @@ import 'package:nemorixpay/features/wallet/presentation/widgets/continue_button.
 import '../../../../core/security/secure_screen_mixin.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/app_loader.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 /// @file        import_seed_phrase_page.dart
 /// @brief       Import Seed Phrase screen for NemorixPay wallet feature.
@@ -133,12 +135,39 @@ class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage>
           Navigator.of(context).pop(); // Close loader if open
           debugPrint('Wallet imported - Secret Key: ${state.wallet.secretKey}');
           debugPrint('Wallet imported - Seed Phrase: ${state.wallet.mnemonic}');
+
+          // Get current user ID from Firebase and save public key
+          final firebaseUser = FirebaseAuth.instance.currentUser;
+
+          AssetCacheManager cache = AssetCacheManager();
+
+          cache.setPublicKey(state.wallet.publicKey);
+          cache.setUserId(firebaseUser!.uid);
+
+          if (firebaseUser != null) {
+            debugPrint('Saving public key for user: ${firebaseUser.uid}');
+            context.read<WalletBloc>().add(
+                  SavePublicKeyRequested(
+                    publicKey: state.wallet.publicKey,
+                    userId: firebaseUser.uid,
+                  ),
+                );
+          } else {
+            debugPrint('No Firebase user found, cannot save public key');
+          }
+
           Navigator.pushNamedAndRemoveUntil(
             context,
             RouteNames.successWalletCreation,
             arguments: l10n.importWalletSuccessTitle,
             (route) => false,
           );
+        } else if (state is PublicKeySaved) {
+          AssetCacheManager cache = AssetCacheManager();
+
+          cache.setPublicKey(state.publicKey);
+          cache.setUserId(state.userId);
+          debugPrint('Public key saved successfully for user: ${state.userId}');
         }
       },
       child: Scaffold(
@@ -174,13 +203,12 @@ class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage>
                         border: OutlineInputBorder(),
                         isDense: true,
                       ),
-                      items:
-                          _phraseOptions.map((option) {
-                            return DropdownMenuItem<int>(
-                              value: option,
-                              child: Text('$option ${l10n.seedPhraseLabel}'),
-                            );
-                          }).toList(),
+                      items: _phraseOptions.map((option) {
+                        return DropdownMenuItem<int>(
+                          value: option,
+                          child: Text('$option ${l10n.seedPhraseLabel}'),
+                        );
+                      }).toList(),
                       onChanged: (value) {
                         if (value != null) {
                           setState(() {
@@ -210,17 +238,16 @@ class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage>
                   child: ContinueButton(
                     label: l10n.next,
                     enabled: _allFieldsFilled,
-                    onPressed:
-                        _allFieldsFilled
-                            ? () {
-                              // context.read<StellarBloc>().add(
-                              //   ImportAccountEvent(mnemonic: _mnemonic),
-                              // );
-                              context.read<WalletBloc>().add(
-                                ImportWalletRequested(_mnemonic),
-                              );
-                            }
-                            : () {},
+                    onPressed: _allFieldsFilled
+                        ? () {
+                            // context.read<StellarBloc>().add(
+                            //   ImportAccountEvent(mnemonic: _mnemonic),
+                            // );
+                            context.read<WalletBloc>().add(
+                                  ImportWalletRequested(_mnemonic),
+                                );
+                          }
+                        : () {},
                   ),
                 ),
                 const SizedBox(height: 32),

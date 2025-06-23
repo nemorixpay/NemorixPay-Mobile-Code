@@ -101,3 +101,23 @@ class VerificationEmailError extends AuthState {
   @override
   List<Object?> get props => [message];
 }
+
+/// State when user is authenticated and has a wallet
+class AuthAuthenticatedWithWallet extends AuthState {
+  final UserEntity user;
+
+  const AuthAuthenticatedWithWallet(this.user);
+
+  @override
+  List<Object?> get props => [user];
+}
+
+/// State when user is authenticated but doesn't have a wallet
+class AuthAuthenticatedWithoutWallet extends AuthState {
+  final UserEntity user;
+
+  const AuthAuthenticatedWithoutWallet(this.user);
+
+  @override
+  List<Object?> get props => [user];
+}

@@ -376,13 +376,18 @@ class StellarDataSourceImpl implements StellarDataSource {
         debugPrint(
             'StellarDatasource: importAccount - Private key saved securely');
 
-        return StellarAccountModel(
+        final account = StellarAccountModel(
           publicKey: keyPair.accountId,
           secretKey: keyPair.secretSeed,
           balance: balance,
           mnemonic: mnemonic,
           createdAt: DateTime.now(),
         );
+
+        _accountProvider.setCurrentAccount(account);
+        debugPrint('StellarDatasource: createAccount - Account set as current');
+
+        return account;
       } catch (e) {
         debugPrint('StellarDatasource: importAccount - Account not found');
         throw StellarFailure(
@@ -700,6 +705,9 @@ class StellarDataSourceImpl implements StellarDataSource {
     try {
       debugPrint(
         'StellarDatasource: getAccountAssets - Obteniendo account assets disponibles',
+      );
+      debugPrint(
+        'StellarDatasource: getAccountAssets - Public Key: $publicKey',
       );
       final account = await _sdk.accounts.account(publicKey);
       return account.balances.map((balance) {
