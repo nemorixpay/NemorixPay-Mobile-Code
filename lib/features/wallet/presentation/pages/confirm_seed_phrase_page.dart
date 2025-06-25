@@ -160,18 +160,23 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
           final firebaseUser = FirebaseAuth.instance.currentUser;
 
           if (firebaseUser != null) {
-            AssetCacheManager cache = AssetCacheManager();
+            if (state.wallet.publicKey == null) {
+              debugPrint(
+                  'PublicKey is null, cannot save public key (ConfirmSeedPhrasePage)');
+            } else {
+              AssetCacheManager cache = AssetCacheManager();
 
-            cache.setPublicKey(state.wallet.publicKey);
-            cache.setUserId(firebaseUser.uid);
+              cache.setPublicKey(state.wallet.publicKey!);
+              cache.setUserId(firebaseUser.uid);
 
-            debugPrint('Saving public key for user: ${firebaseUser.uid}');
-            context.read<WalletBloc>().add(
-                  SavePublicKeyRequested(
-                    publicKey: state.wallet.publicKey,
-                    userId: firebaseUser.uid,
-                  ),
-                );
+              debugPrint('Saving public key for user: ${firebaseUser.uid}');
+              context.read<WalletBloc>().add(
+                    SavePublicKeyRequested(
+                      publicKey: state.wallet.publicKey!,
+                      userId: firebaseUser.uid,
+                    ),
+                  );
+            }
           } else {
             debugPrint('No Firebase user found, cannot save public key');
           }

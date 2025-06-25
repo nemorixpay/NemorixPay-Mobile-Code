@@ -12,11 +12,11 @@ import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart
 /// @copyright   Apache 2.0 License
 
 class StellarAccount extends Equatable {
-  final String publicKey;
+  final String? publicKey;
   final String? secretKey;
-  final double balance;
+  final double? balance;
   final String? mnemonic;
-  final DateTime createdAt;
+  final DateTime? createdAt;
   final List<AssetEntity>? assets;
 
   const StellarAccount({
@@ -30,21 +30,21 @@ class StellarAccount extends Equatable {
 
   @override
   List<Object?> get props => [
-    publicKey,
-    secretKey,
-    balance,
-    mnemonic,
-    createdAt,
-    assets,
-  ];
+        publicKey,
+        secretKey,
+        balance,
+        mnemonic,
+        createdAt,
+        assets,
+      ];
 
   /// Converts this StellarAccount entity to a StellarAccountModel
   StellarAccountModel toModel() {
     return StellarAccountModel(
       publicKey: publicKey,
-      secretKey: secretKey ?? '',
+      secretKey: secretKey,
       balance: balance,
-      mnemonic: mnemonic ?? '',
+      mnemonic: mnemonic,
       createdAt: createdAt,
       assets: assets?.map((asset) => asset.toModel()).toList(),
     );

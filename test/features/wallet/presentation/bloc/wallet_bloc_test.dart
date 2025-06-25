@@ -87,7 +87,7 @@ void main() {
         expectLater(walletBloc.stream, emitsInOrder(expected));
 
         // act
-        walletBloc.add(CreateWalletRequested(tWallet.mnemonic));
+        walletBloc.add(CreateWalletRequested(tWallet.mnemonic ?? ''));
       },
     );
 
@@ -108,7 +108,7 @@ void main() {
         expectLater(walletBloc.stream, emitsInOrder(expected));
 
         // act
-        walletBloc.add(CreateWalletRequested(tWallet.mnemonic));
+        walletBloc.add(CreateWalletRequested(tWallet.mnemonic ?? ''));
       },
     );
   });

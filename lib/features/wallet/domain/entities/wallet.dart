@@ -12,28 +12,28 @@ import '../../data/models/wallet_model.dart';
 /// @copyright   Apache 2.0 License
 
 class Wallet extends Equatable {
-  final String publicKey;
-  final String secretKey;
-  final double balance;
-  final String mnemonic;
-  final DateTime createdAt;
+  final String? publicKey;
+  final String? secretKey;
+  final double? balance;
+  final String? mnemonic;
+  final DateTime? createdAt;
 
   const Wallet({
-    required this.publicKey,
-    required this.secretKey,
-    required this.balance,
-    required this.mnemonic,
-    required this.createdAt,
+    this.publicKey,
+    this.secretKey,
+    this.balance,
+    this.mnemonic,
+    this.createdAt,
   });
 
   @override
   List<Object?> get props => [
-    publicKey,
-    secretKey,
-    balance,
-    mnemonic,
-    createdAt,
-  ];
+        publicKey,
+        secretKey,
+        balance,
+        mnemonic,
+        createdAt,
+      ];
 
   WalletModel toModel() {
     return WalletModel(

@@ -11,33 +11,33 @@ import 'package:nemorixpay/shared/stellar/domain/entities/stellar_account.dart';
 /// @copyright   Apache 2.0 License
 
 class StellarAccountModel {
-  final String publicKey;
-  final String secretKey;
-  final double balance;
-  final String mnemonic;
-  final DateTime createdAt;
+  final String? publicKey;
+  final String? secretKey;
+  final double? balance;
+  final String? mnemonic;
+  final DateTime? createdAt;
   final List<AssetModel>? assets;
 
   const StellarAccountModel({
-    required this.publicKey,
-    required this.secretKey,
-    required this.balance,
-    required this.mnemonic,
-    required this.createdAt,
+    this.publicKey,
+    this.secretKey,
+    this.balance,
+    this.mnemonic,
+    this.createdAt,
     this.assets,
   });
 
   /// Basic validations
-  bool get isValid => publicKey.isNotEmpty && secretKey.isNotEmpty;
+  bool get isValid => publicKey?.isNotEmpty ?? false;
   bool get hasValidMnemonic =>
-      mnemonic.split(' ').length == 12 || mnemonic.split(' ').length == 24;
+      mnemonic?.split(' ').length == 12 || mnemonic?.split(' ').length == 24;
 
   /// Utility tool
   /// Example:
   /// Public Key: GABCDEF1234567890XYZ1234567890ABCDEF1234567890XYZ1234567890ABCDEF1
   /// Public Key (UI): GABCDE...DEF1
-  String get shortPublicKey => publicKey.length > 10
-      ? '${publicKey.substring(0, 6)}...${publicKey.substring(publicKey.length - 4)}'
+  String? get shortPublicKey => publicKey!.length > 10
+      ? '${publicKey?.substring(0, 6)}...${publicKey?.substring(publicKey!.length - 4)}'
       : publicKey;
 
   /// Creates a StellarAccountModel from a JSON map
@@ -63,7 +63,8 @@ class StellarAccountModel {
       'secretKey': secretKey,
       'balance': balance,
       'mnemonic': mnemonic,
-      'createdAt': createdAt.toIso8601String(),
+      'createdAt':
+          createdAt?.toIso8601String() ?? DateTime.now().toIso8601String(),
       'assets': assets?.map((e) => e.toJson()).toList(),
     };
   }

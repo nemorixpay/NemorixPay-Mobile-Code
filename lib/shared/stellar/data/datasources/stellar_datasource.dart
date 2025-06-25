@@ -17,7 +17,7 @@ abstract class StellarDataSource {
   ///
   /// Returns [String] with the current public key
   /// Throws [StellarFailure] if there is no account initialized
-  String getCurrentPublicKey();
+  String? getCurrentPublicKey();
 
   /// Generates a mnemonic phrase for a new Stellar account
   ///

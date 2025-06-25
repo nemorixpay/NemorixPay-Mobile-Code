@@ -36,7 +36,7 @@ class StellarDataSourceImpl implements StellarDataSource {
 
   /// Gets the current public key from the account provider
   @override
-  String getCurrentPublicKey() {
+  String? getCurrentPublicKey() {
     final account = _accountProvider.currentAccount;
     if (account == null) {
       throw StellarFailure(
@@ -418,6 +418,12 @@ class StellarDataSourceImpl implements StellarDataSource {
       debugPrint(
         'StellarDatasource: getTransactions - Obteniendo transacciones para: $publicKey',
       );
+      if (publicKey == null) {
+        throw StellarFailure(
+          stellarCode: StellarErrorCode.unknown.code,
+          stellarMessage: 'Public key is Null. Try again!',
+        );
+      }
 
       final response = await _sdk.transactions.forAccount(publicKey).execute();
       final transactions = response.records;

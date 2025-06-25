@@ -12,18 +12,18 @@ import '../../domain/entities/wallet.dart';
 /// @copyright   Apache 2.0 License
 
 class WalletModel {
-  final String publicKey;
-  final String secretKey;
-  final double balance;
-  final String mnemonic;
-  final DateTime createdAt;
+  final String? publicKey;
+  final String? secretKey;
+  final double? balance;
+  final String? mnemonic;
+  final DateTime? createdAt;
 
   const WalletModel({
-    required this.publicKey,
-    required this.secretKey,
-    required this.balance,
-    required this.mnemonic,
-    required this.createdAt,
+    this.publicKey,
+    this.secretKey,
+    this.balance,
+    this.mnemonic,
+    this.createdAt,
   });
 
   WalletModel fromJson(Map<String, dynamic> json) {
@@ -42,7 +42,8 @@ class WalletModel {
       'secretKey': secretKey,
       'balance': balance,
       'mnemonic': mnemonic,
-      'createdAt': createdAt.toIso8601String(),
+      'createdAt':
+          createdAt?.toIso8601String() ?? DateTime.now().toIso8601String(),
     };
   }
 
