@@ -27,6 +27,19 @@ class StellarAccountModel {
     this.assets,
   });
 
+  /// Basic validations
+  bool get isValid => publicKey.isNotEmpty && secretKey.isNotEmpty;
+  bool get hasValidMnemonic =>
+      mnemonic.split(' ').length == 12 || mnemonic.split(' ').length == 24;
+
+  /// Utility tool
+  /// Example:
+  /// Public Key: GABCDEF1234567890XYZ1234567890ABCDEF1234567890XYZ1234567890ABCDEF1
+  /// Public Key (UI): GABCDE...DEF1
+  String get shortPublicKey => publicKey.length > 10
+      ? '${publicKey.substring(0, 6)}...${publicKey.substring(publicKey.length - 4)}'
+      : publicKey;
+
   /// Creates a StellarAccountModel from a JSON map
   factory StellarAccountModel.fromJson(Map<String, dynamic> json) {
     return StellarAccountModel(
@@ -35,12 +48,11 @@ class StellarAccountModel {
       balance: (json['balance'] as num).toDouble(),
       mnemonic: json['mnemonic'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
-      assets:
-          json['assets'] != null
-              ? (json['assets'] as List)
-                  .map((e) => AssetModel.fromJson(e as Map<String, dynamic>))
-                  .toList()
-              : null,
+      assets: json['assets'] != null
+          ? (json['assets'] as List)
+              .map((e) => AssetModel.fromJson(e as Map<String, dynamic>))
+              .toList()
+          : null,
     );
   }
 
@@ -55,17 +67,6 @@ class StellarAccountModel {
       'assets': assets?.map((e) => e.toJson()).toList(),
     };
   }
-
-  // /// Creates a StellarAccountModel from a StellarAccount entity
-  // factory StellarAccountModel.fromEntity(StellarAccount account) {
-  //   return StellarAccountModel(
-  //     publicKey: account.publicKey,
-  //     secretKey: account.secretKey,
-  //     balance: account.balance,
-  //     mnemonic: account.mnemonic,
-  //     createdAt: account.createdAt,
-  //   );
-  // }
 
   /// Converts this StellarAccountModel to a StellarAccount entity
   StellarAccount toEntity() {

@@ -86,8 +86,9 @@ class StellarDataSourceImpl implements StellarDataSource {
 
     if (!isAppInProduction) {
       await createAccountInTestnet(keyPair.accountId);
+      final balance = await getBalance(keyPair.accountId);
       debugPrint(
-          'StellarDatasource: createAccount - Account created in testnet');
+          'StellarDatasource: createAccount - Account created in testnet with balance = $balance');
     }
 
     debugPrint(
@@ -115,10 +116,12 @@ class StellarDataSourceImpl implements StellarDataSource {
     }
     debugPrint('StellarDatasource: createAccount - Private key saved securely');
 
+    final balance = await getBalance(keyPair.accountId);
+
     final account = StellarAccountModel(
       publicKey: keyPair.accountId,
       secretKey: keyPair.secretSeed,
-      balance: 0.0,
+      balance: balance,
       mnemonic: mnemonic,
       createdAt: DateTime.now(),
     );

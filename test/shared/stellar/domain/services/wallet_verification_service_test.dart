@@ -51,7 +51,7 @@ void main() {
         );
 
         when(mockAccountProvider.currentAccount).thenReturn(mockAccount);
-        when(mockAccountProvider.getCurrentPublicKey()).thenReturn(publicKey);
+        when(mockAccountProvider.getPublicKey()).thenReturn(publicKey);
 
         // Act
         final result = await verificationService.verifyWalletStatus(userId);
@@ -63,7 +63,7 @@ void main() {
         expect(result.message, 'Wallet found in memory');
 
         verify(mockAccountProvider.currentAccount).called(1);
-        verify(mockAccountProvider.getCurrentPublicKey()).called(1);
+        verify(mockAccountProvider.getPublicKey()).called(1);
         verifyNever(mockSecureStorage.getAllPublicKeys());
       });
 
@@ -217,14 +217,14 @@ void main() {
         const userId = 'test_user';
         const publicKey = 'GABC123456789';
 
-        when(mockAccountProvider.getCurrentPublicKey()).thenReturn(publicKey);
+        when(mockAccountProvider.getPublicKey()).thenReturn(publicKey);
 
         // Act
         final result = await verificationService.getStoredPublicKey(userId);
 
         // Assert
         expect(result, publicKey);
-        verify(mockAccountProvider.getCurrentPublicKey()).called(1);
+        verify(mockAccountProvider.getPublicKey()).called(1);
         verifyNever(mockSecureStorage.getAllPublicKeys());
       });
 
@@ -234,7 +234,7 @@ void main() {
         const userId = 'test_user';
         const publicKey = 'GABC123456789';
 
-        when(mockAccountProvider.getCurrentPublicKey()).thenReturn(null);
+        when(mockAccountProvider.getPublicKey()).thenReturn(null);
         when(mockSecureStorage.getAllPublicKeys())
             .thenAnswer((_) async => [publicKey]);
         when(mockSecureStorage.hasPrivateKey(publicKey: publicKey))
@@ -245,7 +245,7 @@ void main() {
 
         // Assert
         expect(result, publicKey);
-        verify(mockAccountProvider.getCurrentPublicKey()).called(1);
+        verify(mockAccountProvider.getPublicKey()).called(1);
         verify(mockSecureStorage.getAllPublicKeys()).called(1);
         verify(mockSecureStorage.hasPrivateKey(publicKey: publicKey)).called(1);
       });
@@ -254,7 +254,7 @@ void main() {
         // Arrange
         const userId = 'test_user';
 
-        when(mockAccountProvider.getCurrentPublicKey()).thenReturn(null);
+        when(mockAccountProvider.getPublicKey()).thenReturn(null);
         when(mockSecureStorage.getAllPublicKeys()).thenAnswer((_) async => []);
 
         // Act

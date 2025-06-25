@@ -139,12 +139,12 @@ class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage>
           // Get current user ID from Firebase and save public key
           final firebaseUser = FirebaseAuth.instance.currentUser;
 
-          AssetCacheManager cache = AssetCacheManager();
-
-          cache.setPublicKey(state.wallet.publicKey);
-          cache.setUserId(firebaseUser!.uid);
-
           if (firebaseUser != null) {
+            AssetCacheManager cache = AssetCacheManager();
+
+            cache.setPublicKey(state.wallet.publicKey);
+            cache.setUserId(firebaseUser.uid);
+
             debugPrint('Saving public key for user: ${firebaseUser.uid}');
             context.read<WalletBloc>().add(
                   SavePublicKeyRequested(

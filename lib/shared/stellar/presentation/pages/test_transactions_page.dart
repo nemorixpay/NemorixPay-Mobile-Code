@@ -36,7 +36,6 @@ class _TestTransactionsPageState extends State<TestTransactionsPage> {
   @override
   void initState() {
     super.initState();
-    //_loadTransactions();
   }
 
   Future<void> _loadTransactions() async {
@@ -68,8 +67,7 @@ class _TestTransactionsPageState extends State<TestTransactionsPage> {
     }
   }
 
-  void _useTestAccount() {
-    _accountProvider.setTestAccount();
+  void _loadStellarAccountProvider() {
     _loadTransactions();
   }
 
@@ -120,14 +118,14 @@ class _TestTransactionsPageState extends State<TestTransactionsPage> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            _buildInfoRow('Public Key:', _accountProvider.testPublicKey),
+            _buildInfoRow('Public Key:', _accountProvider.getPublicKey()!),
             const SizedBox(height: 8),
-            _buildInfoRow('Secret Key:', _accountProvider.testSecretKey),
+            _buildInfoRow('Secret Key:', _accountProvider.getSecretKey()!),
             const SizedBox(height: 8),
-            _buildInfoRow('Mnemonic:', _accountProvider.testMnemonic),
+            _buildInfoRow('Mnemonic:', _accountProvider.getMnemonic()!),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: _useTestAccount,
+              onPressed: _loadStellarAccountProvider,
               child: const Text('Usar Cuenta de Prueba'),
             ),
           ],
@@ -193,8 +191,8 @@ class _TestTransactionsPageState extends State<TestTransactionsPage> {
                         ElevatedButton(
                           onPressed: () {
                             context.read<StellarBloc>().add(
-                              GetAvailableAssetsEvent(),
-                            );
+                                  GetAvailableAssetsEvent(),
+                                );
                           },
                           child: const Text('Reintentar'),
                         ),

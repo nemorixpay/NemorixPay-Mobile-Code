@@ -16,22 +16,40 @@ class StellarAccountProvider {
   factory StellarAccountProvider() => _instance;
   StellarAccountProvider._internal();
 
+  /// Internal user account
   StellarAccountModel? _currentAccount;
 
-  // Datos de la cuenta de prueba
-  static const String _testMnemonic =
-      'blush fragile rapid arrange visit skin autumn jazz muscle save nature drastic crystal slab casual grow crush remain foil cigar any century heavy print';
-  static const String _testPublicKey =
-      'GBHMJ4EBAHCXEPNJK5RAMWFBGKCDMRA4ZRWFOJNUIPHUSJD2HNEVU6V4';
-  static const String _testSecretKey =
-      'SBNAOADD6GUXD4SMKK5H7SOFSZ3AO3IW3XAYZFQ2VOEOJOSBGBBGX4GI';
+  /// Firebase user account id
+  String? userId;
 
   /// Gets the current Stellar account
   StellarAccountModel? get currentAccount => _currentAccount;
 
+  // Validation method
+  bool get hasValidAccount => _currentAccount?.isValid ?? false;
+
   /// Sets the current Stellar account
   void setCurrentAccount(StellarAccountModel account) {
     _currentAccount = account;
+  }
+
+  /// Updates the current mnemonic, public & secret keys
+  void updateSecretKey(String newSecretKey) {
+    if (_currentAccount != null) {
+      _currentAccount = _currentAccount!.copyWith(secretKey: newSecretKey);
+    }
+  }
+
+  void updatePublicKey(String newPublicKey) {
+    if (_currentAccount != null) {
+      _currentAccount = _currentAccount!.copyWith(publicKey: newPublicKey);
+    }
+  }
+
+  void updateMnemonic(String newMnemonic) {
+    if (_currentAccount != null) {
+      _currentAccount = _currentAccount!.copyWith(mnemonic: newMnemonic);
+    }
   }
 
   /// Updates the current account balance
@@ -53,41 +71,26 @@ class StellarAccountProvider {
     _currentAccount = null;
   }
 
-  /// Sets the test account as the current account
-  void setTestAccount() {
-    _currentAccount = StellarAccountModel(
-      publicKey: _testPublicKey,
-      secretKey: _testSecretKey,
-      balance: 100.0,
-      mnemonic: _testMnemonic,
-      createdAt: DateTime.now(),
-    );
-  }
-
-  /// Gets the test account mnemonic
-  String get testMnemonic => _testMnemonic;
-
-  /// Gets the test account public key
-  String get testPublicKey => _testPublicKey;
-
-  /// Gets the test account secret key
-  String get testSecretKey => _testSecretKey;
-
   /// Gets the secret key for the current account
   /// Returns null if there is no current account or if the secret key is not available
-  String? getCurrentSecretKey() {
+  String? getSecretKey() {
     return _currentAccount?.secretKey;
   }
 
   /// Gets the public key for the current account
   /// Returns null if there is no current account or if the public key is not available
-  String? getCurrentPublicKey() {
+  String? getPublicKey() {
     return _currentAccount?.publicKey;
   }
 
   /// Gets the mnemonic for the current account
   /// Returns null if there is no current account or if the mnemonic is not available
-  String? getCurrentMnemonic() {
+  String? getMnemonic() {
     return _currentAccount?.mnemonic;
+  }
+
+  // Sync methods
+  Future<void> syncWithSecureStorage() async {
+    // TODO: Need to check secure storage if needed
   }
 }

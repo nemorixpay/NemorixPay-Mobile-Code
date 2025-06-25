@@ -141,8 +141,7 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
           showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (context) => const AppLoader(
-                message: 'Helloooo aqui estoy'), //l10n.creatingNewAccount),
+            builder: (context) => AppLoader(message: l10n.creatingNewAccount),
           );
         } else if (state is WalletError) {
           debugPrint('WALLET ERROR!');
@@ -160,12 +159,12 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
           // Get current user ID from Firebase and save public key
           final firebaseUser = FirebaseAuth.instance.currentUser;
 
-          AssetCacheManager cache = AssetCacheManager();
-
-          cache.setPublicKey(state.wallet.publicKey);
-          cache.setUserId(firebaseUser!.uid);
-
           if (firebaseUser != null) {
+            AssetCacheManager cache = AssetCacheManager();
+
+            cache.setPublicKey(state.wallet.publicKey);
+            cache.setUserId(firebaseUser.uid);
+
             debugPrint('Saving public key for user: ${firebaseUser.uid}');
             context.read<WalletBloc>().add(
                   SavePublicKeyRequested(

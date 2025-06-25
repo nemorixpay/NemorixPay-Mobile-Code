@@ -27,7 +27,7 @@ class WalletVerificationService {
     try {
       // 1. Check StellarAccountProvider (memory)
       if (_accountProvider.currentAccount != null) {
-        final publicKey = _accountProvider.getCurrentPublicKey();
+        final publicKey = _accountProvider.getPublicKey();
         if (publicKey != null) {
           return WalletVerificationResult.hasWallet(
             publicKey: publicKey,
@@ -99,7 +99,7 @@ class WalletVerificationService {
   Future<String?> getStoredPublicKey(String userId) async {
     try {
       // 1. Check memory first
-      final memoryKey = _accountProvider.getCurrentPublicKey();
+      final memoryKey = _accountProvider.getPublicKey();
       if (memoryKey != null) {
         return memoryKey;
       }
