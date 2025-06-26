@@ -29,9 +29,9 @@ class CryptoMarketDataSourceImpl implements CryptoMarketDataSource {
     String? apiBaseUrl,
     bool useMockData = true,
     required AssetCacheManager assetCacheManager,
-  }) : _apiBaseUrl = apiBaseUrl ?? 'https://api.example.com',
-       _useMockData = useMockData,
-       _assetCacheManager = assetCacheManager;
+  })  : _apiBaseUrl = apiBaseUrl ?? 'https://api.example.com',
+        _useMockData = useMockData,
+        _assetCacheManager = assetCacheManager;
 
   @override
   Future<List<CryptoAssetWithMarketDataModel>> getCryptoAssets() async {
@@ -40,14 +40,12 @@ class CryptoMarketDataSourceImpl implements CryptoMarketDataSource {
 
       // Get available assets from Stellar
       final availableAssets = await _assetCacheManager.getAllAssets();
-
       // Transform to CryptoAssetWithMarketDataModel
       final assets = await Future.wait(
         availableAssets.map((stellarAsset) async {
-          final marketData =
-              _useMockData
-                  ? _generateMockMarketData()
-                  : await getMarketData(stellarAsset.assetCode);
+          final marketData = _useMockData
+              ? _generateMockMarketData()
+              : await getMarketData(stellarAsset.assetCode);
 
           return CryptoAssetWithMarketDataModel(
             asset: stellarAsset,
@@ -56,7 +54,6 @@ class CryptoMarketDataSourceImpl implements CryptoMarketDataSource {
           );
         }),
       );
-
       return assets;
     } catch (e) {
       debugPrint('CryptoMarketDataSourceImpl - getCryptoAssets: Error: $e');
@@ -79,10 +76,9 @@ class CryptoMarketDataSourceImpl implements CryptoMarketDataSource {
       // Transform to CryptoAssetWithMarketDataModel
       final assets = await Future.wait(
         accountAssets.map((asset) async {
-          final marketData =
-              _useMockData
-                  ? _generateMockMarketData()
-                  : await getMarketData(asset.assetCode);
+          final marketData = _useMockData
+              ? _generateMockMarketData()
+              : await getMarketData(asset.assetCode);
 
           return CryptoAssetWithMarketDataModel(
             asset: asset,

@@ -4,6 +4,7 @@ import 'package:nemorixpay/core/errors/asset/asset_failure.dart';
 import 'package:nemorixpay/shared/common/data/models/asset_model.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource_impl.dart';
+import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
 
 /// @file        asset_cache_manager.dart
 /// @brief       Singleton class managing asset cache state.
@@ -24,12 +25,6 @@ class AssetCacheManager extends Equatable {
 
   /// Expiration duration for cache
   final Duration _expirationDuration;
-
-  /// Public account key
-  String? publicAccountKey;
-
-  /// Firebase user account id
-  String? userId;
 
   /// Factory constructor to get the singleton instance
   factory AssetCacheManager({Duration? expirationDuration}) {
@@ -65,18 +60,6 @@ class AssetCacheManager extends Equatable {
       _lastUpdate == null ||
       DateTime.now().difference(_lastUpdate!) > _expirationDuration;
 
-  bool isPublicKeyAvailable() {
-    return publicAccountKey?.contains('G') ?? false;
-  }
-
-  void setPublicKey(String key) {
-    publicAccountKey = key;
-  }
-
-  void setUserId(String newUserId) {
-    userId = newUserId;
-  }
-
   Future<void> assetsEmpty() async {
     if (_assets.isEmpty) {
       await loadAssetsFromStellar();
@@ -92,32 +75,44 @@ class AssetCacheManager extends Equatable {
       // All available Stellar assets
       final stellarAssets = await _stellarDataSource.getAvailableAssets();
       // Only Account assets
-      final accountAssets =
-          await _stellarDataSource.getAccountAssets(publicAccountKey ?? '');
-
-      debugPrint(
-        'AssetCacheManager - loadAssetsFromStellar: list = ${accountAssets.length}',
-      );
-
-      // Clean onl cache values
-      _assets.clear();
-      _accountAssets.clear();
-
-      // Upload the new assets using the unique key
-      for (var asset in stellarAssets) {
-        final key = _getAssetKey(asset.assetCode, asset.assetIssuer);
-        _assets[key] = asset;
-      }
-      // Load the account assets using the unique key
-      for (var accountAsset in accountAssets) {
-        final key = _getAssetKey(
-          accountAsset.assetCode,
-          accountAsset.assetIssuer,
+      StellarAccountProvider stellarAccountProvider = StellarAccountProvider();
+      final publicKey = stellarAccountProvider.getPublicKey();
+      if (publicKey == null) {
+        debugPrint(
+            'AssetCacheManager - loadAssetsFromStellar - publicKey is Null');
+        throw AssetFailure.unknown(
+          'AssetCacheManager - publicKey is null. Try again!',
         );
-        _accountAssets[key] = accountAsset;
-      }
+      } else {
+        debugPrint(
+            'AssetCacheManager - loadAssetsFromStellar - publicKey is not Null');
+        final accountAssets =
+            await _stellarDataSource.getAccountAssets(publicKey);
 
-      _lastUpdate = DateTime.now();
+        debugPrint(
+          'AssetCacheManager - loadAssetsFromStellar: list = ${accountAssets.length}',
+        );
+
+        // Clean onl cache values
+        _assets.clear();
+        _accountAssets.clear();
+
+        // Upload the new assets using the unique key
+        for (var asset in stellarAssets) {
+          final key = _getAssetKey(asset.assetCode, asset.assetIssuer);
+          _assets[key] = asset;
+        }
+        // Load the account assets using the unique key
+        for (var accountAsset in accountAssets) {
+          final key = _getAssetKey(
+            accountAsset.assetCode,
+            accountAsset.assetIssuer,
+          );
+          _accountAssets[key] = accountAsset;
+        }
+
+        _lastUpdate = DateTime.now();
+      }
     } catch (e) {
       throw AssetFailure.unknown(
         'loadAssetsFromStellar - Failed to get account asset by Public key (Asset Cache Manager): $e',
@@ -198,6 +193,15 @@ class AssetCacheManager extends Equatable {
   Future<void> clearCache() async {
     _assets.clear();
     await assetsEmpty();
+  }
+
+  /// Clears the cache synchronously without calling loadAssetsFromStellar
+  /// This is useful for testing purposes
+  void clearCacheSync() {
+    _assets.clear();
+    _accountAssets.clear();
+    _lastUpdate = null;
+    _isLoading = false;
   }
 
   /// Gets all assets for a specific network

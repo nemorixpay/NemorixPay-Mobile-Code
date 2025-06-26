@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:nemorixpay/config/constants/app_constants.dart';
-import 'package:nemorixpay/shared/cache/core/managers/asset_cache_manager.dart';
+import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
 
 /// @file        stellar_secure_storage_datasource.dart
 /// @brief       Secure storage data source for Stellar private keys.
@@ -84,65 +84,6 @@ class StellarSecureStorageDataSource {
     }
   }
 
-  /// Retrieves a Stellar public key securely
-  ///
-  /// [userId] The userId that identify every user
-  /// Returns the public key if found, null otherwise
-  Future<String?> getPublicKey({
-    required String userId,
-  }) async {
-    try {
-      final String storageKey = '$_baseUserKey$userId';
-
-      final String? publicKey = await _storage.read(
-        key: storageKey,
-        aOptions: const AndroidOptions(
-          encryptedSharedPreferences: true,
-        ),
-        iOptions: const IOSOptions(
-          accessibility: KeychainAccessibility.first_unlock_this_device,
-        ),
-      );
-
-      if (publicKey != null) {
-        debugPrint(
-            'Stellar public key retrieved successfully for this userId: $publicKey');
-      } else {
-        debugPrint('No Stellar public key found for this userId.');
-      }
-
-      return publicKey;
-    } catch (e) {
-      debugPrint('Error retrieving Stellar public key: $e');
-      return null;
-    }
-  }
-
-  /// Checks if a public key exists for a given public key
-  ///
-  /// [userId] The userId that identify every user
-  /// Returns true if a public key exists, false otherwise
-  Future<bool> hasPublicKey({
-    required String userId,
-  }) async {
-    try {
-      final String storageKey = '$_baseUserKey$userId';
-      final bool exists = await _storage.containsKey(key: storageKey);
-
-      if (exists) {
-        AssetCacheManager assetCacheManager = AssetCacheManager();
-        assetCacheManager.publicAccountKey = await getPublicKey(userId: userId);
-        assetCacheManager.userId = userId;
-      }
-
-      debugPrint('Public key exists for public key: $exists');
-      return exists;
-    } catch (e) {
-      debugPrint('Error checking if public key exists: $e');
-      return false;
-    }
-  }
-
   /// Retrieves a Stellar private key securely
   ///
   /// [publicKey] The public key that identifies the wallet
@@ -177,6 +118,40 @@ class StellarSecureStorageDataSource {
     }
   }
 
+  /// Retrieves a Stellar public key securely
+  ///
+  /// [userId] The userId that identify every user
+  /// Returns the public key if found, null otherwise
+  Future<String?> getPublicKey({
+    required String userId,
+  }) async {
+    try {
+      final String storageKey = '$_baseUserKey$userId';
+
+      final String? publicKey = await _storage.read(
+        key: storageKey,
+        aOptions: const AndroidOptions(
+          encryptedSharedPreferences: true,
+        ),
+        iOptions: const IOSOptions(
+          accessibility: KeychainAccessibility.first_unlock_this_device,
+        ),
+      );
+
+      if (publicKey != null) {
+        debugPrint(
+            'Stellar public key retrieved successfully for this userId: $publicKey');
+      } else {
+        debugPrint('No Stellar public key found for this userId.');
+      }
+
+      return publicKey;
+    } catch (e) {
+      debugPrint('Error retrieving Stellar public key: $e');
+      return null;
+    }
+  }
+
   /// Checks if a private key exists for a given public key
   ///
   /// [publicKey] The public key to check
@@ -192,6 +167,54 @@ class StellarSecureStorageDataSource {
       return exists;
     } catch (e) {
       debugPrint('Error checking if private key exists: $e');
+      return false;
+    }
+  }
+
+  /// Checks if a public key exists for a given public key
+  ///
+  /// [userId] The userId that identify every user
+  /// Returns true if a public key exists, false otherwise
+  Future<bool> hasPublicKey({
+    required String userId,
+  }) async {
+    try {
+      final String storageKey = '$_baseUserKey$userId';
+      final bool exists = await _storage.containsKey(key: storageKey);
+
+      if (exists) {
+        StellarAccountProvider stellarAccountProvider =
+            StellarAccountProvider();
+        stellarAccountProvider.userId = userId;
+        final publicKey = await getPublicKey(userId: userId);
+        stellarAccountProvider.updatePublicKey(publicKey!);
+      }
+
+      debugPrint('Public key exists for public key: $exists');
+      return exists;
+    } catch (e) {
+      debugPrint('Error checking if public key exists: $e');
+      return false;
+    }
+  }
+
+  /// Deletes all Stellar private keys
+  /// Returns true if all keys were deleted successfully, false otherwise
+  Future<bool> deleteAllKeys() async {
+    try {
+      await _storage.deleteAll(
+        aOptions: const AndroidOptions(
+          encryptedSharedPreferences: true,
+        ),
+        iOptions: const IOSOptions(
+          accessibility: KeychainAccessibility.first_unlock_this_device,
+        ),
+      );
+
+      debugPrint('All Stellar private/public keys deleted successfully');
+      return true;
+    } catch (e) {
+      debugPrint('Error deleting all Stellar private keys: $e');
       return false;
     }
   }
@@ -223,27 +246,6 @@ class StellarSecureStorageDataSource {
       return true;
     } catch (e) {
       debugPrint('Error deleting Stellar private key: $e');
-      return false;
-    }
-  }
-
-  /// Deletes all Stellar private keys
-  /// Returns true if all keys were deleted successfully, false otherwise
-  Future<bool> deleteAllPrivateKeys() async {
-    try {
-      await _storage.deleteAll(
-        aOptions: const AndroidOptions(
-          encryptedSharedPreferences: true,
-        ),
-        iOptions: const IOSOptions(
-          accessibility: KeychainAccessibility.first_unlock_this_device,
-        ),
-      );
-
-      debugPrint('All Stellar private keys deleted successfully');
-      return true;
-    } catch (e) {
-      debugPrint('Error deleting all Stellar private keys: $e');
       return false;
     }
   }

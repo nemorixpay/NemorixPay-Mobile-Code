@@ -17,7 +17,7 @@ class StellarAccountProvider {
   StellarAccountProvider._internal();
 
   /// Internal user account
-  StellarAccountModel? _currentAccount;
+  StellarAccountModel? _currentAccount = const StellarAccountModel();
 
   /// Firebase user account id
   String? userId;
@@ -69,6 +69,7 @@ class StellarAccountProvider {
   /// Clears the current account
   void clearCurrentAccount() {
     _currentAccount = null;
+    _currentAccount = const StellarAccountModel();
   }
 
   /// Gets the secret key for the current account

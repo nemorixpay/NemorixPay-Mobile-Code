@@ -869,7 +869,7 @@ class StellarDataSourceImpl implements StellarDataSource {
       debugPrint(
           'StellarDatasource: deleteAllSecurePrivateKeys - Deleting all private keys');
 
-      final deleted = await _secureStorage.deleteAllPrivateKeys();
+      final deleted = await _secureStorage.deleteAllKeys();
 
       if (deleted) {
         debugPrint(

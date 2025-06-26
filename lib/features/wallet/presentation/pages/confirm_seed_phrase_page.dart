@@ -15,6 +15,7 @@ import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
 
 /// @file        confirm_seed_phrase_page.dart
 /// @brief       Confirm Seed Phrase screen for NemorixPay wallet feature.
@@ -164,10 +165,10 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
               debugPrint(
                   'PublicKey is null, cannot save public key (ConfirmSeedPhrasePage)');
             } else {
-              AssetCacheManager cache = AssetCacheManager();
-
-              cache.setPublicKey(state.wallet.publicKey!);
-              cache.setUserId(firebaseUser.uid);
+              StellarAccountProvider stellarAccountProvider =
+                  StellarAccountProvider();
+              stellarAccountProvider.userId = firebaseUser.uid;
+              stellarAccountProvider.updatePublicKey(state.wallet.publicKey!);
 
               debugPrint('Saving public key for user: ${firebaseUser.uid}');
               context.read<WalletBloc>().add(
@@ -188,10 +189,11 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
             (route) => false,
           );
         } else if (state is PublicKeySaved) {
-          AssetCacheManager cache = AssetCacheManager();
+          StellarAccountProvider stellarAccountProvider =
+              StellarAccountProvider();
+          stellarAccountProvider.userId = state.userId;
+          stellarAccountProvider.updatePublicKey(state.publicKey);
 
-          cache.setPublicKey(state.publicKey);
-          cache.setUserId(state.userId);
           debugPrint('Public key saved successfully for user: ${state.userId}');
         }
       },

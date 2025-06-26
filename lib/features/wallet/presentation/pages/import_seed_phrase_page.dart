@@ -10,6 +10,7 @@ import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/seed_phrase_input_grid.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/features/wallet/presentation/widgets/continue_button.dart';
+import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
 import '../../../../core/security/secure_screen_mixin.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/app_loader.dart';
@@ -144,10 +145,10 @@ class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage>
               debugPrint(
                   'PublicKey is null, cannot save public key (ImportSeedPhrasePage)');
             } else {
-              AssetCacheManager cache = AssetCacheManager();
-
-              cache.setPublicKey(state.wallet.publicKey!);
-              cache.setUserId(firebaseUser.uid);
+              StellarAccountProvider stellarAccountProvider =
+                  StellarAccountProvider();
+              stellarAccountProvider.userId = firebaseUser.uid;
+              stellarAccountProvider.updatePublicKey(state.wallet.publicKey!);
 
               debugPrint('Saving public key for user: ${firebaseUser.uid}');
               context.read<WalletBloc>().add(
@@ -168,10 +169,11 @@ class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage>
             (route) => false,
           );
         } else if (state is PublicKeySaved) {
-          AssetCacheManager cache = AssetCacheManager();
+          StellarAccountProvider stellarAccountProvider =
+              StellarAccountProvider();
+          stellarAccountProvider.userId = state.userId;
+          stellarAccountProvider.updatePublicKey(state.publicKey);
 
-          cache.setPublicKey(state.publicKey);
-          cache.setUserId(state.userId);
           debugPrint('Public key saved successfully for user: ${state.userId}');
         }
       },

@@ -17,6 +17,7 @@ import 'package:nemorixpay/features/auth/presentation/widgets/password_field.dar
 import 'package:nemorixpay/features/auth/presentation/widgets/email_field.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/social_login_buttons.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
+import 'package:nemorixpay/shared/stellar/data/datasources/stellar_secure_storage_datasource.dart';
 
 /// @file        sign_in_page.dart
 /// @brief       Sign In page implementation for NemorixPay authentication system.
@@ -272,10 +273,22 @@ class _LoginPageState extends State<LoginPage> {
                             Navigator.pushNamed(context, RouteNames.splashTest);
                           },
                           onApplePressed: () {
-                            // TODO: Implement Apple Sign In
-                            NemorixSnackBar.show(context,
-                                message: AppLocalizations.of(context)!
-                                    .appleSignInNotImplemented);
+                            try {
+                              StellarSecureStorageDataSource
+                                  stellarSecureStorageDataSource =
+                                  StellarSecureStorageDataSource();
+                              stellarSecureStorageDataSource.deleteAllKeys();
+                              NemorixSnackBar.show(context,
+                                  message:
+                                      'All keys were deleted - Secure Storage');
+                              // TODO: Implement Apple Sign In
+                              // NemorixSnackBar.show(context,
+                              //     message: AppLocalizations.of(context)!
+                              //         .appleSignInNotImplemented);
+                            } catch (e) {
+                              debugPrint(
+                                  'Error: All keys were not deleted - Apple Button: $e');
+                            }
                           },
                         ),
                       ],

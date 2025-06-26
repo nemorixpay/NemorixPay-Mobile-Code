@@ -2,17 +2,25 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:nemorixpay/shared/cache/core/managers/asset_cache_manager.dart';
 import 'package:nemorixpay/shared/common/data/models/asset_model.dart';
 import 'package:nemorixpay/shared/common/domain/entities/asset_entity.dart';
+import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
 
 void main() {
   late AssetCacheManager cacheManager;
   late AssetModel testAsset1;
   late AssetModel testAsset2;
+  late StellarAccountProvider stellarAccountProvider;
 
   setUp(() {
+    // Configurar el StellarAccountProvider con una publicKey de prueba
+    stellarAccountProvider = StellarAccountProvider();
+    stellarAccountProvider.updatePublicKey('test_public_key_123');
+
     cacheManager = AssetCacheManager(
       expirationDuration: const Duration(seconds: 1),
     );
-    cacheManager.clearCache();
+
+    // Limpiar el cache sin llamar a loadAssetsFromStellar
+    cacheManager.clearCacheSync();
 
     // Crear assets de prueba
     testAsset1 = AssetModel(
@@ -52,22 +60,24 @@ void main() {
     test('should update assets in cache', () async {
       await cacheManager.updateAssets([testAsset1, testAsset2]);
       expect(cacheManager.assetCount, equals(2));
-      expect(cacheManager.getAssetByCode('1'), equals(testAsset1));
-      expect(cacheManager.getAssetByCode('2'), equals(testAsset2));
+      expect(cacheManager.getAsset('XLM'), equals(testAsset1));
+      expect(cacheManager.getAsset('USDC', assetIssuer: 'ISSUER123'),
+          equals(testAsset2));
     });
 
     test('should clear cache', () {
-      cacheManager.clearCache();
+      cacheManager.clearCacheSync();
       expect(cacheManager.assetCount, equals(0));
-      expect(cacheManager.getAssetByCode('1'), isNull);
+      expect(cacheManager.getAsset('XLM'), isNull);
     });
 
     test('should remove specific asset', () async {
       await cacheManager.updateAssets([testAsset1, testAsset2]);
-      cacheManager.removeAsset('1');
+      cacheManager.removeAsset('XLM');
       expect(cacheManager.assetCount, equals(1));
-      expect(cacheManager.getAssetByCode('1'), isNull);
-      expect(cacheManager.getAssetByCode('2'), equals(testAsset2));
+      expect(cacheManager.getAsset('XLM'), isNull);
+      expect(cacheManager.getAsset('USDC', assetIssuer: 'ISSUER123'),
+          equals(testAsset2));
     });
   });
 
