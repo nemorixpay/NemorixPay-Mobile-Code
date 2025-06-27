@@ -88,7 +88,7 @@ class _HomePage2State extends State<HomePage> {
             }
 
             if (homeState is CryptoHomeError) {
-              return Center(child: Text('Error: ${homeState.toString()}'));
+              return Center(child: Text('Error: ${l10n.noAvailableData}'));
             }
 
             if (homeState is CryptoHomeLoaded) {
@@ -103,7 +103,7 @@ class _HomePage2State extends State<HomePage> {
               // TODO: Include Home widgets HERE
               return mainWidget(homeState);
             }
-            return const Center(child: Text('No available data. Try again!'));
+            return Center(child: Text(l10n.noAvailableData));
           },
         ),
       ),

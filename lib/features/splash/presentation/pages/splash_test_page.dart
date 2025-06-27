@@ -7,6 +7,7 @@ import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_mar
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_home_bloc.dart';
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_home_state.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_button.dart';
 
 /// @file        splash_test_page.dart
@@ -88,7 +89,13 @@ class _SplashTestPageState extends State<SplashTestPage> {
                 RoundedElevatedButton(
                   text: "Continue with Home2",
                   onPressed: () {
-                    Navigator.pushNamed(context, RouteNames.home2);
+                    // Navigator.pushNamed(context, RouteNames.home2);
+                    NemorixSnackBar.show(
+                      // ignore: use_build_context_synchronously
+                      context,
+                      message: 'This button does not work in this test page!',
+                      type: SnackBarType.error,
+                    );
                   },
                   backgroundColor: Colors.white,
                   textColor: Colors.black,
@@ -97,10 +104,16 @@ class _SplashTestPageState extends State<SplashTestPage> {
                 RoundedElevatedButton(
                   text: "Continue with AssetDetails",
                   onPressed: () {
-                    Navigator.pushNamed(
+                    // Navigator.pushNamed(
+                    //   context,
+                    //   RouteNames.assetDetails,
+                    //   arguments: getRandomAsset(),
+                    // );
+                    NemorixSnackBar.show(
+                      // ignore: use_build_context_synchronously
                       context,
-                      RouteNames.assetDetails,
-                      arguments: getRandomAsset(),
+                      message: 'This button does not work in this test page!',
+                      type: SnackBarType.error,
                     );
                   },
                   backgroundColor: Colors.white,
@@ -271,6 +284,24 @@ class _SplashTestPageState extends State<SplashTestPage> {
                   onPressed: () {
                     Navigator.pushNamed(
                         context, RouteNames.onboardingPageBenefits);
+                  },
+                  backgroundColor: Colors.white,
+                  textColor: Colors.black,
+                ),
+                SizedBox(height: 20),
+                RoundedElevatedButton(
+                  text: "Continue with Receive Crypto",
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      RouteNames.receiveCrypto,
+                      arguments: {
+                        'cryptoName': "XLM",
+                        'logoAsset': "assets/logos/xlm_white.png",
+                        'publicKey':
+                            "GARRK43GDUGZKPGFPLTCXNOGGVZ27KL2RS3J5A4RUYVQOHAESSZ3AERL",
+                      },
+                    );
                   },
                   backgroundColor: Colors.white,
                   textColor: Colors.black,

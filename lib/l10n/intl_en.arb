@@ -125,6 +125,7 @@
   "noPaymentMethodSelected": "Please select a payment method",
   "invalidCardSelected": "Please select a valid card",
   "cardExpired": "The selected card has expired",
+  "noAvailableData": "No available data. Try again!",
   "@_WALLET_SETUP_PAGE": {
   },
   "walletSetupTitle": "Wallet Setup",
@@ -258,5 +259,32 @@
   "onboarding_benefits_speed_title": "Instant Transactions",
   "onboarding_benefits_speed_desc": "Fast and efficient operations",
   "onboarding_benefits_coins_title": "Wide Selection",
-  "onboarding_benefits_coins_desc": "Access to over 100 cryptocurrencies"
+  "onboarding_benefits_coins_desc": "Access to over 100 cryptocurrencies",
+  "@_RECEIVE_CRYPTO_PAGE": {},
+  "receiveCryptoTitle": "Receive {cryptoName}",
+  "@receiveCryptoTitle": {
+    "description": "Title for receive crypto page",
+    "placeholders": {
+      "cryptoName": {
+        "type": "String",
+        "example": "XLM"
+      }
+    }
+  },
+  "scanQrCodeText": "Scan the QR code to get Receive address",
+  "orDividerText": "or",
+  "yourCryptoAddress": "Your {cryptoName} Address",
+  "@yourCryptoAddress": {
+    "description": "Label for the crypto address field",
+    "placeholders": {
+      "cryptoName": {
+        "type": "String",
+        "example": "XLM"
+      }
+    }
+  },
+  "blockTimeInfo": "* Block/Time will be calculated after the transaction is generated and broadcasted",
+  "copyAddressButton": "Copy Address",
+  "shareAddressButton": "Share Address",
+  "addressCopiedMessage": "Address copied to clipboard!"
 }

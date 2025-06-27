@@ -195,6 +195,12 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
           stellarAccountProvider.updatePublicKey(state.publicKey);
 
           debugPrint('Public key saved successfully for user: ${state.userId}');
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            RouteNames.successWalletCreation,
+            arguments: l10n.walletSuccessTitle,
+            (route) => false,
+          );
         }
       },
       child: Scaffold(

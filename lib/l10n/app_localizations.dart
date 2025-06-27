@@ -701,6 +701,12 @@ abstract class AppLocalizations {
   /// **'The selected card has expired'**
   String get cardExpired;
 
+  /// No description provided for @noAvailableData.
+  ///
+  /// In en, this message translates to:
+  /// **'No available data. Try again!'**
+  String get noAvailableData;
+
   /// No description provided for @walletSetupTitle.
   ///
   /// In en, this message translates to:
@@ -1426,6 +1432,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Access to over 100 cryptocurrencies'**
   String get onboarding_benefits_coins_desc;
+
+  /// Title for receive crypto page
+  ///
+  /// In en, this message translates to:
+  /// **'Receive {cryptoName}'**
+  String receiveCryptoTitle(String cryptoName);
+
+  /// No description provided for @scanQrCodeText.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan the QR code to get Receive address'**
+  String get scanQrCodeText;
+
+  /// No description provided for @orDividerText.
+  ///
+  /// In en, this message translates to:
+  /// **'or'**
+  String get orDividerText;
+
+  /// Label for the crypto address field
+  ///
+  /// In en, this message translates to:
+  /// **'Your {cryptoName} Address'**
+  String yourCryptoAddress(String cryptoName);
+
+  /// No description provided for @blockTimeInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'* Block/Time will be calculated after the transaction is generated and broadcasted'**
+  String get blockTimeInfo;
+
+  /// No description provided for @copyAddressButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Address'**
+  String get copyAddressButton;
+
+  /// No description provided for @shareAddressButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Address'**
+  String get shareAddressButton;
+
+  /// No description provided for @addressCopiedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Address copied to clipboard!'**
+  String get addressCopiedMessage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

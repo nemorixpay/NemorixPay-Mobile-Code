@@ -16,6 +16,7 @@ import 'package:nemorixpay/features/auth/presentation/widgets/widgets.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/password_field.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/email_field.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/social_login_buttons.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/line_divider_with_text.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_secure_storage_datasource.dart';
 
@@ -251,16 +252,9 @@ class _LoginPageState extends State<LoginPage> {
                       description:
                           AppLocalizations.of(context)!.chooseYourLoginMethod,
                       children: [
-                        Row(
-                          children: [
-                            const Expanded(child: Divider()),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: Text(AppLocalizations.of(context)!.or),
-                            ),
-                            const Expanded(child: Divider()),
-                          ],
+                        const SizedBox(height: 8),
+                        LineDividerWithText(
+                          text: AppLocalizations.of(context)!.or,
                         ),
                         const SizedBox(height: 16),
                         SocialLoginButtons(

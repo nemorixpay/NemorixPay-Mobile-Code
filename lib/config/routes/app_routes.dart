@@ -9,6 +9,7 @@ import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_mar
 import 'package:nemorixpay/features/crypto/presentation/pages/buy_crypto_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/home_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/payment_method_page.dart';
+import 'package:nemorixpay/features/crypto/presentation/pages/receive_crypto_page.dart';
 import 'package:nemorixpay/features/onboarding/presentation/pages/benefits_slide.dart';
 import 'package:nemorixpay/features/onboarding/presentation/pages/features_slide.dart';
 import 'package:nemorixpay/features/onboarding/presentation/pages/security_slide.dart';
@@ -204,6 +205,15 @@ class AppRoutes {
         final args = settings.arguments as List<String>;
         return MaterialPageRoute(
           builder: (context) => ConfirmSeedPhrasePage(seedPhrase: args),
+        );
+      case RouteNames.receiveCrypto:
+        final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (context) => ReceiveCryptoPage(
+            cryptoName: args['cryptoName'] as String,
+            logoAsset: args['logoAsset'] as String,
+            publicKey: args['publicKey'] as String,
+          ),
         );
       //   ConfirmSeedPhrasePage(
       //      seedPhrase: mySeedPhrase,

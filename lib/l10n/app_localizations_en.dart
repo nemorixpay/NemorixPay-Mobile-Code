@@ -314,6 +314,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cardExpired => 'The selected card has expired';
 
   @override
+  String get noAvailableData => 'No available data. Try again!';
+
+  @override
   String get walletSetupTitle => 'Wallet Setup';
 
   @override
@@ -675,4 +678,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboarding_benefits_coins_desc => 'Access to over 100 cryptocurrencies';
+
+  @override
+  String receiveCryptoTitle(String cryptoName) {
+    return 'Receive $cryptoName';
+  }
+
+  @override
+  String get scanQrCodeText => 'Scan the QR code to get Receive address';
+
+  @override
+  String get orDividerText => 'or';
+
+  @override
+  String yourCryptoAddress(String cryptoName) {
+    return 'Your $cryptoName Address';
+  }
+
+  @override
+  String get blockTimeInfo => '* Block/Time will be calculated after the transaction is generated and broadcasted';
+
+  @override
+  String get copyAddressButton => 'Copy Address';
+
+  @override
+  String get shareAddressButton => 'Share Address';
+
+  @override
+  String get addressCopiedMessage => 'Address copied to clipboard!';
 }

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
+import 'package:nemorixpay/shared/cache/core/managers/asset_cache_manager.dart';
+import 'package:nemorixpay/shared/common/data/models/asset_model.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
 import 'package:nemorixpay/features/crypto/presentation/widgets/crypto_stats_card.dart';
 import 'package:nemorixpay/features/crypto/presentation/widgets/custom_two_buttons.dart';
 import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_market_data.dart';
+import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
 
 /// @file        crypto_details.dart
 /// @brief       Screen to display detailed information about a crypto.
@@ -30,11 +34,33 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
   final List<String> timeFrameOptions = ['1D', '1W', '1M', '1Y'];
 
   late bool _isFav;
+  bool _isAssetInAccount = false;
 
   @override
   void initState() {
     super.initState();
     _isFav = widget.crypto.isFavorite;
+    checkAssetInAccount();
+  }
+
+// -------------------------------------
+// TODO: This needs to be checked
+  void checkAssetInAccount() async {
+    _isAssetInAccount = false;
+    AssetCacheManager cache = AssetCacheManager();
+
+    final list = await cache.getAccountAssets();
+    debugPrint('list(length): ${list.length}');
+    debugPrint(
+        'checkingAssetList (widget.crypto): ${widget.crypto.asset.name}');
+    for (var asset in list) {
+      debugPrint('checkingAssetList (asset): ${asset.assetCode}');
+      if (asset.assetCode == widget.crypto.asset.name) {
+        debugPrint('checkingAssetList: true');
+        _isAssetInAccount = true;
+      }
+    }
+    setState(() {});
   }
 
   void toggleFavorite(CryptoAssetWithMarketData crypto) {
@@ -106,12 +132,12 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
                                   style: Theme.of(
                                     context,
                                   ).textTheme.headlineMedium?.copyWith(
-                                    color:
-                                        widget.crypto.marketData.priceChange >=
+                                        color: widget.crypto.marketData
+                                                    .priceChange >=
                                                 0
                                             ? NemorixColors.successColor
                                             : NemorixColors.errorColor,
-                                  ),
+                                      ),
                                 ),
                               ],
                             ),
@@ -119,10 +145,9 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
                             IconButton(
                               icon: Icon(
                                 _isFav ? Icons.favorite : Icons.favorite_border,
-                                color:
-                                    _isFav
-                                        ? NemorixColors.errorColor
-                                        : NemorixColors.greyLevel3,
+                                color: _isFav
+                                    ? NemorixColors.errorColor
+                                    : NemorixColors.greyLevel3,
                               ),
                               onPressed: () => toggleFavorite(widget.crypto),
                             ),
@@ -158,23 +183,21 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
                         const SizedBox(height: 10.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children:
-                              timeFrameOptions.map((timeframe) {
-                                return TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      selectedTimeFrame = timeframe;
-                                    });
-                                  },
-                                  style: TextButton.styleFrom(
-                                    foregroundColor:
-                                        selectedTimeFrame == timeframe
-                                            ? NemorixColors.primaryColor
-                                            : NemorixColors.greyLevel3,
-                                  ),
-                                  child: Text(timeframe),
-                                );
-                              }).toList(),
+                          children: timeFrameOptions.map((timeframe) {
+                            return TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  selectedTimeFrame = timeframe;
+                                });
+                              },
+                              style: TextButton.styleFrom(
+                                foregroundColor: selectedTimeFrame == timeframe
+                                    ? NemorixColors.primaryColor
+                                    : NemorixColors.greyLevel3,
+                              ),
+                              child: Text(timeframe),
+                            );
+                          }).toList(),
                         ),
                       ],
                     ),
@@ -184,13 +207,33 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
                   // --------------------
                   CustomTwoButtons(
                     textButton1: AppLocalizations.of(context)!.send,
-                    onFunctionButton1: () {
-                      debugPrint('Button01 - Send');
-                    },
+                    onFunctionButton1: _isAssetInAccount
+                        ? () {
+                            debugPrint('Button01 - Send');
+                          }
+                        : null,
                     textButton2: AppLocalizations.of(context)!.receive,
-                    onFunctionButton2: () {
-                      debugPrint('Button02 - Receive');
-                    },
+                    onFunctionButton2: _isAssetInAccount
+                        ? () {
+                            debugPrint('Button02 - Receive');
+                            StellarAccountProvider _provider =
+                                StellarAccountProvider();
+
+                            Navigator.pushNamed(
+                              context,
+                              RouteNames.receiveCrypto,
+                              arguments: {
+                                'cryptoName': _provider
+                                        .currentAccount!.assets?[0].assetCode ??
+                                    'XLM',
+                                'logoAsset': "assets/logos/xlm_white.png",
+                                'publicKey': _provider
+                                        .currentAccount?.publicKey ??
+                                    "GARRK43GDUGZKPGFPLTCXNOGGVZ27KL2RS3J5A4RUYVQOHAESSZ3AERL",
+                              },
+                            );
+                          }
+                        : null,
                   ),
                   const SizedBox(height: 20.0),
                   // --------------------
@@ -216,12 +259,16 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
               child: CustomTwoButtons(
                 textButton1: AppLocalizations.of(context)!.buy,
                 textButton2: AppLocalizations.of(context)!.sell,
-                onFunctionButton1: () {
-                  // TODO: Implement buy action
-                },
-                onFunctionButton2: () {
-                  // TODO: Implement sell action
-                },
+                onFunctionButton1: _isAssetInAccount
+                    ? () {
+                        // TODO: Implement buy action
+                      }
+                    : null,
+                onFunctionButton2: _isAssetInAccount
+                    ? () {
+                        // TODO: Implement sell action
+                      }
+                    : null,
                 height: 1.25,
               ),
             ),

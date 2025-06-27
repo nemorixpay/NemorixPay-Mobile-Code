@@ -125,6 +125,7 @@
   "noPaymentMethodSelected": "Por favor selecciona un método de pago",
   "invalidCardSelected": "Por favor selecciona una tarjeta válida",
   "cardExpired": "La tarjeta seleccionada ha expirado",
+  "noAvailableData":"Datos no disponible. ¡Trata mas tarde!",
   "@_WALLET_SETUP_PAGE": {
   },
   "walletSetupTitle": "Configuración de Billetera",
@@ -258,5 +259,14 @@
   "onboarding_benefits_speed_title": "Transacciones Instantáneas",
   "onboarding_benefits_speed_desc": "Operaciones rápidas y eficientes",
   "onboarding_benefits_coins_title": "Amplia Selección",
-  "onboarding_benefits_coins_desc": "Acceso a más de 100 criptomonedas"
+  "onboarding_benefits_coins_desc": "Acceso a más de 100 criptomonedas",
+  "@_RECEIVE_CRYPTO_PAGE": {},
+  "receiveCryptoTitle": "Recibir {cryptoName}",
+  "scanQrCodeText": "Escanee el código QR para obtener la dirección de recepción",
+  "orDividerText": "o",
+  "yourCryptoAddress": "Su dirección de {cryptoName}",
+  "blockTimeInfo": "* Bloque/Tiempo se calculará después de que la transacción sea generada y transmitida",
+  "copyAddressButton": "Copiar Dirección",
+  "shareAddressButton": "Compartir Dirección",
+  "addressCopiedMessage": "¡Dirección copiada al portapapeles!"
 }

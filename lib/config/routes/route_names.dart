@@ -72,4 +72,7 @@ class RouteNames {
 
   /// Main onboarding page that handles the complete flow
   static const onboarding = "onboarding";
+
+  /// Receive crypto page
+  static const receiveCrypto = "receive_crypto";
 }

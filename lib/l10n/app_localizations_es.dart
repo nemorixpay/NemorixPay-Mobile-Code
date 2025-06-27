@@ -314,6 +314,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cardExpired => 'La tarjeta seleccionada ha expirado';
 
   @override
+  String get noAvailableData => 'Datos no disponible. ¡Trata mas tarde!';
+
+  @override
   String get walletSetupTitle => 'Configuración de Billetera';
 
   @override
@@ -675,4 +678,32 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get onboarding_benefits_coins_desc => 'Acceso a más de 100 criptomonedas';
+
+  @override
+  String receiveCryptoTitle(String cryptoName) {
+    return 'Recibir $cryptoName';
+  }
+
+  @override
+  String get scanQrCodeText => 'Escanee el código QR para obtener la dirección de recepción';
+
+  @override
+  String get orDividerText => 'o';
+
+  @override
+  String yourCryptoAddress(String cryptoName) {
+    return 'Su dirección de $cryptoName';
+  }
+
+  @override
+  String get blockTimeInfo => '* Bloque/Tiempo se calculará después de que la transacción sea generada y transmitida';
+
+  @override
+  String get copyAddressButton => 'Copiar Dirección';
+
+  @override
+  String get shareAddressButton => 'Compartir Dirección';
+
+  @override
+  String get addressCopiedMessage => '¡Dirección copiada al portapapeles!';
 }

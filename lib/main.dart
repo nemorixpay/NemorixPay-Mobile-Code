@@ -120,7 +120,7 @@ class _MyAppState extends State<MyApp> {
           title: 'NemorixPay',
           debugShowCheckedModeBanner: false,
           scaffoldMessengerKey: scaffoldKey,
-          theme: NemorixTheme.darkThemeMode,
+          theme: NemorixTheme.lightThemeMode,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           locale: Locale(_currentLanguage ?? 'en'),
