@@ -10,6 +10,7 @@ import 'package:nemorixpay/features/crypto/presentation/pages/buy_crypto_page.da
 import 'package:nemorixpay/features/crypto/presentation/pages/home_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/payment_method_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/receive_crypto_page.dart';
+import 'package:nemorixpay/features/crypto/presentation/pages/send_crypto_page.dart';
 import 'package:nemorixpay/features/onboarding/presentation/pages/benefits_slide.dart';
 import 'package:nemorixpay/features/onboarding/presentation/pages/features_slide.dart';
 import 'package:nemorixpay/features/onboarding/presentation/pages/security_slide.dart';
@@ -145,6 +146,14 @@ class AppRoutes {
       route: RouteNames.onboarding,
       name: 'Onboarding',
       screen: const OnboardingPage(),
+      icon: Icons.rocket_launch,
+    ),
+    RouteModel(
+      route: RouteNames.sendCrypto,
+      name: 'SendCrypto',
+      screen: const SendCryptoPage(
+        cryptoName: 'XLM',
+      ),
       icon: Icons.rocket_launch,
     ),
   ];

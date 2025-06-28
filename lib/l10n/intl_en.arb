@@ -198,7 +198,9 @@
   "walletErrorNetworkError": "Network error. Please check your connection and try again.",
   "walletErrorTimeoutError": "Request timed out. Please try again.",
   "walletErrorUnknown": "An unknown error occurred. Please try again.",
-  "@_ASSET_ERROR_MESSAGES": {},
+  "@_ASSET_ERROR_MESSAGES": {
+
+  },
   "assetErrorPriceUpdateFailed": "Failed to update asset price",
   "assetErrorInvalidPriceData": "Invalid price data received",
   "assetErrorPriceHistoryNotFound": "Price history not found for this asset",
@@ -211,7 +213,9 @@
   "assetErrorMarketDataNotFound": "Market data for this asset is currently unavailable",
   "assetErrorDetailsNotFound": "Could not find detailed information for this asset",
   "assetErrorMarketDataUpdateFailed": "Failed to update market data. Please try again later.",
-  "@_TERMIS_AND_CONDITIONS": {},
+  "@_TERMIS_AND_CONDITIONS": {
+
+  },
   "termsOfServices": "Terms of Services",
   "lastUpdate": "Last update on",
   "termsContent": "Welcome to NemorixPay. Please read these Terms of Services carefully before using our application.",
@@ -222,7 +226,9 @@
   "accept": "Accept",
   "decline": "Decline",
   "acceptTermsCheckbox": "I accept the terms and conditions",
-  "@_ONBOARDING_SECURITY": {},
+  "@_ONBOARDING_SECURITY": {
+
+  },
   "onboarding_security_title": "Your Security is Our Priority",
   "onboarding_security_subtitle": "We protect your funds and personal data",
   "onboarding_security_feature_biometric_title": "Biometric Authentication",
@@ -233,7 +239,9 @@
   "onboarding_security_feature_monitoring_desc": "Constant surveillance of your transactions",
   "onboarding_button_skip": "Skip",
   "onboarding_button_next": "Next",
-  "@_ONBOARDING_FEATURES": {},
+  "@_ONBOARDING_FEATURES": {
+
+  },
   "onboarding_button_back": "Back",
   "onboarding_features_title": "Everything You Need in One Place",
   "onboarding_features_subtitle": "Manage your cryptocurrencies easily",
@@ -247,7 +255,9 @@
   "onboarding_features_notifications_desc": "Receive alerts about important movements",
   "onboarding_features_wallets_title": "Multiple Wallets",
   "onboarding_features_wallets_desc": "Manage all your wallets in one place",
-  "@_ONBOARDING_BENEFITS": {},
+  "@_ONBOARDING_BENEFITS": {
+
+  },
   "onboarding_benefits_title": "The Best Crypto Experience",
   "onboarding_benefits_subtitle": "Enjoy exclusive advantages",
   "onboarding_benefits_fees_title": "Competitive Fees",
@@ -260,7 +270,9 @@
   "onboarding_benefits_speed_desc": "Fast and efficient operations",
   "onboarding_benefits_coins_title": "Wide Selection",
   "onboarding_benefits_coins_desc": "Access to over 100 cryptocurrencies",
-  "@_RECEIVE_CRYPTO_PAGE": {},
+  "@_RECEIVE_CRYPTO_PAGE": {
+
+  },
   "receiveCryptoTitle": "Receive {cryptoName}",
   "@receiveCryptoTitle": {
     "description": "Title for receive crypto page",
@@ -286,5 +298,72 @@
   "blockTimeInfo": "* Block/Time will be calculated after the transaction is generated and broadcasted",
   "copyAddressButton": "Copy Address",
   "shareAddressButton": "Share Address",
-  "addressCopiedMessage": "Address copied to clipboard!"
+  "addressCopiedMessage": "Address copied to clipboard!",
+  "@_SEND_CRYPTO_PAGE": {
+
+  },
+  "sendCryptoTitle": "Send {cryptoName}",
+  "@sendCryptoTitle": {
+    "description": "Title for send crypto page",
+    "placeholders": {
+      "cryptoName": {
+        "type": "String",
+        "example": "XLM"
+      }
+    }
+  },
+  "enterAddress": "Enter Address",
+  "recipientAddress": "Recipient address",
+  "invalidAddress": "Invalid address",
+  "amount": "Amount",
+  "amountHint": "0.00",
+  "invalidAmount": "The amount exceeds your available balance",
+  "note": "Note",
+  "noteHint": "Optional note",
+  "transactionFees": "Transaction fees: {fee} {cryptoName}",
+  "@transactionFees": {
+    "description": "Transaction Fees",
+    "placeholders": {
+      "fee": {
+        "type": "double",
+        "example": "1"
+      },
+      "cryptoName": {
+        "type": "String",
+        "example": "XLM"
+      }
+    }
+  },
+  "sendCryptominMax": "Min: {min} {cryptoName} - Max: {max} {cryptoName}",
+  "@sendCryptominMax": {
+    "description": "Transaction Fees",
+    "placeholders": {
+      "min": {
+        "type": "double",
+        "example": "1"
+      },
+      "max": {
+        "type": "double",
+        "example": "1"
+      },
+      "cryptoName": {
+        "type": "String",
+        "example": "XLM"
+      }
+    }
+  },
+  "availableBalance": "Available Balance",
+  "sendButton": "Send {cryptoName}",
+  "@sendButton": {
+    "description": "Label for send button",
+    "placeholders": {
+      "cryptoName": {
+        "type": "String",
+        "example": "XLM"
+      }
+    }
+  },
+  "qrNotImplemented": "QR scanner not implemented yet.",
+  "sendNotImplemented": "Send option not implemented yet.",
+  "stellarLumens": "Stellar Lumens"
 }

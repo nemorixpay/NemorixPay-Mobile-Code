@@ -75,4 +75,7 @@ class RouteNames {
 
   /// Receive crypto page
   static const receiveCrypto = "receive_crypto";
+
+  /// Send crypto page
+  static const sendCrypto = "send_crypto";
 }

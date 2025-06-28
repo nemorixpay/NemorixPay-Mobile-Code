@@ -306,6 +306,21 @@ class _SplashTestPageState extends State<SplashTestPage> {
                   backgroundColor: Colors.white,
                   textColor: Colors.black,
                 ),
+                SizedBox(height: 20),
+                RoundedElevatedButton(
+                  text: "Continue with Send Crypto",
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      RouteNames.sendCrypto,
+                      arguments: {
+                        'cryptoName': "XLM",
+                      },
+                    );
+                  },
+                  backgroundColor: Colors.white,
+                  textColor: Colors.black,
+                ),
                 SizedBox(height: 40),
               ],
             ),

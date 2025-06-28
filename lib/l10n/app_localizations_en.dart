@@ -706,4 +706,60 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addressCopiedMessage => 'Address copied to clipboard!';
+
+  @override
+  String sendCryptoTitle(String cryptoName) {
+    return 'Send $cryptoName';
+  }
+
+  @override
+  String get enterAddress => 'Enter Address';
+
+  @override
+  String get recipientAddress => 'Recipient address';
+
+  @override
+  String get invalidAddress => 'Invalid address';
+
+  @override
+  String get amount => 'Amount';
+
+  @override
+  String get amountHint => '0.00';
+
+  @override
+  String get invalidAmount => 'The amount exceeds your available balance';
+
+  @override
+  String get note => 'Note';
+
+  @override
+  String get noteHint => 'Optional note';
+
+  @override
+  String transactionFees(double fee, String cryptoName) {
+    return 'Transaction fees: $fee $cryptoName';
+  }
+
+  @override
+  String sendCryptominMax(double min, double max, String cryptoName) {
+    return 'Min: $min $cryptoName - Max: $max $cryptoName';
+  }
+
+  @override
+  String get availableBalance => 'Available Balance';
+
+  @override
+  String sendButton(String cryptoName) {
+    return 'Send $cryptoName';
+  }
+
+  @override
+  String get qrNotImplemented => 'QR scanner not implemented yet.';
+
+  @override
+  String get sendNotImplemented => 'Send option not implemented yet.';
+
+  @override
+  String get stellarLumens => 'Stellar Lumens';
 }

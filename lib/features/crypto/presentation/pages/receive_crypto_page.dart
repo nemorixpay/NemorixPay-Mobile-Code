@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nemorixpay/features/crypto/presentation/widgets/crypto_logo_widget.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
@@ -115,7 +116,8 @@ class _ReceiveCard extends StatelessWidget {
         cardWidget: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _LogoWidget(logoAsset: logoAsset),
+            // TODO: Need to use logoAsset from database or API
+            const CryptoLogoWidget(logo: 'assets/logos/xlm.png'),
             const SizedBox(height: 24),
             Text(
               l10n!.scanQrCodeText,
@@ -144,33 +146,6 @@ class _ReceiveCard extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// @brief Widget for displaying the crypto logo
-class _LogoWidget extends StatelessWidget {
-  final String logoAsset;
-  const _LogoWidget({required this.logoAsset});
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: Need to be checked in real device and API data
-    // - Temporal -
-    var brightness = Theme.of(context).brightness;
-    bool isDarkMode = brightness == Brightness.dark;
-    final logo = isDarkMode ? logoAsset : 'assets/logos/xlm.png';
-
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Image.asset(
-        logo,
-        width: 36,
-        height: 36,
-        fit: BoxFit.contain,
-        errorBuilder: (context, error, stackTrace) =>
-            const Icon(Icons.currency_exchange, size: 48),
       ),
     );
   }

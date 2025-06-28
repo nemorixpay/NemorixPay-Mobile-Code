@@ -268,5 +268,72 @@
   "blockTimeInfo": "* Bloque/Tiempo se calculará después de que la transacción sea generada y transmitida",
   "copyAddressButton": "Copiar Dirección",
   "shareAddressButton": "Compartir Dirección",
-  "addressCopiedMessage": "¡Dirección copiada al portapapeles!"
+  "addressCopiedMessage": "¡Dirección copiada al portapapeles!",
+  "@_SEND_CRYPTO_PAGE": {
+
+  },
+  "sendCryptoTitle": "Enviar {cryptoName}",
+  "@sendCryptoTitle": {
+    "description": "Title for send crypto page",
+    "placeholders": {
+      "cryptoName": {
+        "type": "String",
+        "example": "XLM"
+      }
+    }
+  },
+  "enterAddress": "Ingresar dirección",
+  "recipientAddress": "Dirección de destino",
+  "invalidAddress": "Dirección inválida",
+  "amount": "Monto",
+  "amountHint": "0.00",
+  "invalidAmount": "El monto excede tu saldo disponible",
+  "note": "Nota",
+  "noteHint": "Nota opcional",
+  "transactionFees": "Comisión de transacción: {fee} {cryptoName}",
+  "@transactionFees": {
+    "description": "Transaction Fees",
+    "placeholders": {
+      "fee": {
+        "type": "double",
+        "example": "1"
+      },
+      "cryptoName": {
+        "type": "String",
+        "example": "XLM"
+      }
+    }
+  },
+  "sendCryptominMax": "Min: {min} {cryptoName} - Max: {max} {cryptoName}",
+  "@sendCryptominMax": {
+    "description": "Transaction Fees",
+    "placeholders": {
+      "min": {
+        "type": "double",
+        "example": "1"
+      },
+      "max": {
+        "type": "double",
+        "example": "1"
+      },
+      "cryptoName": {
+        "type": "String",
+        "example": "XLM"
+      }
+    }
+  },
+  "availableBalance": "Saldo disponible",
+  "sendButton": "Enviar {cryptoName}",
+  "@sendButton": {
+    "description": "Label for send button",
+    "placeholders": {
+      "cryptoName": {
+        "type": "String",
+        "example": "XLM"
+      }
+    }
+  },
+  "qrNotImplemented": "Escáner QR aún no implementado.",
+  "sendNotImplemented": "Enviar aún no implementado.",
+  "stellarLumens": "Stellar Lumens"
 }

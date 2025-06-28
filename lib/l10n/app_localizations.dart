@@ -1480,6 +1480,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Address copied to clipboard!'**
   String get addressCopiedMessage;
+
+  /// Title for send crypto page
+  ///
+  /// In en, this message translates to:
+  /// **'Send {cryptoName}'**
+  String sendCryptoTitle(String cryptoName);
+
+  /// No description provided for @enterAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Address'**
+  String get enterAddress;
+
+  /// No description provided for @recipientAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipient address'**
+  String get recipientAddress;
+
+  /// No description provided for @invalidAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid address'**
+  String get invalidAddress;
+
+  /// No description provided for @amount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get amount;
+
+  /// No description provided for @amountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'0.00'**
+  String get amountHint;
+
+  /// No description provided for @invalidAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'The amount exceeds your available balance'**
+  String get invalidAmount;
+
+  /// No description provided for @note.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get note;
+
+  /// No description provided for @noteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional note'**
+  String get noteHint;
+
+  /// Transaction Fees
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction fees: {fee} {cryptoName}'**
+  String transactionFees(double fee, String cryptoName);
+
+  /// Transaction Fees
+  ///
+  /// In en, this message translates to:
+  /// **'Min: {min} {cryptoName} - Max: {max} {cryptoName}'**
+  String sendCryptominMax(double min, double max, String cryptoName);
+
+  /// No description provided for @availableBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Available Balance'**
+  String get availableBalance;
+
+  /// Label for send button
+  ///
+  /// In en, this message translates to:
+  /// **'Send {cryptoName}'**
+  String sendButton(String cryptoName);
+
+  /// No description provided for @qrNotImplemented.
+  ///
+  /// In en, this message translates to:
+  /// **'QR scanner not implemented yet.'**
+  String get qrNotImplemented;
+
+  /// No description provided for @sendNotImplemented.
+  ///
+  /// In en, this message translates to:
+  /// **'Send option not implemented yet.'**
+  String get sendNotImplemented;
+
+  /// No description provided for @stellarLumens.
+  ///
+  /// In en, this message translates to:
+  /// **'Stellar Lumens'**
+  String get stellarLumens;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
