@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nemorixpay/config/routes/route_names.dart';
+import 'package:nemorixpay/core/utils/validation_rules.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
@@ -61,8 +63,7 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
     final address = _addressController.text.trim();
     // Validacion simple: longitud tipica de direccion Stellar (56 caracteres, empieza con 'G')
     setState(() {
-      _isValidAddress =
-          address.isNotEmpty && address.length == 56 && address.startsWith('G');
+      _isValidAddress = ValidationRules.isValidStellarAddress(address);
     });
   }
 
@@ -79,15 +80,21 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
 
   bool get _isFormValid => _isValidAddress && _isValidAmount;
 
-  void _onScanQr(String message) {
-    // TODO: Implement QR scanning logic
-    //'QR scanner not implemented yet.'
-    NemorixSnackBar.show(
-      // ignore: use_build_context_synchronously
+  void _onScanQr() async {
+    // TODO: Need to be checked in real device
+    final result = await Navigator.pushNamed(
       context,
-      message: message,
-      type: SnackBarType.info,
-    );
+      RouteNames.qrScan,
+    ) as String;
+
+    if (result != '-1') {
+      setState(() {
+        _addressController.text = result;
+      });
+    } else {
+      debugPrint('_onScanQr - result is not a Stellar address or null');
+    }
+    debugPrint('_onScanQr - result = $result');
   }
 
   void _onSend(String message) {
@@ -132,7 +139,7 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
                 amountController: _amountController,
                 noteController: _noteController,
                 onScanQr: () {
-                  _onScanQr(l10n!.qrNotImplemented);
+                  _onScanQr();
                 },
                 isValidAddress: _isValidAddress,
                 isValidAmount: _isValidAmount,

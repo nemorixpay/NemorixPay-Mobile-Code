@@ -78,4 +78,7 @@ class RouteNames {
 
   /// Send crypto page
   static const sendCrypto = "send_crypto";
+
+  /// QR scan page
+  static const qrScan = "qr_scan";
 }

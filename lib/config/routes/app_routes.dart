@@ -9,6 +9,7 @@ import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_mar
 import 'package:nemorixpay/features/crypto/presentation/pages/buy_crypto_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/home_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/payment_method_page.dart';
+import 'package:nemorixpay/features/crypto/presentation/pages/qr_scan_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/receive_crypto_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/send_crypto_page.dart';
 import 'package:nemorixpay/features/onboarding/presentation/pages/benefits_slide.dart';
@@ -155,6 +156,12 @@ class AppRoutes {
         cryptoName: 'XLM',
       ),
       icon: Icons.rocket_launch,
+    ),
+    RouteModel(
+      route: RouteNames.qrScan,
+      name: 'QrScan',
+      screen: const QrScanPage(),
+      icon: Icons.qr_code,
     ),
   ];
 

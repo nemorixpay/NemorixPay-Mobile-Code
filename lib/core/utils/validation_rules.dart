@@ -55,4 +55,21 @@ class ValidationRules {
     '1234567890',
     'abc123',
   ];
+
+  /// Validates if a string is a valid Stellar public key format
+  ///
+  /// A valid Stellar public key must:
+  /// - Not be empty
+  /// - Be exactly 56 characters long
+  /// - Start with 'G'
+  ///
+  /// Note: This is a basic format validation.
+  ///
+  /// @param address The string to validate
+  /// @return true if the address format is valid, false otherwise
+  static bool isValidStellarAddress(String address) {
+    return address.isNotEmpty &&
+        address.length == 56 &&
+        address.startsWith('G');
+  }
 }

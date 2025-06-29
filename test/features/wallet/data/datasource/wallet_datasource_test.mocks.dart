@@ -3,10 +3,10 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i7;
+import 'dart:async' as _i6;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i6;
+import 'package:mockito/src/dummies.dart' as _i7;
 import 'package:nemorixpay/shared/common/data/models/asset_model.dart' as _i8;
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart'
     as _i5;
@@ -56,26 +56,15 @@ class MockStellarDataSource extends _i1.Mock implements _i5.StellarDataSource {
   }
 
   @override
-  String getCurrentPublicKey() =>
-      (super.noSuchMethod(
-            Invocation.method(#getCurrentPublicKey, []),
-            returnValue: _i6.dummyValue<String>(
-              this,
-              Invocation.method(#getCurrentPublicKey, []),
-            ),
-          )
-          as String);
-
-  @override
-  _i7.Future<List<String>> generateMnemonic({int? strength = 256}) =>
+  _i6.Future<List<String>> generateMnemonic({int? strength = 256}) =>
       (super.noSuchMethod(
             Invocation.method(#generateMnemonic, [], {#strength: strength}),
-            returnValue: _i7.Future<List<String>>.value(<String>[]),
+            returnValue: _i6.Future<List<String>>.value(<String>[]),
           )
-          as _i7.Future<List<String>>);
+          as _i6.Future<List<String>>);
 
   @override
-  _i7.Future<_i2.StellarAccountModel> createAccount({
+  _i6.Future<_i2.StellarAccountModel> createAccount({
     required String? mnemonic,
     String? passphrase = '',
   }) =>
@@ -84,7 +73,7 @@ class MockStellarDataSource extends _i1.Mock implements _i5.StellarDataSource {
               #mnemonic: mnemonic,
               #passphrase: passphrase,
             }),
-            returnValue: _i7.Future<_i2.StellarAccountModel>.value(
+            returnValue: _i6.Future<_i2.StellarAccountModel>.value(
               _FakeStellarAccountModel_0(
                 this,
                 Invocation.method(#createAccount, [], {
@@ -94,18 +83,18 @@ class MockStellarDataSource extends _i1.Mock implements _i5.StellarDataSource {
               ),
             ),
           )
-          as _i7.Future<_i2.StellarAccountModel>);
+          as _i6.Future<_i2.StellarAccountModel>);
 
   @override
-  _i7.Future<double> getAccountBalance(String? publicKey) =>
+  _i6.Future<double> getAccountBalance(String? publicKey) =>
       (super.noSuchMethod(
             Invocation.method(#getAccountBalance, [publicKey]),
-            returnValue: _i7.Future<double>.value(0.0),
+            returnValue: _i6.Future<double>.value(0.0),
           )
-          as _i7.Future<double>);
+          as _i6.Future<double>);
 
   @override
-  _i7.Future<_i3.StellarTransactionModel> sendPayment({
+  _i6.Future<_i3.StellarTransactionModel> sendPayment({
     required String? sourceSecretKey,
     required String? destinationPublicKey,
     required double? amount,
@@ -118,7 +107,7 @@ class MockStellarDataSource extends _i1.Mock implements _i5.StellarDataSource {
               #amount: amount,
               #memo: memo,
             }),
-            returnValue: _i7.Future<_i3.StellarTransactionModel>.value(
+            returnValue: _i6.Future<_i3.StellarTransactionModel>.value(
               _FakeStellarTransactionModel_1(
                 this,
                 Invocation.method(#sendPayment, [], {
@@ -130,25 +119,25 @@ class MockStellarDataSource extends _i1.Mock implements _i5.StellarDataSource {
               ),
             ),
           )
-          as _i7.Future<_i3.StellarTransactionModel>);
+          as _i6.Future<_i3.StellarTransactionModel>);
 
   @override
-  _i7.Future<_i3.StellarTransactionModel> validateTransaction(
+  _i6.Future<_i3.StellarTransactionModel> validateTransaction(
     String? transactionHash,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#validateTransaction, [transactionHash]),
-            returnValue: _i7.Future<_i3.StellarTransactionModel>.value(
+            returnValue: _i6.Future<_i3.StellarTransactionModel>.value(
               _FakeStellarTransactionModel_1(
                 this,
                 Invocation.method(#validateTransaction, [transactionHash]),
               ),
             ),
           )
-          as _i7.Future<_i3.StellarTransactionModel>);
+          as _i6.Future<_i3.StellarTransactionModel>);
 
   @override
-  _i7.Future<_i2.StellarAccountModel> importAccount({
+  _i6.Future<_i2.StellarAccountModel> importAccount({
     required String? mnemonic,
     String? passphrase = '',
   }) =>
@@ -157,7 +146,7 @@ class MockStellarDataSource extends _i1.Mock implements _i5.StellarDataSource {
               #mnemonic: mnemonic,
               #passphrase: passphrase,
             }),
-            returnValue: _i7.Future<_i2.StellarAccountModel>.value(
+            returnValue: _i6.Future<_i2.StellarAccountModel>.value(
               _FakeStellarAccountModel_0(
                 this,
                 Invocation.method(#importAccount, [], {
@@ -167,10 +156,10 @@ class MockStellarDataSource extends _i1.Mock implements _i5.StellarDataSource {
               ),
             ),
           )
-          as _i7.Future<_i2.StellarAccountModel>);
+          as _i6.Future<_i2.StellarAccountModel>);
 
   @override
-  _i7.Future<_i4.KeyPair> getKeyPairFromMnemonic(
+  _i6.Future<_i4.KeyPair> getKeyPairFromMnemonic(
     String? mnemonic, {
     String? passphrase = '',
   }) =>
@@ -180,7 +169,7 @@ class MockStellarDataSource extends _i1.Mock implements _i5.StellarDataSource {
               [mnemonic],
               {#passphrase: passphrase},
             ),
-            returnValue: _i7.Future<_i4.KeyPair>.value(
+            returnValue: _i6.Future<_i4.KeyPair>.value(
               _FakeKeyPair_2(
                 this,
                 Invocation.method(
@@ -191,18 +180,18 @@ class MockStellarDataSource extends _i1.Mock implements _i5.StellarDataSource {
               ),
             ),
           )
-          as _i7.Future<_i4.KeyPair>);
+          as _i6.Future<_i4.KeyPair>);
 
   @override
-  _i7.Future<double> getBalance(String? publicKey) =>
+  _i6.Future<double> getBalance(String? publicKey) =>
       (super.noSuchMethod(
             Invocation.method(#getBalance, [publicKey]),
-            returnValue: _i7.Future<double>.value(0.0),
+            returnValue: _i6.Future<double>.value(0.0),
           )
-          as _i7.Future<double>);
+          as _i6.Future<double>);
 
   @override
-  _i7.Future<String> sendTransaction({
+  _i6.Future<String> sendTransaction({
     required String? sourceSecretSeed,
     required String? destinationPublicKey,
     required double? amount,
@@ -215,8 +204,8 @@ class MockStellarDataSource extends _i1.Mock implements _i5.StellarDataSource {
               #amount: amount,
               #memo: memo,
             }),
-            returnValue: _i7.Future<String>.value(
-              _i6.dummyValue<String>(
+            returnValue: _i6.Future<String>.value(
+              _i7.dummyValue<String>(
                 this,
                 Invocation.method(#sendTransaction, [], {
                   #sourceSecretSeed: sourceSecretSeed,
@@ -227,25 +216,71 @@ class MockStellarDataSource extends _i1.Mock implements _i5.StellarDataSource {
               ),
             ),
           )
-          as _i7.Future<String>);
+          as _i6.Future<String>);
 
   @override
-  _i7.Future<List<_i8.AssetModel>> getAccountAssets(String? publicKey) =>
+  _i6.Future<List<_i8.AssetModel>> getAccountAssets(String? publicKey) =>
       (super.noSuchMethod(
             Invocation.method(#getAccountAssets, [publicKey]),
-            returnValue: _i7.Future<List<_i8.AssetModel>>.value(
+            returnValue: _i6.Future<List<_i8.AssetModel>>.value(
               <_i8.AssetModel>[],
             ),
           )
-          as _i7.Future<List<_i8.AssetModel>>);
+          as _i6.Future<List<_i8.AssetModel>>);
 
   @override
-  _i7.Future<List<_i8.AssetModel>> getAvailableAssets() =>
+  _i6.Future<List<_i8.AssetModel>> getAvailableAssets() =>
       (super.noSuchMethod(
             Invocation.method(#getAvailableAssets, []),
-            returnValue: _i7.Future<List<_i8.AssetModel>>.value(
+            returnValue: _i6.Future<List<_i8.AssetModel>>.value(
               <_i8.AssetModel>[],
             ),
           )
-          as _i7.Future<List<_i8.AssetModel>>);
+          as _i6.Future<List<_i8.AssetModel>>);
+
+  @override
+  _i6.Future<String?> getSecurePrivateKey({required String? publicKey}) =>
+      (super.noSuchMethod(
+            Invocation.method(#getSecurePrivateKey, [], {
+              #publicKey: publicKey,
+            }),
+            returnValue: _i6.Future<String?>.value(),
+          )
+          as _i6.Future<String?>);
+
+  @override
+  _i6.Future<bool> hasSecurePrivateKey({required String? publicKey}) =>
+      (super.noSuchMethod(
+            Invocation.method(#hasSecurePrivateKey, [], {
+              #publicKey: publicKey,
+            }),
+            returnValue: _i6.Future<bool>.value(false),
+          )
+          as _i6.Future<bool>);
+
+  @override
+  _i6.Future<bool> deleteSecurePrivateKey({required String? publicKey}) =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteSecurePrivateKey, [], {
+              #publicKey: publicKey,
+            }),
+            returnValue: _i6.Future<bool>.value(false),
+          )
+          as _i6.Future<bool>);
+
+  @override
+  _i6.Future<bool> deleteAllSecurePrivateKeys() =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteAllSecurePrivateKeys, []),
+            returnValue: _i6.Future<bool>.value(false),
+          )
+          as _i6.Future<bool>);
+
+  @override
+  _i6.Future<List<String>> getAllStoredPublicKeys() =>
+      (super.noSuchMethod(
+            Invocation.method(#getAllStoredPublicKeys, []),
+            returnValue: _i6.Future<List<String>>.value(<String>[]),
+          )
+          as _i6.Future<List<String>>);
 }

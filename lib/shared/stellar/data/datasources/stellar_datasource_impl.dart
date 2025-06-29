@@ -1,6 +1,7 @@
 // ignore_for_file: unintended_html_in_doc_comment
 
 import 'package:flutter/foundation.dart';
+import 'package:nemorixpay/core/utils/validation_rules.dart';
 import 'package:nemorixpay/shared/common/data/models/asset_model.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_secure_storage_datasource.dart';
@@ -182,7 +183,7 @@ class StellarDataSourceImpl implements StellarDataSource {
       );
 
       // Validate public key format
-      if (!publicKey.startsWith('G') || publicKey.length != 56) {
+      if (!ValidationRules.isValidStellarAddress(publicKey)) {
         debugPrint(
           'StellarDatasource: getAccountBalance - Invalid public key format',
         );

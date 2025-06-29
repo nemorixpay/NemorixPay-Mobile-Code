@@ -61,25 +61,17 @@ class MockStellarSecureStorageDataSource extends _i1.Mock
           as _i3.Future<bool>);
 
   @override
-  _i3.Future<String?> getPublicKey({required String? userId}) =>
+  _i3.Future<String?> getPrivateKey({required String? publicKey}) =>
       (super.noSuchMethod(
-            Invocation.method(#getPublicKey, [], {#userId: userId}),
+            Invocation.method(#getPrivateKey, [], {#publicKey: publicKey}),
             returnValue: _i3.Future<String?>.value(),
           )
           as _i3.Future<String?>);
 
   @override
-  _i3.Future<bool> hasPublicKey({required String? userId}) =>
+  _i3.Future<String?> getPublicKey({required String? userId}) =>
       (super.noSuchMethod(
-            Invocation.method(#hasPublicKey, [], {#userId: userId}),
-            returnValue: _i3.Future<bool>.value(false),
-          )
-          as _i3.Future<bool>);
-
-  @override
-  _i3.Future<String?> getPrivateKey({required String? publicKey}) =>
-      (super.noSuchMethod(
-            Invocation.method(#getPrivateKey, [], {#publicKey: publicKey}),
+            Invocation.method(#getPublicKey, [], {#userId: userId}),
             returnValue: _i3.Future<String?>.value(),
           )
           as _i3.Future<String?>);
@@ -93,17 +85,25 @@ class MockStellarSecureStorageDataSource extends _i1.Mock
           as _i3.Future<bool>);
 
   @override
-  _i3.Future<bool> deletePrivateKey({required String? publicKey}) =>
+  _i3.Future<bool> hasPublicKey({required String? userId}) =>
       (super.noSuchMethod(
-            Invocation.method(#deletePrivateKey, [], {#publicKey: publicKey}),
+            Invocation.method(#hasPublicKey, [], {#userId: userId}),
             returnValue: _i3.Future<bool>.value(false),
           )
           as _i3.Future<bool>);
 
   @override
-  _i3.Future<bool> deleteAllPrivateKeys() =>
+  _i3.Future<bool> deleteAllKeys() =>
       (super.noSuchMethod(
-            Invocation.method(#deleteAllPrivateKeys, []),
+            Invocation.method(#deleteAllKeys, []),
+            returnValue: _i3.Future<bool>.value(false),
+          )
+          as _i3.Future<bool>);
+
+  @override
+  _i3.Future<bool> deletePrivateKey({required String? publicKey}) =>
+      (super.noSuchMethod(
+            Invocation.method(#deletePrivateKey, [], {#publicKey: publicKey}),
             returnValue: _i3.Future<bool>.value(false),
           )
           as _i3.Future<bool>);

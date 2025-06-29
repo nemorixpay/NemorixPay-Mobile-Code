@@ -3,15 +3,14 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i7;
+import 'dart:async' as _i5;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i3;
-import 'package:nemorixpay/shared/common/data/models/asset_model.dart' as _i5;
+import 'package:nemorixpay/shared/common/data/models/asset_model.dart' as _i4;
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_secure_storage_datasource.dart'
     as _i6;
 import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart'
-    as _i4;
+    as _i3;
 import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart'
     as _i2;
 
@@ -39,44 +38,43 @@ class MockStellarAccountProvider extends _i1.Mock
   }
 
   @override
-  String get testMnemonic =>
-      (super.noSuchMethod(
-            Invocation.getter(#testMnemonic),
-            returnValue: _i3.dummyValue<String>(
-              this,
-              Invocation.getter(#testMnemonic),
-            ),
-          )
-          as String);
+  set userId(String? _userId) => super.noSuchMethod(
+    Invocation.setter(#userId, _userId),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  String get testPublicKey =>
+  bool get hasValidAccount =>
       (super.noSuchMethod(
-            Invocation.getter(#testPublicKey),
-            returnValue: _i3.dummyValue<String>(
-              this,
-              Invocation.getter(#testPublicKey),
-            ),
+            Invocation.getter(#hasValidAccount),
+            returnValue: false,
           )
-          as String);
+          as bool);
 
   @override
-  String get testSecretKey =>
-      (super.noSuchMethod(
-            Invocation.getter(#testSecretKey),
-            returnValue: _i3.dummyValue<String>(
-              this,
-              Invocation.getter(#testSecretKey),
-            ),
-          )
-          as String);
-
-  @override
-  void setCurrentAccount(_i4.StellarAccountModel? account) =>
+  void setCurrentAccount(_i3.StellarAccountModel? account) =>
       super.noSuchMethod(
         Invocation.method(#setCurrentAccount, [account]),
         returnValueForMissingStub: null,
       );
+
+  @override
+  void updateSecretKey(String? newSecretKey) => super.noSuchMethod(
+    Invocation.method(#updateSecretKey, [newSecretKey]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void updatePublicKey(String? newPublicKey) => super.noSuchMethod(
+    Invocation.method(#updatePublicKey, [newPublicKey]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void updateMnemonic(String? newMnemonic) => super.noSuchMethod(
+    Invocation.method(#updateMnemonic, [newMnemonic]),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void updateBalance(double? newBalance) => super.noSuchMethod(
@@ -85,7 +83,7 @@ class MockStellarAccountProvider extends _i1.Mock
   );
 
   @override
-  void updateAssets(List<_i5.AssetModel>? newAssets) => super.noSuchMethod(
+  void updateAssets(List<_i4.AssetModel>? newAssets) => super.noSuchMethod(
     Invocation.method(#updateAssets, [newAssets]),
     returnValueForMissingStub: null,
   );
@@ -97,10 +95,13 @@ class MockStellarAccountProvider extends _i1.Mock
   );
 
   @override
-  void setTestAccount() => super.noSuchMethod(
-    Invocation.method(#setTestAccount, []),
-    returnValueForMissingStub: null,
-  );
+  _i5.Future<void> syncWithSecureStorage() =>
+      (super.noSuchMethod(
+            Invocation.method(#syncWithSecureStorage, []),
+            returnValue: _i5.Future<void>.value(),
+            returnValueForMissingStub: _i5.Future<void>.value(),
+          )
+          as _i5.Future<void>);
 }
 
 /// A class which mocks [StellarSecureStorageDataSource].
@@ -113,7 +114,7 @@ class MockStellarSecureStorageDataSource extends _i1.Mock
   }
 
   @override
-  _i7.Future<bool> savePrivateKey({
+  _i5.Future<bool> savePrivateKey({
     required String? publicKey,
     required String? privateKey,
   }) =>
@@ -122,12 +123,12 @@ class MockStellarSecureStorageDataSource extends _i1.Mock
               #publicKey: publicKey,
               #privateKey: privateKey,
             }),
-            returnValue: _i7.Future<bool>.value(false),
+            returnValue: _i5.Future<bool>.value(false),
           )
-          as _i7.Future<bool>);
+          as _i5.Future<bool>);
 
   @override
-  _i7.Future<bool> savePublicKey({
+  _i5.Future<bool> savePublicKey({
     required String? publicKey,
     required String? userId,
   }) =>
@@ -136,63 +137,63 @@ class MockStellarSecureStorageDataSource extends _i1.Mock
               #publicKey: publicKey,
               #userId: userId,
             }),
-            returnValue: _i7.Future<bool>.value(false),
+            returnValue: _i5.Future<bool>.value(false),
           )
-          as _i7.Future<bool>);
+          as _i5.Future<bool>);
 
   @override
-  _i7.Future<String?> getPublicKey({required String? userId}) =>
-      (super.noSuchMethod(
-            Invocation.method(#getPublicKey, [], {#userId: userId}),
-            returnValue: _i7.Future<String?>.value(),
-          )
-          as _i7.Future<String?>);
-
-  @override
-  _i7.Future<bool> hasPublicKey({required String? userId}) =>
-      (super.noSuchMethod(
-            Invocation.method(#hasPublicKey, [], {#userId: userId}),
-            returnValue: _i7.Future<bool>.value(false),
-          )
-          as _i7.Future<bool>);
-
-  @override
-  _i7.Future<String?> getPrivateKey({required String? publicKey}) =>
+  _i5.Future<String?> getPrivateKey({required String? publicKey}) =>
       (super.noSuchMethod(
             Invocation.method(#getPrivateKey, [], {#publicKey: publicKey}),
-            returnValue: _i7.Future<String?>.value(),
+            returnValue: _i5.Future<String?>.value(),
           )
-          as _i7.Future<String?>);
+          as _i5.Future<String?>);
 
   @override
-  _i7.Future<bool> hasPrivateKey({required String? publicKey}) =>
+  _i5.Future<String?> getPublicKey({required String? userId}) =>
+      (super.noSuchMethod(
+            Invocation.method(#getPublicKey, [], {#userId: userId}),
+            returnValue: _i5.Future<String?>.value(),
+          )
+          as _i5.Future<String?>);
+
+  @override
+  _i5.Future<bool> hasPrivateKey({required String? publicKey}) =>
       (super.noSuchMethod(
             Invocation.method(#hasPrivateKey, [], {#publicKey: publicKey}),
-            returnValue: _i7.Future<bool>.value(false),
+            returnValue: _i5.Future<bool>.value(false),
           )
-          as _i7.Future<bool>);
+          as _i5.Future<bool>);
 
   @override
-  _i7.Future<bool> deletePrivateKey({required String? publicKey}) =>
+  _i5.Future<bool> hasPublicKey({required String? userId}) =>
+      (super.noSuchMethod(
+            Invocation.method(#hasPublicKey, [], {#userId: userId}),
+            returnValue: _i5.Future<bool>.value(false),
+          )
+          as _i5.Future<bool>);
+
+  @override
+  _i5.Future<bool> deleteAllKeys() =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteAllKeys, []),
+            returnValue: _i5.Future<bool>.value(false),
+          )
+          as _i5.Future<bool>);
+
+  @override
+  _i5.Future<bool> deletePrivateKey({required String? publicKey}) =>
       (super.noSuchMethod(
             Invocation.method(#deletePrivateKey, [], {#publicKey: publicKey}),
-            returnValue: _i7.Future<bool>.value(false),
+            returnValue: _i5.Future<bool>.value(false),
           )
-          as _i7.Future<bool>);
+          as _i5.Future<bool>);
 
   @override
-  _i7.Future<bool> deleteAllPrivateKeys() =>
-      (super.noSuchMethod(
-            Invocation.method(#deleteAllPrivateKeys, []),
-            returnValue: _i7.Future<bool>.value(false),
-          )
-          as _i7.Future<bool>);
-
-  @override
-  _i7.Future<List<String>> getAllPublicKeys() =>
+  _i5.Future<List<String>> getAllPublicKeys() =>
       (super.noSuchMethod(
             Invocation.method(#getAllPublicKeys, []),
-            returnValue: _i7.Future<List<String>>.value(<String>[]),
+            returnValue: _i5.Future<List<String>>.value(<String>[]),
           )
-          as _i7.Future<List<String>>);
+          as _i5.Future<List<String>>);
 }

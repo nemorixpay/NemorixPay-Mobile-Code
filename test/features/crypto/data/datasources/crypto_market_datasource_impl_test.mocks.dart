@@ -66,20 +66,6 @@ class MockAssetCacheManager extends _i1.Mock implements _i3.AssetCacheManager {
           as List<Object?>);
 
   @override
-  bool isPublicKeyAvailable() =>
-      (super.noSuchMethod(
-            Invocation.method(#isPublicKeyAvailable, []),
-            returnValue: false,
-          )
-          as bool);
-
-  @override
-  void setPublicAccountKey(String? key) => super.noSuchMethod(
-    Invocation.method(#setPublicAccountKey, [key]),
-    returnValueForMissingStub: null,
-  );
-
-  @override
   _i4.Future<void> assetsEmpty() =>
       (super.noSuchMethod(
             Invocation.method(#assetsEmpty, []),
@@ -165,6 +151,12 @@ class MockAssetCacheManager extends _i1.Mock implements _i3.AssetCacheManager {
             returnValueForMissingStub: _i4.Future<void>.value(),
           )
           as _i4.Future<void>);
+
+  @override
+  void clearCacheSync() => super.noSuchMethod(
+    Invocation.method(#clearCacheSync, []),
+    returnValueForMissingStub: null,
+  );
 
   @override
   _i4.Future<List<_i2.AssetModel>> getAssetsByNetwork(String? network) =>

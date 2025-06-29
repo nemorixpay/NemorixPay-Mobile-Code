@@ -1,9 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:mockito/annotations.dart';
 import 'package:nemorixpay/shared/common/data/models/asset_model.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_datasource_impl.dart';
+import 'package:nemorixpay/shared/stellar/data/datasources/stellar_secure_storage_datasource.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_transaction_model.dart';
 import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
+
+// Generar mocks
+@GenerateMocks([StellarSecureStorageDataSource])
+import 'stellar_datasource_test.mocks.dart';
 
 /// @file        stellar_datasource_test.dart
 /// @brief       Unit tests for StellarDatasource implementation.
@@ -11,11 +18,15 @@ import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
 ///              account import, balance checking and transaction handling.
 /// @author      Miguel Fagundez
 /// @date        2025-05-15
-/// @version     1.1
+/// @version     1.2
 /// @copyright   Apache 2.0 License
 
 void main() {
+  TestWidgetsFlutterBinding
+      .ensureInitialized(); // Inicializar binding para flutter_secure_storage
+
   late StellarDataSourceImpl datasource;
+  late MockStellarSecureStorageDataSource mockSecureStorage;
 
   // Test accounts
   const testAccount1Mnemonic =
@@ -33,7 +44,14 @@ void main() {
       'GDM23BBTRM7ZYLRVKK473RN374WOXP4B7IOQNFMBE7Y4YTDZW6BJZVJG';
 
   setUp(() {
+    mockSecureStorage = MockStellarSecureStorageDataSource();
     datasource = StellarDataSourceImpl();
+
+    // Configurar mock para que siempre retorne éxito
+    when(mockSecureStorage.savePrivateKey(
+      publicKey: anyNamed('publicKey'),
+      privateKey: anyNamed('privateKey'),
+    )).thenAnswer((_) async => true);
   });
 
   group('StellarDatasource', () {
