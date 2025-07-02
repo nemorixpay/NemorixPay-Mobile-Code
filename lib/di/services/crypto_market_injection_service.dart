@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:nemorixpay/features/crypto/domain/usecases/get_crypto_account_assets_usecase.dart';
+import 'package:nemorixpay/features/crypto/domain/usecases/send_stellar_transaction_usecase.dart';
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_bloc.dart';
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_home_bloc.dart';
 import 'package:nemorixpay/shared/cache/core/managers/asset_cache_manager.dart';
@@ -30,31 +31,36 @@ import 'package:nemorixpay/features/crypto/domain/usecases/get_crypto_asset_deta
 final di = GetIt.instance;
 Future<void> cryptoMarketInjectionServices() async {
   // Defining CryptoMarket Datasources
-  final CryptoMarketDataSourceImpl cryptoMarketDataSourceImpl = di
-      .registerSingleton(
-        CryptoMarketDataSourceImpl(assetCacheManager: AssetCacheManager()),
-      );
+  final CryptoMarketDataSourceImpl cryptoMarketDataSourceImpl =
+      di.registerSingleton(
+    CryptoMarketDataSourceImpl(assetCacheManager: AssetCacheManager()),
+  );
 
   // Defining CryptoMarket Repositories
-  final CryptoMarketRepositoryImpl cryptoMarketRepositoryImpl = di
-      .registerSingleton(
-        CryptoMarketRepositoryImpl(cryptoMarketDataSourceImpl),
-      );
+  final CryptoMarketRepositoryImpl cryptoMarketRepositoryImpl =
+      di.registerSingleton(
+    CryptoMarketRepositoryImpl(cryptoMarketDataSourceImpl),
+  );
 
   // Defining CryptoMarket UseCases
-  final GetCryptoAssetDetailsUseCase getCryptoAssetDetailsUseCase = di
-      .registerSingleton(
-        GetCryptoAssetDetailsUseCase(repository: cryptoMarketRepositoryImpl),
-      );
+  final GetCryptoAssetDetailsUseCase getCryptoAssetDetailsUseCase =
+      di.registerSingleton(
+    GetCryptoAssetDetailsUseCase(repository: cryptoMarketRepositoryImpl),
+  );
 
   final GetCryptoAssetsUseCase getCryptoAssetsUseCase = di.registerSingleton(
     GetCryptoAssetsUseCase(repository: cryptoMarketRepositoryImpl),
   );
 
-  final GetCryptoAccountAssetsUseCase getCryptoAccountAssetsUseCase = di
-      .registerSingleton(
-        GetCryptoAccountAssetsUseCase(repository: cryptoMarketRepositoryImpl),
-      );
+  final GetCryptoAccountAssetsUseCase getCryptoAccountAssetsUseCase =
+      di.registerSingleton(
+    GetCryptoAccountAssetsUseCase(repository: cryptoMarketRepositoryImpl),
+  );
+
+  final SendStellarTransactionUseCase sendStellarTransactionUseCase =
+      di.registerSingleton(
+    SendStellarTransactionUseCase(repository: cryptoMarketRepositoryImpl),
+  );
 
   final GetMarketDataUseCase getMarketDataUseCase = di.registerSingleton(
     GetMarketDataUseCase(repository: cryptoMarketRepositoryImpl),
@@ -79,6 +85,7 @@ Future<void> cryptoMarketInjectionServices() async {
     () => CryptoAccountBloc(
       getCryptoAssetDetailsUseCase: getCryptoAssetDetailsUseCase,
       getCryptoAccountAssetsUseCase: getCryptoAccountAssetsUseCase,
+      sendStellarTransactionUseCase: sendStellarTransactionUseCase,
     ),
   );
 

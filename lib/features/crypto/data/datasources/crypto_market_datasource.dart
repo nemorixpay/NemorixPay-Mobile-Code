@@ -39,4 +39,14 @@ abstract class CryptoMarketDataSource {
   /// Returns [MarketDataModel] with the updated market data
   /// Throws [AssetFailure] if the operation fails
   Future<MarketDataModel> updateMarketData(String symbol);
+
+  /// Sends a transaction to the Stellar network
+  ///
+  /// Returns [String] with the transaction hash
+  /// Throws [StellarFailure] if transaction fails
+  Future<String> sendTransaction({
+    required String destinationPublicKey,
+    required double amount,
+    String? memo,
+  });
 }

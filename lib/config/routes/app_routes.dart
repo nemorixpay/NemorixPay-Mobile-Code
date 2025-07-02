@@ -25,7 +25,7 @@ import 'package:nemorixpay/features/wallet/presentation/pages/show_seed_phrase_p
 import 'package:nemorixpay/features/wallet/presentation/pages/stellar_service_test_page.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/wallet_setup_page.dart';
 import 'package:nemorixpay/features/crypto/presentation/pages/crypto_details.dart';
-import 'package:nemorixpay/features/wallet/presentation/pages/wallet_success_page.dart';
+import 'package:nemorixpay/shared/common/presentation/pages/success_page.dart';
 import 'package:nemorixpay/shared/stellar/presentation/pages/test_transactions_page.dart';
 
 /// @file        app_routes.dart
@@ -150,14 +150,6 @@ class AppRoutes {
       icon: Icons.rocket_launch,
     ),
     RouteModel(
-      route: RouteNames.sendCrypto,
-      name: 'SendCrypto',
-      screen: const SendCryptoPage(
-        cryptoName: 'XLM',
-      ),
-      icon: Icons.rocket_launch,
-    ),
-    RouteModel(
       route: RouteNames.qrScan,
       name: 'QrScan',
       screen: const QrScanPage(),
@@ -212,10 +204,14 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (context) => ShowSeedPhrasePage(seedPhrase: args),
         );
-      case RouteNames.successWalletCreation:
-        final title = settings.arguments as String;
+      case RouteNames.successPage:
+        final args = settings.arguments as Map<String, String?>;
         return MaterialPageRoute(
-          builder: (context) => WalletSuccessPage(titleSuccess: title),
+          builder: (context) => SuccessPage(
+            titleSuccess: args['titleSuccess'] as String,
+            firstParagraph: args['firstParagraph'] as String,
+            secondParagraph: args['secondParagraph'],
+          ),
         );
       case RouteNames.confirmSeedPhrase:
         final args = settings.arguments as List<String>;
@@ -231,17 +227,13 @@ class AppRoutes {
             publicKey: args['publicKey'] as String,
           ),
         );
-      //   ConfirmSeedPhrasePage(
-      //      seedPhrase: mySeedPhrase,
-      //      onSuccess: () {
-      //       // Navegar a la pantalla principal
-      //        Navigator.pushReplacementNamed(context, '/walletHome');
-      //      },
-      //      onFail: () {
-      //        // Mostrar alerta
-      //        showDialog(...);
-      //      },
-      //    )
+      case RouteNames.sendCrypto:
+        final args =
+            settings.arguments as Map<String, CryptoAssetWithMarketData>;
+        return MaterialPageRoute(
+          builder: (context) => SendCryptoPage(
+              crypto: args['crypto'] as CryptoAssetWithMarketData),
+        );
       default:
         return MaterialPageRoute(builder: (context) => const LoginPage());
     }

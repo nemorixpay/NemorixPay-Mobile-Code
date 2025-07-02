@@ -1,20 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_home_bloc.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_home_event.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_button.dart';
 
-/// @file        wallet_success_page.dart
-/// @brief       Success page for wallet creation or import in NemorixPay.
-/// @details     This page is shown after the user successfully creates or imports a wallet.
+/// @file        success_page.dart
+/// @brief       Success page for different results in NemorixPay.
+/// @details     This page is shown after the user successfully creates or imports a wallet or a transaction has been sent.
 ///              It displays a success icon, important security messages, and a button to go to the home page.
 /// @author      Miguel Fagundez
-/// @date        2025-05-13
+/// @date        07/01/2025
 /// @version     1.0
 /// @copyright   Apache 2.0 License
-class WalletSuccessPage extends StatelessWidget {
+class SuccessPage extends StatefulWidget {
   final String titleSuccess;
-  const WalletSuccessPage({super.key, required this.titleSuccess});
+  final String firstParagraph;
+  final String? secondParagraph;
+  const SuccessPage({
+    super.key,
+    required this.titleSuccess,
+    required this.firstParagraph,
+    this.secondParagraph,
+  });
+
+  @override
+  State<SuccessPage> createState() => _SuccessPageState();
+}
+
+class _SuccessPageState extends State<SuccessPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +61,7 @@ class WalletSuccessPage extends StatelessWidget {
                         child: Container(
                           width: 100,
                           height: 100,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: NemorixColors.primaryColor,
                             shape: BoxShape.circle,
                           ),
@@ -56,7 +77,7 @@ class WalletSuccessPage extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 32.0),
                         child: Text(
-                          titleSuccess,
+                          widget.titleSuccess,
                           style: theme.textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -64,25 +85,26 @@ class WalletSuccessPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 40),
-                      // Security Message
+                      // First paragraph
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 32.0),
                         child: Text(
-                          l10n.walletSuccessSecurity,
+                          widget.firstParagraph,
                           style: theme.textTheme.bodyLarge,
                           textAlign: TextAlign.center,
                         ),
                       ),
                       const SizedBox(height: 20),
-                      // Info Message
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                        child: Text(
-                          l10n.walletSuccessInfo,
-                          style: theme.textTheme.bodyLarge,
-                          textAlign: TextAlign.center,
+                      // Second paragraph
+                      if (widget.secondParagraph != null)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                          child: Text(
+                            widget.secondParagraph ?? '',
+                            style: theme.textTheme.bodyLarge,
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
                       const Spacer(),
                       Padding(
                         padding: const EdgeInsets.symmetric(

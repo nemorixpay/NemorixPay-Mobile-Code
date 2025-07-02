@@ -237,4 +237,23 @@ class CryptoMarketDataSourceImpl implements CryptoMarketDataSource {
     // TODO check this line
     //_assetCache[asset.asset.symbol] = asset;
   }
+
+  @override
+  Future<String> sendTransaction({
+    required String destinationPublicKey,
+    required double amount,
+    String? memo,
+  }) async {
+    try {
+      final hash = await _assetCacheManager.sendTransaction(
+        destinationPublicKey,
+        amount,
+        memo,
+      );
+      return hash;
+    } catch (e) {
+      if (e is AssetFailure) rethrow;
+      throw AssetFailure.unknown('Failed to load send stellar transaction');
+    }
+  }
 }

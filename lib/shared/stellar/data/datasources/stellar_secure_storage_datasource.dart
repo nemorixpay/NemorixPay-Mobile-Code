@@ -182,15 +182,25 @@ class StellarSecureStorageDataSource {
       final String storageKey = '$_baseUserKey$userId';
       final bool exists = await _storage.containsKey(key: storageKey);
 
+      debugPrint('Public key exists for this userId ($userId): $exists');
       if (exists) {
         StellarAccountProvider stellarAccountProvider =
             StellarAccountProvider();
         stellarAccountProvider.userId = userId;
         final publicKey = await getPublicKey(userId: userId);
-        stellarAccountProvider.updatePublicKey(publicKey!);
+        if (publicKey != null) {
+          // --------------------------------------------------
+          // TODO: This need to be re-checked in production
+          // --------------------------------------------------
+          stellarAccountProvider.updatePublicKey(publicKey);
+          debugPrint('Public key exists for public key: $publicKey');
+          final privateKey = await getPrivateKey(publicKey: publicKey);
+          if (privateKey != null) {
+            debugPrint('Private key exists: $privateKey');
+            stellarAccountProvider.updateSecretKey(privateKey);
+          }
+        }
       }
-
-      debugPrint('Public key exists for public key: $exists');
       return exists;
     } catch (e) {
       debugPrint('Error checking if public key exists: $e');

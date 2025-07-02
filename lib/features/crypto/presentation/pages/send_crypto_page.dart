@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/core/utils/validation_rules.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_market_data.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_bloc.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_event.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_state.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/app_loader.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
 import 'package:nemorixpay/features/crypto/presentation/widgets/crypto_logo_widget.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_button.dart';
+import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
 
 /// @file        send_crypto_page.dart
 /// @brief       Page for sending Stellar Lumens (XLM) to another address.
@@ -19,8 +26,11 @@ import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_b
 /// @copyright   Apache 2.0 License
 class SendCryptoPage extends StatefulWidget {
   /// Name of the cryptocurrency (e.g., "XLM", "USDC")
-  final String cryptoName;
-  const SendCryptoPage({Key? key, required this.cryptoName}) : super(key: key);
+  final CryptoAssetWithMarketData crypto;
+  const SendCryptoPage({
+    Key? key,
+    required this.crypto,
+  }) : super(key: key);
 
   @override
   State<SendCryptoPage> createState() => _SendCryptoPageState();
@@ -32,7 +42,7 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
   final TextEditingController _noteController = TextEditingController();
 
   // Valores hardcodeados (mock)
-  final double _availableBalance = 2.23464;
+  late double _availableBalance;
   final double _minAmount = 1;
   final double _initialFee = 0.0006;
   late double _fee;
@@ -46,9 +56,14 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
     super.initState();
     // Basic validation
     _fee = 3 * _initialFee;
+    _availableBalance = widget.crypto.asset.balance ?? 0.0;
     _maxAmount = _availableBalance - _fee;
     _addressController.addListener(_validateAddress);
     _amountController.addListener(_validateAmount);
+    debugPrint('initState - amount = ${widget.crypto.asset.amount}');
+    debugPrint('initState - balance = ${widget.crypto.asset.balance}');
+    debugPrint('initState - name = ${widget.crypto.asset.name}');
+    debugPrint('initState - assetIssuer = ${widget.crypto.asset.assetIssuer}');
   }
 
   @override
@@ -98,80 +113,121 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
   }
 
   void _onSend(String message) {
-    // TODO: Implement send logic
-    // 'Send not implemented yet.'
-    NemorixSnackBar.show(
-      // ignore: use_build_context_synchronously
-      context,
-      message: message,
-      type: SnackBarType.info,
-    );
+    final double amount = double.parse(_amountController.text);
+    context.read<CryptoAccountBloc>().add(SendCryptoTransaction(
+          _addressController.text,
+          amount,
+          _noteController.text,
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              MainHeader(
-                title: l10n!.sendCryptoTitle(widget.cryptoName),
-                showSearchButton: false,
-              ),
-              const SizedBox(height: 20),
-              const CryptoLogoWidget(
-                logo: 'assets/logos/xlm.png',
-              ),
-              const SizedBox(height: 20),
-              _CryptoInfoCard(
-                balance: _availableBalance,
-                cryptoName: widget.cryptoName,
-              ),
-              const SizedBox(height: 32),
-              _SendCryptoForm(
-                addressController: _addressController,
-                amountController: _amountController,
-                noteController: _noteController,
-                onScanQr: () {
-                  _onScanQr();
-                },
-                isValidAddress: _isValidAddress,
-                isValidAmount: _isValidAmount,
-                minAmount: _minAmount,
-                maxAmount: _maxAmount,
-                availableBalance: _availableBalance,
-                fee: _fee,
-                cryptoName: widget.cryptoName,
-              ),
-              const SizedBox(height: 32),
-              Text(
-                l10n.blockTimeInfo,
-                style: theme.textTheme.labelSmall
-                    ?.copyWith(color: theme.hintColor),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 32),
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: RoundedElevatedButton(
-                  text: l10n!.sendCryptoTitle(widget.cryptoName),
-                  onPressed: _isFormValid
-                      ? () async {
-                          _onSend(l10n!.sendNotImplemented);
-                        }
-                      : null,
-                  backgroundColor: NemorixColors.primaryColor,
-                  textColor: NemorixColors.greyLevel1,
+    debugPrint('cryptoName (SEND): ${widget.crypto.asset.assetCode}');
+    return BlocListener<CryptoAccountBloc, CryptoAccountState>(
+      listener: (BuildContext context, CryptoAccountState state) {
+        if (state is CryptoTransactionLoading) {
+          debugPrint('CryptoTransactionLoading');
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) =>
+                const AppLoader(message: 'Sending your transaction..'),
+          );
+        }
+        if (state is CryptoTransactionError) {
+          debugPrint('CryptoTransactionError: ${state.failure}');
+          Navigator.of(context).pop(); // Close loader if open
+          NemorixSnackBar.show(
+            context,
+            message: 'Transaction has failed.. ${state.failure.message}',
+            type: SnackBarType.error,
+          );
+        }
+        if (state is CryptoTransactionSent) {
+          debugPrint('CryptoTransactionSent: ${state.hash}');
+          Navigator.of(context).pop(); // Close loader if open
+          Navigator.of(context).pop(); // Close send crypto page
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            RouteNames.successPage,
+            arguments: {
+              'titleSuccess': "Transaction has been sent!",
+              'firstParagraph': "Paragraph 01",
+              'secondParagraph': "Paragraph 02 with hash: ${state.hash}",
+            },
+            (route) => false,
+          );
+          NemorixSnackBar.show(
+            context,
+            message: 'Transaction has been sent..',
+            type: SnackBarType.success,
+          );
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                MainHeader(
+                  title: l10n!.sendCryptoTitle(widget.crypto.asset.assetCode),
+                  showSearchButton: false,
                 ),
-              ),
-              const SizedBox(height: 32),
-            ],
+                const SizedBox(height: 20),
+                const CryptoLogoWidget(
+                  logo: 'assets/logos/xlm.png',
+                ),
+                const SizedBox(height: 20),
+                _CryptoInfoCard(
+                  balance: _availableBalance,
+                  cryptoName: widget.crypto.asset.assetCode,
+                ),
+                const SizedBox(height: 32),
+                _SendCryptoForm(
+                  addressController: _addressController,
+                  amountController: _amountController,
+                  noteController: _noteController,
+                  onScanQr: () {
+                    _onScanQr();
+                  },
+                  isValidAddress: _isValidAddress,
+                  isValidAmount: _isValidAmount,
+                  minAmount: _minAmount,
+                  maxAmount: _maxAmount,
+                  availableBalance: _availableBalance,
+                  fee: _fee,
+                  cryptoName: widget.crypto.asset.assetCode,
+                ),
+                const SizedBox(height: 32),
+                Text(
+                  l10n.blockTimeInfo,
+                  style: theme.textTheme.labelSmall
+                      ?.copyWith(color: theme.hintColor),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 32),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: RoundedElevatedButton(
+                    text: l10n.sendCryptoTitle(widget.crypto.asset.assetCode),
+                    onPressed: _isFormValid
+                        ? () async {
+                            _onSend(l10n!.sendNotImplemented);
+                          }
+                        : null,
+                    backgroundColor: NemorixColors.primaryColor,
+                    textColor: NemorixColors.greyLevel1,
+                  ),
+                ),
+                const SizedBox(height: 32),
+              ],
+            ),
           ),
         ),
       ),

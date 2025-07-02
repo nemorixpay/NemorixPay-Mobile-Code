@@ -29,7 +29,7 @@ class CryptoHomeBloc extends Bloc<CryptoHomeEvent, CryptoHomeState> {
   List<CryptoAssetWithMarketData>? _accountAssets;
 
   CryptoHomeBloc({required this.marketBloc, required this.accountBloc})
-    : super(CryptoHomeInitial()) {
+      : super(const CryptoHomeInitial()) {
     on<LoadAllCryptoData>(_onLoadAllCryptoData);
   }
 

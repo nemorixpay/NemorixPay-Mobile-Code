@@ -51,3 +51,25 @@ class CryptoAccountAssetDetailsLoaded extends CryptoAccountState {
   @override
   List<Object?> get props => [asset];
 }
+
+class CryptoTransactionSent extends CryptoAccountState {
+  final String hash;
+
+  const CryptoTransactionSent(this.hash);
+
+  @override
+  List<Object?> get props => [hash];
+}
+
+class CryptoTransactionLoading extends CryptoAccountState {
+  const CryptoTransactionLoading();
+}
+
+class CryptoTransactionError extends CryptoAccountState {
+  final Failure failure;
+
+  const CryptoTransactionError(this.failure);
+
+  @override
+  List<Object?> get props => [failure];
+}

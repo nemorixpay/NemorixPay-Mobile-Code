@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/core/errors/asset/asset_failure.dart';
 import 'package:nemorixpay/features/crypto/domain/usecases/get_crypto_asset_details_usecase.dart';
 import 'package:nemorixpay/features/crypto/domain/usecases/get_crypto_account_assets_usecase.dart';
+import 'package:nemorixpay/features/crypto/domain/usecases/send_stellar_transaction_usecase.dart';
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_event.dart';
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_state.dart';
 
@@ -19,15 +20,19 @@ import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets
 class CryptoAccountBloc extends Bloc<CryptoAccountEvent, CryptoAccountState> {
   final GetCryptoAccountAssetsUseCase _getCryptoAccountAssetsUseCase;
   final GetCryptoAssetDetailsUseCase _getCryptoAssetDetailsUseCase;
+  final SendStellarTransactionUseCase _sendStellarTransactionUseCase;
 
   CryptoAccountBloc({
     required GetCryptoAccountAssetsUseCase getCryptoAccountAssetsUseCase,
     required GetCryptoAssetDetailsUseCase getCryptoAssetDetailsUseCase,
-  }) : _getCryptoAccountAssetsUseCase = getCryptoAccountAssetsUseCase,
-       _getCryptoAssetDetailsUseCase = getCryptoAssetDetailsUseCase,
-       super(CryptoAccountInitial()) {
+    required SendStellarTransactionUseCase sendStellarTransactionUseCase,
+  })  : _getCryptoAccountAssetsUseCase = getCryptoAccountAssetsUseCase,
+        _getCryptoAssetDetailsUseCase = getCryptoAssetDetailsUseCase,
+        _sendStellarTransactionUseCase = sendStellarTransactionUseCase,
+        super(CryptoAccountInitial()) {
     on<GetCryptoAccountAssets>(_onGetCryptoAccountAssets);
     on<GetCryptoAccountAssetDetails>(_onGetCryptoAssetDetails);
+    on<SendCryptoTransaction>(_onSendCryptoTransaction);
   }
 
   Future<void> _onGetCryptoAccountAssets(
@@ -78,6 +83,34 @@ class CryptoAccountBloc extends Bloc<CryptoAccountEvent, CryptoAccountState> {
         'CryptoAccountBloc -_onGetCryptoAssetDetails- Error (unknown): ${e.toString()}',
       );
       emit(CryptoAccountError(AssetFailure.unknown(e.toString())));
+    }
+  }
+
+  Future<void> _onSendCryptoTransaction(
+    SendCryptoTransaction event,
+    Emitter<CryptoAccountState> emit,
+  ) async {
+    try {
+      emit(const CryptoTransactionLoading());
+      final result = await _sendStellarTransactionUseCase(
+        event.senderAddress,
+        event.amount,
+        event.note,
+      );
+      result.fold(
+        (failure) => emit(CryptoTransactionError(failure)),
+        (hash) => emit(CryptoTransactionSent(hash)),
+      );
+    } on AssetFailure catch (failure) {
+      debugPrint(
+        'CryptoAccountBloc -_onSendCryptoTransaction- Error (AssetFailure): ${failure.assetMessage}',
+      );
+      emit(CryptoTransactionError(failure));
+    } catch (e) {
+      debugPrint(
+        'CryptoAccountBloc -_onSendCryptoTransaction- Error (unknown): ${e.toString()}',
+      );
+      emit(CryptoTransactionError(AssetFailure.unknown(e.toString())));
     }
   }
 }

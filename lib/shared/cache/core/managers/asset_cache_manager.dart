@@ -123,6 +123,54 @@ class AssetCacheManager extends Equatable {
     }
   }
 
+  /// Send stellar transactions
+  Future<String> sendTransaction(
+      String destinationPublicKey, double amount, String? memo) async {
+    try {
+      StellarAccountProvider stellarAccountProvider = StellarAccountProvider();
+      final privateKey = stellarAccountProvider.getSecretKey();
+      final publicKey = stellarAccountProvider.getPublicKey();
+
+      if (privateKey != null) {
+        // Send stellar transaction
+        final hash = await _stellarDataSource.sendTransaction(
+          sourceSecretSeed: privateKey,
+          destinationPublicKey: destinationPublicKey,
+          amount: amount,
+          memo: memo,
+        );
+
+        final updateAccountAssets =
+            await _stellarDataSource.getAccountAssets(publicKey!);
+        _accountAssets.clear();
+        // Load the account assets using the unique key
+        // --------------------------------------------------
+        // TODO: This needs to be re-checked
+        for (var accountAsset in updateAccountAssets) {
+          debugPrint(
+              'AssetCacheManager - accountAsset (balance): ${accountAsset.balance}');
+          final key = _getAssetKey(
+            accountAsset.assetCode,
+            accountAsset.assetIssuer,
+          );
+          _accountAssets[key] = accountAsset;
+          // --------------------------------------------------
+        }
+        return hash;
+      } else {
+        debugPrint('AssetCacheManager - sendTransaction - privateKey is Null');
+        throw AssetFailure.unknown(
+          'AssetCacheManager - privateKey is null. Try again!',
+        );
+      }
+    } catch (e) {
+      if (e is AssetFailure) rethrow;
+      throw AssetFailure.unknown(
+        'AssetCacheManager - Transaction Fails. Unknown error!. Try again!',
+      );
+    }
+  }
+
   /// Gets an asset by its code and network
   Future<AssetModel> getAssetByCode(String code) async {
     try {

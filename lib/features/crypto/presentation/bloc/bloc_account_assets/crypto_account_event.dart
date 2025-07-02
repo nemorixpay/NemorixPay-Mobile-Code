@@ -27,3 +27,10 @@ class GetCryptoAccountAssetDetails extends CryptoAccountEvent {
   @override
   List<Object?> get props => [symbol];
 }
+
+class SendCryptoTransaction extends CryptoAccountEvent {
+  final String senderAddress;
+  final double amount;
+  final String? note;
+  const SendCryptoTransaction(this.senderAddress, this.amount, this.note);
+}

@@ -35,16 +35,14 @@ class _HomePage2State extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    // Fire main event: Get all available/account assets
-    AssetCacheManager cache = AssetCacheManager();
+  }
 
-    debugPrint('cache.assetCount == ${cache.assetCount}');
-    if (cache.assetCount == 0) {
-      debugPrint('Calling...');
-      context.read<CryptoHomeBloc>().add(LoadAllCryptoData());
-    } else {
-      debugPrint('it has assets..');
-    }
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    // Fire main event: Get all available/account assets
+    context.read<CryptoHomeBloc>().add(LoadAllCryptoData());
   }
 
   void _toggleSearch() {

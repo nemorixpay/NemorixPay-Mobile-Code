@@ -217,22 +217,6 @@ class _SplashTestPageState extends State<SplashTestPage> {
                 ),
                 SizedBox(height: 20),
                 RoundedElevatedButton(
-                  text: "Continue with Wallet Success Creation",
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      RouteNames.successWalletCreation,
-                      arguments: AppLocalizations.of(
-                        context,
-                      )!
-                          .importWalletSuccessTitle,
-                    );
-                  },
-                  backgroundColor: Colors.white,
-                  textColor: Colors.black,
-                ),
-                SizedBox(height: 20),
-                RoundedElevatedButton(
                   text: "Continue with Tetsing Page",
                   onPressed: () {
                     Navigator.pushNamed(context, RouteNames.testingPage);
@@ -310,12 +294,11 @@ class _SplashTestPageState extends State<SplashTestPage> {
                 RoundedElevatedButton(
                   text: "Continue with Send Crypto",
                   onPressed: () {
-                    Navigator.pushNamed(
+                    NemorixSnackBar.show(
+                      // ignore: use_build_context_synchronously
                       context,
-                      RouteNames.sendCrypto,
-                      arguments: {
-                        'cryptoName': "XLM",
-                      },
+                      message: 'This button does not work in this test page!',
+                      type: SnackBarType.error,
                     );
                   },
                   backgroundColor: Colors.white,

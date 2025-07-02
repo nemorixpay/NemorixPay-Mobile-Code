@@ -184,8 +184,12 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
 
           Navigator.pushNamedAndRemoveUntil(
             context,
-            RouteNames.successWalletCreation,
-            arguments: l10n.walletSuccessTitle,
+            RouteNames.successPage,
+            arguments: {
+              'titleSuccess': l10n.walletSuccessTitle,
+              'firstParagraph': l10n.walletSuccessSecurity,
+              'secondParagraph': l10n.walletSuccessInfo,
+            },
             (route) => false,
           );
         } else if (state is PublicKeySaved) {
@@ -195,10 +199,15 @@ class _ConfirmSeedPhrasePageState extends State<ConfirmSeedPhrasePage> {
           stellarAccountProvider.updatePublicKey(state.publicKey);
 
           debugPrint('Public key saved successfully for user: ${state.userId}');
+
           Navigator.pushNamedAndRemoveUntil(
             context,
-            RouteNames.successWalletCreation,
-            arguments: l10n.walletSuccessTitle,
+            RouteNames.successPage,
+            arguments: {
+              'titleSuccess': l10n.walletSuccessTitle,
+              'firstParagraph': l10n.walletSuccessSecurity,
+              'secondParagraph': l10n.walletSuccessInfo,
+            },
             (route) => false,
           );
         }

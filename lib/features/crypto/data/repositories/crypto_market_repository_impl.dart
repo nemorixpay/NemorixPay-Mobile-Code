@@ -39,7 +39,7 @@ class CryptoMarketRepositoryImpl implements CryptoMarketRepository {
 
   @override
   Future<Either<Failure, List<CryptoAssetWithMarketData>>>
-  getCryptoAssets() async {
+      getCryptoAssets() async {
     try {
       final listOfCryptos = await dataSource.getCryptoAssets();
       return Right(listOfCryptos.map((crypto) => crypto.toEntity()).toList());
@@ -52,7 +52,7 @@ class CryptoMarketRepositoryImpl implements CryptoMarketRepository {
 
   @override
   Future<Either<Failure, List<CryptoAssetWithMarketData>>>
-  getCryptoAccountAssets() async {
+      getCryptoAccountAssets() async {
     try {
       final listOfCryptos = await dataSource.getCryptoAccountAssets();
       return Right(listOfCryptos.map((crypto) => crypto.toEntity()).toList());
@@ -86,6 +86,24 @@ class CryptoMarketRepositoryImpl implements CryptoMarketRepository {
       return Right(marketData.toEntity());
     } catch (e) {
       debugPrint('CryptoMarketRepositoryImpl - updateMarketData: Error: $e');
+      if (e is AssetFailure) return Left(e);
+      return Left(AssetFailure.marketDataUpdateFailed(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> sentTransaction(
+      String publicKey, double amount, String? note) async {
+    try {
+      final hash = await dataSource.sendTransaction(
+        destinationPublicKey: publicKey,
+        amount: amount,
+        memo: note,
+      );
+      debugPrint('CryptoMarketRepositoryImpl - sentTransaction: Hash = $hash');
+      return Right(hash);
+    } catch (e) {
+      debugPrint('CryptoMarketRepositoryImpl - sentTransaction: Error: $e');
       if (e is AssetFailure) return Left(e);
       return Left(AssetFailure.marketDataUpdateFailed(e.toString()));
     }

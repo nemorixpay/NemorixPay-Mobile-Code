@@ -617,7 +617,10 @@ class StellarDataSourceImpl implements StellarDataSource {
           .addMemo(Memo.text("NemorixPay Transfer: $memo"))
           .build();
 
-      transaction.sign(sourceKeyPair, Network.TESTNET);
+      transaction.sign(
+        sourceKeyPair,
+        (!isAppInProduction) ? Network.TESTNET : Network.PUBLIC,
+      );
       debugPrint('StellarDatasource: sendTransaction - Transacción firmada');
 
       final response = await _sdk.submitTransaction(transaction);

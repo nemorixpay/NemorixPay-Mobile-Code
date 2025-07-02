@@ -23,7 +23,7 @@ abstract class CryptoMarketRepository {
   /// Returns [List<CryptoAssetWithMarketData>] with all account assets
   /// Throws [AssetFailure] if the operation fails
   Future<Either<Failure, List<CryptoAssetWithMarketData>>>
-  getCryptoAccountAssets();
+      getCryptoAccountAssets();
 
   /// Gets the market data for a specific crypto asset
   ///
@@ -44,4 +44,11 @@ abstract class CryptoMarketRepository {
   /// Returns [MarketDataEntity] with the updated market data
   /// Throws [AssetFailure] if the operation fails
   Future<Either<Failure, MarketDataEntity>> updateMarketData(String symbol);
+
+  /// Send Stellar transaction
+  ///
+  /// Returns [String] with the transaction hash if succesfull, empty if otherwise
+  /// Throws [AssetFailure] if the operation fails
+  Future<Either<Failure, String>> sentTransaction(
+      String publicKey, double amount, String? note);
 }

@@ -164,8 +164,12 @@ class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage>
 
           Navigator.pushNamedAndRemoveUntil(
             context,
-            RouteNames.successWalletCreation,
-            arguments: l10n.importWalletSuccessTitle,
+            RouteNames.successPage,
+            arguments: {
+              'titleSuccess': l10n.importWalletSuccessTitle,
+              'firstParagraph': l10n.walletSuccessSecurity,
+              'secondParagraph': l10n.walletSuccessInfo,
+            },
             (route) => false,
           );
         } else if (state is PublicKeySaved) {
@@ -175,6 +179,16 @@ class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage>
           stellarAccountProvider.updatePublicKey(state.publicKey);
 
           debugPrint('Public key saved successfully for user: ${state.userId}');
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            RouteNames.successPage,
+            arguments: {
+              'titleSuccess': l10n.importWalletSuccessTitle,
+              'firstParagraph': l10n.walletSuccessSecurity,
+              'secondParagraph': l10n.walletSuccessInfo,
+            },
+            (route) => false,
+          );
         }
       },
       child: Scaffold(

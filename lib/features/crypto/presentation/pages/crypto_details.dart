@@ -210,6 +210,13 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
                     onFunctionButton1: _isAssetInAccount
                         ? () {
                             debugPrint('Button01 - Send');
+                            Navigator.pushNamed(
+                              context,
+                              RouteNames.sendCrypto,
+                              arguments: {
+                                'crypto': widget.crypto,
+                              },
+                            );
                           }
                         : null,
                     textButton2: AppLocalizations.of(context)!.receive,
