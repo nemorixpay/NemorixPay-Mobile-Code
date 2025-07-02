@@ -391,5 +391,24 @@
       }
     }
   },
-  "transactionConfirmationNote": "You can use this hash to track your transaction on the Stellar network explorer."
+  "transactionConfirmationNote": "You can use this hash to track your transaction on the Stellar network explorer.",
+  "@_CONFIRM_TRANSACTION_PAGE": {
+
+  },
+  "confirmTransactionTitle": "Confirm Transaction",
+  "confirmTransactionCanceled": "Transaction canceled!",
+  "confirmTransactionFees": "Transaction fees:",
+  "transactionSummary": "Transaction Summary",
+  "transactionDetails": "Transaction Details",
+  "confirmAndSend": "Confirm & Send {cryptoName}",
+  "@confirmAndSend": {
+    "description": "Button text for confirming and sending transaction",
+    "placeholders": {
+      "cryptoName": {
+        "type": "String",
+        "example": "XLM"
+      }
+    }
+  },
+  "cancel": "Cancel"
 }

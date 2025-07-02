@@ -343,5 +343,15 @@
   "transactionSuccessTitle": "¡Transacción Exitosa!",
   "transactionSuccessMessage": "Tu transacción de {cryptoName} ha sido enviada exitosamente a la red Stellar. La transacción está siendo procesada y será confirmada en breve.",
   "transactionHashInfo": "Hash de Transacción: {hash}",
-  "transactionConfirmationNote": "Puedes usar este hash para rastrear tu transacción en el explorador de la red Stellar."
+  "transactionConfirmationNote": "Puedes usar este hash para rastrear tu transacción en el explorador de la red Stellar.",
+  "@_CONFIRM_TRANSACTION_PAGE": {
+
+  },
+  "confirmTransactionTitle": "Confirmar Transacción",
+  "confirmTransactionCanceled": "¡Transacción cancelada!",
+  "confirmTransactionFees": "Comisión de transacción:",
+  "transactionSummary": "Resumen de Transacción",
+  "transactionDetails": "Detalles de Transacción",
+  "confirmAndSend": "Confirmar y Enviar {cryptoName}",
+  "cancel": "Cancelar"
 }

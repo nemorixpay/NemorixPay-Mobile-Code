@@ -790,4 +790,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get transactionConfirmationNote => 'You can use this hash to track your transaction on the Stellar network explorer.';
+
+  @override
+  String get confirmTransactionTitle => 'Confirm Transaction';
+
+  @override
+  String get confirmTransactionCanceled => 'Transaction canceled!';
+
+  @override
+  String get confirmTransactionFees => 'Transaction fees:';
+
+  @override
+  String get transactionSummary => 'Transaction Summary';
+
+  @override
+  String get transactionDetails => 'Transaction Details';
+
+  @override
+  String confirmAndSend(String cryptoName) {
+    return 'Confirm & Send $cryptoName';
+  }
+
+  @override
+  String get cancel => 'Cancel';
 }

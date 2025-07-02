@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
-import 'package:nemorixpay/core/utils/validation_rules.dart';
-import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_market_data.dart';
-import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_bloc.dart';
-import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_event.dart';
-import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_state.dart';
+import 'package:nemorixpay/features/crypto/presentation/pages/confirm_transaction_page.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
+import 'package:nemorixpay/core/utils/validation_rules.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/app_loader.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
+import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
 import 'package:nemorixpay/features/crypto/presentation/widgets/crypto_logo_widget.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_button.dart';
-import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_market_data.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_bloc.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_event.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_state.dart';
 
 /// @file        send_crypto_page.dart
 /// @brief       Page for sending Stellar Lumens (XLM) to another address.
@@ -58,7 +59,7 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
   void initState() {
     super.initState();
     // Basic validation
-    _fee = 3 * _initialFee;
+    _fee = 4 * _initialFee;
     _availableBalance = widget.crypto.asset.balance ?? 0.0;
     _maxAmount = _availableBalance - _fee;
     _addressController.addListener(_validateAddress);
@@ -123,13 +124,61 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
     debugPrint('_onScanQr - result = $result');
   }
 
-  void _onSend(String message) {
+  void showNemorixSnackBar({
+    required String message,
+    SnackBarType type = SnackBarType.success,
+  }) {
+    NemorixSnackBar.show(
+      context,
+      message: message,
+      type: type,
+    );
+  }
+
+  void sentTransaction() {
     final double amount = double.parse(_amountController.text);
     context.read<CryptoAccountBloc>().add(SendCryptoTransaction(
           _addressController.text,
           amount,
           _noteController.text,
         ));
+  }
+
+  void _onSend(String message) {
+    final l10n = AppLocalizations.of(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ConfirmTransactionPage(
+          recipientAddress: _addressController.text,
+          amount: double.parse(_amountController.text),
+          cryptoName: widget.crypto.asset.assetCode,
+          fee: _fee,
+          note: _noteController.text,
+          onConfirm: () {
+            // Handle confirmation - send transaction
+            Navigator.pop(context, true); // Return true for confirmed
+          },
+          onCancel: () {
+            // Handle cancellation
+            Navigator.pop(context, false); // Return false for cancelled
+          },
+        ),
+      ),
+    ).then((confirmed) {
+      if (confirmed == true) {
+        // User confirmed, proceed with transaction
+        debugPrint('Transaction confirmed!');
+        sentTransaction();
+      } else {
+        // User cancelled
+        debugPrint('Transaction cancelled!');
+        showNemorixSnackBar(
+          message: l10n!.confirmTransactionCanceled,
+          type: SnackBarType.warning,
+        );
+      }
+    });
   }
 
   @override
@@ -150,8 +199,7 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
         if (state is CryptoTransactionError) {
           debugPrint('CryptoTransactionError: ${state.failure}');
           Navigator.of(context).pop(); // Close loader if open
-          NemorixSnackBar.show(
-            context,
+          showNemorixSnackBar(
             message: l10n.transactionFailed,
             type: SnackBarType.error,
           );
@@ -172,8 +220,7 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
             },
             (route) => false,
           );
-          NemorixSnackBar.show(
-            context,
+          showNemorixSnackBar(
             message: l10n.transactionSent,
             type: SnackBarType.success,
           );

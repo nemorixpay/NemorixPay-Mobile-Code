@@ -1624,6 +1624,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You can use this hash to track your transaction on the Stellar network explorer.'**
   String get transactionConfirmationNote;
+
+  /// No description provided for @confirmTransactionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Transaction'**
+  String get confirmTransactionTitle;
+
+  /// No description provided for @confirmTransactionCanceled.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction canceled!'**
+  String get confirmTransactionCanceled;
+
+  /// No description provided for @confirmTransactionFees.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction fees:'**
+  String get confirmTransactionFees;
+
+  /// No description provided for @transactionSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Summary'**
+  String get transactionSummary;
+
+  /// No description provided for @transactionDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Details'**
+  String get transactionDetails;
+
+  /// Button text for confirming and sending transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm & Send {cryptoName}'**
+  String confirmAndSend(String cryptoName);
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
