@@ -19,10 +19,12 @@ import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provide
 
 /// @file        send_crypto_page.dart
 /// @brief       Page for sending Stellar Lumens (XLM) to another address.
-/// @details     Provides UI for entering recipient address, amount, note, and sending XLM. Includes validation, balance display, and a placeholder for QR scanning. Follows NemorixPay theme and documentation standards.
+/// @details     Provides UI for entering recipient address, amount, note, and sending XLM.
+///              Includes validation, balance display, and a placeholder for QR scanning.
+///              Validates that the recipient address is not the same as the sender's address.
 /// @author      Miguel Fagundez
 /// @date        06/28/2025
-/// @version     1.0
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 class SendCryptoPage extends StatefulWidget {
   /// Name of the cryptocurrency (e.g., "XLM", "USDC")
@@ -50,6 +52,7 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
 
   bool _isValidAddress = false;
   bool _isValidAmount = false;
+  bool _isOwnAddress = false;
 
   @override
   void initState() {
@@ -76,9 +79,17 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
 
   void _validateAddress() {
     final address = _addressController.text.trim();
-    // Validacion simple: longitud tipica de direccion Stellar (56 caracteres, empieza con 'G')
+    final stellarAccountProvider = StellarAccountProvider();
+    final ownPublicKey = stellarAccountProvider.getPublicKey();
+
+    // Simple validation: (56 characters, starting with 'G')
+    final isValidFormat = ValidationRules.isValidStellarAddress(address);
+    // Validates that the recipient address is not the same as the sender's address
+    final isOwnAddress = address == ownPublicKey;
+
     setState(() {
-      _isValidAddress = ValidationRules.isValidStellarAddress(address);
+      _isValidAddress = isValidFormat && !isOwnAddress;
+      _isOwnAddress = isOwnAddress;
     });
   }
 
@@ -133,8 +144,7 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
           showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (context) =>
-                const AppLoader(message: 'Sending your transaction..'),
+            builder: (context) => AppLoader(message: l10n.sendingTransaction),
           );
         }
         if (state is CryptoTransactionError) {
@@ -142,7 +152,7 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
           Navigator.of(context).pop(); // Close loader if open
           NemorixSnackBar.show(
             context,
-            message: 'Transaction has failed.. ${state.failure.message}',
+            message: l10n.transactionFailed,
             type: SnackBarType.error,
           );
         }
@@ -154,15 +164,17 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
             context,
             RouteNames.successPage,
             arguments: {
-              'titleSuccess': "Transaction has been sent!",
-              'firstParagraph': "Paragraph 01",
-              'secondParagraph': "Paragraph 02 with hash: ${state.hash}",
+              'titleSuccess': l10n.transactionSuccessTitle,
+              'firstParagraph':
+                  l10n.transactionSuccessMessage(widget.crypto.asset.assetCode),
+              'secondParagraph':
+                  '${l10n.transactionHashInfo(state.hash)}.\n${l10n.transactionConfirmationNote}',
             },
             (route) => false,
           );
           NemorixSnackBar.show(
             context,
-            message: 'Transaction has been sent..',
+            message: l10n.transactionSent,
             type: SnackBarType.success,
           );
         }
@@ -198,6 +210,7 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
                   },
                   isValidAddress: _isValidAddress,
                   isValidAmount: _isValidAmount,
+                  isOwnAddress: _isOwnAddress,
                   minAmount: _minAmount,
                   maxAmount: _maxAmount,
                   availableBalance: _availableBalance,
@@ -218,7 +231,7 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
                     text: l10n.sendCryptoTitle(widget.crypto.asset.assetCode),
                     onPressed: _isFormValid
                         ? () async {
-                            _onSend(l10n!.sendNotImplemented);
+                            _onSend(l10n.sendNotImplemented);
                           }
                         : null,
                     backgroundColor: NemorixColors.primaryColor,
@@ -245,10 +258,6 @@ class _CryptoInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
-
-    // TODO: Need to be checked in real device and API data
-    // - Temporal -
-    const logo = 'assets/logos/xlm.png';
 
     return BaseCard(
       cardWidget: Padding(
@@ -292,6 +301,7 @@ class _SendCryptoForm extends StatelessWidget {
   final VoidCallback onScanQr;
   final bool isValidAddress;
   final bool isValidAmount;
+  final bool isOwnAddress;
   final double minAmount;
   final double maxAmount;
   final double availableBalance;
@@ -306,6 +316,7 @@ class _SendCryptoForm extends StatelessWidget {
     required this.onScanQr,
     required this.isValidAddress,
     required this.isValidAmount,
+    required this.isOwnAddress,
     required this.minAmount,
     required this.maxAmount,
     required this.availableBalance,
@@ -332,10 +343,12 @@ class _SendCryptoForm extends StatelessWidget {
                   child: TextField(
                     controller: addressController,
                     decoration: InputDecoration(
-                      hintText: l10n!.recipientAddress,
+                      hintText: l10n.recipientAddress,
                       errorText: addressController.text.isEmpty
                           ? null
-                          : (isValidAddress ? null : l10n!.invalidAddress),
+                          : (isOwnAddress
+                              ? l10n.ownAddressError
+                              : (isValidAddress ? null : l10n.invalidAddress)),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12)),
                       contentPadding: const EdgeInsets.symmetric(
@@ -361,17 +374,17 @@ class _SendCryptoForm extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
-            Text(l10n!.amount, style: theme.textTheme.labelLarge),
+            Text(l10n.amount, style: theme.textTheme.labelLarge),
             const SizedBox(height: 8),
             TextField(
               controller: amountController,
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
-                hintText: l10n!.amountHint,
+                hintText: l10n.amountHint,
                 errorText: amountController.text.isEmpty
                     ? null
-                    : (isValidAmount ? null : l10n!.invalidAmount),
+                    : (isValidAmount ? null : l10n.invalidAmount),
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 contentPadding:
@@ -382,12 +395,12 @@ class _SendCryptoForm extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
-            Text(l10n!.note, style: theme.textTheme.labelLarge),
+            Text(l10n.note, style: theme.textTheme.labelLarge),
             const SizedBox(height: 8),
             TextField(
               controller: noteController,
               decoration: InputDecoration(
-                hintText: l10n!.noteHint,
+                hintText: l10n.noteHint,
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 contentPadding:
@@ -397,11 +410,11 @@ class _SendCryptoForm extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              l10n!.transactionFees(fee, cryptoName),
+              l10n.transactionFees(fee, cryptoName),
               style: theme.textTheme.labelSmall,
             ),
             Text(
-              l10n!.sendCryptominMax(minAmount, maxAmount, cryptoName),
+              l10n.sendCryptominMax(minAmount, maxAmount, cryptoName),
               style: theme.textTheme.labelSmall,
             ),
           ],

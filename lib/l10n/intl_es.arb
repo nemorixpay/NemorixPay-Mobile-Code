@@ -285,6 +285,7 @@
   "enterAddress": "Ingresar dirección",
   "recipientAddress": "Dirección de destino",
   "invalidAddress": "Dirección inválida",
+  "ownAddressError": "No puedes enviar a tu propia dirección",
   "amount": "Monto",
   "amountHint": "0.00",
   "invalidAmount": "El monto excede tu saldo disponible",
@@ -335,5 +336,12 @@
   },
   "qrNotImplemented": "Escáner QR aún no implementado.",
   "sendNotImplemented": "Enviar aún no implementado.",
-  "stellarLumens": "Stellar Lumens"
+  "stellarLumens": "Stellar Lumens",
+  "transactionSent": "¡Transacción enviada!",
+  "transactionFailed": "¡Transacción fallida!",
+  "sendingTransaction": "Enviando tu transacción...",
+  "transactionSuccessTitle": "¡Transacción Exitosa!",
+  "transactionSuccessMessage": "Tu transacción de {cryptoName} ha sido enviada exitosamente a la red Stellar. La transacción está siendo procesada y será confirmada en breve.",
+  "transactionHashInfo": "Hash de Transacción: {hash}",
+  "transactionConfirmationNote": "Puedes usar este hash para rastrear tu transacción en el explorador de la red Stellar."
 }

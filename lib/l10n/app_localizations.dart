@@ -1505,6 +1505,12 @@ abstract class AppLocalizations {
   /// **'Invalid address'**
   String get invalidAddress;
 
+  /// No description provided for @ownAddressError.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot send to your own address'**
+  String get ownAddressError;
+
   /// No description provided for @amount.
   ///
   /// In en, this message translates to:
@@ -1576,6 +1582,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Stellar Lumens'**
   String get stellarLumens;
+
+  /// No description provided for @transactionSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction has been sent!'**
+  String get transactionSent;
+
+  /// No description provided for @transactionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction has failed!'**
+  String get transactionFailed;
+
+  /// No description provided for @sendingTransaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending your transaction...'**
+  String get sendingTransaction;
+
+  /// No description provided for @transactionSuccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Successful!'**
+  String get transactionSuccessTitle;
+
+  /// Success message for completed transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Your {cryptoName} transaction has been successfully sent to the Stellar network. The transaction is now being processed and will be confirmed shortly.'**
+  String transactionSuccessMessage(String cryptoName);
+
+  /// Transaction hash information
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Hash: {hash}'**
+  String transactionHashInfo(String hash);
+
+  /// No description provided for @transactionConfirmationNote.
+  ///
+  /// In en, this message translates to:
+  /// **'You can use this hash to track your transaction on the Stellar network explorer.'**
+  String get transactionConfirmationNote;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

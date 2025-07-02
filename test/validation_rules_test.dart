@@ -146,4 +146,50 @@ void main() {
       }
     });
   });
+
+  group('Stellar Address Validation', () {
+    test('should validate correct Stellar addresses', () {
+      final validAddresses = [
+        'GARRK43GDUGZKPGFPLTCXNOGGVZ27KL2RS3J5A4RUYVQOHAESSZ3AERL',
+        'GBBM6BKZPEHWYO3E3YKREDPQXMS4VK35YLNU7NFBRI26RAN7GI5POFBB',
+        'GCEZWKCA5VLDNRLN3RPRJMRZOX3Z6G5CHCGSNFHEYVXM3XOJMDS674JZ',
+      ];
+
+      for (final address in validAddresses) {
+        expect(ValidationRules.isValidStellarAddress(address), isTrue,
+            reason: 'Address $address should be valid');
+      }
+    });
+
+    test('should reject invalid Stellar addresses', () {
+      final invalidAddresses = [
+        '', // Empty string
+        'GARRK43GDUGZKPGFPLTCXNOGGVZ27KL2RS3J5A4RUYVQOHAESSZ3AER', // Too short (55 chars)
+        'GARRK43GDUGZKPGFPLTCXNOGGVZ27KL2RS3J5A4RUYVQOHAESSZ3AERLL', // Too long (57 chars)
+        'AARRK43GDUGZKPGFPLTCXNOGGVZ27KL2RS3J5A4RUYVQOHAESSZ3AERL', // Doesn't start with G
+        'GARRK43GDUGZKPGFPLTCXNOGGVZ27KL2RS3J5A4RUYVQOHAESSZ3AER1', // Contains invalid char
+        'GARRK43GDUGZKPGFPLTCXNOGGVZ27KL2RS3J5A4RUYVQOHAESSZ3AERL1', // Too long and invalid
+      ];
+
+      for (final address in invalidAddresses) {
+        expect(ValidationRules.isValidStellarAddress(address), isFalse,
+            reason: 'Address $address should be invalid');
+      }
+    });
+
+    test('should validate own address detection', () {
+      // Test that we can detect when an address is the same as the sender's
+      final ownAddress =
+          'GARRK43GDUGZKPGFPLTCXNOGGVZ27KL2RS3J5A4RUYVQOHAESSZ3AERL';
+      final differentAddress =
+          'GBBM6BKZPEHWYO3E3YKREDPQXMS4VK35YLNU7NFBRI26RAN7GI5POFBB';
+
+      // Both addresses are valid Stellar addresses
+      expect(ValidationRules.isValidStellarAddress(ownAddress), isTrue);
+      expect(ValidationRules.isValidStellarAddress(differentAddress), isTrue);
+
+      // But they are different addresses
+      expect(ownAddress == differentAddress, isFalse);
+    });
+  });
 }

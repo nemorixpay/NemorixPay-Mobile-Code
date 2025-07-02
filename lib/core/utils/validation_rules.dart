@@ -3,7 +3,7 @@
 /// @details
 /// @author      Miguel Fagundez
 /// @date        04/25/2025
-/// @version     2.0
+/// @version     2.1
 /// @copyright   Apache 2.0 License
 class ValidationRules {
   /// Regex básico para validación de email
@@ -62,14 +62,19 @@ class ValidationRules {
   /// - Not be empty
   /// - Be exactly 56 characters long
   /// - Start with 'G'
+  /// - Contain only valid base32 characters (A-Z, 2-7)
   ///
   /// Note: This is a basic format validation.
   ///
   /// @param address The string to validate
   /// @return true if the address format is valid, false otherwise
   static bool isValidStellarAddress(String address) {
-    return address.isNotEmpty &&
-        address.length == 56 &&
-        address.startsWith('G');
+    if (address.isEmpty || address.length != 56 || !address.startsWith('G')) {
+      return false;
+    }
+
+    // Validate that all characters are valid base32 (A-Z, 2-7)
+    final base32Regex = RegExp(r'^[A-Z2-7]+$');
+    return base32Regex.hasMatch(address);
   }
 }

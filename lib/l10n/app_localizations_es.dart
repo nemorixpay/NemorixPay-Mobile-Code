@@ -722,6 +722,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get invalidAddress => 'Dirección inválida';
 
   @override
+  String get ownAddressError => 'No puedes enviar a tu propia dirección';
+
+  @override
   String get amount => 'Monto';
 
   @override
@@ -762,4 +765,29 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get stellarLumens => 'Stellar Lumens';
+
+  @override
+  String get transactionSent => '¡Transacción enviada!';
+
+  @override
+  String get transactionFailed => '¡Transacción fallida!';
+
+  @override
+  String get sendingTransaction => 'Enviando tu transacción...';
+
+  @override
+  String get transactionSuccessTitle => '¡Transacción Exitosa!';
+
+  @override
+  String transactionSuccessMessage(String cryptoName) {
+    return 'Tu transacción de $cryptoName ha sido enviada exitosamente a la red Stellar. La transacción está siendo procesada y será confirmada en breve.';
+  }
+
+  @override
+  String transactionHashInfo(String hash) {
+    return 'Hash de Transacción: $hash';
+  }
+
+  @override
+  String get transactionConfirmationNote => 'Puedes usar este hash para rastrear tu transacción en el explorador de la red Stellar.';
 }

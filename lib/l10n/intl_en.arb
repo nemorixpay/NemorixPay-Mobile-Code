@@ -315,6 +315,7 @@
   "enterAddress": "Enter Address",
   "recipientAddress": "Recipient address",
   "invalidAddress": "Invalid address",
+  "ownAddressError": "Cannot send to your own address",
   "amount": "Amount",
   "amountHint": "0.00",
   "invalidAmount": "The amount exceeds your available balance",
@@ -365,5 +366,30 @@
   },
   "qrNotImplemented": "QR scanner not implemented yet.",
   "sendNotImplemented": "Send option not implemented yet.",
-  "stellarLumens": "Stellar Lumens"
+  "stellarLumens": "Stellar Lumens",
+  "transactionSent": "Transaction has been sent!",
+  "transactionFailed": "Transaction has failed!",
+  "sendingTransaction": "Sending your transaction...",
+  "transactionSuccessTitle": "Transaction Successful!",
+  "transactionSuccessMessage": "Your {cryptoName} transaction has been successfully sent to the Stellar network. The transaction is now being processed and will be confirmed shortly.",
+  "@transactionSuccessMessage": {
+    "description": "Success message for completed transaction",
+    "placeholders": {
+      "cryptoName": {
+        "type": "String",
+        "example": "XLM"
+      }
+    }
+  },
+  "transactionHashInfo": "Transaction Hash: {hash}",
+  "@transactionHashInfo": {
+    "description": "Transaction hash information",
+    "placeholders": {
+      "hash": {
+        "type": "String",
+        "example": "abc123..."
+      }
+    }
+  },
+  "transactionConfirmationNote": "You can use this hash to track your transaction on the Stellar network explorer."
 }
