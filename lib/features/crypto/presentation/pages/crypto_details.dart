@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
@@ -54,6 +55,7 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
     debugPrint(
         'checkingAssetList (widget.crypto): ${widget.crypto.asset.name}');
     for (var asset in list) {
+      // TODO: Need to verify this condition in general case
       debugPrint('checkingAssetList (asset): ${asset.assetCode}');
       if (asset.assetCode == widget.crypto.asset.name) {
         debugPrint('checkingAssetList: true');
@@ -114,8 +116,10 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
                         Row(
                           children: [
                             Image.asset(
-                              widget.crypto.asset.logoUrl ??
-                                  'assets/logos/btc.png',
+                              widget.crypto.asset.isNative()
+                                  ? ImageUrl.xlmLogo
+                                  : widget.crypto.asset.logoUrl ??
+                                      ImageUrl.temporalCryptoLogo,
                               width: 50,
                               height: 50,
                             ),

@@ -32,7 +32,7 @@ class StellarDataSourceImpl implements StellarDataSource {
   final bool isAppInProduction = false;
 
   StellarDataSourceImpl() {
-    _sdk = StellarSDK.TESTNET;
+    _sdk = (!isAppInProduction) ? StellarSDK.TESTNET : StellarSDK.PUBLIC;
   }
 
   /// Gets the current public key from the account provider

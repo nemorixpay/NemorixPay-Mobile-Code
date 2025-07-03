@@ -42,7 +42,9 @@ class _HomePage2State extends State<HomePage> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     // Fire main event: Get all available/account assets
-    context.read<CryptoHomeBloc>().add(LoadAllCryptoData());
+    if (!_isSearching) {
+      context.read<CryptoHomeBloc>().add(LoadAllCryptoData());
+    }
   }
 
   void _toggleSearch() {
@@ -187,7 +189,7 @@ class _HomePage2State extends State<HomePage> {
               ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
-          ...displayAssets.map((asset) => LivePriceTile(asset: asset)),
+          ...displayAssets.map((asset) => LivePriceTile(crypto: asset)),
         ],
       ),
     );
@@ -200,7 +202,10 @@ class _HomePage2State extends State<HomePage> {
       double totalBalance = 0.0;
       for (var asset in accountAssets) {
         final balance = asset.asset.balance ?? 0.0;
-        final price = asset.marketData.currentPrice ?? 0.0;
+        //final price = asset.marketData.currentPrice ?? 0.0;
+        // TODO: This need to be re-checked when connected with coin market gecko
+        // - $1 per crypto -
+        const price = 1.0;
         final assetValue = balance * price;
 
         totalBalance += assetValue;

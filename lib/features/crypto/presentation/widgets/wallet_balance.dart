@@ -14,18 +14,18 @@ class WalletBalance extends StatelessWidget {
         children: [
           Text(
             AppLocalizations.of(context)!.currentWalletBalance,
-            style: TextStyle(fontSize: 16, color: Colors.black),
+            style: const TextStyle(fontSize: 16, color: Colors.black),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(
             balance,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
         ],
       ),
     );

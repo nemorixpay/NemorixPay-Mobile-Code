@@ -1,6 +1,7 @@
 // Reusable Widget for My Assets
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_market_data.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
@@ -32,8 +33,10 @@ class CryptoCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              // TODO - Check general image
-              crypto.asset.logoUrl ?? 'assets/logos/btc.png',
+              // TODO: Check general image
+              (crypto.asset.isNative())
+                  ? ImageUrl.xlmLogo
+                  : crypto.asset.logoUrl ?? 'assets/logos/btc.png',
               width: 30,
             ),
             const SizedBox(height: 8),
