@@ -1,11 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/core/errors/auth/firebase_failure.dart';
+import 'package:nemorixpay/core/services/navigation_service.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/sign_up_usecase.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/forgot_password_usecase.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/send_verification_email_usecase.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/check_wallet_exists_usecase.dart';
+import 'package:nemorixpay/features/terms/domain/usecases/check_terms_acceptance_usecase.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_event.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,9 +17,10 @@ import 'package:nemorixpay/features/auth/data/models/user_model.dart';
 /// @file        auth_bloc.dart
 /// @brief       Authentication Bloc for managing auth state and events.
 /// @details     Handles authentication state management and user interactions.
+///              Now integrates NavigationService for post-auth navigation logic.
 /// @author      Miguel Fagundez
-/// @date        2024-05-08
-/// @version     1.2
+/// @date        07/02/2025
+/// @version     1.3
 /// @copyright   Apache 2.0 License
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignInUseCase _signInUseCase;
@@ -24,6 +28,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final ForgotPasswordUseCase _forgotPasswordUseCase;
   final SendVerificationEmailUseCase _sendVerificationEmailUseCase;
   final CheckWalletExistsUseCase _checkWalletExistsUseCase;
+  final CheckTermsAcceptanceUseCase _checkTermsAcceptanceUseCase;
+  final NavigationService _navigationService;
 
   AuthBloc({
     required SignInUseCase signInUseCase,
@@ -31,11 +37,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required ForgotPasswordUseCase forgotPasswordUseCase,
     required SendVerificationEmailUseCase sendVerificationEmailUseCase,
     required CheckWalletExistsUseCase checkWalletExistsUseCase,
+    required CheckTermsAcceptanceUseCase checkTermsAcceptanceUseCase,
+    required NavigationService navigationService,
   })  : _signInUseCase = signInUseCase,
         _signUpUseCase = signUpUseCase,
         _forgotPasswordUseCase = forgotPasswordUseCase,
         _sendVerificationEmailUseCase = sendVerificationEmailUseCase,
         _checkWalletExistsUseCase = checkWalletExistsUseCase,
+        _checkTermsAcceptanceUseCase = checkTermsAcceptanceUseCase,
+        _navigationService = navigationService,
         super(const AuthInitial()) {
     on<SignInRequested>(_onSignInRequested);
     on<SignUpRequested>(_onSignUpRequested);
@@ -43,6 +53,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SendVerificationEmailRequested>(_onSendVerificationEmailRequested);
     on<CheckEmailVerificationStatus>(_onCheckEmailVerificationStatus);
     on<CheckWalletExists>(_onCheckWalletExists);
+    on<DeterminePostAuthNavigation>(_onDeterminePostAuthNavigation);
   }
 
   Future<void> _onSignInRequested(
@@ -73,8 +84,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           debugPrint(
             'AuthBloc - User authenticated successfully: ${user.email}',
           );
-          // After successful authentication, check if user has a wallet
-          add(CheckWalletExists(userId: user.id, user: user));
+          // After successful authentication, determine post-auth navigation
+          add(DeterminePostAuthNavigation(userId: user.id, user: user));
         },
       );
     } on FirebaseFailure catch (failure) {
@@ -285,16 +296,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
       } else {
         debugPrint('AuthBloc - Email verified');
-        emit(
-          AuthAuthenticated(
-            UserModel(
-              id: user.uid,
-              email: user.email ?? '',
-              isEmailVerified: true,
-              createdAt: DateTime.now(),
-            ).toUserEntity(),
-          ),
-        );
+        final userEntity = UserModel(
+          id: user.uid,
+          email: user.email ?? '',
+          isEmailVerified: true,
+          createdAt: DateTime.now(),
+        ).toUserEntity();
+
+        // Determine post-auth navigation for verified user
+        add(DeterminePostAuthNavigation(userId: user.uid, user: userEntity));
       }
     } else {
       debugPrint('AuthBloc - No user found');
@@ -326,6 +336,58 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       debugPrint('AuthBloc - Error checking wallet: $e');
       // In case of error, emit AuthError instead of assuming no wallet
       emit(AuthError(FirebaseFailure.unknown(e.toString())));
+    }
+  }
+
+  Future<void> _onDeterminePostAuthNavigation(
+    DeterminePostAuthNavigation event,
+    Emitter<AuthState> emit,
+  ) async {
+    debugPrint(
+        'AuthBloc - Determining post-auth navigation for user: ${event.userId}');
+    emit(const AuthLoading());
+
+    try {
+      // First, check if user has a wallet
+      final hasWallet = await _checkWalletExistsUseCase(event.userId);
+
+      if (hasWallet) {
+        // User has wallet, go directly to home
+        // (if they have wallet, they already accepted terms)
+        debugPrint('AuthBloc - User has wallet, navigating to home');
+        emit(PostAuthNavigationDetermined(
+          route: RouteNames.home2,
+          user: event.user,
+        ));
+      } else {
+        // User doesn't have wallet, check terms acceptance
+        final termsAccepted = await _checkTermsAcceptanceUseCase();
+
+        if (termsAccepted) {
+          // Terms accepted but no wallet, go to wallet setup
+          debugPrint(
+              'AuthBloc - Terms accepted but no wallet, navigating to wallet setup');
+          emit(PostAuthNavigationDetermined(
+            route: RouteNames.walletSetup,
+            user: event.user,
+          ));
+        } else {
+          // No wallet and no terms accepted, go to terms page
+          debugPrint(
+              'AuthBloc - No wallet and no terms accepted, navigating to terms');
+          emit(PostAuthNavigationDetermined(
+            route: RouteNames.termsAndConditions,
+            user: event.user,
+          ));
+        }
+      }
+    } catch (e) {
+      debugPrint('AuthBloc - Error determining navigation: $e');
+      // If there's an error, default to terms page for safety
+      emit(PostAuthNavigationDetermined(
+        route: RouteNames.termsAndConditions,
+        user: event.user,
+      ));
     }
   }
 }

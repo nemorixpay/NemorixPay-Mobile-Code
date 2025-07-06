@@ -548,7 +548,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get termsOfServices => 'Términos y Condiciones';
 
   @override
-  String get lastUpdate => 'Última actualización en';
+  String get lastUpdate => 'Última actualización en Junio 2025';
 
   @override
   String get termsContent => 'Bienvenido a NemorixPay. Por favor, lea estos Términos y Condiciones cuidadosamente antes de usar nuestra aplicación.';
@@ -557,13 +557,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get termsTitle => 'Términos';
 
   @override
-  String get termsBody => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dictum, urna eu facilisis cursus, enim libero dictum enim, nec scelerisque enim enim nec enim. \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dictum, urna eu facilisis cursus, enim libero dictum enim, nec scelerisque enim enim nec enim.';
+  String get termsAndConditionsContent => 'TÉRMINOS Y CONDICIONES DE NEMORIXPAY\n\nBienvenido a NemorixPay. Al usar nuestra aplicación, usted acepta estos términos y condiciones.\n\n1. DESCRIPCIÓN DEL SERVICIO\nNemorixPay es una aplicación de billetera de criptomonedas y pagos que permite a los usuarios almacenar, enviar y recibir activos digitales en la red Stellar.\n\n';
 
   @override
-  String get licenseTitle => 'Licencia de Uso';
+  String get termsLastUpdate => 'Última actualización: Febrero 2025';
 
   @override
-  String get licenseBody => 'Adipiscing tempus feugiat viverra iaculis. Odio et a ac pretium nulla pharetra in. Cursus aenean condimentum volutpat ullamcorper eu, feugiat sed massa. \nAdipiscing tempus feugiat viverra iaculis. Odio et a ac pretium nulla pharetra in. Cursus aenean condimentum volutpat ullamcorper eu, feugiat sed massa.';
+  String get termsBody => 'RESPONSABILIDADES DEL USUARIO\n- Usted es responsable de mantener la seguridad de su billetera\n- Mantenga sus claves privadas seguras y nunca las comparta con nadie\n- Verifique todos los detalles de la transacción antes de confirmar\n- Reporte cualquier actividad sospechosa inmediatamente\n\n SEGURIDAD\n- Implementamos medidas de seguridad estándar de la industria\n- Sin embargo, usted es responsable de la seguridad de su billetera\n- No podemos recuperar claves privadas perdidas o fondos robados\n- Habilite la autenticación de dos factores cuando esté disponible\n\n TRANSACCIONES\n- Todas las transacciones son irreversibles una vez confirmadas en la blockchain\n- Verifique las direcciones del destinatario cuidadosamente antes de enviar\n- Pueden aplicarse tarifas de red y no son reembolsables\n- Los tiempos de transacción pueden variar según las condiciones de la red\n\n PRIVACIDAD\n- Recopilamos y procesamos datos personales como se describe en nuestra Política de Privacidad\n- Sus datos están protegidos usando encriptación y protocolos seguros\n- No vendemos su información personal a terceros\n- Puede solicitar la eliminación de datos en cualquier momento\n\n LIMITACIONES DE RESPONSABILIDAD\n- No somos responsables de pérdidas debido a errores o negligencia del usuario\n- No garantizamos la disponibilidad ininterrumpida del servicio\n- La responsabilidad máxima está limitada al monto de las tarifas pagadas\n- No somos responsables de interrupciones de servicios de terceros\n\n PROPIEDAD INTELECTUAL\n- NemorixPay y su contenido están protegidos por derechos de autor\n- No puede copiar, modificar o distribuir nuestro software sin permiso\n- Todas las marcas comerciales y logos pertenecen a sus respectivos propietarios\n\n LEY APLICABLE\n- Estos términos se rigen por las leyes aplicables\n- Las disputas se resolverán a través de arbitraje\n- Los cambios en los términos se comunicarán a través de la aplicación\n\n';
+
+  @override
+  String get licenseTitle => 'Licencia de Uso y Detalles de Contacto';
+
+  @override
+  String get licenseBody => '@copyright: Apache 2.0 License\n\n INFORMACIÓN DE CONTACTO\nPara preguntas sobre estos términos, contáctenos en:\nEmail: support@nemorixpay.com\nSitio web: www.nemorixpay.com\n\nÚltima actualización: Febrero 2025\nVersión: 1.0';
 
   @override
   String get accept => 'Aceptar';

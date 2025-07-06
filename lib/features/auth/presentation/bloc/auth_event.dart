@@ -99,3 +99,17 @@ class CheckWalletExists extends AuthEvent {
   @override
   List<Object?> get props => [userId, user];
 }
+
+/// Event to determine post-authentication navigation based on wallet and terms status
+class DeterminePostAuthNavigation extends AuthEvent {
+  final String userId;
+  final UserEntity user;
+
+  const DeterminePostAuthNavigation({
+    required this.userId,
+    required this.user,
+  });
+
+  @override
+  List<Object?> get props => [userId, user];
+}

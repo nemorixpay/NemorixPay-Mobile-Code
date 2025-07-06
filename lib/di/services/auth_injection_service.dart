@@ -7,15 +7,17 @@ import 'package:nemorixpay/features/auth/domain/usecases/sign_up_usecase.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/send_verification_email_usecase.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/check_wallet_exists_usecase.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:nemorixpay/shared/stellar/data/datasources/stellar_secure_storage_datasource.dart';
+import 'package:nemorixpay/features/terms/domain/usecases/check_terms_acceptance_usecase.dart';
+import 'package:nemorixpay/core/services/navigation_service.dart';
 
 /// @file        auth_injection_service.dart
 /// @brief       Dependency injection container implementation for Auth feature in NemorixPay.
 /// @details     This file contains the dependency injection setup using get_it,
 ///              registering all services, repositories, and use cases for the application.
+///              Now includes terms acceptance and navigation service integration.
 /// @author      Miguel Fagundez
-/// @date        2024-05-08
-/// @version     1.0
+/// @date        07/02/2025
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 ///
 /// @section     Auth Service Initialization
@@ -30,6 +32,8 @@ import 'package:nemorixpay/shared/stellar/data/datasources/stellar_secure_storag
 /// - FirebaseAuthRepository: Implements AuthRepository interface
 /// - SignInUseCase: Contains business logic for sign in
 /// - AuthBloc: Manages authentication state
+/// - CheckTermsAcceptanceUseCase: Verifies terms acceptance
+/// - NavigationService: Handles post-auth navigation logic
 ///
 /// @section     Usage
 /// This service is automatically initialized by the main injection container.
@@ -68,12 +72,13 @@ Future<void> authInjectionServices() async {
     SendVerificationEmailUseCase(authRepository: firebaseAuthRepository),
   );
 
-  final CheckWalletExistsUseCase checkWalletExistsUseCase =
-      di.registerSingleton(
-    CheckWalletExistsUseCase(
-      StellarSecureStorageDataSource(),
-    ),
-  );
+  final CheckWalletExistsUseCase checkWalletExistsUseCase = di.get();
+
+  // Get CheckTermsAcceptanceUseCase from terms service
+  final CheckTermsAcceptanceUseCase checkTermsAcceptanceUseCase = di.get();
+
+  // Get NavigationService from terms service
+  final NavigationService navigationService = di.get();
 
   // Define Auth Bloc
   di.registerFactory(
@@ -83,6 +88,8 @@ Future<void> authInjectionServices() async {
       forgotPasswordUseCase: forgotPasswordUseCase,
       sendVerificationEmailUseCase: sendVerificationEmailUseCase,
       checkWalletExistsUseCase: checkWalletExistsUseCase,
+      checkTermsAcceptanceUseCase: checkTermsAcceptanceUseCase,
+      navigationService: navigationService,
     ),
   );
 }

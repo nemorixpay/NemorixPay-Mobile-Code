@@ -12,6 +12,8 @@ import 'package:nemorixpay/features/auth/domain/usecases/check_wallet_exists_use
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_event.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
+import 'package:nemorixpay/features/terms/domain/usecases/check_terms_acceptance_usecase.dart';
+import 'package:nemorixpay/core/services/navigation_service.dart';
 
 import 'auth_bloc_test.mocks.dart';
 
@@ -21,15 +23,17 @@ import 'auth_bloc_test.mocks.dart';
   ForgotPasswordUseCase,
   SendVerificationEmailUseCase,
   CheckWalletExistsUseCase,
+  CheckTermsAcceptanceUseCase,
+  NavigationService,
 ])
 
 /// @file        auth_bloc_test.dart
 /// @brief       Tests for the Auth Bloc implementation
 /// @details     Verifies the behavior of the Auth Bloc, including authentication,
-///              wallet verification, and error handling.
+///              wallet verification, terms acceptance, and error handling.
 /// @author      Miguel Fagundez
-/// @date        2025-01-18
-/// @version     1.0
+/// @date        07/02/2025
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 
 void main() {
@@ -39,6 +43,8 @@ void main() {
   late MockForgotPasswordUseCase mockForgotPasswordUseCase;
   late MockSendVerificationEmailUseCase mockSendVerificationEmailUseCase;
   late MockCheckWalletExistsUseCase mockCheckWalletExistsUseCase;
+  late MockCheckTermsAcceptanceUseCase mockCheckTermsAcceptanceUseCase;
+  late MockNavigationService mockNavigationService;
 
   setUp(() {
     mockSignInUseCase = MockSignInUseCase();
@@ -46,6 +52,8 @@ void main() {
     mockForgotPasswordUseCase = MockForgotPasswordUseCase();
     mockSendVerificationEmailUseCase = MockSendVerificationEmailUseCase();
     mockCheckWalletExistsUseCase = MockCheckWalletExistsUseCase();
+    mockCheckTermsAcceptanceUseCase = MockCheckTermsAcceptanceUseCase();
+    mockNavigationService = MockNavigationService();
 
     authBloc = AuthBloc(
       signInUseCase: mockSignInUseCase,
@@ -53,6 +61,8 @@ void main() {
       forgotPasswordUseCase: mockForgotPasswordUseCase,
       sendVerificationEmailUseCase: mockSendVerificationEmailUseCase,
       checkWalletExistsUseCase: mockCheckWalletExistsUseCase,
+      checkTermsAcceptanceUseCase: mockCheckTermsAcceptanceUseCase,
+      navigationService: mockNavigationService,
     );
   });
 

@@ -135,6 +135,15 @@ class _LoginPageState extends State<LoginPage> {
               message: AppLocalizations.of(context)!.welcomeBack,
               type: SnackBarType.success,
             );
+          } else if (state is PostAuthNavigationDetermined) {
+            debugPrint('Post-auth navigation determined: ${state.route}');
+            NemorixSnackBar.show(
+              context,
+              message: AppLocalizations.of(context)!.welcomeBack,
+              type: SnackBarType.success,
+            );
+            // Navigate to the determined route
+            Navigator.pushReplacementNamed(context, state.route);
           } else if (state is AuthAuthenticatedWithWallet) {
             debugPrint('User authenticated with wallet: ${state.user.email}');
             NemorixSnackBar.show(

@@ -3,25 +3,32 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
+import 'dart:async' as _i6;
 
 import 'package:dartz/dartz.dart' as _i3;
+import 'package:flutter/material.dart' as _i16;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:nemorixpay/core/errors/failures.dart' as _i6;
+import 'package:mockito/src/dummies.dart' as _i15;
+import 'package:nemorixpay/core/errors/failures.dart' as _i7;
+import 'package:nemorixpay/core/services/navigation_service.dart' as _i14;
 import 'package:nemorixpay/features/auth/domain/entities/user_entity.dart'
-    as _i7;
+    as _i8;
 import 'package:nemorixpay/features/auth/domain/repositories/auth_repository.dart'
     as _i2;
 import 'package:nemorixpay/features/auth/domain/usecases/check_wallet_exists_usecase.dart'
-    as _i11;
+    as _i12;
 import 'package:nemorixpay/features/auth/domain/usecases/forgot_password_usecase.dart'
-    as _i9;
-import 'package:nemorixpay/features/auth/domain/usecases/send_verification_email_usecase.dart'
     as _i10;
+import 'package:nemorixpay/features/auth/domain/usecases/send_verification_email_usecase.dart'
+    as _i11;
 import 'package:nemorixpay/features/auth/domain/usecases/sign_in_usecase.dart'
-    as _i4;
+    as _i5;
 import 'package:nemorixpay/features/auth/domain/usecases/sign_up_usecase.dart'
-    as _i8;
+    as _i9;
+import 'package:nemorixpay/features/terms/data/models/terms_acceptance_model.dart'
+    as _i4;
+import 'package:nemorixpay/features/terms/domain/usecases/check_terms_acceptance_usecase.dart'
+    as _i13;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -48,10 +55,16 @@ class _FakeEither_1<L, R> extends _i1.SmartFake implements _i3.Either<L, R> {
     : super(parent, parentInvocation);
 }
 
+class _FakeTermsAcceptanceModel_2 extends _i1.SmartFake
+    implements _i4.TermsAcceptanceModel {
+  _FakeTermsAcceptanceModel_2(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
 /// A class which mocks [SignInUseCase].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSignInUseCase extends _i1.Mock implements _i4.SignInUseCase {
+class MockSignInUseCase extends _i1.Mock implements _i5.SignInUseCase {
   MockSignInUseCase() {
     _i1.throwOnMissingStub(this);
   }
@@ -68,27 +81,27 @@ class MockSignInUseCase extends _i1.Mock implements _i4.SignInUseCase {
           as _i2.AuthRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, _i7.UserEntity>> call(
+  _i6.Future<_i3.Either<_i7.Failure, _i8.UserEntity>> call(
     String? email,
     String? password,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#call, [email, password]),
             returnValue:
-                _i5.Future<_i3.Either<_i6.Failure, _i7.UserEntity>>.value(
-                  _FakeEither_1<_i6.Failure, _i7.UserEntity>(
+                _i6.Future<_i3.Either<_i7.Failure, _i8.UserEntity>>.value(
+                  _FakeEither_1<_i7.Failure, _i8.UserEntity>(
                     this,
                     Invocation.method(#call, [email, password]),
                   ),
                 ),
           )
-          as _i5.Future<_i3.Either<_i6.Failure, _i7.UserEntity>>);
+          as _i6.Future<_i3.Either<_i7.Failure, _i8.UserEntity>>);
 }
 
 /// A class which mocks [SignUpUseCase].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSignUpUseCase extends _i1.Mock implements _i8.SignUpUseCase {
+class MockSignUpUseCase extends _i1.Mock implements _i9.SignUpUseCase {
   MockSignUpUseCase() {
     _i1.throwOnMissingStub(this);
   }
@@ -105,7 +118,7 @@ class MockSignUpUseCase extends _i1.Mock implements _i8.SignUpUseCase {
           as _i2.AuthRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, _i7.UserEntity>> call({
+  _i6.Future<_i3.Either<_i7.Failure, _i8.UserEntity>> call({
     required String? email,
     required String? password,
     required String? firstName,
@@ -123,8 +136,8 @@ class MockSignUpUseCase extends _i1.Mock implements _i8.SignUpUseCase {
               #securityWord: securityWord,
             }),
             returnValue:
-                _i5.Future<_i3.Either<_i6.Failure, _i7.UserEntity>>.value(
-                  _FakeEither_1<_i6.Failure, _i7.UserEntity>(
+                _i6.Future<_i3.Either<_i7.Failure, _i8.UserEntity>>.value(
+                  _FakeEither_1<_i7.Failure, _i8.UserEntity>(
                     this,
                     Invocation.method(#call, [], {
                       #email: email,
@@ -137,37 +150,37 @@ class MockSignUpUseCase extends _i1.Mock implements _i8.SignUpUseCase {
                   ),
                 ),
           )
-          as _i5.Future<_i3.Either<_i6.Failure, _i7.UserEntity>>);
+          as _i6.Future<_i3.Either<_i7.Failure, _i8.UserEntity>>);
 }
 
 /// A class which mocks [ForgotPasswordUseCase].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockForgotPasswordUseCase extends _i1.Mock
-    implements _i9.ForgotPasswordUseCase {
+    implements _i10.ForgotPasswordUseCase {
   MockForgotPasswordUseCase() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, bool>> call(String? email) =>
+  _i6.Future<_i3.Either<_i7.Failure, bool>> call(String? email) =>
       (super.noSuchMethod(
             Invocation.method(#call, [email]),
-            returnValue: _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
-              _FakeEither_1<_i6.Failure, bool>(
+            returnValue: _i6.Future<_i3.Either<_i7.Failure, bool>>.value(
+              _FakeEither_1<_i7.Failure, bool>(
                 this,
                 Invocation.method(#call, [email]),
               ),
             ),
           )
-          as _i5.Future<_i3.Either<_i6.Failure, bool>>);
+          as _i6.Future<_i3.Either<_i7.Failure, bool>>);
 }
 
 /// A class which mocks [SendVerificationEmailUseCase].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockSendVerificationEmailUseCase extends _i1.Mock
-    implements _i10.SendVerificationEmailUseCase {
+    implements _i11.SendVerificationEmailUseCase {
   MockSendVerificationEmailUseCase() {
     _i1.throwOnMissingStub(this);
   }
@@ -184,33 +197,103 @@ class MockSendVerificationEmailUseCase extends _i1.Mock
           as _i2.AuthRepository);
 
   @override
-  _i5.Future<_i3.Either<_i6.Failure, bool>> call() =>
+  _i6.Future<_i3.Either<_i7.Failure, bool>> call() =>
       (super.noSuchMethod(
             Invocation.method(#call, []),
-            returnValue: _i5.Future<_i3.Either<_i6.Failure, bool>>.value(
-              _FakeEither_1<_i6.Failure, bool>(
+            returnValue: _i6.Future<_i3.Either<_i7.Failure, bool>>.value(
+              _FakeEither_1<_i7.Failure, bool>(
                 this,
                 Invocation.method(#call, []),
               ),
             ),
           )
-          as _i5.Future<_i3.Either<_i6.Failure, bool>>);
+          as _i6.Future<_i3.Either<_i7.Failure, bool>>);
 }
 
 /// A class which mocks [CheckWalletExistsUseCase].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockCheckWalletExistsUseCase extends _i1.Mock
-    implements _i11.CheckWalletExistsUseCase {
+    implements _i12.CheckWalletExistsUseCase {
   MockCheckWalletExistsUseCase() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i5.Future<bool> call(String? userId) =>
+  _i6.Future<bool> call(String? userId) =>
       (super.noSuchMethod(
             Invocation.method(#call, [userId]),
-            returnValue: _i5.Future<bool>.value(false),
+            returnValue: _i6.Future<bool>.value(false),
           )
-          as _i5.Future<bool>);
+          as _i6.Future<bool>);
+}
+
+/// A class which mocks [CheckTermsAcceptanceUseCase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCheckTermsAcceptanceUseCase extends _i1.Mock
+    implements _i13.CheckTermsAcceptanceUseCase {
+  MockCheckTermsAcceptanceUseCase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i6.Future<bool> call() =>
+      (super.noSuchMethod(
+            Invocation.method(#call, []),
+            returnValue: _i6.Future<bool>.value(false),
+          )
+          as _i6.Future<bool>);
+
+  @override
+  _i6.Future<_i4.TermsAcceptanceModel> getTermsAcceptanceDetails() =>
+      (super.noSuchMethod(
+            Invocation.method(#getTermsAcceptanceDetails, []),
+            returnValue: _i6.Future<_i4.TermsAcceptanceModel>.value(
+              _FakeTermsAcceptanceModel_2(
+                this,
+                Invocation.method(#getTermsAcceptanceDetails, []),
+              ),
+            ),
+          )
+          as _i6.Future<_i4.TermsAcceptanceModel>);
+}
+
+/// A class which mocks [NavigationService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockNavigationService extends _i1.Mock implements _i14.NavigationService {
+  MockNavigationService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i6.Future<String> getPostAuthNavigationRoute(String? userId) =>
+      (super.noSuchMethod(
+            Invocation.method(#getPostAuthNavigationRoute, [userId]),
+            returnValue: _i6.Future<String>.value(
+              _i15.dummyValue<String>(
+                this,
+                Invocation.method(#getPostAuthNavigationRoute, [userId]),
+              ),
+            ),
+          )
+          as _i6.Future<String>);
+
+  @override
+  _i6.Future<void> navigateAfterAuth(
+    _i16.BuildContext? context,
+    String? userId, {
+    bool? replace = true,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(
+              #navigateAfterAuth,
+              [context, userId],
+              {#replace: replace},
+            ),
+            returnValue: _i6.Future<void>.value(),
+            returnValueForMissingStub: _i6.Future<void>.value(),
+          )
+          as _i6.Future<void>);
 }

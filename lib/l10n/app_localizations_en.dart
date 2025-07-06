@@ -548,7 +548,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get termsOfServices => 'Terms of Services';
 
   @override
-  String get lastUpdate => 'Last update on';
+  String get lastUpdate => 'Last update on June 2025';
 
   @override
   String get termsContent => 'Welcome to NemorixPay. Please read these Terms of Services carefully before using our application.';
@@ -557,13 +557,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get termsTitle => 'Terms';
 
   @override
-  String get termsBody => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dictum, urna eu facilisis cursus, enim libero dictum enim, nec scelerisque enim enim nec enim. \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dictum, urna eu facilisis cursus, enim libero dictum enim, nec scelerisque enim enim nec enim.';
+  String get termsAndConditionsContent => 'NEMORIXPAY TERMS AND CONDITIONS\n\nWelcome to NemorixPay. By using our application, you agree to these terms and conditions.\n\n1. SERVICE DESCRIPTION\nNemorixPay is a cryptocurrency wallet and payment application that allows users to store, send, and receive digital assets on the Stellar network.\n\n';
 
   @override
-  String get licenseTitle => 'Use License';
+  String get termsLastUpdate => 'Last updated: February 2025';
 
   @override
-  String get licenseBody => 'Adipiscing tempus feugiat viverra iaculis. Odio et a ac pretium nulla pharetra in. Cursus aenean condimentum volutpat ullamcorper eu, feugiat sed massa. \nAdipiscing tempus feugiat viverra iaculis. Odio et a ac pretium nulla pharetra in. Cursus aenean condimentum volutpat ullamcorper eu, feugiat sed massa.';
+  String get termsBody => 'USER RESPONSIBILITIES\n- You are responsible for maintaining the security of your wallet\n- Keep your private keys safe and never share them with anyone\n- Verify all transaction details before confirming\n- Report any suspicious activity immediately\n\n SECURITY\n- We implement industry-standard security measures\n- However, you are ultimately responsible for your wallet\'s security\n- We cannot recover lost private keys or stolen funds\n- Enable two-factor authentication when available\n\n TRANSACTIONS\n- All transactions are irreversible once confirmed on the blockchain\n- Verify recipient addresses carefully before sending\n- Network fees may apply and are non-refundable\n- Transaction times may vary based on network conditions\n\n PRIVACITY\n- We collect and process personal data as described in our Privacy Policy\n- Your data is protected using encryption and secure protocols\n- We do not sell your personal information to third parties\n- You can request data deletion at any time\n\n LIMITATIONS OF LIABILITY\n- We are not liable for losses due to user error or negligence\n- We do not guarantee uninterrupted service availability\n- Maximum liability is limited to the amount of fees paid\n- We are not responsible for third-party service disruptions\n\n INTELLECTUAL PROPERTY\n- NemorixPay and its content are protected by copyright\n- You may not copy, modify, or distribute our software without permission\n- All trademarks and logos belong to their respective owners\n\n GOVERNING LAW\n- These terms are governed by applicable laws\n- Disputes will be resolved through arbitration\n- Changes to terms will be communicated via the app\n';
+
+  @override
+  String get licenseTitle => 'Use License and Contact Details';
+
+  @override
+  String get licenseBody => '@copyright: Apache 2.0 License\n\n CONTACT INFORMATION\nFor questions about these terms, contact us at:\nEmail: support@nemorixpay.com\nWebsite: www.nemorixpay.com\n\nLast updated: February 2025\nVersion: 1.0';
 
   @override
   String get accept => 'Accept';

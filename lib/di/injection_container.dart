@@ -1,16 +1,19 @@
 import 'package:nemorixpay/di/services/auth_injection_service.dart';
 import 'package:nemorixpay/di/services/crypto_market_injection_service.dart';
+import 'package:nemorixpay/di/services/navigation_service.dart';
 import 'package:nemorixpay/di/services/stellar_injection_service.dart';
 import 'package:nemorixpay/di/services/wallet_injection_service.dart';
 import 'package:nemorixpay/di/services/onboarding_injection_service.dart';
+import 'package:nemorixpay/di/services/terms_injection_service.dart';
 
 /// @file        injection_container.dart
 /// @brief       Dependency injection container implementation for NemorixPay.
 /// @details     This file contains the dependency injection setup using get_it,
 ///              registering all app services, such as Auth, UI, and other services.
+///              Now includes Terms and Conditions feature with navigation service.
 /// @author      Miguel Fagundez
-/// @date        2024-05-08
-/// @version     1.0
+/// @date        07/02/2025
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 ///
 /// @section     Initialization Order
@@ -35,8 +38,13 @@ import 'package:nemorixpay/di/services/onboarding_injection_service.dart';
 ///   runApp(MyApp());
 /// }
 /// ```
+// Define all services
 Future<void> initInjectionDependencies() async {
-  // Define all services
+  // Terms and conditions
+  // (must be first for NavigationService)
+  await termsInjectionServices();
+  // Navigation Services
+  await navigationServices();
   // Authentication
   await authInjectionServices();
   // Stellar

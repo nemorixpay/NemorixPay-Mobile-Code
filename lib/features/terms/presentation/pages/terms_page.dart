@@ -1,53 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nemorixpay/features/crypto/presentation/widgets/custom_two_buttons.dart';
-import 'package:nemorixpay/features/terms/presentation/widgets/terms_section.dart';
-import 'package:nemorixpay/l10n/app_localizations.dart';
-import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
+import 'package:nemorixpay/config/routes/route_names.dart';
 import '../bloc/terms_bloc.dart';
 import '../bloc/terms_event.dart';
 import '../bloc/terms_state.dart';
-import '../../domain/usecases/get_terms_content.dart';
 import '../../domain/usecases/accept_terms.dart';
-import '../../domain/repositories/terms_repository.dart';
+import '../../domain/usecases/get_terms_content.dart';
+import '../../data/repositories/terms_repository_impl.dart';
+import 'package:nemorixpay/l10n/app_localizations.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
+import 'package:nemorixpay/features/terms/presentation/widgets/terms_section.dart';
+import 'package:nemorixpay/features/crypto/presentation/widgets/custom_two_buttons.dart';
+import 'package:nemorixpay/features/terms/data/datasources/terms_local_datasource_impl.dart';
 
 /// @file        terms_page.dart
 /// @brief       Terms and Conditions page UI.
 /// @details     Displays the terms content, last update, and accept/decline actions with localization support.
+///              Now uses real SharedPreferences storage for terms acceptance.
 /// @author      Miguel Fagundez
-/// @date        06/13/2025
-/// @version     1.0
+/// @date        07/02/2025
+/// @version     1.1
 /// @copyright   Apache 2.0 License
-class _LocalTermsRepository implements TermsRepository {
-  // TODO _LocalTermsRepository - Testing purposes only
-  // TODO Need to changed in future - Text from file or API call
-  final String content;
-  _LocalTermsRepository(this.content);
-
-  @override
-  Future<String> getTermsContent() async => content;
-
-  @override
-  Future<void> acceptTerms(String version, DateTime acceptedAt) async {}
-}
 
 class TermsPage extends StatelessWidget {
   const TermsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
-    final termsContent = localizations.termsContent;
-
-    // TEMPORAL - We need to connect with real repository: Server or LocalDatabase
-    final repository = _LocalTermsRepository(termsContent);
+    // Use real datasource and repository with SharedPreferences
+    // This needs to be checked/changed in main.dart
+    // ------------
+    // TEMPORAL
+    // ------------
+    final datasource = TermsLocalDatasourceImpl();
+    final repository = TermsRepositoryImpl(datasource);
 
     return BlocProvider(
-      create:
-          (context) => TermsBloc(
-            getTermsContent: GetTermsContent(repository),
-            acceptTerms: AcceptTerms(repository),
-          )..add(LoadTerms()),
+      create: (context) => TermsBloc(
+        getTermsContent: GetTermsContent(repository),
+        acceptTerms: AcceptTerms(repository),
+      )..add(LoadTerms()),
       child: BlocBuilder<TermsBloc, TermsState>(
         builder: (context, state) {
           if (state is TermsLoading) {
@@ -59,6 +51,7 @@ class TermsPage extends StatelessWidget {
             return Scaffold(body: Center(child: Text(state.message)));
           }
           if (state is TermsLoaded) {
+            debugPrint('Terms loaded: ${state.content}');
             return _TermsContent(
               content: state.content,
               isAccepted: state.isAccepted,
@@ -92,12 +85,12 @@ class _TermsContent extends StatelessWidget {
               // --------------------
               MainHeader(
                 title: localizations.termsOfServices,
-                showBackButton: true,
+                showBackButton: false,
                 showSearchButton: false,
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               Text(
-                '${localizations.lastUpdate} June 2025',
+                '${localizations.lastUpdate}',
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               const SizedBox(height: 32),
@@ -105,22 +98,13 @@ class _TermsContent extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Text(
-                        content,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      SizedBox(height: 32),
                       TermsSection(
                         sectionTitle: localizations.termsTitle,
                         sectionBody: localizations.termsBody,
                       ),
-                      SizedBox(height: 32),
+                      const SizedBox(height: 32),
                       TermsSection(
                         sectionTitle: localizations.licenseTitle,
-                        sectionBody: localizations.licenseBody,
-                      ),
-                      TermsSection(
-                        sectionTitle: '',
                         sectionBody: localizations.licenseBody,
                       ),
                     ],
@@ -153,22 +137,39 @@ class _TermsContent extends StatelessWidget {
                       textButton1: localizations.decline,
                       onFunctionButton1: () {
                         debugPrint('Button01 - Decline');
-                        Navigator.of(context).pop(false);
+                        // Navigator.of(context).pop(false);
+                        Navigator.of(context)
+                            .pushReplacementNamed(RouteNames.signIn);
                       },
                       textButton2: localizations.accept,
-                      onFunctionButton2:
-                          isAccepted
-                              ? () {
-                                // We need to save the date/time of accepting terms
-                                // context.read<TermsBloc>().add(
-                                //   AcceptTermsEvent(
-                                //     version: '1.0',
-                                //     acceptedAt: DateTime.now(),
-                                //   ),
-                                // );
-                                debugPrint('Button01 - Accept');
+                      onFunctionButton2: isAccepted
+                          ? () async {
+                              try {
+                                // Save terms acceptance
+                                context.read<TermsBloc>().add(
+                                      AcceptTermsEvent(
+                                        version: '1.0',
+                                        acceptedAt: DateTime.now(),
+                                      ),
+                                    );
+
+                                debugPrint('Button02 - Accept');
+
+                                // Navigate to wallet setup after accepting terms
+                                Navigator.of(context).pushReplacementNamed(
+                                    RouteNames.walletSetup);
+                              } catch (e) {
+                                debugPrint('Error accepting terms: $e');
+                                // Show error message to user
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Error accepting terms: $e'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
                               }
-                              : null,
+                            }
+                          : null,
                     ),
                   ),
                 ],

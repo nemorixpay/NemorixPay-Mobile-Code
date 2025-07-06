@@ -128,4 +128,21 @@ class MockCryptoMarketRepository extends _i1.Mock
                 ),
           )
           as _i4.Future<_i2.Either<_i5.Failure, _i7.MarketDataEntity>>);
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, String>> sentTransaction(
+    String? publicKey,
+    double? amount,
+    String? note,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#sentTransaction, [publicKey, amount, note]),
+            returnValue: _i4.Future<_i2.Either<_i5.Failure, String>>.value(
+              _FakeEither_0<_i5.Failure, String>(
+                this,
+                Invocation.method(#sentTransaction, [publicKey, amount, note]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, String>>);
 }

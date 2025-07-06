@@ -6,6 +6,7 @@
 import 'dart:async' as _i4;
 
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:mockito/src/dummies.dart' as _i5;
 import 'package:nemorixpay/shared/cache/core/managers/asset_cache_manager.dart'
     as _i3;
 import 'package:nemorixpay/shared/common/data/models/asset_model.dart' as _i2;
@@ -82,6 +83,31 @@ class MockAssetCacheManager extends _i1.Mock implements _i3.AssetCacheManager {
             returnValueForMissingStub: _i4.Future<void>.value(),
           )
           as _i4.Future<void>);
+
+  @override
+  _i4.Future<String> sendTransaction(
+    String? destinationPublicKey,
+    double? amount,
+    String? memo,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#sendTransaction, [
+              destinationPublicKey,
+              amount,
+              memo,
+            ]),
+            returnValue: _i4.Future<String>.value(
+              _i5.dummyValue<String>(
+                this,
+                Invocation.method(#sendTransaction, [
+                  destinationPublicKey,
+                  amount,
+                  memo,
+                ]),
+              ),
+            ),
+          )
+          as _i4.Future<String>);
 
   @override
   _i4.Future<_i2.AssetModel> getAssetByCode(String? code) =>

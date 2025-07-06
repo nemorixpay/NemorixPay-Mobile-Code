@@ -6,6 +6,7 @@
 import 'dart:async' as _i5;
 
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:mockito/src/dummies.dart' as _i6;
 import 'package:nemorixpay/features/crypto/data/datasources/crypto_market_datasource.dart'
     as _i4;
 import 'package:nemorixpay/features/crypto/data/models/crypto_asset_with_market_data_model.dart'
@@ -113,4 +114,29 @@ class MockCryptoMarketDataSource extends _i1.Mock
             ),
           )
           as _i5.Future<_i2.MarketDataModel>);
+
+  @override
+  _i5.Future<String> sendTransaction({
+    required String? destinationPublicKey,
+    required double? amount,
+    String? memo,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#sendTransaction, [], {
+              #destinationPublicKey: destinationPublicKey,
+              #amount: amount,
+              #memo: memo,
+            }),
+            returnValue: _i5.Future<String>.value(
+              _i6.dummyValue<String>(
+                this,
+                Invocation.method(#sendTransaction, [], {
+                  #destinationPublicKey: destinationPublicKey,
+                  #amount: amount,
+                  #memo: memo,
+                }),
+              ),
+            ),
+          )
+          as _i5.Future<String>);
 }

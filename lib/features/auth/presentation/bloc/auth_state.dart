@@ -121,3 +121,17 @@ class AuthAuthenticatedWithoutWallet extends AuthState {
   @override
   List<Object?> get props => [user];
 }
+
+/// State when post-authentication navigation is determined
+class PostAuthNavigationDetermined extends AuthState {
+  final String route;
+  final UserEntity user;
+
+  const PostAuthNavigationDetermined({
+    required this.route,
+    required this.user,
+  });
+
+  @override
+  List<Object?> get props => [route, user];
+}
