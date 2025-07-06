@@ -798,6 +798,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get transactionConfirmationNote => 'Puedes usar este hash para rastrear tu transacción en el explorador de la red Stellar.';
 
   @override
+  String get memoLongErrorMessage => 'La nota no puede tener más de 28 caracteres';
+
+  @override
   String get confirmTransactionTitle => 'Confirmar Transacción';
 
   @override

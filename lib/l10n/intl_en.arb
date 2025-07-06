@@ -394,6 +394,7 @@
     }
   },
   "transactionConfirmationNote": "You can use this hash to track your transaction on the Stellar network explorer.",
+  "memoLongErrorMessage": "Note cannot be longer than 28 characters",
   "@_CONFIRM_TRANSACTION_PAGE": {
 
   },

@@ -346,6 +346,7 @@
   "transactionSuccessMessage": "Tu transacción de {cryptoName} ha sido enviada exitosamente a la red Stellar. La transacción está siendo procesada y será confirmada en breve.",
   "transactionHashInfo": "Hash de Transacción: {hash}",
   "transactionConfirmationNote": "Puedes usar este hash para rastrear tu transacción en el explorador de la red Stellar.",
+  "memoLongErrorMessage": "La nota no puede tener más de 28 caracteres",
   "@_CONFIRM_TRANSACTION_PAGE": {
 
   },

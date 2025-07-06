@@ -54,6 +54,7 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
   bool _isValidAddress = false;
   bool _isValidAmount = false;
   bool _isOwnAddress = false;
+  bool _isValidNote = false;
 
   @override
   void initState() {
@@ -64,6 +65,7 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
     _maxAmount = _availableBalance - _fee;
     _addressController.addListener(_validateAddress);
     _amountController.addListener(_validateAmount);
+    _noteController.addListener(_validateNote);
     debugPrint('initState - amount = ${widget.crypto.asset.amount}');
     debugPrint('initState - balance = ${widget.crypto.asset.balance}');
     debugPrint('initState - name = ${widget.crypto.asset.name}');
@@ -105,7 +107,14 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
     });
   }
 
-  bool get _isFormValid => _isValidAddress && _isValidAmount;
+  void _validateNote() {
+    final note = _noteController.text.trim();
+    setState(() {
+      _isValidNote = (note.isEmpty) || (note.isNotEmpty && note.length < 28);
+    });
+  }
+
+  bool get _isFormValid => _isValidAddress && _isValidAmount && _isValidNote;
 
   void _onScanQr() async {
     // TODO: Need to be checked in real device
@@ -258,6 +267,7 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
                   isValidAddress: _isValidAddress,
                   isValidAmount: _isValidAmount,
                   isOwnAddress: _isOwnAddress,
+                  isValidNote: _isValidNote,
                   minAmount: _minAmount,
                   maxAmount: _maxAmount,
                   availableBalance: _availableBalance,
@@ -348,6 +358,7 @@ class _SendCryptoForm extends StatelessWidget {
   final VoidCallback onScanQr;
   final bool isValidAddress;
   final bool isValidAmount;
+  final bool isValidNote;
   final bool isOwnAddress;
   final double minAmount;
   final double maxAmount;
@@ -363,6 +374,7 @@ class _SendCryptoForm extends StatelessWidget {
     required this.onScanQr,
     required this.isValidAddress,
     required this.isValidAmount,
+    required this.isValidNote,
     required this.isOwnAddress,
     required this.minAmount,
     required this.maxAmount,
@@ -448,6 +460,9 @@ class _SendCryptoForm extends StatelessWidget {
               controller: noteController,
               decoration: InputDecoration(
                 hintText: l10n.noteHint,
+                errorText: noteController.text.isEmpty
+                    ? null
+                    : (isValidNote ? null : l10n.memoLongErrorMessage),
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 contentPadding:

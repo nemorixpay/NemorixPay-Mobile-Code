@@ -1637,6 +1637,12 @@ abstract class AppLocalizations {
   /// **'You can use this hash to track your transaction on the Stellar network explorer.'**
   String get transactionConfirmationNote;
 
+  /// No description provided for @memoLongErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Note cannot be longer than 28 characters'**
+  String get memoLongErrorMessage;
+
   /// No description provided for @confirmTransactionTitle.
   ///
   /// In en, this message translates to:

@@ -236,6 +236,9 @@ class StellarDataSourceImpl implements StellarDataSource {
       debugPrint('StellarDatasource: sendPayment - Amount: $amount');
       debugPrint('StellarDatasource: sendPayment - Memo: $memo');
 
+      // --------------------------------------------------------------------------
+      // These validations aren't necessary because validations are performed in the UI
+      // We keep them just for future reference
       // Validate memo length if provided
       if (memo != null && memo.length > 28) {
         debugPrint('StellarDatasource: sendPayment - Invalid memo length');
@@ -253,6 +256,7 @@ class StellarDataSourceImpl implements StellarDataSource {
           stellarMessage: 'Amount must be greater than 0',
         );
       }
+      // --------------------------------------------------------------------------
 
       final transactionHash = await sendTransaction(
         sourceSecretSeed: sourceSecretKey,
@@ -605,6 +609,14 @@ class StellarDataSourceImpl implements StellarDataSource {
         sourceKeyPair.accountId,
       );
       debugPrint('StellarDatasource: sendTransaction - Cuenta fuente cargada');
+      debugPrint('StellarDatasource: sendTransaction - memo = $memo');
+
+      final String finalMemo;
+      if (memo == null || memo.isEmpty) {
+        finalMemo = "NemorixPay";
+      } else {
+        finalMemo = memo;
+      }
 
       final transaction = TransactionBuilder(sourceAccount)
           .addOperation(
@@ -614,7 +626,7 @@ class StellarDataSourceImpl implements StellarDataSource {
               amount.toString(),
             ).build(),
           )
-          .addMemo(Memo.text("NemorixPay Transfer: $memo"))
+          .addMemo(Memo.text(finalMemo))
           .build();
 
       transaction.sign(
