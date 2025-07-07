@@ -4,10 +4,12 @@ import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/features/crypto/domain/entities/credit_card.dart';
 import 'package:nemorixpay/features/crypto/domain/entities/payment_method_validator.dart';
 import 'package:nemorixpay/features/crypto/presentation/widgets/credit_card_gradient.dart';
+import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/shared/common/data/mock_credit_cards.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/custom_button_tile.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_button.dart';
 
 /// @file        payment_method_page.dart
@@ -41,6 +43,15 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
   PaymentMethodValidationState _validationState =
       PaymentMethodValidationState.valid;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    debugPrint('cryptoName: ${widget.cryptoName}');
+    debugPrint('amount: ${widget.amount}');
+    debugPrint('currency: ${widget.currency}');
+    super.initState();
+  }
+
   void _showAddCardDialog() {
     final numberController = TextEditingController();
     final holderController = TextEditingController();
@@ -49,71 +60,69 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
 
     showDialog(
       context: context,
-      builder:
-          (_) => AlertDialog(
-            title: const Text('Add New Card'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: numberController,
-                  decoration: const InputDecoration(labelText: 'Card Number'),
-                ),
-                TextField(
-                  controller: holderController,
-                  decoration: const InputDecoration(labelText: 'Card Holder'),
-                ),
-                TextField(
-                  controller: expiryController,
-                  decoration: const InputDecoration(labelText: 'Expiry Date'),
-                ),
-                DropdownButton<String>(
-                  value: selectedType,
-                  items:
-                      ['Visa', 'MasterCard', 'ApplePay']
-                          .map(
-                            (type) => DropdownMenuItem(
-                              value: type,
-                              child: Text(type),
-                            ),
-                          )
-                          .toList(),
-                  onChanged: (value) => setState(() => selectedType = value!),
-                ),
-              ],
+      builder: (_) => AlertDialog(
+        title: const Text('Add New Card'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: numberController,
+              decoration: const InputDecoration(labelText: 'Card Number'),
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Cancel'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  if (numberController.text.isNotEmpty &&
-                      holderController.text.isNotEmpty &&
-                      expiryController.text.isNotEmpty) {
-                    setState(() {
-                      creditCards.add(
-                        CreditCard(
-                          number: numberController.text,
-                          holder: holderController.text,
-                          expiry: expiryController.text,
-                          type: selectedType,
-                        ),
-                      );
-                      selectedCardIndex = creditCards.length - 1;
-                      selectedMethod = 'Credit Card';
-                      _validatePaymentMethod();
-                    });
-                    Navigator.pop(context);
-                  }
-                },
-                child: const Text('Add'),
-              ),
-            ],
+            TextField(
+              controller: holderController,
+              decoration: const InputDecoration(labelText: 'Card Holder'),
+            ),
+            TextField(
+              controller: expiryController,
+              decoration: const InputDecoration(labelText: 'Expiry Date'),
+            ),
+            DropdownButton<String>(
+              value: selectedType,
+              items: ['Visa', 'MasterCard', 'ApplePay']
+                  .map(
+                    (type) => DropdownMenuItem(
+                      value: type,
+                      child: Text(type),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) => setState(() => selectedType = value!),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Cancel'),
           ),
+          ElevatedButton(
+            onPressed: () {
+              if (numberController.text.isNotEmpty &&
+                  holderController.text.isNotEmpty &&
+                  expiryController.text.isNotEmpty) {
+                setState(() {
+                  creditCards.add(
+                    CreditCard(
+                      number: numberController.text,
+                      holder: holderController.text,
+                      expiry: expiryController.text,
+                      type: selectedType,
+                    ),
+                  );
+                  selectedCardIndex = creditCards.length - 1;
+                  selectedMethod = 'Credit Card';
+                  _validatePaymentMethod();
+                });
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Add'),
+          ),
+        ],
+      ),
     );
   }
 
@@ -162,8 +171,9 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                             child: Row(
                               children: [
                                 (creditCards[index].type == 'Visa')
-                                    ? FaIcon(FontAwesomeIcons.ccVisa)
-                                    : FaIcon(FontAwesomeIcons.ccMastercard),
+                                    ? const FaIcon(FontAwesomeIcons.ccVisa)
+                                    : const FaIcon(
+                                        FontAwesomeIcons.ccMastercard),
                                 const SizedBox(width: 8.0),
                                 Text(
                                   creditCards[index].number,
@@ -229,7 +239,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
               // Other Payment buttons
               CustomButtonTile(
                 label: 'Google Pay',
-                widgetLeft: FaIcon(
+                widgetLeft: const FaIcon(
                   size: 16,
                   FontAwesomeIcons.google,
                   color: NemorixColors.primaryColor,
@@ -244,7 +254,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
               ),
               const SizedBox(height: 10),
               CustomButtonTile(
-                widgetLeft: FaIcon(
+                widgetLeft: const FaIcon(
                   size: 16,
                   FontAwesomeIcons.apple,
                   color: NemorixColors.primaryColor,
@@ -312,8 +322,13 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                   onPressed:
                       _validationState == PaymentMethodValidationState.valid
                           ? () {
-                            debugPrint('Button continue pressed');
-                          }
+                              NemorixSnackBar.show(
+                                context,
+                                message: AppLocalizations.of(context)!
+                                    .featureNotImplemented,
+                                type: SnackBarType.info,
+                              );
+                            }
                           : null,
                   backgroundColor:
                       _validationState == PaymentMethodValidationState.valid

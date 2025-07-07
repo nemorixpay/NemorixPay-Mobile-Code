@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:nemorixpay/config/routes/route_names.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/commission_validator.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
-import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
 import 'package:nemorixpay/features/crypto/presentation/widgets/continue_button.dart';
 import 'package:nemorixpay/features/crypto/presentation/widgets/exchange_fee_card.dart';
 import 'package:nemorixpay/features/crypto/presentation/widgets/crypto_conversion_card.dart';
@@ -91,11 +92,17 @@ class _BuyCryptoPageState extends State<BuyCryptoPage> {
                     const SizedBox(height: 20),
                     ContinueButton(
                       onPressed: () {
-                        NemorixSnackBar.show(
+                        Navigator.pushNamed(
                           context,
-                          message: AppLocalizations.of(context)!
-                              .featureNotImplemented,
-                          type: SnackBarType.info,
+                          RouteNames.paymentMethod,
+                          arguments: {
+                            'assetName': widget.selectedAsset.asset.assetCode,
+                            'amount': CommissionValidator.calculateTotalAmount(
+                              amount: payAmount,
+                              commissionPercent: exchangeFeePercent,
+                            ),
+                            'currency': selectedFiat,
+                          },
                         );
                       },
                       amount: _payController.text,
