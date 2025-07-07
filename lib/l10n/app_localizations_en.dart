@@ -176,7 +176,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletSuccessSecurity => 'Remember to keep your seed phrase safe, it\'s your responsibility!';
 
   @override
-  String get walletSuccessInfo => 'NemorixPay cannot recover your wallet if you lose it. You can find your seed phrase in Settings > Security & Privacy.';
+  String get walletSuccessInfo => 'NemorixPay cannot recover your wallet if you lose it. You can find your security options in Settings > Security & Privacy.';
 
   @override
   String get goToHomePage => 'Go to Home Page';
@@ -560,6 +560,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get termsTitle => 'Terms';
 
   @override
+  String get termsTitleTesting => 'Terms (Testing purposes)';
+
+  @override
   String get termsAndConditionsContent => 'NEMORIXPAY TERMS AND CONDITIONS\n\nWelcome to NemorixPay. By using our application, you agree to these terms and conditions.\n\n1. SERVICE DESCRIPTION\nNemorixPay is a cryptocurrency wallet and payment application that allows users to store, send, and receive digital assets on the Stellar network.\n\n';
 
   @override
@@ -572,7 +575,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get licenseTitle => 'Use License and Contact Details';
 
   @override
-  String get licenseBody => '@copyright: Apache 2.0 License\n\n CONTACT INFORMATION\nFor questions about these terms, contact us at:\nEmail: support@nemorixpay.com\nWebsite: www.nemorixpay.com\n\nLast updated: February 2025\nVersion: 1.0';
+  String get licenseBody => '@copyright: Apache 2.0 License\n\nCONTACT INFORMATION\nFor questions about these terms, contact us at:\nEmail: support@nemorixpay.com\nWebsite: www.nemorixpay.com\n\nLast updated: February 2025\nVersion: 1.0';
 
   @override
   String get accept => 'Accept';
@@ -582,6 +585,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get acceptTermsCheckbox => 'I accept the terms and conditions';
+
+  @override
+  String get confirmDeclineTerms => 'Are you sure you want to decline our terms of service?';
+
+  @override
+  String get yesDecline => 'Yes, decline';
+
+  @override
+  String get noContinue => 'No, continue';
+
+  @override
+  String get loremIpsumTitle => 'Lorem Ipsum';
+
+  @override
+  String get loremIpsumContent => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. \n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
   @override
   String get onboarding_security_title => 'Your Security is Our Priority';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/custom_button.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_button.dart';
 
 /// @file        yes_no_dialog.dart
@@ -47,17 +48,22 @@ class YesNoDialog extends StatelessWidget {
       content: Text(message),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       actions: [
-        RoundedElevatedButton(
-          text: noText,
-          onPressed: onNoPressed,
-          backgroundColor: NemorixColors.primaryColor,
-          textColor: Colors.black,
-        ),
-        RoundedElevatedButton(
-          text: yesText,
-          onPressed: onYesPressed,
-          backgroundColor: NemorixColors.primaryColor,
-          textColor: Colors.black,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            CustomButton(
+              label: noText,
+              onTap: onNoPressed,
+              backgroundColor: NemorixColors.primaryColor,
+              textColor: Colors.black,
+            ),
+            CustomButton(
+              label: yesText,
+              onTap: onYesPressed,
+              backgroundColor: NemorixColors.primaryColor,
+              textColor: Colors.black,
+            ),
+          ],
         ),
       ],
     );

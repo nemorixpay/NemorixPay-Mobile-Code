@@ -106,12 +106,6 @@ class AppRoutes {
       icon: Icons.list_alt,
     ),
     RouteModel(
-      route: RouteNames.termsAndConditions,
-      name: 'Test Terms and Conditions',
-      screen: const TermsPage(),
-      icon: Icons.list_alt,
-    ),
-    RouteModel(
       route: RouteNames.onboardingPageSecurity,
       name: 'Onboarding Security',
       screen: SecuritySlide(
@@ -179,6 +173,16 @@ class AppRoutes {
   /// @throws TypeError if the arguments are not of the expected type
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case RouteNames.termsAndConditions:
+        final value = settings.arguments as bool?;
+        if (value == null) {
+          debugPrint('isOnbording is null');
+        } else {
+          debugPrint('isOnbording is not null');
+        }
+        return MaterialPageRoute(
+          builder: (context) => TermsPage(isOnboarding: value),
+        );
       case RouteNames.assetDetails:
         final cryptoArg = settings.arguments as CryptoAssetWithMarketData;
         return MaterialPageRoute(

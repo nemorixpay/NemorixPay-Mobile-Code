@@ -51,6 +51,11 @@ class _BuyCryptoPageState extends State<BuyCryptoPage> {
 
   void _handleTermsTap() {
     debugPrint('Terms and Conditions');
+    Navigator.pushNamed(
+      context,
+      RouteNames.termsAndConditions,
+      arguments: false,
+    );
   }
 
   @override

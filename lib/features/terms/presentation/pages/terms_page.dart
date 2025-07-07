@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
+import 'package:nemorixpay/config/theme/nemorix_colors.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_button.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/single_action_dialog.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/yes_no_dialog.dart';
 import '../bloc/terms_bloc.dart';
 import '../bloc/terms_event.dart';
 import '../bloc/terms_state.dart';
@@ -23,7 +27,8 @@ import 'package:nemorixpay/features/terms/data/datasources/terms_local_datasourc
 /// @copyright   Apache 2.0 License
 
 class TermsPage extends StatelessWidget {
-  const TermsPage({super.key});
+  final bool? isOnboarding;
+  const TermsPage({super.key, this.isOnboarding = true});
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +60,7 @@ class TermsPage extends StatelessWidget {
             return _TermsContent(
               content: state.content,
               isAccepted: state.isAccepted,
+              isOnboarding: isOnboarding ?? true,
             );
           }
           return const SizedBox.shrink();
@@ -67,12 +73,18 @@ class TermsPage extends StatelessWidget {
 class _TermsContent extends StatelessWidget {
   final String content;
   final bool isAccepted;
+  final bool isOnboarding;
 
-  const _TermsContent({required this.content, required this.isAccepted});
+  const _TermsContent({
+    required this.content,
+    required this.isAccepted,
+    required this.isOnboarding,
+  });
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    debugPrint('_TermsContent. isOnboarding = $isOnboarding');
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -85,12 +97,12 @@ class _TermsContent extends StatelessWidget {
               // --------------------
               MainHeader(
                 title: localizations.termsOfServices,
-                showBackButton: false,
+                showBackButton: !isOnboarding,
                 showSearchButton: false,
               ),
               const SizedBox(height: 40),
               Text(
-                '${localizations.lastUpdate}',
+                localizations.lastUpdate,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               const SizedBox(height: 32),
@@ -98,6 +110,11 @@ class _TermsContent extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
+                      TermsSection(
+                        sectionTitle: localizations.termsTitleTesting,
+                        sectionBody: localizations.loremIpsumContent,
+                      ),
+                      const SizedBox(height: 32),
                       TermsSection(
                         sectionTitle: localizations.termsTitle,
                         sectionBody: localizations.termsBody,
@@ -107,73 +124,103 @@ class _TermsContent extends StatelessWidget {
                         sectionTitle: localizations.licenseTitle,
                         sectionBody: localizations.licenseBody,
                       ),
+                      const SizedBox(height: 32),
+                      TermsSection(
+                        sectionTitle: localizations.loremIpsumTitle,
+                        sectionBody: localizations.loremIpsumContent,
+                      ),
                     ],
                   ),
                 ),
               ),
               const SizedBox(height: 32),
-              Row(
-                children: [
-                  Checkbox(
-                    value: isAccepted,
-                    onChanged: (_) {
-                      context.read<TermsBloc>().add(ToggleAcceptance());
-                    },
-                  ),
-                  Flexible(child: Text(localizations.acceptTermsCheckbox)),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  // --------------------
-                  // Decline/Accept Buttons
-                  // --------------------
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: CustomTwoButtons(
-                      height: 1.25,
-                      textButton1: localizations.decline,
-                      onFunctionButton1: () {
-                        debugPrint('Button01 - Decline');
-                        // Navigator.of(context).pop(false);
-                        Navigator.of(context)
-                            .pushReplacementNamed(RouteNames.signIn);
+              if (isOnboarding)
+                Row(
+                  children: [
+                    Checkbox(
+                      value: isAccepted,
+                      onChanged: (_) {
+                        context.read<TermsBloc>().add(ToggleAcceptance());
                       },
-                      textButton2: localizations.accept,
-                      onFunctionButton2: isAccepted
-                          ? () async {
-                              try {
-                                // Save terms acceptance
-                                context.read<TermsBloc>().add(
-                                      AcceptTermsEvent(
-                                        version: '1.0',
-                                        acceptedAt: DateTime.now(),
-                                      ),
-                                    );
-
-                                debugPrint('Button02 - Accept');
-
-                                // Navigate to wallet setup after accepting terms
-                                Navigator.of(context).pushReplacementNamed(
-                                    RouteNames.walletSetup);
-                              } catch (e) {
-                                debugPrint('Error accepting terms: $e');
-                                // Show error message to user
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Error accepting terms: $e'),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                              }
-                            }
-                          : null,
                     ),
-                  ),
-                ],
-              ),
+                    Flexible(child: Text(localizations.acceptTermsCheckbox)),
+                  ],
+                ),
+              const SizedBox(height: 8),
+              if (isOnboarding)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    // --------------------
+                    // Decline/Accept Buttons
+                    // --------------------
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: CustomTwoButtons(
+                        height: 1.25,
+                        textButton1: localizations.decline,
+                        onFunctionButton1: () async {
+                          debugPrint('Button01 - Decline4');
+                          await showDialog(
+                            context: context,
+                            builder: (BuildContext context) => YesNoDialog(
+                              title: localizations.termsOfServices,
+                              message: localizations.confirmDeclineTerms,
+                              onYesPressed: () {
+                                Navigator.of(context)
+                                    .pushReplacementNamed(RouteNames.signIn);
+                              },
+                              onNoPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              yesText: localizations.yesDecline,
+                              noText: localizations.noContinue,
+                            ),
+                          );
+                        },
+                        textButton2: localizations.accept,
+                        onFunctionButton2: isAccepted
+                            ? () async {
+                                try {
+                                  // Save terms acceptance
+                                  context.read<TermsBloc>().add(
+                                        AcceptTermsEvent(
+                                          version: '1.0',
+                                          acceptedAt: DateTime.now(),
+                                        ),
+                                      );
+
+                                  debugPrint('Button02 - Accept');
+
+                                  // Navigate to wallet setup after accepting terms
+                                  Navigator.of(context).pushReplacementNamed(
+                                      RouteNames.walletSetup);
+                                } catch (e) {
+                                  debugPrint('Error accepting terms: $e');
+                                  // Show error message to user
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content:
+                                          Text('Error accepting terms: $e'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
+                              }
+                            : null,
+                      ),
+                    ),
+                  ],
+                ),
+              if (!isOnboarding)
+                RoundedElevatedButton(
+                  text: AppLocalizations.of(context)!.continueText,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  backgroundColor: NemorixColors.primaryColor,
+                  textColor: NemorixColors.greyLevel1,
+                ),
             ],
           ),
         ),

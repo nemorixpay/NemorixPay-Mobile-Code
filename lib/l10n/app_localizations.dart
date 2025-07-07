@@ -428,7 +428,7 @@ abstract class AppLocalizations {
   /// No description provided for @walletSuccessInfo.
   ///
   /// In en, this message translates to:
-  /// **'NemorixPay cannot recover your wallet if you lose it. You can find your seed phrase in Settings > Security & Privacy.'**
+  /// **'NemorixPay cannot recover your wallet if you lose it. You can find your security options in Settings > Security & Privacy.'**
   String get walletSuccessInfo;
 
   /// No description provided for @goToHomePage.
@@ -1193,6 +1193,12 @@ abstract class AppLocalizations {
   /// **'Terms'**
   String get termsTitle;
 
+  /// No description provided for @termsTitleTesting.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms (Testing purposes)'**
+  String get termsTitleTesting;
+
   /// No description provided for @termsAndConditionsContent.
   ///
   /// In en, this message translates to:
@@ -1220,7 +1226,7 @@ abstract class AppLocalizations {
   /// No description provided for @licenseBody.
   ///
   /// In en, this message translates to:
-  /// **'@copyright: Apache 2.0 License\n\n CONTACT INFORMATION\nFor questions about these terms, contact us at:\nEmail: support@nemorixpay.com\nWebsite: www.nemorixpay.com\n\nLast updated: February 2025\nVersion: 1.0'**
+  /// **'@copyright: Apache 2.0 License\n\nCONTACT INFORMATION\nFor questions about these terms, contact us at:\nEmail: support@nemorixpay.com\nWebsite: www.nemorixpay.com\n\nLast updated: February 2025\nVersion: 1.0'**
   String get licenseBody;
 
   /// No description provided for @accept.
@@ -1240,6 +1246,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'I accept the terms and conditions'**
   String get acceptTermsCheckbox;
+
+  /// No description provided for @confirmDeclineTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to decline our terms of service?'**
+  String get confirmDeclineTerms;
+
+  /// No description provided for @yesDecline.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, decline'**
+  String get yesDecline;
+
+  /// No description provided for @noContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'No, continue'**
+  String get noContinue;
+
+  /// No description provided for @loremIpsumTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Lorem Ipsum'**
+  String get loremIpsumTitle;
+
+  /// No description provided for @loremIpsumContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. \n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'**
+  String get loremIpsumContent;
 
   /// No description provided for @onboarding_security_title.
   ///
