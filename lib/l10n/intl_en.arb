@@ -3,6 +3,7 @@
   },
   "appName": "NemorixPay",
   "loading": "It is loading",
+  "featureNotImplemented": "This feature has not been fully implemented",
   "@_SIGN_IN_PAGE": {
   },  
   "welcomeBack": "Welcome Back",

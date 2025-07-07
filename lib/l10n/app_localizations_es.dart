@@ -15,6 +15,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get loading => 'Se esta cargando';
 
   @override
+  String get featureNotImplemented => 'Esta función no se ha implementado completamente';
+
+  @override
   String get welcomeBack => 'Bienvenido de nuevo';
 
   @override

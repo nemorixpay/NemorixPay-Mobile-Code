@@ -2,28 +2,28 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:nemorixpay/l10n/app_localizations.dart';
+import 'package:nemorixpay/di/injection_container.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/config/routes/app_routes.dart';
 import 'package:nemorixpay/config/theme/nemorix_theme.dart';
-import 'package:nemorixpay/di/injection_container.dart';
-import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_bloc.dart';
-import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_home_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_all_available_assets/crypto_market_bloc.dart';
-import 'package:nemorixpay/features/onboarding/presentation/bloc/onboarding_state.dart';
 import 'package:nemorixpay/features/splash/presentation/bloc/splash_bloc.dart';
 import 'package:nemorixpay/features/splash/presentation/bloc/splash_state.dart';
 import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_bloc.dart';
 import 'package:nemorixpay/shared/stellar/presentation/bloc/stellar_bloc.dart';
-import 'package:nemorixpay/l10n/app_localizations.dart';
+import 'package:nemorixpay/features/onboarding/presentation/bloc/onboarding_state.dart';
 import 'package:nemorixpay/features/onboarding/presentation/bloc/onboarding_bloc.dart';
 import 'package:nemorixpay/features/onboarding/presentation/bloc/onboarding_event.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_home_bloc.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_bloc.dart';
+import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_all_available_assets/crypto_market_bloc.dart';
 import 'firebase_options.dart';
 
 /// Global key for accessing the ScaffoldMessenger from anywhere in the app
@@ -42,7 +42,7 @@ Future<void> main() async {
   // Init Bloc dependencies
   await initInjectionDependencies();
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {

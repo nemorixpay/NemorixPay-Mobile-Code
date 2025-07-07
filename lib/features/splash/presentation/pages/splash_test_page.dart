@@ -123,7 +123,11 @@ class _SplashTestPageState extends State<SplashTestPage> {
                 RoundedElevatedButton(
                   text: "Continue with BuyAsset",
                   onPressed: () {
-                    Navigator.pushNamed(context, RouteNames.buyAsset);
+                    Navigator.pushNamed(
+                      context,
+                      RouteNames.buyAsset,
+                      arguments: CryptoAssetWithMarketData.toTest(),
+                    );
                   },
                   backgroundColor: Colors.white,
                   textColor: Colors.black,

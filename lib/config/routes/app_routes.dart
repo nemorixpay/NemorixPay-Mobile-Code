@@ -82,12 +82,6 @@ class AppRoutes {
       icon: Icons.home,
     ),
     RouteModel(
-      route: RouteNames.buyAsset,
-      name: 'Buy',
-      screen: BuyCryptoPage(),
-      icon: Icons.credit_card_rounded,
-    ),
-    RouteModel(
       route: RouteNames.walletSetup,
       name: 'Wallet Setup',
       screen: WalletSetupPage(),
@@ -189,6 +183,11 @@ class AppRoutes {
         final cryptoArg = settings.arguments as CryptoAssetWithMarketData;
         return MaterialPageRoute(
           builder: (context) => CryptoDetailsPage(crypto: cryptoArg),
+        );
+      case RouteNames.buyAsset:
+        final cryptoArg = settings.arguments as CryptoAssetWithMarketData;
+        return MaterialPageRoute(
+          builder: (context) => BuyCryptoPage(selectedAsset: cryptoArg),
         );
       case RouteNames.paymentMethod:
         final args = settings.arguments as Map<String, dynamic>;

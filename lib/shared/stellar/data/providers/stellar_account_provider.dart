@@ -75,15 +75,13 @@ class StellarAccountProvider {
   /// Gets the secret key for the current account
   /// Returns null if there is no current account or if the secret key is not available
   String? getSecretKey() {
-    return _currentAccount?.secretKey ??
-        'SARMKXJ24NJIJLJUWC3425BOORILUWGSQFSOBYSKZBYGT37TJUZJJM4Z';
+    return _currentAccount?.secretKey;
   }
 
   /// Gets the public key for the current account
   /// Returns null if there is no current account or if the public key is not available
   String? getPublicKey() {
-    return _currentAccount?.publicKey ??
-        'GARRK43GDUGZKPGFPLTCXNOGGVZ27KL2RS3J5A4RUYVQOHAESSZ3AERL';
+    return _currentAccount?.publicKey;
   }
 
   /// Gets the mnemonic for the current account

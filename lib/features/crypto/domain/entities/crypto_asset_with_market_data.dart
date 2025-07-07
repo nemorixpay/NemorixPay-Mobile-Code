@@ -11,6 +11,7 @@ import 'market_data_entity.dart';
 /// @date        2025-06-05
 /// @version     1.0
 /// @copyright   Apache 2.0 License
+// ignore: must_be_immutable
 class CryptoAssetWithMarketData extends Equatable {
   final AssetEntity asset;
   final MarketDataEntity marketData;
@@ -46,6 +47,38 @@ class CryptoAssetWithMarketData extends Equatable {
       asset: asset.toModel(),
       marketData: marketData.toModel(),
       isFavorite: isFavorite,
+    );
+  }
+
+  static CryptoAssetWithMarketData toTest() {
+    return CryptoAssetWithMarketData(
+      asset: const AssetEntity(
+        id: 'test',
+        assetCode: 'MIN',
+        name: 'test',
+        assetType: 'test',
+        network: 'test',
+        decimals: 0,
+      ),
+      marketData: MarketDataEntity(
+        currentPrice: 0.0,
+        priceChange: 0.0,
+        priceChangePercentage: 0.0,
+        marketCap: 1,
+        volume: 1,
+        high24h: 0.0,
+        low24h: 0.0,
+        circulatingSupply: 1,
+        totalSupply: 1,
+        maxSupply: 1,
+        ath: 0.0,
+        athChangePercentage: 0.0,
+        athDate: DateTime.now(),
+        atl: 0.0,
+        atlChangePercentage: 0.0,
+        atlDate: DateTime.now(),
+        lastUpdated: DateTime.now(),
+      ),
     );
   }
 }

@@ -45,7 +45,7 @@ class ContinueButton extends StatelessWidget {
       onPressed: _isValid ? onPressed : null,
       backgroundColor:
           _isValid ? NemorixColors.primaryColor : NemorixColors.greyLevel2,
-      textColor: _isValid ? Colors.white : NemorixColors.greyLevel3,
+      textColor: _isValid ? NemorixColors.greyLevel1 : NemorixColors.greyLevel3,
     );
   }
 }

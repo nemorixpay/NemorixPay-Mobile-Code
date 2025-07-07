@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:nemorixpay/config/constants/image_url.dart';
-import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
+import 'package:nemorixpay/config/routes/route_names.dart';
+import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/shared/cache/core/managers/asset_cache_manager.dart';
-import 'package:nemorixpay/shared/common/data/models/asset_model.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
+import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
 import 'package:nemorixpay/features/crypto/presentation/widgets/crypto_stats_card.dart';
 import 'package:nemorixpay/features/crypto/presentation/widgets/custom_two_buttons.dart';
 import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_market_data.dart';
-import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
 
 /// @file        crypto_details.dart
 /// @brief       Screen to display detailed information about a crypto.
@@ -21,7 +21,6 @@ import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provide
 /// @version     1.2
 /// @copyright   Apache 2.0 License
 class CryptoDetailsPage extends StatefulWidget {
-  // final AssetEntity crypto;
   final CryptoAssetWithMarketData crypto;
 
   const CryptoDetailsPage({super.key, required this.crypto});
@@ -227,22 +226,31 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
                     onFunctionButton2: _isAssetInAccount
                         ? () {
                             debugPrint('Button02 - Receive');
-                            StellarAccountProvider _provider =
+                            StellarAccountProvider provider =
                                 StellarAccountProvider();
 
-                            Navigator.pushNamed(
-                              context,
-                              RouteNames.receiveCrypto,
-                              arguments: {
-                                'cryptoName': _provider
-                                        .currentAccount!.assets?[0].assetCode ??
-                                    'XLM',
-                                'logoAsset': "assets/logos/xlm_white.png",
-                                'publicKey': _provider
-                                        .currentAccount?.publicKey ??
-                                    "GARRK43GDUGZKPGFPLTCXNOGGVZ27KL2RS3J5A4RUYVQOHAESSZ3AERL",
-                              },
-                            );
+                            if (provider.getPublicKey() != null) {
+                              Navigator.pushNamed(
+                                context,
+                                RouteNames.receiveCrypto,
+                                arguments: {
+                                  'cryptoName': provider.currentAccount!
+                                          .assets?[0].assetCode ??
+                                      'XLM',
+                                  'logoAsset': "assets/logos/xlm_white.png",
+                                  'publicKey':
+                                      provider.currentAccount?.publicKey,
+                                },
+                              );
+                            } else {
+                              // Show error message - Public key not Found
+                              NemorixSnackBar.show(
+                                context,
+                                message: AppLocalizations.of(context)!
+                                    .stellarErrorInvalidPublicKey,
+                                type: SnackBarType.error,
+                              );
+                            }
                           }
                         : null,
                   ),
@@ -258,7 +266,7 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
                     ),
                     child: CryptoStatsCard(crypto: widget.crypto),
                   ),
-                  SizedBox(height: 80),
+                  const SizedBox(height: 80),
                 ],
               ),
             ),
@@ -270,14 +278,21 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
               child: CustomTwoButtons(
                 textButton1: AppLocalizations.of(context)!.buy,
                 textButton2: AppLocalizations.of(context)!.sell,
-                onFunctionButton1: _isAssetInAccount
-                    ? () {
-                        // TODO: Implement buy action
-                      }
-                    : null,
+                onFunctionButton1: () {
+                  Navigator.pushNamed(
+                    context,
+                    RouteNames.buyAsset,
+                    arguments: widget.crypto,
+                  );
+                },
                 onFunctionButton2: _isAssetInAccount
                     ? () {
-                        // TODO: Implement sell action
+                        NemorixSnackBar.show(
+                          context,
+                          message: AppLocalizations.of(context)!
+                              .featureNotImplemented,
+                          type: SnackBarType.info,
+                        );
                       }
                     : null,
                 height: 1.25,

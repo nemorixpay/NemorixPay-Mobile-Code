@@ -107,6 +107,12 @@ abstract class AppLocalizations {
   /// **'It is loading'**
   String get loading;
 
+  /// No description provided for @featureNotImplemented.
+  ///
+  /// In en, this message translates to:
+  /// **'This feature has not been fully implemented'**
+  String get featureNotImplemented;
+
   /// No description provided for @welcomeBack.
   ///
   /// In en, this message translates to:

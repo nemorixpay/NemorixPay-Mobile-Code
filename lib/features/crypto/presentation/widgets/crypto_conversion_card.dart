@@ -17,23 +17,21 @@ import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_mar
 /// @copyright   Apache 2.0 License
 class CryptoConversionCard extends StatefulWidget {
   final String selectedFiat;
-  final List<CryptoAssetWithMarketData> listOfAssets;
+  final CryptoAssetWithMarketData selectedAsset;
   final TextEditingController payController;
   final double assetPrice;
   final double receiveAmount;
   final Function(String) onFiatChanged;
-  final Function(CryptoAssetWithMarketData) onAssetChanged;
   final Function(String) onPayAmountChanged;
 
   const CryptoConversionCard({
     super.key,
     required this.selectedFiat,
-    required this.listOfAssets,
+    required this.selectedAsset,
     required this.payController,
     required this.assetPrice,
     required this.receiveAmount,
     required this.onFiatChanged,
-    required this.onAssetChanged,
     required this.onPayAmountChanged,
   });
 
@@ -43,17 +41,18 @@ class CryptoConversionCard extends StatefulWidget {
 
 class _CryptoConversionCardState extends State<CryptoConversionCard> {
   AmountValidationState _validationState = AmountValidationState.valid;
-  late CryptoAssetWithMarketData selectedAsset;
+  // late CryptoAssetWithMarketData selectedAsset;
   @override
   void initState() {
-    selectedAsset = widget.listOfAssets[0];
+    // selectedAsset = widget.listOfAssets[0];
+    debugPrint(
+        'CryptoConversionCard: selectedAsset = ${widget.selectedAsset.asset.assetCode}');
     super.initState();
   }
 
   @override
   void didUpdateWidget(CryptoConversionCard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (selectedAsset.asset.assetCode != selectedAsset.asset.assetCode) {}
   }
 
   void _validateAmount(String amount) {
@@ -87,8 +86,8 @@ class _CryptoConversionCardState extends State<CryptoConversionCard> {
           ),
           const SizedBox(height: 12),
           CryptoPriceDisplay(
-            symbol: selectedAsset.asset.assetCode,
-            initialCrypto: selectedAsset,
+            symbol: widget.selectedAsset.asset.assetCode,
+            initialCrypto: widget.selectedAsset,
           ),
           const SizedBox(height: 12),
           Row(
@@ -110,25 +109,24 @@ class _CryptoConversionCardState extends State<CryptoConversionCard> {
               hintText: '0.00',
               hintStyle: const TextStyle(color: Colors.grey),
               border: InputBorder.none,
-              errorText:
-                  _validationState != AmountValidationState.valid
-                      ? _getErrorMessage(context)
-                      : null,
+              errorText: _validationState != AmountValidationState.valid
+                  ? _getErrorMessage(context)
+                  : null,
             ),
             onChanged: _validateAmount,
           ),
           const SizedBox(height: 12),
-          Row(
+          const Row(
             children: [
-              const Expanded(child: Divider()),
+              Expanded(child: Divider()),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: const Icon(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Icon(
                   Icons.swap_vert,
                   color: NemorixColors.primaryColor,
                 ),
               ),
-              const Expanded(child: Divider()),
+              Expanded(child: Divider()),
             ],
           ),
           const SizedBox(height: 12),
@@ -139,7 +137,14 @@ class _CryptoConversionCardState extends State<CryptoConversionCard> {
                 style: Theme.of(context).textTheme.labelLarge,
               ),
               const Spacer(),
-              _buildAssetDropdown(context),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  widget.selectedAsset.asset.assetCode,
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ),
+              // _buildAssetDropdown(context),
             ],
           ),
           Align(
@@ -160,7 +165,7 @@ class _CryptoConversionCardState extends State<CryptoConversionCard> {
               ),
               const SizedBox(width: 4),
               Text(
-                '1 USD = ${(1 / widget.assetPrice).toStringAsFixed(6)} ${selectedAsset.asset.assetCode.toUpperCase()}',
+                '1 USD = ${(1 / widget.assetPrice).toStringAsFixed(6)} ${widget.selectedAsset.asset.assetCode.toUpperCase()}',
                 style: Theme.of(context).textTheme.labelMedium,
               ),
             ],
@@ -175,32 +180,13 @@ class _CryptoConversionCardState extends State<CryptoConversionCard> {
       value: widget.selectedFiat,
       style: Theme.of(context).textTheme.labelLarge,
       underline: const SizedBox(),
-      items:
-          ['USD', 'EUR', 'MXN', 'VES']
-              .map(
-                (currency) =>
-                    DropdownMenuItem(value: currency, child: Text(currency)),
-              )
-              .toList(),
+      items: ['USD', 'EUR', 'MXN', 'VES']
+          .map(
+            (currency) =>
+                DropdownMenuItem(value: currency, child: Text(currency)),
+          )
+          .toList(),
       onChanged: (value) => widget.onFiatChanged(value!),
-    );
-  }
-
-  Widget _buildAssetDropdown(BuildContext context) {
-    return DropdownButton<CryptoAssetWithMarketData>(
-      value: selectedAsset,
-      style: Theme.of(context).textTheme.labelLarge,
-      underline: const SizedBox(),
-      items:
-          widget.listOfAssets
-              .map(
-                (asset) => DropdownMenuItem(
-                  value: asset,
-                  child: Text(asset.asset.assetCode.toUpperCase()),
-                ),
-              )
-              .toList(),
-      onChanged: (value) => widget.onAssetChanged(value!),
     );
   }
 

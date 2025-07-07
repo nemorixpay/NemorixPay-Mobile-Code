@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nemorixpay/features/crypto/presentation/widgets/crypto_logo_widget.dart';
@@ -87,9 +89,8 @@ class ReceiveCryptoPage extends StatelessWidget {
     // For now, just copy to clipboard and show feedback
     await Clipboard.setData(ClipboardData(text: address));
     NemorixSnackBar.show(
-      // ignore: use_build_context_synchronously
       context,
-      message: 'Share address has not been implemented yet!',
+      message: AppLocalizations.of(context)!.featureNotImplemented,
       type: SnackBarType.info,
     );
   }
