@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
+import 'package:nemorixpay/features/onboarding/data/datasources/onboarding_local_datasource_impl.dart';
+import 'package:nemorixpay/features/terms/data/datasources/terms_local_datasource_impl.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
@@ -19,6 +21,7 @@ import 'package:nemorixpay/features/auth/presentation/widgets/social_login_butto
 import 'package:nemorixpay/shared/common/presentation/widgets/line_divider_with_text.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
 import 'package:nemorixpay/shared/stellar/data/datasources/stellar_secure_storage_datasource.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// @file        sign_in_page.dart
 /// @brief       Sign In page implementation for NemorixPay authentication system.
@@ -97,6 +100,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (BuildContext context, AuthState state) {
@@ -269,57 +273,115 @@ class _LoginPageState extends State<LoginPage> {
                         SocialLoginButtons(
                           onGooglePressed: () {
                             // TODO: Implement Google Sign In
-                            // NemorixSnackBar.show(context,
-                            //     message: AppLocalizations.of(context)!
-                            //         .googleSignInNotImplemented);
-
-                            Navigator.pushNamed(context, RouteNames.splashTest);
+                            NemorixSnackBar.show(context,
+                                message: AppLocalizations.of(context)!
+                                    .googleSignInNotImplemented);
                           },
                           onApplePressed: () {
+                            // TODO: Implement Apple Sign In
+                            NemorixSnackBar.show(context,
+                                message: AppLocalizations.of(context)!
+                                    .appleSignInNotImplemented);
+                          },
+                        ),
+                        Center(
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "${AppLocalizations.of(context)!.dontHaveAnAccount}?",
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                        context, RouteNames.signUp);
+                                  },
+                                  child: Text(
+                                    AppLocalizations.of(context)!.signUp,
+                                    style: const TextStyle(
+                                      color: NemorixColors.primaryColor,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        LineDividerWithText(
+                          text: AppLocalizations.of(context)!.testingPurposes,
+                        ),
+                        const SizedBox(height: 8),
+                        RoundedElevatedButton(
+                          text: localizations.showIndividualScreens,
+                          onPressed: () {
+                            Navigator.pushNamed(context, RouteNames.splashTest);
+                          }, // Flutter bloc action
+                          backgroundColor: NemorixColors.infoColor,
+                          textColor: Colors.white,
+                          // isLoading: state is AuthLoading,
+                        ),
+                        RoundedElevatedButton(
+                          text: localizations.deletePublicPrivateKeys,
+                          onPressed: () async {
                             try {
                               StellarSecureStorageDataSource
                                   stellarSecureStorageDataSource =
                                   StellarSecureStorageDataSource();
-                              stellarSecureStorageDataSource.deleteAllKeys();
+                              await stellarSecureStorageDataSource
+                                  .deleteAllKeys();
+                              // ignore: use_build_context_synchronously
                               NemorixSnackBar.show(context,
-                                  message:
-                                      'All keys were deleted - Secure Storage');
-                              // TODO: Implement Apple Sign In
-                              // NemorixSnackBar.show(context,
-                              //     message: AppLocalizations.of(context)!
-                              //         .appleSignInNotImplemented);
+                                  message: localizations.allKeysDeleted);
                             } catch (e) {
                               debugPrint(
                                   'Error: All keys were not deleted - Apple Button: $e');
                             }
-                          },
+                          }, // Flutter bloc action
+                          backgroundColor: NemorixColors.infoColor,
+                          textColor: Colors.white,
+                          // isLoading: state is AuthLoading,
+                        ),
+                        RoundedElevatedButton(
+                          text: localizations.deleteTermsOfServices,
+                          onPressed: () async {
+                            //clearTermsAcceptance
+                            TermsLocalDatasourceImpl datasource =
+                                TermsLocalDatasourceImpl();
+                            StellarSecureStorageDataSource
+                                stellarSecureStorageDataSource =
+                                StellarSecureStorageDataSource();
+                            await datasource.clearTermsAcceptance();
+                            await stellarSecureStorageDataSource
+                                .deleteAllKeys();
+                            // ignore: use_build_context_synchronously
+                            NemorixSnackBar.show(context,
+                                message: localizations.termsDeleted);
+                          }, // Flutter bloc action
+                          backgroundColor: NemorixColors.infoColor,
+                          textColor: Colors.white,
+                          // isLoading: state is AuthLoading,
+                        ),
+                        RoundedElevatedButton(
+                          text: localizations.deleteOnboardingSteps,
+                          onPressed: () async {
+                            final SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            OnboardingLocalDatasourceImpl datasource =
+                                OnboardingLocalDatasourceImpl(prefs);
+
+                            await datasource.resetOnboarding();
+                            // ignore: use_build_context_synchronously
+                            NemorixSnackBar.show(context,
+                                message: localizations.onboardingReset);
+                          }, // Flutter bloc action
+                          backgroundColor: NemorixColors.infoColor,
+                          textColor: Colors.white,
+                          // isLoading: state is AuthLoading,
                         ),
                       ],
-                    ),
-                    const SizedBox(height: 20),
-                    Center(
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "${AppLocalizations.of(context)!.dontHaveAnAccount}?",
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, RouteNames.signUp);
-                              },
-                              child: Text(
-                                AppLocalizations.of(context)!.signUp,
-                                style: const TextStyle(
-                                  color: NemorixColors.primaryColor,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
                   ],
                 ),

@@ -18,6 +18,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get featureNotImplemented => 'This feature has not been fully implemented';
 
   @override
+  String get testingPurposes => 'Testing Purposes';
+
+  @override
+  String get showIndividualScreens => 'Show Individual Screens';
+
+  @override
+  String get deletePublicPrivateKeys => 'Delete Public/Private Keys';
+
+  @override
+  String get deleteTermsOfServices => 'Delete Terms of Services';
+
+  @override
+  String get deleteOnboardingSteps => 'Delete Onboarding Steps';
+
+  @override
+  String get allKeysDeleted => 'All keys were deleted - Secure Storage';
+
+  @override
+  String get termsDeleted => 'Terms were deleted - Internal Storage';
+
+  @override
+  String get onboardingReset => 'Onboarding was reset - Internal Storage';
+
+  @override
   String get welcomeBack => 'Welcome Back';
 
   @override

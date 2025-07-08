@@ -113,6 +113,54 @@ abstract class AppLocalizations {
   /// **'This feature has not been fully implemented'**
   String get featureNotImplemented;
 
+  /// No description provided for @testingPurposes.
+  ///
+  /// In en, this message translates to:
+  /// **'Testing Purposes'**
+  String get testingPurposes;
+
+  /// No description provided for @showIndividualScreens.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Individual Screens'**
+  String get showIndividualScreens;
+
+  /// No description provided for @deletePublicPrivateKeys.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Public/Private Keys'**
+  String get deletePublicPrivateKeys;
+
+  /// No description provided for @deleteTermsOfServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Terms of Services'**
+  String get deleteTermsOfServices;
+
+  /// No description provided for @deleteOnboardingSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Onboarding Steps'**
+  String get deleteOnboardingSteps;
+
+  /// No description provided for @allKeysDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'All keys were deleted - Secure Storage'**
+  String get allKeysDeleted;
+
+  /// No description provided for @termsDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms were deleted - Internal Storage'**
+  String get termsDeleted;
+
+  /// No description provided for @onboardingReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Onboarding was reset - Internal Storage'**
+  String get onboardingReset;
+
   /// No description provided for @welcomeBack.
   ///
   /// In en, this message translates to:

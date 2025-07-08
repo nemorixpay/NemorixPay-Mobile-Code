@@ -24,6 +24,12 @@ abstract class OnboardingLocalDatasource {
   /// @throws      Exception if saving fails.
   Future<bool> completeOnboarding();
 
+  /// @brief       Marks onboarding as no completed.
+  /// @details     Reset the onboarding completion status.
+  /// @return      True if successful.
+  /// @throws      Exception if reset fails.
+  Future<bool> resetOnboarding();
+
   /// @brief       Checks if onboarding is completed.
   /// @details     Verifies if the user has already completed the onboarding process.
   /// @return      True if onboarding is completed.

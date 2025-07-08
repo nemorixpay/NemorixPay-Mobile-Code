@@ -221,7 +221,7 @@ class _SplashTestPageState extends State<SplashTestPage> {
                 ),
                 SizedBox(height: 20),
                 RoundedElevatedButton(
-                  text: "Continue with Tetsing Page",
+                  text: "Continue with Testing Page",
                   onPressed: () {
                     Navigator.pushNamed(context, RouteNames.testingPage);
                   },
@@ -232,7 +232,13 @@ class _SplashTestPageState extends State<SplashTestPage> {
                 RoundedElevatedButton(
                   text: "Continue with Transactions Page",
                   onPressed: () {
-                    Navigator.pushNamed(context, RouteNames.testTransactions);
+                    //Navigator.pushNamed(context, RouteNames.testTransactions);
+                    NemorixSnackBar.show(
+                      // ignore: use_build_context_synchronously
+                      context,
+                      message: 'This button does not work in this test page!',
+                      type: SnackBarType.error,
+                    );
                   },
                   backgroundColor: Colors.white,
                   textColor: Colors.black,

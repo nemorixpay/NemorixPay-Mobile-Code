@@ -70,4 +70,14 @@ class OnboardingLocalDatasourceImpl implements OnboardingLocalDatasource {
     await _prefs.setBool(_onboardingCompletedKey, model.isCompleted);
     await _prefs.setBool(_hasWalletKey, model.hasWallet);
   }
+
+  @override
+  Future<bool> resetOnboarding() async {
+    try {
+      await _prefs.setBool(_onboardingCompletedKey, false);
+      return true;
+    } catch (e) {
+      throw OnboardingFailure.unknown('Failed to reset onboarding: $e');
+    }
+  }
 }
