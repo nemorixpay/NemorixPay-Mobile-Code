@@ -375,5 +375,14 @@
   "transactionSummary": "Resumen de Transacción",
   "transactionDetails": "Detalles de Transacción",
   "confirmAndSend": "Confirmar y Enviar {cryptoName}",
-  "cancel": "Cancelar"
+  "cancel": "Cancelar",
+  "@_ANIMATED_DRAWER": {
+
+  },
+  "home": "Página principal",
+  "settings": "Herramientas",
+  "signOut": "Cerrar sesión",
+  "confirmSignOut": "¿Estás seguro de que quieres cerra sesión?",
+  "yes": "Si",
+  "no": "No"
 }

@@ -71,6 +71,9 @@ dependencies:
   # Native splash
   flutter_native_splash: ^2.3.10
 
+  # Dynamic drawer
+  flutter_advanced_drawer: ^1.5.0
+
   # QR
   qr_flutter: ^4.1.0
   mobile_scanner: ^7.0.1

@@ -1774,6 +1774,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
+
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Page'**
+  String get home;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// No description provided for @signOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Out'**
+  String get signOut;
+
+  /// No description provided for @confirmSignOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to sign out?'**
+  String get confirmSignOut;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

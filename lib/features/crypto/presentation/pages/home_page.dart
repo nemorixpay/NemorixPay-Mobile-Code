@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/core/utils/api_extensions.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/animated_drawer.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/app_loader.dart';
 import 'package:nemorixpay/shared/cache/core/managers/asset_cache_manager.dart';
 import 'package:nemorixpay/features/crypto/presentation/widgets/crypto_card.dart';
@@ -76,7 +77,7 @@ class _HomePage2State extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
+    return AnimatedDrawer(
       body: SafeArea(
         // TODO: Need to check with BlocListener
         child: BlocBuilder<CryptoHomeBloc, CryptoHomeState>(

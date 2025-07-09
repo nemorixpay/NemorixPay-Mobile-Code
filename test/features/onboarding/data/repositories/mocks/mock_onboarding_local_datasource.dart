@@ -45,7 +45,6 @@ class MockOnboardingLocalDatasource implements OnboardingLocalDatasource {
     return _isCompleted;
   }
 
-  @override
   Future<OnboardingModel> getOnboardingData() async {
     _checkForError();
     return OnboardingModel(
@@ -55,11 +54,16 @@ class MockOnboardingLocalDatasource implements OnboardingLocalDatasource {
     );
   }
 
-  @override
   Future<void> saveOnboardingData(OnboardingModel data) async {
     _checkForError();
     _language = data.language;
     _isCompleted = data.isCompleted;
     _hasWallet = data.hasWallet;
+  }
+
+  @override
+  Future<bool> resetOnboarding() {
+    // TODO: implement resetOnboarding
+    throw UnimplementedError();
   }
 }

@@ -867,4 +867,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancel => 'Cancel';
+
+  @override
+  String get home => 'Home Page';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get signOut => 'Sign Out';
+
+  @override
+  String get confirmSignOut => 'Are you sure you want to sign out?';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
 }
