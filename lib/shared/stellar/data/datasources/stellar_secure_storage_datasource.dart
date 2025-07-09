@@ -161,7 +161,15 @@ class StellarSecureStorageDataSource {
   }) async {
     try {
       final String storageKey = '$_baseKey$publicKey';
-      final bool exists = await _storage.containsKey(key: storageKey);
+      final bool exists = await _storage.containsKey(
+        key: storageKey,
+        aOptions: const AndroidOptions(
+          encryptedSharedPreferences: true,
+        ),
+        iOptions: const IOSOptions(
+          accessibility: KeychainAccessibility.first_unlock_this_device,
+        ),
+      );
 
       debugPrint('Private key exists for public key $publicKey: $exists');
       return exists;
@@ -180,7 +188,15 @@ class StellarSecureStorageDataSource {
   }) async {
     try {
       final String storageKey = '$_baseUserKey$userId';
-      final bool exists = await _storage.containsKey(key: storageKey);
+      final bool exists = await _storage.containsKey(
+        key: storageKey,
+        aOptions: const AndroidOptions(
+          encryptedSharedPreferences: true,
+        ),
+        iOptions: const IOSOptions(
+          accessibility: KeychainAccessibility.first_unlock_this_device,
+        ),
+      );
 
       debugPrint('Public key exists for this userId ($userId): $exists');
       if (exists) {
