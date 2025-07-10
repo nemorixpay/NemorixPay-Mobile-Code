@@ -207,6 +207,8 @@
   "walletErrorNetworkError": "Error de red. Por favor, verifica tu conexión e inténtalo de nuevo.",
   "walletErrorTimeoutError": "La solicitud ha expirado. Por favor, inténtalo de nuevo.",
   "walletErrorUnknown": "Ha ocurrido un error desconocido. Por favor, inténtalo de nuevo.",
+  "walletErrorUserNotAuthenticated": "Usuario no autenticado. Por favor, inicia sesión nuevamente.",
+  "walletErrorCreationFailedGeneric": "No se pudo crear la wallet. Inténtalo de nuevo.",
   "@_ASSET_ERROR_MESSAGES": {},
   "assetErrorPriceUpdateFailed": "Error al actualizar el precio del activo",
   "assetErrorInvalidPriceData": "Datos de precio inválidos recibidos",

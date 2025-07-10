@@ -536,6 +536,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletErrorUnknown => 'An unknown error occurred. Please try again.';
 
   @override
+  String get walletErrorUserNotAuthenticated => 'User not authenticated. Please sign in again.';
+
+  @override
+  String get walletErrorCreationFailedGeneric => 'Could not create wallet. Please try again.';
+
+  @override
   String get assetErrorPriceUpdateFailed => 'Failed to update asset price';
 
   @override

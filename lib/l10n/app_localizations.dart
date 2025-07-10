@@ -1145,6 +1145,18 @@ abstract class AppLocalizations {
   /// **'An unknown error occurred. Please try again.'**
   String get walletErrorUnknown;
 
+  /// No description provided for @walletErrorUserNotAuthenticated.
+  ///
+  /// In en, this message translates to:
+  /// **'User not authenticated. Please sign in again.'**
+  String get walletErrorUserNotAuthenticated;
+
+  /// No description provided for @walletErrorCreationFailedGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not create wallet. Please try again.'**
+  String get walletErrorCreationFailedGeneric;
+
   /// No description provided for @assetErrorPriceUpdateFailed.
   ///
   /// In en, this message translates to:

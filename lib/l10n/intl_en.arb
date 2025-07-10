@@ -207,6 +207,8 @@
   "walletErrorNetworkError": "Network error. Please check your connection and try again.",
   "walletErrorTimeoutError": "Request timed out. Please try again.",
   "walletErrorUnknown": "An unknown error occurred. Please try again.",
+  "walletErrorUserNotAuthenticated": "User not authenticated. Please sign in again.",
+  "walletErrorCreationFailedGeneric": "Could not create wallet. Please try again.",
   "@_ASSET_ERROR_MESSAGES": {
 
   },

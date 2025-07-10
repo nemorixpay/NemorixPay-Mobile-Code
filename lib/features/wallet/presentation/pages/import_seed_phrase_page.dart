@@ -140,45 +140,53 @@ class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage>
           // Get current user ID from Firebase and save public key
           final firebaseUser = FirebaseAuth.instance.currentUser;
 
-          if (firebaseUser != null) {
-            if (state.wallet.publicKey == null) {
-              debugPrint(
-                  'PublicKey is null, cannot save public key (ImportSeedPhrasePage)');
-            } else {
-              StellarAccountProvider stellarAccountProvider =
-                  StellarAccountProvider();
-              stellarAccountProvider.userId = firebaseUser.uid;
-              stellarAccountProvider.updatePublicKey(state.wallet.publicKey!);
-
-              debugPrint('Saving public key for user: ${firebaseUser.uid}');
-              context.read<WalletBloc>().add(
-                    SavePublicKeyRequested(
-                      publicKey: state.wallet.publicKey!,
-                      userId: firebaseUser.uid,
-                    ),
-                  );
-            }
-          } else {
-            debugPrint('No Firebase user found, cannot save public key');
+          if (firebaseUser == null) {
+            // ERROR: No authenticated user
+            NemorixSnackBar.show(
+              context,
+              message: l10n.walletErrorUserNotAuthenticated,
+              type: SnackBarType.error,
+            );
+            // Go to SignIn page
+            Navigator.pushNamedAndRemoveUntil(
+                context, RouteNames.signIn, (route) => false);
+            return;
           }
 
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            RouteNames.successPage,
-            arguments: {
-              'titleSuccess': l10n.importWalletSuccessTitle,
-              'firstParagraph': l10n.walletSuccessSecurity,
-              'secondParagraph': l10n.walletSuccessInfo,
-            },
-            (route) => false,
-          );
+          if (state.wallet.publicKey == null) {
+            // ERROR: Wallet did not create it successfully
+            NemorixSnackBar.show(
+              context,
+              message: l10n.walletErrorCreationFailedGeneric,
+              type: SnackBarType.error,
+            );
+            // Go back to Wallet Setup
+            Navigator.pop(context);
+            return;
+          }
+
+          // Saving wallet / account data
+          StellarAccountProvider stellarAccountProvider =
+              StellarAccountProvider();
+          stellarAccountProvider.userId = firebaseUser.uid;
+          stellarAccountProvider.updatePublicKey(state.wallet.publicKey!);
+
+          debugPrint('Saving public key for user: ${firebaseUser.uid}');
+
+          // Saving account data in secure internal storage
+          context.read<WalletBloc>().add(
+                SavePublicKeyRequested(
+                  publicKey: state.wallet.publicKey!,
+                  userId: firebaseUser.uid,
+                ),
+              );
         } else if (state is PublicKeySaved) {
           StellarAccountProvider stellarAccountProvider =
               StellarAccountProvider();
           stellarAccountProvider.userId = state.userId;
           stellarAccountProvider.updatePublicKey(state.publicKey);
 
-          debugPrint('Public key saved successfully for user: ${state.userId}');
+          debugPrint('Public key saved successfully: ${state.userId}');
           Navigator.pushNamedAndRemoveUntil(
             context,
             RouteNames.successPage,
