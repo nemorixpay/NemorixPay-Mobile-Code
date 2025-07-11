@@ -386,5 +386,17 @@
   "signOut": "Cerrar sesión",
   "confirmSignOut": "¿Estás seguro de que quieres cerra sesión?",
   "yes": "Si",
-  "no": "No"
+  "no": "No",
+  "@_SETTINGS_PAGE": {
+
+  },
+  "userProfile": "Perfil de Usuario",
+  "general": "General",
+  "myAccount": "Mi Cuenta",
+  "billingPayment": "Facturación/Pagos",
+  "faqSupport": "FAQ & Soporte",
+  "setting": "Configuración",
+  "language": "Idioma",
+  "security": "Seguridad",
+  "darkMode": "Modo Oscuro"
 }

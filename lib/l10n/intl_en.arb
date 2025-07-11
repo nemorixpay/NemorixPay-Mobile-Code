@@ -439,5 +439,17 @@
   "signOut": "Sign Out",
   "confirmSignOut": "Are you sure you want to sign out?",
   "yes": "Yes",
-  "no": "No"
+  "no": "No",
+  "@_SETTINGS_PAGE": {
+
+  },
+  "userProfile": "User Profile",
+  "general": "General",
+  "myAccount": "My Account",
+  "billingPayment": "Billing/Payment",
+  "faqSupport": "FAQ & Support",
+  "setting": "Setting",
+  "language": "Language",
+  "security": "Security",
+  "darkMode": "Dark Mode"
 }

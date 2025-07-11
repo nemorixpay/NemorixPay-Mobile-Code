@@ -80,8 +80,11 @@ class _AnimatedDrawerState extends State<AnimatedDrawer> {
               ),
               ListTile(
                 onTap: () {
-                  NemorixSnackBar.show(context,
-                      message: localizations.featureNotImplemented);
+                  _animatedDrawerController.hideDrawer();
+                  Navigator.pushNamed(
+                    context,
+                    RouteNames.settings,
+                  );
                 },
                 leading: const Icon(Icons.settings),
                 title: Text(localizations.settings),

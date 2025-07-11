@@ -28,4 +28,8 @@ class ImageUrl {
       'assets/images/onboarding/funcionalidades.jpg';
   static const String onboardingSlideBenefits =
       'assets/images/onboarding/beneficios.png';
+
+  // Settings
+  static const String settingsUserAvatar =
+      'assets/images/settings/avatar_placeholder.png';
 }

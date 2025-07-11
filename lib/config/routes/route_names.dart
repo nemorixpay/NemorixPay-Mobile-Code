@@ -81,4 +81,7 @@ class RouteNames {
 
   /// QR scan page
   static const qrScan = "qr_scan";
+
+  /// Settings page
+  static const settings = "settings";
 }

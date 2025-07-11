@@ -110,6 +110,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/onboarding/
+    - assets/images/settings/
     - assets/logos/
     - assets/animations/
   #   - images/a_dot_ham.jpeg

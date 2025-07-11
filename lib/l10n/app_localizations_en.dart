@@ -891,4 +891,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get no => 'No';
+
+  @override
+  String get userProfile => 'User Profile';
+
+  @override
+  String get general => 'General';
+
+  @override
+  String get myAccount => 'My Account';
+
+  @override
+  String get billingPayment => 'Billing/Payment';
+
+  @override
+  String get faqSupport => 'FAQ & Support';
+
+  @override
+  String get setting => 'Setting';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get darkMode => 'Dark Mode';
 }

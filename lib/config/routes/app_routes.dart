@@ -16,6 +16,7 @@ import 'package:nemorixpay/features/onboarding/presentation/pages/benefits_slide
 import 'package:nemorixpay/features/onboarding/presentation/pages/features_slide.dart';
 import 'package:nemorixpay/features/onboarding/presentation/pages/security_slide.dart';
 import 'package:nemorixpay/features/onboarding/presentation/pages/onboarding_page.dart';
+import 'package:nemorixpay/features/settings/presentation/pages/settings_page.dart';
 import 'package:nemorixpay/features/splash/presentation/pages/splash_native_page.dart';
 import 'package:nemorixpay/features/splash/presentation/pages/splash_test_page.dart';
 import 'package:nemorixpay/features/terms/presentation/pages/terms_page.dart';
@@ -142,6 +143,12 @@ class AppRoutes {
       name: 'QrScan',
       screen: const QrScanPage(),
       icon: Icons.qr_code,
+    ),
+    RouteModel(
+      route: RouteNames.settings,
+      name: 'Settings',
+      screen: const SettingsPage(),
+      icon: Icons.settings,
     ),
   ];
 
