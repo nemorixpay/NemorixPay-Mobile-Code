@@ -24,88 +24,87 @@ class BenefitsSlide extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 40),
-              // Imagen
-              Center(
-                child: Image.asset(
-                  ImageUrl.onboardingSlideBenefits,
-                  height: 180,
-                  fit: BoxFit.contain,
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 40),
+                // Imagen
+                Center(
+                  child: Image.asset(
+                    ImageUrl.onboardingSlideBenefits,
+                    height: 180,
+                    fit: BoxFit.contain,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 40),
-              // Título
-              Text(
-                l10n.onboarding_benefits_title,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
+                const SizedBox(height: 40),
+                // Título
+                Text(
+                  l10n.onboarding_benefits_title,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                // Subtítulo
+                Text(
+                  l10n.onboarding_benefits_subtitle,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 40),
+                // Características
+                OnboardingFeature(
+                  icon: Icons.currency_exchange,
+                  title: l10n.onboarding_benefits_fees_title,
+                  description: l10n.onboarding_benefits_fees_desc,
+                ),
+                const SizedBox(height: 16),
+                OnboardingFeature(
+                  icon: Icons.support_agent_outlined,
+                  title: l10n.onboarding_benefits_support_title,
+                  description: l10n.onboarding_benefits_support_desc,
+                ),
+                const SizedBox(height: 16),
+                OnboardingFeature(
+                  icon: Icons.fast_forward_outlined,
+                  title: l10n.onboarding_benefits_speed_title,
+                  description: l10n.onboarding_benefits_speed_desc,
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                // Botones
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CustomButton(
+                      onTap: () {
+                        debugPrint('Back pressed');
+                        onBack();
+                      },
+                      label: l10n.onboarding_button_back,
                     ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              // Subtítulo
-              Text(
-                l10n.onboarding_benefits_subtitle,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    CustomButton(
+                      onTap: () {
+                        debugPrint('Next pressed');
+                        onNext();
+                      },
+                      label: l10n.onboarding_button_next,
+                      backgroundColor: NemorixColors.primaryColor,
+                      textColor: NemorixColors.greyLevel1,
                     ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 40),
-              // Características
-              OnboardingFeature(
-                icon: Icons.currency_exchange,
-                title: l10n.onboarding_benefits_fees_title,
-                description: l10n.onboarding_benefits_fees_desc,
-              ),
-              const SizedBox(height: 16),
-              OnboardingFeature(
-                icon: Icons.support_agent_outlined,
-                title: l10n.onboarding_benefits_support_title,
-                description: l10n.onboarding_benefits_support_desc,
-              ),
-              const SizedBox(height: 16),
-              OnboardingFeature(
-                icon: Icons.touch_app_outlined,
-                title: l10n.onboarding_benefits_ui_title,
-                description: l10n.onboarding_benefits_ui_desc,
-              ),
-              const SizedBox(height: 16),
-              OnboardingFeature(
-                icon: Icons.fast_forward_outlined,
-                title: l10n.onboarding_benefits_speed_title,
-                description: l10n.onboarding_benefits_speed_desc,
-              ),
-              const Spacer(),
-              // Botones
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  CustomButton(
-                    onTap: () {
-                      debugPrint('Back pressed');
-                      onBack();
-                    },
-                    label: l10n.onboarding_button_back,
-                  ),
-                  CustomButton(
-                    onTap: () {
-                      debugPrint('Next pressed');
-                      onNext();
-                    },
-                    label: l10n.onboarding_button_next,
-                    backgroundColor: NemorixColors.primaryColor,
-                    textColor: NemorixColors.greyLevel1,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-            ],
+                  ],
+                ),
+                const SizedBox(height: 24),
+              ],
+            ),
           ),
         ),
       ),

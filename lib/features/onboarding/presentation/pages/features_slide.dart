@@ -24,88 +24,87 @@ class FeaturesSlide extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 40),
-              // Imagen
-              Center(
-                child: Image.asset(
-                  ImageUrl.onboardingSlideFeatures,
-                  height: 180,
-                  fit: BoxFit.contain,
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 40),
+                // Imagen
+                Center(
+                  child: Image.asset(
+                    ImageUrl.onboardingSlideFeatures,
+                    height: 180,
+                    fit: BoxFit.contain,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 40),
-              // Título
-              Text(
-                l10n.onboarding_features_title,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
+                const SizedBox(height: 40),
+                // Título
+                Text(
+                  l10n.onboarding_features_title,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                // Subtítulo
+                Text(
+                  l10n.onboarding_features_subtitle,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 40),
+                // Características
+                OnboardingFeature(
+                  icon: Icons.currency_exchange,
+                  title: l10n.onboarding_features_trading_title,
+                  description: l10n.onboarding_features_trading_desc,
+                ),
+                const SizedBox(height: 16),
+                OnboardingFeature(
+                  icon: Icons.trending_up,
+                  title: l10n.onboarding_features_monitoring_title,
+                  description: l10n.onboarding_features_monitoring_desc,
+                ),
+                const SizedBox(height: 16),
+                OnboardingFeature(
+                  icon: Icons.history,
+                  title: l10n.onboarding_features_history_title,
+                  description: l10n.onboarding_features_history_desc,
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                // Botones
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CustomButton(
+                      onTap: () {
+                        debugPrint('Back pressed');
+                        onBack();
+                      },
+                      label: l10n.onboarding_button_back,
                     ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              // Subtítulo
-              Text(
-                l10n.onboarding_features_subtitle,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    CustomButton(
+                      onTap: () {
+                        debugPrint('Next pressed');
+                        onNext();
+                      },
+                      label: l10n.onboarding_button_next,
+                      backgroundColor: NemorixColors.primaryColor,
+                      textColor: NemorixColors.greyLevel1,
                     ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 40),
-              // Características
-              OnboardingFeature(
-                icon: Icons.currency_exchange,
-                title: l10n.onboarding_features_trading_title,
-                description: l10n.onboarding_features_trading_desc,
-              ),
-              const SizedBox(height: 16),
-              OnboardingFeature(
-                icon: Icons.trending_up,
-                title: l10n.onboarding_features_monitoring_title,
-                description: l10n.onboarding_features_monitoring_desc,
-              ),
-              const SizedBox(height: 16),
-              OnboardingFeature(
-                icon: Icons.history,
-                title: l10n.onboarding_features_history_title,
-                description: l10n.onboarding_features_history_desc,
-              ),
-              const SizedBox(height: 16),
-              OnboardingFeature(
-                icon: Icons.notifications,
-                title: l10n.onboarding_features_notifications_title,
-                description: l10n.onboarding_features_notifications_desc,
-              ),
-              const Spacer(),
-              // Botones
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  CustomButton(
-                    onTap: () {
-                      debugPrint('Back pressed');
-                      onBack();
-                    },
-                    label: l10n.onboarding_button_back,
-                  ),
-                  CustomButton(
-                    onTap: () {
-                      debugPrint('Next pressed');
-                      onNext();
-                    },
-                    label: l10n.onboarding_button_next,
-                    backgroundColor: NemorixColors.primaryColor,
-                    textColor: NemorixColors.greyLevel1,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-            ],
+                  ],
+                ),
+                const SizedBox(height: 24),
+              ],
+            ),
           ),
         ),
       ),
