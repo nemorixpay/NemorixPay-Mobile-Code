@@ -1,6 +1,7 @@
 import 'package:nemorixpay/di/services/auth_injection_service.dart';
 import 'package:nemorixpay/di/services/crypto_market_injection_service.dart';
 import 'package:nemorixpay/di/services/navigation_service.dart';
+import 'package:nemorixpay/di/services/settings_injection_service.dart';
 import 'package:nemorixpay/di/services/stellar_injection_service.dart';
 import 'package:nemorixpay/di/services/wallet_injection_service.dart';
 import 'package:nemorixpay/di/services/onboarding_injection_service.dart';
@@ -13,7 +14,7 @@ import 'package:nemorixpay/di/services/terms_injection_service.dart';
 ///              Now includes Terms and Conditions feature with navigation service.
 /// @author      Miguel Fagundez
 /// @date        07/02/2025
-/// @version     1.1
+/// @version     1.2
 /// @copyright   Apache 2.0 License
 ///
 /// @section     Initialization Order
@@ -45,6 +46,8 @@ Future<void> initInjectionDependencies() async {
   await termsInjectionServices();
   // Navigation Services
   await navigationServices();
+  // Settings
+  await settingsInjectionServices();
   // Authentication
   await authInjectionServices();
   // Stellar

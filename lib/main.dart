@@ -24,6 +24,9 @@ import 'package:nemorixpay/features/onboarding/presentation/bloc/onboarding_even
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_home_bloc.dart';
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_bloc.dart';
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_all_available_assets/crypto_market_bloc.dart';
+import 'package:nemorixpay/features/settings/presentation/bloc/settings_bloc.dart';
+import 'package:nemorixpay/features/settings/presentation/bloc/settings_event.dart';
+import 'package:nemorixpay/features/settings/presentation/bloc/settings_state.dart';
 import 'firebase_options.dart';
 
 /// Global key for accessing the ScaffoldMessenger from anywhere in the app
@@ -67,6 +70,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => GetIt.instance.get<CryptoAccountBloc>()),
         BlocProvider(create: (_) => GetIt.instance.get<CryptoHomeBloc>()),
         BlocProvider(create: (_) => GetIt.instance.get<OnboardingBloc>()),
+        BlocProvider(create: (_) => GetIt.instance.get<SettingsBloc>()),
       ],
       child: MultiBlocListener(
         listeners: [
@@ -116,17 +120,43 @@ class _MyAppState extends State<MyApp> {
             },
           ),
         ],
-        child: MaterialApp(
-          title: 'NemorixPay',
-          debugShowCheckedModeBanner: false,
-          scaffoldMessengerKey: scaffoldKey,
-          theme: NemorixTheme.darkThemeMode,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: Locale(_currentLanguage ?? 'en'),
-          initialRoute: RouteNames.splashNative,
-          routes: AppRoutes.getAppRoutes(),
-          onGenerateRoute: AppRoutes.onGenerateRoute,
+        child: BlocBuilder<SettingsBloc, SettingsState>(
+          builder: (context, settingsState) {
+            // Load dark mode preference when app starts
+            if (settingsState is SettingsInitial) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                context.read<SettingsBloc>().add(LoadDarkModePreference());
+              });
+            }
+
+            // Determine current theme based on settings state
+            ThemeData currentTheme;
+            if (settingsState is SettingsLoaded ||
+                settingsState is DarkModeToggled) {
+              final isDarkMode = settingsState is SettingsLoaded
+                  ? settingsState.isDarkMode
+                  : (settingsState as DarkModeToggled).isDarkMode;
+              currentTheme = isDarkMode
+                  ? NemorixTheme.darkThemeMode
+                  : NemorixTheme.lightThemeMode;
+            } else {
+              // Default to dark mode while loading
+              currentTheme = NemorixTheme.darkThemeMode;
+            }
+
+            return MaterialApp(
+              title: 'NemorixPay',
+              debugShowCheckedModeBanner: false,
+              scaffoldMessengerKey: scaffoldKey,
+              theme: currentTheme,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              locale: Locale(_currentLanguage ?? 'en'),
+              initialRoute: RouteNames.splashNative,
+              routes: AppRoutes.getAppRoutes(),
+              onGenerateRoute: AppRoutes.onGenerateRoute,
+            );
+          },
         ),
       ),
     );
