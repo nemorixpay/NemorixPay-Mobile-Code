@@ -23,6 +23,18 @@ class NemorixTheme {
         return null; // Use the default fill color when not selected
       }),
     ),
+    switchTheme: SwitchThemeData(
+      thumbColor: WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.selected)
+            ? NemorixColors.primaryColor
+            : null,
+      ),
+      trackColor: WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.selected)
+            ? NemorixColors.greyLevel2
+            : null,
+      ),
+    ),
     primaryColor: NemorixColors.primaryColor,
     cardColor: NemorixColors.greyLevel1,
     textTheme: const TextTheme(
@@ -60,6 +72,18 @@ class NemorixTheme {
         }
         return null; // Use the default fill color when not selected
       }),
+    ),
+    switchTheme: SwitchThemeData(
+      thumbColor: WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.selected)
+            ? NemorixColors.primaryColor
+            : null,
+      ),
+      trackColor: WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.selected)
+            ? NemorixColors.greyLevel2
+            : null,
+      ),
     ),
     primaryColor: NemorixColors.primaryColor,
     cardColor: NemorixColors.greyLevel6,

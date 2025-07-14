@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_market_data.dart';
+import 'package:nemorixpay/l10n/app_localizations.dart';
 
 /// @file        crypto_price_display.dart
 /// @brief       Widget for displaying crypto prices.
@@ -51,14 +52,14 @@ class CryptoPriceDisplay extends StatelessWidget {
           ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         Text(
-          'Última actualización: ${_formatDateTime(asset.marketData.lastUpdated)}',
+          '${AppLocalizations.of(context)!.lastUpdateOnly}: ${_formatDateTime(asset.marketData.lastUpdated)}',
           style: Theme.of(context).textTheme.bodySmall,
         ),
         const SizedBox(height: 8),
-        ElevatedButton(
-          onPressed: () => _updatePrice(context),
-          child: const Text('Actualizar Precio'),
-        ),
+        // ElevatedButton(
+        //   onPressed: () => _updatePrice(context),
+        //   child: const Text('Actualizar Precio'),
+        // ),
       ],
     );
   }
@@ -69,14 +70,14 @@ class CryptoPriceDisplay extends StatelessWidget {
         Text(
           'Error: $message',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(context).colorScheme.error,
-          ),
+                color: Theme.of(context).colorScheme.error,
+              ),
         ),
         const SizedBox(height: 8),
-        ElevatedButton(
-          onPressed: () => _updatePrice(context),
-          child: const Text('Reintentar'),
-        ),
+        // ElevatedButton(
+        //   onPressed: () => _updatePrice(context),
+        //   child: const Text('Reintentar'),
+        // ),
       ],
     );
   }
@@ -94,14 +95,14 @@ class CryptoPriceDisplay extends StatelessWidget {
           ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         Text(
-          'Última actualización: ${_formatDateTime(asset.marketData.lastUpdated)}',
+          '${AppLocalizations.of(context)!.lastUpdateOnly}: ${_formatDateTime(asset.marketData.lastUpdated)}',
           style: Theme.of(context).textTheme.bodySmall,
         ),
         const SizedBox(height: 8),
-        ElevatedButton(
-          onPressed: () => _updatePrice(context),
-          child: const Text('Actualizar Precio'),
-        ),
+        // ElevatedButton(
+        //   onPressed: () => _updatePrice(context),
+        //   child: const Text('Actualizar Precio'),
+        // ),
       ],
     );
   }

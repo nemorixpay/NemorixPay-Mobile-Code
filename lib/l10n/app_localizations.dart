@@ -593,6 +593,12 @@ abstract class AppLocalizations {
   /// **'You Pay'**
   String get youPay;
 
+  /// No description provided for @lastUpdateOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Last update'**
+  String get lastUpdateOnly;
+
   /// No description provided for @youReceive.
   ///
   /// In en, this message translates to:
@@ -1870,6 +1876,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dark Mode'**
   String get darkMode;
+
+  /// No description provided for @paymentMethodTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Method'**
+  String get paymentMethodTitle;
+
+  /// No description provided for @creditCardLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit Card'**
+  String get creditCardLabel;
+
+  /// No description provided for @addNewCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New Card'**
+  String get addNewCardTitle;
+
+  /// No description provided for @cardNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Card Number'**
+  String get cardNumberLabel;
+
+  /// No description provided for @cardHolderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Card Holder'**
+  String get cardHolderLabel;
+
+  /// No description provided for @expiryDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Expiry Date'**
+  String get expiryDateLabel;
+
+  /// No description provided for @addButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get addButton;
+
+  /// No description provided for @addNewCardButton.
+  ///
+  /// In en, this message translates to:
+  /// **'+add new card'**
+  String get addNewCardButton;
+
+  /// No description provided for @googlePayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Google Pay'**
+  String get googlePayLabel;
+
+  /// No description provided for @applePayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Apple Pay'**
+  String get applePayLabel;
+
+  /// No description provided for @mobileBankingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile Banking'**
+  String get mobileBankingLabel;
+
+  /// No description provided for @sendReceiptLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Send receipt to your email'**
+  String get sendReceiptLabel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

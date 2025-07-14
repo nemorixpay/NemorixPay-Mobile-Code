@@ -107,6 +107,7 @@
   "performance": "Rendimiento",
   "buy": "Comprar",
   "youPay": "Tú Pagas",
+  "lastUpdateOnly": "Última actualización",
   "youReceive": "Tú Recibes",
   "exchangeFee": "Comisión de cambio",
   "clickHereFor": "Haz clic aquí para ",
@@ -398,5 +399,20 @@
   "setting": "Configuración",
   "language": "Idioma",
   "security": "Seguridad",
-  "darkMode": "Modo Oscuro"
+  "darkMode": "Modo Oscuro",
+  "@_PAYMENT_METHOD_PAGE": {
+
+  },  
+  "paymentMethodTitle": "Método de Pago",
+  "creditCardLabel": "Tarjeta de Crédito",
+  "addNewCardTitle": "Agregar Nueva Tarjeta",
+  "cardNumberLabel": "Número de Tarjeta",
+  "cardHolderLabel": "Titular de la Tarjeta",
+  "expiryDateLabel": "Fecha de Vencimiento",
+  "addButton": "Agregar",
+  "addNewCardButton": "+agregar nueva tarjeta",
+  "googlePayLabel": "Google Pay",
+  "applePayLabel": "Apple Pay",
+  "mobileBankingLabel": "Banca Móvil",
+  "sendReceiptLabel": "Enviar recibo a tu email"
 }

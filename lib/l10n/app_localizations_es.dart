@@ -260,6 +260,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get youPay => 'Tú Pagas';
 
   @override
+  String get lastUpdateOnly => 'Última actualización';
+
+  @override
   String get youReceive => 'Tú Recibes';
 
   @override
@@ -915,4 +918,40 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get darkMode => 'Modo Oscuro';
+
+  @override
+  String get paymentMethodTitle => 'Método de Pago';
+
+  @override
+  String get creditCardLabel => 'Tarjeta de Crédito';
+
+  @override
+  String get addNewCardTitle => 'Agregar Nueva Tarjeta';
+
+  @override
+  String get cardNumberLabel => 'Número de Tarjeta';
+
+  @override
+  String get cardHolderLabel => 'Titular de la Tarjeta';
+
+  @override
+  String get expiryDateLabel => 'Fecha de Vencimiento';
+
+  @override
+  String get addButton => 'Agregar';
+
+  @override
+  String get addNewCardButton => '+agregar nueva tarjeta';
+
+  @override
+  String get googlePayLabel => 'Google Pay';
+
+  @override
+  String get applePayLabel => 'Apple Pay';
+
+  @override
+  String get mobileBankingLabel => 'Banca Móvil';
+
+  @override
+  String get sendReceiptLabel => 'Enviar recibo a tu email';
 }

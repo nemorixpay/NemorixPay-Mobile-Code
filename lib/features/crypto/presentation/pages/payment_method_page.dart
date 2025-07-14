@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:nemorixpay/config/theme/nemorix_colors.dart';
-import 'package:nemorixpay/features/crypto/domain/entities/credit_card.dart';
-import 'package:nemorixpay/features/crypto/domain/entities/payment_method_validator.dart';
-import 'package:nemorixpay/features/crypto/presentation/widgets/credit_card_gradient.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
+import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/shared/common/data/mock_credit_cards.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/credit_card.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/base_card.dart';
-import 'package:nemorixpay/shared/common/presentation/widgets/custom_button_tile.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
+import 'package:nemorixpay/shared/common/presentation/widgets/custom_button_tile.dart';
+import 'package:nemorixpay/features/crypto/domain/entities/payment_method_validator.dart';
+import 'package:nemorixpay/features/crypto/presentation/widgets/credit_card_gradient.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_button.dart';
 
 /// @file        payment_method_page.dart
@@ -57,25 +57,29 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
     final holderController = TextEditingController();
     final expiryController = TextEditingController();
     String selectedType = 'Visa';
+    final localizations = AppLocalizations.of(context)!;
 
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Add New Card'),
+        title: Text(localizations.addNewCardTitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: numberController,
-              decoration: const InputDecoration(labelText: 'Card Number'),
+              decoration:
+                  InputDecoration(labelText: localizations.cardNumberLabel),
             ),
             TextField(
               controller: holderController,
-              decoration: const InputDecoration(labelText: 'Card Holder'),
+              decoration:
+                  InputDecoration(labelText: localizations.cardHolderLabel),
             ),
             TextField(
               controller: expiryController,
-              decoration: const InputDecoration(labelText: 'Expiry Date'),
+              decoration:
+                  InputDecoration(labelText: localizations.expiryDateLabel),
             ),
             DropdownButton<String>(
               value: selectedType,
@@ -96,7 +100,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('Cancel'),
+            child: Text(localizations.cancel),
           ),
           ElevatedButton(
             onPressed: () {
@@ -119,7 +123,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                 Navigator.pop(context);
               }
             },
-            child: const Text('Add'),
+            child: Text(localizations.addButton),
           ),
         ],
       ),
@@ -138,6 +142,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -146,8 +151,8 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const MainHeader(
-                title: 'Payment Method',
+              MainHeader(
+                title: localizations.paymentMethodTitle,
                 showSearchButton: false,
               ),
               const SizedBox(height: 20),
@@ -157,7 +162,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Credit Card',
+                      localizations.creditCardLabel,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 20),
@@ -199,33 +204,34 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                         CreditCardGradient(
                           card: creditCards[selectedCardIndex],
                         ),
-                        GestureDetector(
-                          child: const Icon(
-                            Icons.delete_forever_rounded,
-                            size: 24,
+                        if (creditCards.length > 1)
+                          GestureDetector(
+                            child: const Icon(
+                              Icons.delete_forever_rounded,
+                              size: 24,
+                            ),
+                            onTap: () {
+                              setState(() {
+                                creditCards.removeAt(selectedCardIndex);
+                                if (creditCards.isEmpty) {
+                                  selectedCardIndex = -1;
+                                  selectedMethod = '';
+                                } else {
+                                  selectedCardIndex = 0;
+                                }
+                                _validatePaymentMethod();
+                              });
+                            },
                           ),
-                          onTap: () {
-                            setState(() {
-                              creditCards.removeAt(selectedCardIndex);
-                              if (creditCards.isEmpty) {
-                                selectedCardIndex = -1;
-                                selectedMethod = '';
-                              } else {
-                                selectedCardIndex = 0;
-                              }
-                              _validatePaymentMethod();
-                            });
-                          },
-                        ),
                       ],
                     ),
                     const SizedBox(height: 10),
                     Center(
                       child: TextButton(
                         onPressed: _showAddCardDialog,
-                        child: const Text(
-                          '+add new card',
-                          style: TextStyle(
+                        child: Text(
+                          localizations.addNewCardButton,
+                          style: const TextStyle(
                             color: NemorixColors.primaryColor,
                             fontSize: 14,
                           ),
@@ -238,7 +244,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
               const SizedBox(height: 20),
               // Other Payment buttons
               CustomButtonTile(
-                label: 'Google Pay',
+                label: localizations.googlePayLabel,
                 widgetLeft: const FaIcon(
                   size: 16,
                   FontAwesomeIcons.google,
@@ -246,10 +252,19 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                 ),
                 widgetRight: const Icon(Icons.arrow_forward_ios),
                 function: () {
-                  setState(() {
-                    selectedMethod = 'Google Pay';
-                    _validatePaymentMethod();
-                  });
+                  debugPrint('Google Play');
+
+                  NemorixSnackBar.show(
+                    context,
+                    message:
+                        AppLocalizations.of(context)!.featureNotImplemented,
+                    type: SnackBarType.info,
+                  );
+
+                  // setState(() {
+                  //   selectedMethod = 'Google Pay';
+                  //   _validatePaymentMethod();
+                  // });
                 },
               ),
               const SizedBox(height: 10),
@@ -260,17 +275,25 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                   color: NemorixColors.primaryColor,
                 ),
                 widgetRight: const Icon(Icons.arrow_forward_ios),
-                label: 'Apple Pay',
+                label: localizations.applePayLabel,
                 function: () {
-                  setState(() {
-                    selectedMethod = 'Apple Pay';
-                    _validatePaymentMethod();
-                  });
+                  debugPrint('Apple Pay');
+
+                  NemorixSnackBar.show(
+                    context,
+                    message:
+                        AppLocalizations.of(context)!.featureNotImplemented,
+                    type: SnackBarType.info,
+                  );
+                  // setState(() {
+                  //   selectedMethod = 'Apple Pay';
+                  //   _validatePaymentMethod();
+                  // });
                 },
               ),
               const SizedBox(height: 10),
               CustomButtonTile(
-                label: 'Mobile Banking',
+                label: localizations.mobileBankingLabel,
                 widgetRight: const Icon(Icons.arrow_forward_ios),
                 widgetLeft: const Icon(
                   size: 16,
@@ -278,10 +301,18 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                   color: NemorixColors.primaryColor,
                 ),
                 function: () {
-                  setState(() {
-                    selectedMethod = 'Mobile Banking';
-                    _validatePaymentMethod();
-                  });
+                  debugPrint('Mobile Banking');
+
+                  NemorixSnackBar.show(
+                    context,
+                    message:
+                        AppLocalizations.of(context)!.featureNotImplemented,
+                    type: SnackBarType.info,
+                  );
+                  // setState(() {
+                  //   selectedMethod = 'Mobile Banking';
+                  //   _validatePaymentMethod();
+                  // });
                 },
               ),
               if (_validationState != PaymentMethodValidationState.valid) ...[
@@ -302,13 +333,12 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Send receipt to your email',
-                    style: TextStyle(color: Colors.white),
+                  Text(
+                    localizations.sendReceiptLabel,
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                   Switch(
                     value: sendReceipt,
-                    activeColor: NemorixColors.primaryColor,
                     onChanged: (value) => setState(() => sendReceipt = value),
                   ),
                 ],
@@ -318,7 +348,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: RoundedElevatedButton(
-                  text: 'Continue',
+                  text: localizations.continueText,
                   onPressed:
                       _validationState == PaymentMethodValidationState.valid
                           ? () {

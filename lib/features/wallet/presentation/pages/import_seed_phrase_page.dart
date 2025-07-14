@@ -126,7 +126,7 @@ class _ImportSeedPhrasePageState extends State<ImportSeedPhrasePage>
             builder: (context) => AppLoader(message: l10n.importingWallet),
           );
         } else if (state is WalletError) {
-          Navigator.of(context).pop(); // Close loader if open
+          debugPrint('Wallet not imported - WalletError');
           NemorixSnackBar.show(
             context,
             message: state.message,

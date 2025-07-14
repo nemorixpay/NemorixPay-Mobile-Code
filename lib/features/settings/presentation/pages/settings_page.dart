@@ -212,10 +212,6 @@ class _SettingsPageState extends State<SettingsPage> {
                       onChanged: (val) {
                         context.read<SettingsBloc>().add(ToggleDarkMode());
                       },
-                      activeColor: NemorixColors.primaryColor,
-                      activeTrackColor: NemorixColors.greyLevel2,
-                      inactiveThumbColor: NemorixColors.greyLevel3,
-                      inactiveTrackColor: NemorixColors.greyLevel5,
                     ),
                     widgetLeft: const Icon(
                       Icons.dark_mode_outlined,

@@ -13,10 +13,9 @@ import 'package:intl/intl.dart';
 /// @copyright   Apache 2.0 License
 extension TruncateDoubles on double {
   String truncateToDecimalPlaces(int fractionalDigits) {
-    final number =
-        (this * pow(10, fractionalDigits)).truncate() /
+    final number = (this * pow(10, fractionalDigits)).truncate() /
         pow(10, fractionalDigits);
-    var numberFormat = NumberFormat("##,###.0#", "en_US");
+    var numberFormat = NumberFormat("##,###.00#", "en_US");
     return numberFormat.format(number);
   }
 }
