@@ -56,7 +56,9 @@ class _CryptoDetailsPageState extends State<CryptoDetailsPage> {
     for (var asset in list) {
       // TODO: Need to verify this condition in general case
       debugPrint('checkingAssetList (asset): ${asset.assetCode}');
-      if (asset.assetCode == widget.crypto.asset.name) {
+      debugPrint(
+          'checkingAssetList (widget): ${widget.crypto.asset.assetCode}');
+      if (asset.assetCode == widget.crypto.asset.assetCode) {
         debugPrint('checkingAssetList: true');
         _isAssetInAccount = true;
       }

@@ -8,11 +8,14 @@ import 'package:nemorixpay/shared/stellar/data/datasources/stellar_secure_storag
 import 'package:nemorixpay/shared/stellar/data/models/stellar_transaction_model.dart';
 import 'package:stellar_flutter_sdk/stellar_flutter_sdk.dart';
 import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:nemorixpay/core/errors/stellar/stellar_failure.dart';
 import 'package:nemorixpay/core/errors/stellar/stellar_error_codes.dart';
 import 'package:nemorixpay/shared/stellar/data/models/stellar_account_model.dart';
 import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
+import 'dart:io';
+import 'dart:convert'; // Added for json.decode
 
 /// @file        stellar_datasource_impl.dart
 /// @brief       Service for Stellar network integration in NemorixPay.
@@ -89,17 +92,22 @@ class StellarDataSourceImpl implements StellarDataSource {
       await createAccountInTestnet(keyPair.accountId);
       final balance = await getBalance(keyPair.accountId);
       debugPrint(
-          'StellarDatasource: createAccount - Account created in testnet with balance = $balance');
+        'StellarDatasource: createAccount - Account created in testnet with balance = $balance',
+      );
     }
 
     debugPrint(
-        'StellarDatasource: createAccount (accountId): ${keyPair.accountId}');
+      'StellarDatasource: createAccount (accountId): ${keyPair.accountId}',
+    );
     debugPrint(
-        'StellarDatasource: createAccount (publicKey): ${keyPair.publicKey}');
+      'StellarDatasource: createAccount (publicKey): ${keyPair.publicKey}',
+    );
     debugPrint(
-        'StellarDatasource: createAccount (secretSeed): ${keyPair.secretSeed}');
+      'StellarDatasource: createAccount (secretSeed): ${keyPair.secretSeed}',
+    );
     debugPrint(
-        'StellarDatasource: createAccount (privateKey): ${keyPair.privateKey}');
+      'StellarDatasource: createAccount (privateKey): ${keyPair.privateKey}',
+    );
 
     // Save private key securely
     final saved = await _secureStorage.savePrivateKey(
@@ -109,7 +117,8 @@ class StellarDataSourceImpl implements StellarDataSource {
 
     if (!saved) {
       debugPrint(
-          'StellarDatasource: createAccount - Failed to save private key securely');
+        'StellarDatasource: createAccount - Failed to save private key securely',
+      );
       throw StellarFailure(
         stellarCode: StellarErrorCode.unknown.code,
         stellarMessage: 'Error saving private key securely',
@@ -152,23 +161,123 @@ class StellarDataSourceImpl implements StellarDataSource {
     debugPrint(
       'StellarDatasource: createAccountInTestnet - Intentando crear cuenta: $publicKey',
     );
-    final url = 'https://friendbot.stellar.org/?addr=$publicKey';
-    final response = await Dio().get(url);
-    if (response.statusCode != 200) {
+
+    try {
+      final url = 'https://friendbot.stellar.org/?addr=$publicKey';
+      debugPrint('StellarDatasource: createAccountInTestnet - URL: $url');
+
+      // Try with http first
+      try {
+        final response = await http.get(Uri.parse(url));
+        debugPrint(
+          'StellarDatasource: createAccountInTestnet - HTTP Status: ${response.statusCode}',
+        );
+        debugPrint(
+          'StellarDatasource: createAccountInTestnet - HTTP Response: ${response.body}',
+        );
+
+        if (response.statusCode == 200) {
+          debugPrint(
+            'StellarDatasource: createAccountInTestnet - Account created successfully via HTTP',
+          );
+          await _verifyAccountCreation(publicKey);
+          return;
+        }
+      } catch (e) {
+        debugPrint(
+          'StellarDatasource: createAccountInTestnet - HTTP failed: $e',
+        );
+      }
+
+      // Fallback: Try with curl if http fails
       debugPrint(
-        'StellarDatasource: createAccountInTestnet - Error: ${response.statusCode}',
+        'StellarDatasource: createAccountInTestnet - Trying with curl fallback',
+      );
+      final result = await _createAccountWithCurl(publicKey);
+
+      if (result) {
+        debugPrint(
+          'StellarDatasource: createAccountInTestnet - Account created successfully via curl',
+        );
+        await _verifyAccountCreation(publicKey);
+      } else {
+        throw StellarFailure(
+          stellarCode: StellarErrorCode.unknown.code,
+          stellarMessage: 'Failed to create account via both HTTP and curl',
+        );
+      }
+    } catch (e) {
+      debugPrint('StellarDatasource: createAccountInTestnet - Exception: $e');
+      if (e is StellarFailure) rethrow;
+
+      throw StellarFailure(
+        stellarCode: StellarErrorCode.unknown.code,
+        stellarMessage: 'Error creating stellar account: $e',
+      );
+    }
+  }
+
+  Future<bool> _createAccountWithCurl(String publicKey) async {
+    try {
+      final result = await Process.run('curl', [
+        '-s',
+        '-w',
+        '%{http_code}',
+        '-o',
+        '/tmp/friendbot_response.json',
+        'https://friendbot.stellar.org/?addr=$publicKey',
+      ]);
+
+      final statusCode = int.tryParse(result.stdout.toString().trim()) ?? 0;
+      debugPrint(
+        'StellarDatasource: _createAccountWithCurl - Status: $statusCode',
+      );
+
+      if (statusCode == 200) {
+        // Read the response file
+        final responseFile = File('/tmp/friendbot_response.json');
+        if (await responseFile.exists()) {
+          final response = await responseFile.readAsString();
+          debugPrint(
+            'StellarDatasource: _createAccountWithCurl - Response: $response',
+          );
+        }
+        return true;
+      } else {
+        debugPrint(
+          'StellarDatasource: _createAccountWithCurl - Failed with status: $statusCode',
+        );
+        return false;
+      }
+    } catch (e) {
+      debugPrint('StellarDatasource: _createAccountWithCurl - Error: $e');
+      return false;
+    }
+  }
+
+  Future<void> _verifyAccountCreation(String publicKey) async {
+    // Wait a moment for the transaction to be processed
+    await Future.delayed(Duration(seconds: 3));
+
+    // Verify the account exists
+    try {
+      final account = await _sdk.accounts.account(publicKey);
+      final xlmBalance = account.balances.firstWhere(
+        (b) => b.assetType == 'native',
+        orElse: () => throw Exception('No XLM balance found'),
       );
       debugPrint(
-        'StellarDatasource: createAccountInTestnet - Response: ${response.data}',
+        'StellarDatasource: _verifyAccountCreation - Account verified with balance: ${xlmBalance.balance} XLM',
+      );
+    } catch (e) {
+      debugPrint(
+        'StellarDatasource: _verifyAccountCreation - Account verification failed: $e',
       );
       throw StellarFailure(
         stellarCode: StellarErrorCode.unknown.code,
-        stellarMessage: 'Error creating stellar account. Try again!',
+        stellarMessage: 'Account was funded but verification failed: $e',
       );
     }
-    debugPrint(
-      'StellarDatasource: createAccountInTestnet - Account created successfully',
-    );
   }
 
   /// Gets the current balance of a Stellar account
@@ -375,14 +484,16 @@ class StellarDataSourceImpl implements StellarDataSource {
 
         if (!saved) {
           debugPrint(
-              'StellarDatasource: importAccount - Failed to save private key securely');
+            'StellarDatasource: importAccount - Failed to save private key securely',
+          );
           throw StellarFailure(
             stellarCode: StellarErrorCode.unknown.code,
             stellarMessage: 'Error saving private key securely',
           );
         }
         debugPrint(
-            'StellarDatasource: importAccount - Private key saved securely');
+          'StellarDatasource: importAccount - Private key saved securely',
+        );
 
         final account = StellarAccountModel(
           publicKey: keyPair.accountId,
@@ -678,77 +789,353 @@ class StellarDataSourceImpl implements StellarDataSource {
     }
   }
 
-  /// Gets all available assets in the Stellar network
+  /// Gets all available assets in the Stellar network (for Live Prices section)
   @override
   Future<List<AssetModel>> getAvailableAssets() async {
     try {
       debugPrint(
-        'StellarDatasource: getAvailableAssets - Obteniendo assets disponibles',
+        'StellarDatasource: getAvailableAssets - Obteniendo assets disponibles para Live Prices',
       );
 
-      // Obtener todos los assets de la red
-      final response = await _sdk.assets
-          .order(RequestBuilderOrder.DESC)
-          .limit(200)
-          .execute();
-      final assets = response.records;
+      // Try SDK method first
+      try {
+        final response = await _sdk.assets
+            .order(RequestBuilderOrder.DESC)
+            .limit(200)
+            .execute();
 
-      // Convertir a StellarAssetInfoModel
-      return assets.map((asset) {
-        return AssetModel(
-          id: '',
-          assetCode: asset.assetCode ?? 'XLM',
-          name: _getAssetName(asset.assetCode ?? 'XLM'),
-          description: _getAssetDescription(asset.assetCode ?? 'XLM'),
-          assetIssuer: asset.assetIssuer ?? '',
-          issuerName: _getIssuerName(asset.assetIssuer ?? ''),
-          isVerified: _isAssetVerified(
-            asset.assetCode ?? 'XLM',
-            asset.assetIssuer ?? '',
-          ),
-          logoUrl: _getAssetLogoUrl(asset.assetCode ?? 'XLM'),
-          decimals:
-              7, // Por defecto, debería obtenerse de la información del asset
-          assetType: asset.assetType,
-          network: '',
-        );
-      }).toList();
+        debugPrint(
+            'StellarDatasource: getAvailableAssets - Response received: ${response != null ? 'NOT NULL' : 'NULL'}');
+
+        // Validar que response y records no sean null
+        if (response == null) {
+          debugPrint(
+              'StellarDatasource: getAvailableAssets - Response is null');
+          return await _getAssetsViaHttp();
+        }
+
+        final assets = response.records;
+        debugPrint(
+            'StellarDatasource: getAvailableAssets - Records: ${assets != null ? 'NOT NULL' : 'NULL'}');
+
+        if (assets == null || assets.isEmpty) {
+          debugPrint(
+              'StellarDatasource: getAvailableAssets - No assets found, trying HTTP fallback');
+          return await _getAssetsViaHttp();
+        }
+
+        debugPrint(
+            'StellarDatasource: getAvailableAssets - Found ${assets.length} assets via SDK');
+
+        // Convertir a AssetModel con validación adicional
+        return assets.map((asset) {
+          // Validar cada asset antes de procesarlo
+          if (asset == null) {
+            debugPrint(
+                'StellarDatasource: getAvailableAssets - Skipping null asset');
+            return const AssetModel(
+              id: '',
+              assetCode: 'XLMi',
+              name: 'Stellar Lumens Test',
+              description: 'Native asset of the Stellar network',
+              assetIssuer: '',
+              issuerName: 'Stellar Development Foundation',
+              isVerified: true,
+              logoUrl: null,
+              decimals: 7,
+              assetType: 'native',
+              network: '',
+            );
+          }
+
+          return AssetModel(
+            id: '',
+            assetCode: asset.assetCode ?? 'XLMi',
+            name: getAssetName(asset.assetCode ?? 'XLMi'),
+            description: _getAssetDescription(asset.assetCode ?? 'XLMi'),
+            assetIssuer: asset.assetIssuer ?? '',
+            issuerName: _getIssuerName(asset.assetIssuer ?? ''),
+            isVerified: isAssetVerified(
+              asset.assetCode ?? 'XLMi',
+              asset.assetIssuer ?? '',
+            ),
+            logoUrl: _getAssetLogoUrl(asset.assetCode ?? 'XLMi'),
+            decimals:
+                7, // Por defecto, debería obtenerse de la información del asset
+            assetType: asset.assetType,
+            network: '',
+          );
+        }).toList();
+      } catch (e) {
+        debugPrint('StellarDatasource: getAvailableAssets - SDK failed: $e');
+        debugPrint(
+            'StellarDatasource: getAvailableAssets - Trying HTTP fallback');
+        return await _getAssetsViaHttp();
+      }
     } catch (e) {
       debugPrint('StellarDatasource: getAvailableAssets - Error: $e');
-      if (e is StellarFailure) rethrow;
+      debugPrint(
+          'StellarDatasource: getAvailableAssets - Error type: ${e.runtimeType}');
+      debugPrint(
+          'StellarDatasource: getAvailableAssets - Using default assets due to error');
 
-      throw StellarFailure(
-        stellarCode: StellarErrorCode.unknown.code,
-        stellarMessage: 'Error getting available assets: $e',
-      );
+      // En caso de error, retornar assets por defecto en lugar de fallar
+      return _getDefaultAssets();
     }
   }
 
-  /// Gets all assets and their balances for a given Stellar account
+  /// Gets assets via direct HTTP call to Horizon API (for Live Prices section)
+  Future<List<AssetModel>> _getAssetsViaHttp() async {
+    try {
+      debugPrint(
+          'StellarDatasource: _getAssetsViaHttp - Starting HTTP request for Live Prices');
+
+      final url = (!isAppInProduction)
+          ? 'https://horizon-testnet.stellar.org/assets?limit=100'
+          : 'https://horizon.stellar.org/assets?limit=100';
+
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final records = data['_embedded']['records'] as List;
+
+        debugPrint(
+            'StellarDatasource: _getAssetsViaHttp - Found ${records.length} assets via HTTP');
+
+        final List<AssetModel> assets = [];
+
+        // Add XLM as the first asset (native asset) - always show in Live Prices
+        assets.add(const AssetModel(
+          id: 'xlmi',
+          assetCode: 'XLMi',
+          name: 'Stellar Lumens Test',
+          description: 'Native asset of the Stellar network',
+          assetIssuer: '',
+          issuerName: 'Stellar Development Foundation',
+          isVerified: true,
+          logoUrl: null,
+          decimals: 7,
+          assetType: 'native-test',
+          network: 'stellar-test',
+        ));
+
+        // In testnet, show test assets + XLM
+        if (!isAppInProduction) {
+          debugPrint(
+              'StellarDatasource: _getAssetsViaHttp - Testnet mode: showing XLM + test assets');
+
+          // Add test assets (limit to 20 for performance)
+          int testAssetCount = 0;
+          for (final record in records) {
+            try {
+              final assetCode = record['asset_code'] ?? '';
+              final assetIssuer = record['asset_issuer'] ?? '';
+
+              // Skip assets with empty codes
+              if (assetCode.isEmpty) continue;
+
+              // Only add test assets (like 00A, 013, etc.)
+              if (isTestAsset(assetCode)) {
+                final asset = AssetModel(
+                  id: '',
+                  assetCode: assetCode,
+                  name: assetCode, // Use code as name for test assets
+                  description: 'Test asset on Stellar testnet',
+                  assetIssuer: assetIssuer,
+                  issuerName: assetIssuer,
+                  isVerified: false, // Test assets are not verified
+                  logoUrl: null,
+                  decimals: 7,
+                  assetType: record['asset_type'] ?? 'credit_alphanum4',
+                  network: 'stellar',
+                );
+                assets.add(asset);
+                testAssetCount++;
+
+                if (testAssetCount >= 20) break; // Limit to 20 test assets
+              }
+            } catch (e) {
+              debugPrint(
+                  'StellarDatasource: _getAssetsViaHttp - Error processing test asset: $e');
+              continue;
+            }
+          }
+
+          debugPrint(
+              'StellarDatasource: _getAssetsViaHttp - Added $testAssetCount test assets');
+          return assets;
+        }
+
+        // Checking THIS before production
+        // For mainnet, show real assets
+        final knownAssets = {
+          'USDC': 'USD Coin',
+          'USDT': 'Tether',
+          'BTC': 'Bitcoin',
+          'ETH': 'Ethereum',
+          'EURC': 'Euro Coin',
+          'JPYC': 'Japanese Yen Coin',
+          'SGD': 'Singapore Dollar',
+          'BRL': 'Brazilian Real',
+          'ARS': 'Argentine Peso',
+          'MXN': 'Mexican Peso',
+          'GBPT': 'British Pound Token',
+          'CADC': 'Canadian Dollar Coin',
+          'CHFT': 'Swiss Franc Token',
+          'AUROC': 'Australian Dollar Coin',
+          'NGNT': 'Nigerian Naira Token',
+          'NGNC': 'Nigerian Naira Coin',
+          'RMT': 'RMT Token',
+          'SLT': 'Smartlands Token',
+          'MOBI': 'Mobius Token',
+        };
+
+        // Add other assets from the API, prioritizing known ones
+        final List<AssetModel> knownAssetModels = [];
+        final List<AssetModel> otherAssetModels = [];
+
+        for (final record in records) {
+          try {
+            final assetCode = record['asset_code'] ?? '';
+            final assetIssuer = record['asset_issuer'] ?? '';
+
+            // Skip assets with empty codes or very short codes
+            if (assetCode.isEmpty || assetCode.length < 2) continue;
+
+            // Skip test assets (codes that look like test codes)
+            if (isTestAsset(assetCode)) continue;
+
+            final asset = AssetModel(
+              id: '',
+              assetCode: assetCode,
+              name: getAssetName(assetCode),
+              description: _getAssetDescription(assetCode),
+              assetIssuer: assetIssuer,
+              issuerName: _getIssuerName(assetIssuer),
+              isVerified: isAssetVerified(assetCode, assetIssuer),
+              logoUrl: _getAssetLogoUrl(assetCode),
+              decimals: 7,
+              assetType: record['asset_type'] ?? 'credit_alphanum4',
+              network: 'stellar',
+            );
+
+            // Separate known assets from others
+            if (knownAssets.containsKey(assetCode)) {
+              knownAssetModels.add(asset);
+            } else {
+              otherAssetModels.add(asset);
+            }
+          } catch (e) {
+            debugPrint(
+                'StellarDatasource: _getAssetsViaHttp - Error processing asset: $e');
+            continue;
+          }
+        }
+
+        // Checking THIS before production
+        // Add known assets first, then others (limit to 40 total for performance)
+        assets.addAll(knownAssetModels);
+        assets.addAll(otherAssetModels
+            .take(40 - knownAssetModels.length - 1)); // -1 for XLM
+
+        debugPrint(
+            'StellarDatasource: _getAssetsViaHttp - Returning ${assets.length} assets (${knownAssetModels.length} known)');
+
+        return assets;
+      } else {
+        debugPrint(
+            'StellarDatasource: _getAssetsViaHttp - HTTP failed with status: ${response.statusCode}');
+        return _getDefaultAssets();
+      }
+    } catch (e) {
+      debugPrint('StellarDatasource: _getAssetsViaHttp - Error: $e');
+      return _getDefaultAssets();
+    }
+  }
+
+  /// Checks if an asset code looks like a test asset
+  bool isTestAsset(String assetCode) {
+    // Test assets typically have patterns like:
+    // - 3-digit numbers (00A, 013, 017, etc.)
+    // - Very short codes
+    // - Codes that start with numbers
+
+    if (assetCode.length <= 3) {
+      // Check if it's mostly numbers or follows test patterns
+      final hasOnlyNumbers = RegExp(r'^[0-9]+$').hasMatch(assetCode);
+      final hasTestPattern = RegExp(r'^[0-9]{2,3}[A-Z]?$').hasMatch(assetCode);
+
+      if (hasOnlyNumbers || hasTestPattern) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /// Returns default assets when the API fails
+  List<AssetModel> _getDefaultAssets() {
+    return [
+      AssetModel(
+        id: 'xlm',
+        assetCode: 'XLM',
+        name: 'Stellar Lumens',
+        description: 'Native asset of the Stellar network',
+        assetIssuer: '',
+        issuerName: 'Stellar Development Foundation',
+        isVerified: true,
+        logoUrl: null,
+        decimals: 7,
+        assetType: 'native',
+        network: 'stellar',
+      ),
+    ];
+  }
+
+  /// Gets all assets and their balances for a given Stellar account (for My Assets section)
   @override
   Future<List<AssetModel>> getAccountAssets(String publicKey) async {
     try {
       debugPrint(
-        'StellarDatasource: getAccountAssets - Obteniendo account assets disponibles',
+        'StellarDatasource: getAccountAssets - Obteniendo account assets para My Assets',
       );
       debugPrint(
         'StellarDatasource: getAccountAssets - Public Key: $publicKey',
       );
+
       final account = await _sdk.accounts.account(publicKey);
-      return account.balances.map((balance) {
-        return AssetModel(
-          id: '',
-          assetCode: balance.assetCode ?? 'XLM',
-          balance: double.tryParse(balance.balance) ?? 0.0,
-          assetType: balance.assetType,
-          assetIssuer: balance.assetIssuer,
-          limit: balance.limit != null ? double.tryParse(balance.limit!) : null,
-          isAuthorized: balance.isAuthorized ?? true,
-          decimals: 7,
-          name: _getAssetName(balance.assetCode ?? 'XLM'),
-          network: '', // Default for XLM, should be fetched from asset info
-        );
-      }).toList();
+      final List<AssetModel> accountAssets = [];
+
+      for (final balance in account.balances) {
+        // Only include assets with balance > 0
+        final balanceAmount = double.tryParse(balance.balance) ?? 0.0;
+        if (balanceAmount > 0) {
+          final asset = AssetModel(
+            id: '',
+            assetCode: balance.assetCode ?? 'XLM',
+            balance: balanceAmount,
+            assetType: balance.assetType,
+            assetIssuer: balance.assetIssuer,
+            limit:
+                balance.limit != null ? double.tryParse(balance.limit!) : null,
+            isAuthorized: balance.isAuthorized ?? true,
+            decimals: 7,
+            name: getAssetName(balance.assetCode ?? 'XLM'),
+            description: _getAssetDescription(balance.assetCode ?? 'XLM'),
+            issuerName: _getIssuerName(balance.assetIssuer ?? ''),
+            isVerified: isAssetVerified(
+                balance.assetCode ?? 'XLM', balance.assetIssuer ?? ''),
+            logoUrl: _getAssetLogoUrl(balance.assetCode ?? 'XLM'),
+            network: 'stellar',
+          );
+          accountAssets.add(asset);
+        }
+      }
+
+      debugPrint(
+          'StellarDatasource: getAccountAssets - Found ${accountAssets.length} assets with balance > 0');
+      return accountAssets;
     } catch (e) {
       debugPrint('StellarDatasource: getAccountAssets - Error: $e');
       if (e is StellarFailure) rethrow;
@@ -761,10 +1148,32 @@ class StellarDataSourceImpl implements StellarDataSource {
   }
 
   // Métodos auxiliares para obtener información adicional de los assets
-  String _getAssetName(String code) {
-    // TODO: Implementar lógica para obtener el nombre del asset
-    // Por ahora retornamos el código como nombre
-    return code;
+  String getAssetName(String code) {
+    // Known asset names
+    final knownAssets = {
+      'XLM': 'Stellar Lumens',
+      'USDC': 'USD Coin',
+      'USDT': 'Tether',
+      'BTC': 'Bitcoin',
+      'ETH': 'Ethereum',
+      'EURC': 'Euro Coin',
+      'JPYC': 'Japanese Yen Coin',
+      'SGD': 'Singapore Dollar',
+      'BRL': 'Brazilian Real',
+      'ARS': 'Argentine Peso',
+      'MXN': 'Mexican Peso',
+      'GBPT': 'British Pound Token',
+      'CADC': 'Canadian Dollar Coin',
+      'CHFT': 'Swiss Franc Token',
+      'AUROC': 'Australian Dollar Coin',
+      'NGNT': 'Nigerian Naira Token',
+      'NGNC': 'Nigerian Naira Coin',
+      'RMT': 'RMT Token',
+      'SLT': 'Smartlands Token',
+      'MOBI': 'Mobius Token',
+    };
+
+    return knownAssets[code] ?? code;
   }
 
   String _getAssetDescription(String code) {
@@ -779,10 +1188,32 @@ class StellarDataSourceImpl implements StellarDataSource {
     return issuer;
   }
 
-  bool _isAssetVerified(String code, String issuer) {
-    // TODO: Implementar lógica para verificar si el asset está verificado
-    // Por ahora retornamos true para XLM y false para otros
-    return code == 'XLM';
+  bool isAssetVerified(String code, String issuer) {
+    // Known verified assets
+    final verifiedAssets = {
+      'XLM': true, // Native asset is always verified
+      'USDC': true,
+      'USDT': true,
+      'BTC': true,
+      'ETH': true,
+      'EURC': true,
+      'JPYC': true,
+      'SGD': true,
+      'BRL': true,
+      'ARS': true,
+      'MXN': true,
+      'GBPT': true,
+      'CADC': true,
+      'CHFT': true,
+      'AUROC': true,
+      'NGNT': true,
+      'NGNC': true,
+      'RMT': true,
+      'SLT': true,
+      'MOBI': true,
+    };
+
+    return verifiedAssets[code] ?? false;
   }
 
   String? _getAssetLogoUrl(String code) {
@@ -800,22 +1231,24 @@ class StellarDataSourceImpl implements StellarDataSource {
   /// [publicKey] The public key that identifies the wallet
   /// Returns the private key if found, null otherwise
   @override
-  Future<String?> getSecurePrivateKey({
-    required String publicKey,
-  }) async {
+  Future<String?> getSecurePrivateKey({required String publicKey}) async {
     try {
       debugPrint(
-          'StellarDatasource: getSecurePrivateKey - Retrieving private key for: $publicKey');
+        'StellarDatasource: getSecurePrivateKey - Retrieving private key for: $publicKey',
+      );
 
-      final privateKey =
-          await _secureStorage.getPrivateKey(publicKey: publicKey);
+      final privateKey = await _secureStorage.getPrivateKey(
+        publicKey: publicKey,
+      );
 
       if (privateKey != null) {
         debugPrint(
-            'StellarDatasource: getSecurePrivateKey - Private key retrieved successfully');
+          'StellarDatasource: getSecurePrivateKey - Private key retrieved successfully',
+        );
       } else {
         debugPrint(
-            'StellarDatasource: getSecurePrivateKey - No private key found');
+          'StellarDatasource: getSecurePrivateKey - No private key found',
+        );
       }
 
       return privateKey;
@@ -830,12 +1263,11 @@ class StellarDataSourceImpl implements StellarDataSource {
   /// [publicKey] The public key to check
   /// Returns true if a private key exists, false otherwise
   @override
-  Future<bool> hasSecurePrivateKey({
-    required String publicKey,
-  }) async {
+  Future<bool> hasSecurePrivateKey({required String publicKey}) async {
     try {
       debugPrint(
-          'StellarDatasource: hasSecurePrivateKey - Checking for public key: $publicKey');
+        'StellarDatasource: hasSecurePrivateKey - Checking for public key: $publicKey',
+      );
 
       final exists = await _secureStorage.hasPrivateKey(publicKey: publicKey);
 
@@ -852,22 +1284,24 @@ class StellarDataSourceImpl implements StellarDataSource {
   /// [publicKey] The public key that identifies the wallet to delete
   /// Returns true if the key was deleted successfully, false otherwise
   @override
-  Future<bool> deleteSecurePrivateKey({
-    required String publicKey,
-  }) async {
+  Future<bool> deleteSecurePrivateKey({required String publicKey}) async {
     try {
       debugPrint(
-          'StellarDatasource: deleteSecurePrivateKey - Deleting private key for: $publicKey');
+        'StellarDatasource: deleteSecurePrivateKey - Deleting private key for: $publicKey',
+      );
 
-      final deleted =
-          await _secureStorage.deletePrivateKey(publicKey: publicKey);
+      final deleted = await _secureStorage.deletePrivateKey(
+        publicKey: publicKey,
+      );
 
       if (deleted) {
         debugPrint(
-            'StellarDatasource: deleteSecurePrivateKey - Private key deleted successfully');
+          'StellarDatasource: deleteSecurePrivateKey - Private key deleted successfully',
+        );
       } else {
         debugPrint(
-            'StellarDatasource: deleteSecurePrivateKey - Failed to delete private key');
+          'StellarDatasource: deleteSecurePrivateKey - Failed to delete private key',
+        );
       }
 
       return deleted;
@@ -883,16 +1317,19 @@ class StellarDataSourceImpl implements StellarDataSource {
   Future<bool> deleteAllSecurePrivateKeys() async {
     try {
       debugPrint(
-          'StellarDatasource: deleteAllSecurePrivateKeys - Deleting all private keys');
+        'StellarDatasource: deleteAllSecurePrivateKeys - Deleting all private keys',
+      );
 
       final deleted = await _secureStorage.deleteAllKeys();
 
       if (deleted) {
         debugPrint(
-            'StellarDatasource: deleteAllSecurePrivateKeys - All private keys deleted successfully');
+          'StellarDatasource: deleteAllSecurePrivateKeys - All private keys deleted successfully',
+        );
       } else {
         debugPrint(
-            'StellarDatasource: deleteAllSecurePrivateKeys - Failed to delete all private keys');
+          'StellarDatasource: deleteAllSecurePrivateKeys - Failed to delete all private keys',
+        );
       }
 
       return deleted;
@@ -908,12 +1345,14 @@ class StellarDataSourceImpl implements StellarDataSource {
   Future<List<String>> getAllStoredPublicKeys() async {
     try {
       debugPrint(
-          'StellarDatasource: getAllStoredPublicKeys - Getting all stored public keys');
+        'StellarDatasource: getAllStoredPublicKeys - Getting all stored public keys',
+      );
 
       final publicKeys = await _secureStorage.getAllPublicKeys();
 
       debugPrint(
-          'StellarDatasource: getAllStoredPublicKeys - Found ${publicKeys.length} public keys');
+        'StellarDatasource: getAllStoredPublicKeys - Found ${publicKeys.length} public keys',
+      );
       return publicKeys;
     } catch (e) {
       debugPrint('StellarDatasource: getAllStoredPublicKeys - Error: $e');

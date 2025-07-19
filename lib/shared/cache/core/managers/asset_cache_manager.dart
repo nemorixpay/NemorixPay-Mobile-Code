@@ -80,9 +80,23 @@ class AssetCacheManager extends Equatable {
       if (publicKey == null) {
         debugPrint(
             'AssetCacheManager - loadAssetsFromStellar - publicKey is Null');
-        throw AssetFailure.unknown(
-          'AssetCacheManager - publicKey is null. Try again!',
-        );
+        // Instead of throwing an error, just load available assets without account assets
+        debugPrint(
+            'AssetCacheManager - loadAssetsFromStellar - Loading only available assets');
+
+        // Clean cache values
+        _assets.clear();
+        _accountAssets.clear();
+
+        // Upload the new assets using the unique key
+        for (var asset in stellarAssets) {
+          final key = _getAssetKey(asset.assetCode, asset.assetIssuer);
+          debugPrint('AssetCacheManager - stellarAssets (key): $key');
+          _assets[key] = asset;
+        }
+
+        _lastUpdate = DateTime.now();
+        return;
       } else {
         debugPrint(
             'AssetCacheManager - loadAssetsFromStellar - publicKey is not Null');
@@ -93,7 +107,7 @@ class AssetCacheManager extends Equatable {
           'AssetCacheManager - loadAssetsFromStellar: list = ${accountAssets.length}',
         );
 
-        // Clean onl cache values
+        // Clean cache values
         _assets.clear();
         _accountAssets.clear();
 
@@ -114,9 +128,11 @@ class AssetCacheManager extends Equatable {
         _lastUpdate = DateTime.now();
       }
     } catch (e) {
-      throw AssetFailure.unknown(
-        'loadAssetsFromStellar - Failed to get account asset by Public key (Asset Cache Manager): $e',
-      );
+      debugPrint('AssetCacheManager - loadAssetsFromStellar - Error: $e');
+      // Instead of throwing an error, just clear the cache and continue
+      _assets.clear();
+      _accountAssets.clear();
+      _lastUpdate = DateTime.now();
     } finally {
       debugPrint('loadAssetsFromStellar - _isLoading = false;');
       _isLoading = false;

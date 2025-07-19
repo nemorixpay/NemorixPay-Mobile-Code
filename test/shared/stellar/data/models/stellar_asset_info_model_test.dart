@@ -33,15 +33,17 @@ void main() {
     test('should create a valid model from json', () {
       // arrange
       final json = {
-        'code': 'USDC',
+        'id': '',
+        'asset_code': 'USDC',
         'name': 'USD Coin',
         'description': 'USD Coin on Stellar',
-        'issuer': 'G...',
-        'issuerName': 'Circle',
-        'isVerified': true,
-        'logoUrl': 'https://example.com/usdc.png',
+        'asset_issuer': 'G...',
+        'issuer_name': 'Circle',
+        'is_verified': true,
+        'logo_url': 'https://example.com/usdc.png',
         'decimals': 7,
-        'type': 'credit_alphanum4',
+        'asset_type': 'credit_alphanum4',
+        'network': '',
       };
 
       // act
@@ -57,15 +59,25 @@ void main() {
 
       // assert
       expect(json, {
-        'code': 'USDC',
+        'id': '',
+        'asset_code': 'USDC',
         'name': 'USD Coin',
-        'description': 'USD Coin on Stellar',
-        'issuer': 'G...',
-        'issuerName': 'Circle',
-        'isVerified': true,
-        'logoUrl': 'https://example.com/usdc.png',
+        'asset_type': 'credit_alphanum4',
+        'network': '',
         'decimals': 7,
-        'type': 'credit_alphanum4',
+        'description': 'USD Coin on Stellar',
+        'asset_issuer': 'G...',
+        'issuer_name': 'Circle',
+        'is_verified': true,
+        'domain': null,
+        'balance': null,
+        'limit': null,
+        'is_authorized': true,
+        'buying_liabilities': null,
+        'selling_liabilities': null,
+        'amount': null,
+        'num_accounts': null,
+        'logo_url': 'https://example.com/usdc.png',
       });
     });
 

@@ -93,11 +93,11 @@ class AssetModel extends Equatable {
   /// Creates an AssetModel from a JSON map
   factory AssetModel.fromJson(Map<String, dynamic> json) {
     return AssetModel(
-      id: json['id'] as String,
-      assetCode: json['asset_code'] as String,
-      name: json['name'] as String,
-      assetType: json['asset_type'] as String,
-      network: json['network'] as String,
+      id: json['id'] as String? ?? '',
+      assetCode: json['asset_code'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+      assetType: json['asset_type'] as String? ?? '',
+      network: json['network'] as String? ?? '',
       decimals: json['decimals'] as int? ?? 7,
       description: json['description'] as String?,
       assetIssuer: json['asset_issuer'] as String?,
@@ -108,14 +108,12 @@ class AssetModel extends Equatable {
           json['balance'] != null ? (json['balance'] as num).toDouble() : null,
       limit: json['limit'] != null ? (json['limit'] as num).toDouble() : null,
       isAuthorized: json['is_authorized'] as bool? ?? true,
-      buyingLiabilities:
-          json['buying_liabilities'] != null
-              ? (json['buying_liabilities'] as num).toDouble()
-              : null,
-      sellingLiabilities:
-          json['selling_liabilities'] != null
-              ? (json['selling_liabilities'] as num).toDouble()
-              : null,
+      buyingLiabilities: json['buying_liabilities'] != null
+          ? (json['buying_liabilities'] as num).toDouble()
+          : null,
+      sellingLiabilities: json['selling_liabilities'] != null
+          ? (json['selling_liabilities'] as num).toDouble()
+          : null,
       amount:
           json['amount'] != null ? (json['amount'] as num).toDouble() : null,
       numAccounts: json['num_accounts'] as int?,
@@ -203,24 +201,24 @@ class AssetModel extends Equatable {
 
   @override
   List<Object?> get props => [
-    id,
-    assetCode,
-    name,
-    assetType,
-    network,
-    decimals,
-    description,
-    assetIssuer,
-    issuerName,
-    isVerified,
-    domain,
-    balance,
-    limit,
-    isAuthorized,
-    buyingLiabilities,
-    sellingLiabilities,
-    amount,
-    numAccounts,
-    logoUrl,
-  ];
+        id,
+        assetCode,
+        name,
+        assetType,
+        network,
+        decimals,
+        description,
+        assetIssuer,
+        issuerName,
+        isVerified,
+        domain,
+        balance,
+        limit,
+        isAuthorized,
+        buyingLiabilities,
+        sellingLiabilities,
+        amount,
+        numAccounts,
+        logoUrl,
+      ];
 }
