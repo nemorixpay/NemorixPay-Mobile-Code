@@ -1,6 +1,6 @@
 # NemorixPay
 
-Initial repository of the open-source project NemorixPay, which provides financial aid to underserved communities in Venezuela and Mexico. This code is freely accessible and is licensed under **Apache 2.0**. For more details, please refer to the LICENSE section.
+Initial repository of the open-source project NemorixPay, which provides financial aid to underserved communities in Mexico, Venezuela and across Latin America with fast, affordable crypto payments built on the Stellar blockchain. This code is freely accessible and is licensed under **Apache 2.0**. For more details, please refer to the LICENSE section.
 
 You can view NemorixPay's design here: [Initial Design](https://github.com/nemorixpay/NemorixPay-Readme/blob/main/design/README.md) (*In Progress*)
 
