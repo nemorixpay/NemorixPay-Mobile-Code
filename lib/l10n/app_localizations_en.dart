@@ -920,6 +920,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get darkMode => 'Dark Mode';
 
   @override
+  String get selectLanguage => 'Select Language';
+
+  @override
+  String get saveChanges => 'Save Changes';
+
+  @override
   String get paymentMethodTitle => 'Payment Method';
 
   @override

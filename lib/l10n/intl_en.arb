@@ -453,6 +453,11 @@
   "language": "Language",
   "security": "Security",
   "darkMode": "Dark Mode",
+  "@_LANGUAGE_PAGE": {
+
+  },
+  "selectLanguage": "Select Language",
+  "saveChanges": "Save Changes",
   "@_PAYMENT_METHOD_PAGE": {
 
   },

@@ -84,4 +84,7 @@ class RouteNames {
 
   /// Settings page
   static const settings = "settings";
+
+  /// Language page
+  static const languagePage = "language_page";
 }

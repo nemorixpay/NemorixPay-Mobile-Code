@@ -400,6 +400,11 @@
   "language": "Idioma",
   "security": "Seguridad",
   "darkMode": "Modo Oscuro",
+  "@_LANGUAGE_PAGE": {
+
+  },
+  "selectLanguage": "Seleccionar Idioma",
+  "saveChanges": "Guardar",
   "@_PAYMENT_METHOD_PAGE": {
 
   },  

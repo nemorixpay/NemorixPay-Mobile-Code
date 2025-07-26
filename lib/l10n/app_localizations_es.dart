@@ -920,6 +920,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get darkMode => 'Modo Oscuro';
 
   @override
+  String get selectLanguage => 'Seleccionar Idioma';
+
+  @override
+  String get saveChanges => 'Guardar';
+
+  @override
   String get paymentMethodTitle => 'Método de Pago';
 
   @override

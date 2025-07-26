@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
@@ -177,9 +178,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   CustomButtonTile(
                     label: appLocalizations.language,
                     function: () {
-                      NemorixSnackBar.show(
+                      Navigator.pushNamed(
                         context,
-                        message: appLocalizations.featureNotImplemented,
+                        RouteNames.languagePage,
                       );
                     },
                     widgetRight: const Icon(Icons.chevron_right),
