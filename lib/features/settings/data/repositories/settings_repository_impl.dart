@@ -6,7 +6,7 @@ import '../datasources/settings_local_datasource.dart';
 /// @details     Provides access to settings preferences using SharedPreferences.
 /// @author      Miguel Fagundez
 /// @date        07/12/2025
-/// @version     1.0
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 
 class SettingsRepositoryImpl implements SettingsRepository {
@@ -27,5 +27,15 @@ class SettingsRepositoryImpl implements SettingsRepository {
   @override
   Future<bool> toggleDarkMode() async {
     return await _localDatasource.toggleDarkMode();
+  }
+
+  @override
+  Future<String> getLanguagePreference() async {
+    return await _localDatasource.getLanguagePreference();
+  }
+
+  @override
+  Future<void> saveLanguagePreference(String languageCode) async {
+    await _localDatasource.saveLanguagePreference(languageCode);
   }
 }

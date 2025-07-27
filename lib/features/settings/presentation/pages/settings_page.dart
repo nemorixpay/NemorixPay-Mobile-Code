@@ -46,10 +46,10 @@ class _SettingsPageState extends State<SettingsPage> {
         (currentUser == null) ? 'john.smith@email.com' : currentUser.email;
     userName = (currentUser == null) ? 'John Smith' : currentUser.displayName;
 
-    // Load dark mode preference after the widget is built
+    // Load complete settings data after the widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        context.read<SettingsBloc>().add(LoadDarkModePreference());
+        context.read<SettingsBloc>().add(LoadCompleteSettingsData());
       }
     });
   }

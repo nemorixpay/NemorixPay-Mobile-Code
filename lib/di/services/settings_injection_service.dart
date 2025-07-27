@@ -3,6 +3,8 @@ import 'package:nemorixpay/features/settings/data/datasources/settings_local_dat
 import 'package:nemorixpay/features/settings/data/repositories/settings_repository_impl.dart';
 import 'package:nemorixpay/features/settings/domain/usecases/get_dark_mode_preference.dart';
 import 'package:nemorixpay/features/settings/domain/usecases/toggle_dark_mode_usecase.dart';
+import 'package:nemorixpay/features/settings/domain/usecases/get_language_usecase.dart';
+import 'package:nemorixpay/features/settings/domain/usecases/set_language_usecase.dart';
 import 'package:nemorixpay/features/settings/presentation/bloc/settings_bloc.dart';
 
 /// @file        settings_injection_service.dart
@@ -11,7 +13,7 @@ import 'package:nemorixpay/features/settings/presentation/bloc/settings_bloc.dar
 ///              registering all services, repositories, and use cases for the Settings feature.
 /// @author      Miguel Fagundez
 /// @date        07/12/2025
-/// @version     1.0
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 ///
 /// @section     Usage
@@ -43,11 +45,21 @@ Future<void> settingsInjectionServices() async {
     ToggleDarkModeUseCase(settingsRepositoryImpl),
   );
 
+  final GetLanguageUseCase getLanguagePreference = di.registerSingleton(
+    GetLanguageUseCase(settingsRepositoryImpl),
+  );
+
+  final SetLanguageUseCase setLanguagePreference = di.registerSingleton(
+    SetLanguageUseCase(settingsRepositoryImpl),
+  );
+
   // Define Settings Bloc
   di.registerFactory(
     () => SettingsBloc(
       getDarkModePreference: getDarkModePreference,
       toggleDarkModeUseCase: toggleDarkModeUseCase,
+      getLanguagePreference: getLanguagePreference,
+      setLanguagePreference: setLanguagePreference,
     ),
   );
 }

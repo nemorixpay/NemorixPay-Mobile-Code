@@ -3,7 +3,7 @@
 /// @details     Defines contract for managing user settings preferences.
 /// @author      Miguel Fagundez
 /// @date        07/12/2025
-/// @version     1.0
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 
 abstract class SettingsRepository {
@@ -15,4 +15,10 @@ abstract class SettingsRepository {
 
   /// Toggles the current dark mode preference
   Future<bool> toggleDarkMode();
+
+  /// Gets the current language preference
+  Future<String> getLanguagePreference();
+
+  /// Saves the language preference
+  Future<void> saveLanguagePreference(String languageCode);
 }

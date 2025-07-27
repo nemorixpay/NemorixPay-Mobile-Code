@@ -119,24 +119,41 @@ class _MyAppState extends State<MyApp> {
               }
             },
           ),
+          BlocListener<SettingsBloc, SettingsState>(
+            listener: (context, state) {
+              if (state is LanguageChanged) {
+                setState(() {
+                  _currentLanguage = state.newLanguage;
+                });
+                debugPrint('LanguageChanged (main.dart): ${state.newLanguage}');
+              } else if (state is LanguageLoaded) {
+                setState(() {
+                  _currentLanguage = state.currentLanguage;
+                });
+                debugPrint(
+                    'LanguageLoaded (main.dart): ${state.currentLanguage}');
+              }
+            },
+          ),
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {
-            // Load dark mode preference when app starts
+            // Load dark mode and language preferences when app starts
             if (settingsState is SettingsInitial) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                context.read<SettingsBloc>().add(LoadDarkModePreference());
+                context.read<SettingsBloc>().add(LoadCompleteSettingsData());
+                context.read<SettingsBloc>().add(LoadLanguagePreference());
               });
             }
 
             // Determine current theme based on settings state
             ThemeData currentTheme;
-            if (settingsState is SettingsLoaded ||
-                settingsState is DarkModeToggled) {
-              final isDarkMode = settingsState is SettingsLoaded
-                  ? settingsState.isDarkMode
-                  : (settingsState as DarkModeToggled).isDarkMode;
-              currentTheme = isDarkMode
+            if (settingsState is SettingsLoaded) {
+              currentTheme = settingsState.isDarkMode
+                  ? NemorixTheme.darkThemeMode
+                  : NemorixTheme.lightThemeMode;
+            } else if (settingsState is DarkModeToggled) {
+              currentTheme = settingsState.isDarkMode
                   ? NemorixTheme.darkThemeMode
                   : NemorixTheme.lightThemeMode;
             } else {

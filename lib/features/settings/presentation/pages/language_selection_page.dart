@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/config/constants/app_constants.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
+import 'package:nemorixpay/features/settings/presentation/bloc/settings_bloc.dart';
+import 'package:nemorixpay/features/settings/presentation/bloc/settings_event.dart';
+import 'package:nemorixpay/features/settings/presentation/bloc/settings_state.dart';
 import 'package:nemorixpay/features/settings/presentation/widgets/language_list_item.dart';
 import 'package:nemorixpay/features/settings/presentation/widgets/language_search_bar.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
@@ -14,7 +18,7 @@ import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_b
 ///              Features search functionality and visual selection indicators.
 /// @author      Miguel Fagundez
 /// @date        07/26/2025
-/// @version     1.0
+/// @version     1.2
 /// @copyright   Apache 2.0 License
 
 class LanguageSelectionPage extends StatefulWidget {
@@ -29,8 +33,8 @@ class _LanguageSelectionPageState extends State<LanguageSelectionPage> {
   String _searchQuery = '';
   bool _hasChanges = false;
 
-  // Sample language data - replace with actual data
-  final List<Map<String, dynamic>> _languages = [
+  // Static list of supported languages
+  final List<Map<String, String>> _supportedLanguages = [
     {
       AppConstants.languageName: 'English',
       AppConstants.languageFlag: 'assets/images/flags/en_flag.png',
@@ -48,21 +52,30 @@ class _LanguageSelectionPageState extends State<LanguageSelectionPage> {
     },
   ];
 
-  List<Map<String, dynamic>> get _filteredLanguages {
+  @override
+  void initState() {
+    super.initState();
+    // Load current language preference when page initializes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SettingsBloc>().add(LoadLanguagePreference());
+    });
+  }
+
+  List<Map<String, String>> get _filteredLanguages {
     if (_searchQuery.isEmpty) {
-      return _languages;
+      return _supportedLanguages;
     }
-    return _languages
-        .where((language) => language[AppConstants.languageName]
+    return _supportedLanguages
+        .where((language) => language[AppConstants.languageName]!
             .toLowerCase()
             .contains(_searchQuery.toLowerCase()))
         .toList();
   }
 
-  void _onLanguageSelected(String languageName) {
-    if (_selectedLanguage != languageName) {
+  void _onLanguageSelected(String languageCode) {
+    if (_selectedLanguage != languageCode) {
       setState(() {
-        _selectedLanguage = languageName;
+        _selectedLanguage = languageCode;
         _hasChanges = true;
       });
     }
@@ -75,12 +88,7 @@ class _LanguageSelectionPageState extends State<LanguageSelectionPage> {
   }
 
   void _saveChanges() {
-    // TODO: Implement save functionality
-    NemorixSnackBar.show(
-      context,
-      message: AppLocalizations.of(context)!.featureNotImplemented,
-      type: SnackBarType.info,
-    );
+    context.read<SettingsBloc>().add(SetLanguage(_selectedLanguage));
     setState(() {
       _hasChanges = false;
     });
@@ -101,9 +109,7 @@ class _LanguageSelectionPageState extends State<LanguageSelectionPage> {
                 showBackButton: true,
                 showSearchButton: false,
               ),
-              const SizedBox(
-                height: 24,
-              ),
+              const SizedBox(height: 24),
               // Search Bar
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -111,32 +117,64 @@ class _LanguageSelectionPageState extends State<LanguageSelectionPage> {
                   onSearchChanged: _onSearchChanged,
                 ),
               ),
-              const SizedBox(
-                height: 24,
-              ),
-              // Language List
+              const SizedBox(height: 24),
+              // Language List with BlocConsumer
               Expanded(
-                child: ListView.separated(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  itemCount: _filteredLanguages.length,
-                  separatorBuilder: (context, index) => const Divider(
-                    color: NemorixColors.greyLevel2,
-                    height: 3,
-                    thickness: 2,
-                  ),
-                  itemBuilder: (context, index) {
-                    final language = _filteredLanguages[index];
-                    final isSelected = language[AppConstants.languageName] ==
-                        _selectedLanguage;
+                child: BlocConsumer<SettingsBloc, SettingsState>(
+                  listener: (context, state) {
+                    if (state is LanguageLoaded) {
+                      debugPrint(
+                          'LanguageSelectionPage: LanguageLoaded - ${state.currentLanguage}');
+                      setState(() {
+                        _selectedLanguage = state.currentLanguage;
+                      });
+                    }
+                    if (state is LanguageChanged) {
+                      NemorixSnackBar.show(
+                        context,
+                        message: appLocalizations.transactionSuccessTitle,
+                        type: SnackBarType.success,
+                      );
+                    } else if (state is SettingsError) {
+                      NemorixSnackBar.show(
+                        context,
+                        message: state.message,
+                        type: SnackBarType.error,
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is SettingsLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
 
-                    return LanguageListItem(
-                      languageName: language[AppConstants.languageName],
-                      flagAsset: language[AppConstants.languageFlag],
-                      isSelected: isSelected,
-                      onTap: () => (index != 2)
-                          ? _onLanguageSelected(
-                              language[AppConstants.languageName])
-                          : null,
+                    return ListView.separated(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      itemCount: _filteredLanguages.length,
+                      separatorBuilder: (context, index) => const Divider(
+                        color: NemorixColors.greyLevel2,
+                        height: 3,
+                        thickness: 2,
+                      ),
+                      itemBuilder: (context, index) {
+                        final language = _filteredLanguages[index];
+                        final isSelected =
+                            language[AppConstants.languageCode] ==
+                                _selectedLanguage;
+
+                        return LanguageListItem(
+                          languageName:
+                              language[AppConstants.languageName] ?? '',
+                          flagAsset: language[AppConstants.languageFlag] ?? '',
+                          isSelected: isSelected,
+                          onTap: () => (index != 2)
+                              ? _onLanguageSelected(
+                                  language[AppConstants.languageCode] ?? '')
+                              : null,
+                        );
+                      },
                     );
                   },
                 ),
