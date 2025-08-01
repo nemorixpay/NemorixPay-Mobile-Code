@@ -338,6 +338,18 @@ class _SplashTestPageState extends State<SplashTestPage> {
                   backgroundColor: Colors.white,
                   textColor: Colors.black,
                 ),
+                SizedBox(height: 20),
+                RoundedElevatedButton(
+                  text: "Test KYC WebView (Google.com)",
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      RouteNames.kycPage,
+                    );
+                  },
+                  backgroundColor: Colors.white,
+                  textColor: Colors.black,
+                ),
                 SizedBox(height: 40),
               ],
             ),

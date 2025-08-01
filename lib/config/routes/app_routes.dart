@@ -29,6 +29,7 @@ import 'package:nemorixpay/features/wallet/presentation/pages/wallet_setup_page.
 import 'package:nemorixpay/features/crypto/presentation/pages/crypto_details.dart';
 import 'package:nemorixpay/shared/common/presentation/pages/success_page.dart';
 import 'package:nemorixpay/shared/stellar/presentation/pages/test_transactions_page.dart';
+import 'package:nemorixpay/features/kyc/presentation/pages/kyc_test_page.dart';
 
 /// @file        app_routes.dart
 /// @brief       Centralized route management for NemorixPay.
@@ -156,6 +157,12 @@ class AppRoutes {
       name: 'Language',
       screen: const LanguageSelectionPage(),
       icon: Icons.language_outlined,
+    ),
+    RouteModel(
+      route: RouteNames.kycPage,
+      name: 'KYC Test',
+      screen: const KYCTestPage(),
+      icon: Icons.verified_user_outlined,
     ),
   ];
 

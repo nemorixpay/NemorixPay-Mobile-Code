@@ -87,4 +87,7 @@ class RouteNames {
 
   /// Language page
   static const languagePage = "language_page";
+
+  /// KYC test page (temporary)
+  static const kycPage = "kyc_page";
 }
