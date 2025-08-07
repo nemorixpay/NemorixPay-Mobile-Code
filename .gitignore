@@ -67,3 +67,9 @@ app_constants.dart
 rules
 
 .DS_Store
+
+# Implementation details & testing
+kyc_datasource_impl.dart
+kyc_repository_impl.dart
+test_*.dart
+*_test.dart

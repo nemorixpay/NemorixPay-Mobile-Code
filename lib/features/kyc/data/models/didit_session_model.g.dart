@@ -10,6 +10,7 @@ DiditSessionModel _$DiditSessionModelFromJson(Map<String, dynamic> json) =>
     DiditSessionModel(
       sessionId: json['session_id'] as String,
       sessionNumber: (json['session_number'] as num).toInt(),
+      sessionToken: json['session_token'] as String?,
       vendorData: json['vendor_data'] as String?,
       metadata: json['metadata'] as Map<String, dynamic>?,
       status: json['status'] as String,
@@ -28,6 +29,7 @@ Map<String, dynamic> _$DiditSessionModelToJson(DiditSessionModel instance) =>
     <String, dynamic>{
       'session_id': instance.sessionId,
       'session_number': instance.sessionNumber,
+      'session_token': instance.sessionToken,
       'vendor_data': instance.vendorData,
       'metadata': instance.metadata,
       'status': instance.status,

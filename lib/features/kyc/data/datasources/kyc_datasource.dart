@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart';
 import '../../domain/entities/kyc_session.dart';
 import '../models/didit_session_model.dart';
 import '../models/didit_create_session_request.dart';
@@ -14,19 +13,19 @@ import '../models/didit_create_session_request.dart';
 
 abstract class KYCDatasource {
   /// Create a new KYC verification session with Didit
-  Future<Either<String, DiditSessionModel>> createSession(
+  Future<DiditSessionModel> createSession(
     DiditCreateSessionRequest request,
   );
 
   /// Get the current KYC session from local storage
-  Future<Either<String, KYCSession?>> getCurrentSession();
+  Future<KYCSession?> getCurrentSession();
 
   /// Save KYC session to local storage
-  Future<Either<String, void>> saveSession(KYCSession session);
+  Future<void> saveSession(KYCSession session);
 
   /// Clear KYC session from local storage
-  Future<Either<String, void>> clearSession();
+  Future<void> clearSession();
 
   /// Get KYC verification status
-  Future<Either<String, KYCStatus>> getVerificationStatus();
+  Future<KYCStatus> getVerificationStatus();
 }

@@ -1,10 +1,8 @@
-import 'package:dartz/dartz.dart';
-import '../entities/kyc_session.dart';
+import '../../domain/entities/kyc_session.dart';
 
 /// @file        kyc_repository.dart
-/// @brief       Abstract repository for KYC operations
-/// @details     Defines the contract for KYC business logic operations
-///              including session management and status verification
+/// @brief       Repository interface for KYC feature
+/// @details     Defines contract for KYC verification operations
 /// @author      Miguel Fagundez
 /// @date        07/31/2025
 /// @version     1.0
@@ -12,20 +10,20 @@ import '../entities/kyc_session.dart';
 
 abstract class KYCRepository {
   /// Create a new KYC verification session
-  Future<Either<String, KYCSession>> createVerificationSession();
+  Future<KYCSession> createVerificationSession();
 
-  /// Get the current KYC session
-  Future<Either<String, KYCSession?>> getCurrentSession();
+  /// Get the current KYC session from local storage
+  Future<KYCSession?> getCurrentSession();
 
-  /// Save KYC session
-  Future<Either<String, void>> saveSession(KYCSession session);
+  /// Save KYC session to local storage
+  Future<void> saveSession(KYCSession session);
 
-  /// Clear KYC session
-  Future<Either<String, void>> clearSession();
+  /// Clear KYC session from local storage
+  Future<void> clearSession();
 
   /// Get KYC verification status
-  Future<Either<String, KYCStatus>> getVerificationStatus();
+  Future<KYCStatus> getVerificationStatus();
 
-  /// Check if user has active session
-  Future<Either<String, bool>> hasActiveSession();
+  /// Check if user has an active KYC session
+  Future<bool> hasActiveSession();
 }

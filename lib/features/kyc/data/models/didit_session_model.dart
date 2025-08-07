@@ -20,6 +20,10 @@ class DiditSessionModel {
   @JsonKey(name: 'session_number')
   final int sessionNumber;
 
+  /// JWT token for session authentication
+  @JsonKey(name: 'session_token')
+  final String? sessionToken;
+
   /// Vendor data associated with the session
   @JsonKey(name: 'vendor_data')
   final String? vendorData;
@@ -71,6 +75,7 @@ class DiditSessionModel {
   const DiditSessionModel({
     required this.sessionId,
     required this.sessionNumber,
+    this.sessionToken,
     this.vendorData,
     this.metadata,
     required this.status,
@@ -89,6 +94,7 @@ class DiditSessionModel {
   DiditSessionModel copyWith({
     String? sessionId,
     int? sessionNumber,
+    String? sessionToken,
     String? vendorData,
     Map<String, dynamic>? metadata,
     String? status,
@@ -105,6 +111,7 @@ class DiditSessionModel {
     return DiditSessionModel(
       sessionId: sessionId ?? this.sessionId,
       sessionNumber: sessionNumber ?? this.sessionNumber,
+      sessionToken: sessionToken ?? this.sessionToken,
       vendorData: vendorData ?? this.vendorData,
       metadata: metadata ?? this.metadata,
       status: status ?? this.status,
