@@ -29,7 +29,7 @@ import 'package:nemorixpay/features/wallet/presentation/pages/wallet_setup_page.
 import 'package:nemorixpay/features/crypto/presentation/pages/crypto_details.dart';
 import 'package:nemorixpay/shared/common/presentation/pages/success_page.dart';
 import 'package:nemorixpay/shared/stellar/presentation/pages/test_transactions_page.dart';
-import 'package:nemorixpay/features/kyc/presentation/pages/kyc_test_page.dart';
+import 'package:nemorixpay/features/kyc/presentation/pages/kyc_verification_page.dart';
 
 /// @file        app_routes.dart
 /// @brief       Centralized route management for NemorixPay.
@@ -158,12 +158,7 @@ class AppRoutes {
       screen: const LanguageSelectionPage(),
       icon: Icons.language_outlined,
     ),
-    RouteModel(
-      route: RouteNames.kycPage,
-      name: 'KYC Test',
-      screen: const KYCTestPage(),
-      icon: Icons.verified_user_outlined,
-    ),
+    // KYC page is handled in onGenerateRoute to support dynamic URL passing
   ];
 
   /// Generates a map of all available routes for the MaterialApp
@@ -193,7 +188,19 @@ class AppRoutes {
   /// @return A MaterialPageRoute for the requested screen
   /// @throws TypeError if the arguments are not of the expected type
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
+    debugPrint(
+        '🔄 AppRoutes: onGenerateRoute - Route: ${settings.name}, Arguments: ${settings.arguments}');
+
     switch (settings.name) {
+      case RouteNames.kycPage:
+        debugPrint(
+            '🔄 AppRoutes: onGenerateRoute - Handling KYC page with URL: ${settings.arguments}');
+        final verificationUrl = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (context) => KYCVerificationPage(
+            verificationUrl: verificationUrl,
+          ),
+        );
       case RouteNames.termsAndConditions:
         final value = settings.arguments as bool?;
         if (value == null) {

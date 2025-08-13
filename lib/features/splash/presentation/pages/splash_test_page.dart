@@ -9,6 +9,9 @@ import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_home/crypto_ho
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/rounded_elevated_button.dart';
+import 'package:nemorixpay/features/kyc/presentation/bloc/kyc_bloc.dart';
+import 'package:nemorixpay/features/kyc/presentation/bloc/kyc_event.dart';
+import 'package:nemorixpay/features/kyc/presentation/bloc/kyc_state.dart';
 
 /// @file        splash_test_page.dart
 /// @brief       Temporary test page for NemorixPay UI components.
@@ -349,6 +352,234 @@ class _SplashTestPageState extends State<SplashTestPage> {
                   },
                   backgroundColor: Colors.white,
                   textColor: Colors.black,
+                ),
+                SizedBox(height: 20),
+
+                // KYC BLoC Test Section
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blue),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'KYC BLoC Test',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      BlocConsumer<KYCBloc, KYCState>(
+                        listener: (context, state) {
+                          if (state is KYCVerificationStarted) {
+                            debugPrint(
+                                '🔄 SplashTestPage: Navigating to KYC with URL: ${state.session.url}');
+                            Navigator.pushNamed(
+                              context,
+                              RouteNames.kycPage,
+                              arguments: state.session.url,
+                            );
+                          } else if (state is KYCError) {
+                            NemorixSnackBar.show(
+                              context,
+                              message: 'Error: ${state.message}',
+                              type: SnackBarType.error,
+                            );
+                          }
+                        },
+                        builder: (context, state) {
+                          return Column(
+                            children: [
+                              // Load KYC Status Button
+                              RoundedElevatedButton(
+                                text: "Load KYC Status",
+                                onPressed: () {
+                                  context
+                                      .read<KYCBloc>()
+                                      .add(const LoadKYCStatus());
+                                },
+                                backgroundColor: Colors.blue,
+                                textColor: Colors.white,
+                              ),
+                              const SizedBox(height: 10),
+
+                              // Create KYC Session Button
+                              RoundedElevatedButton(
+                                text: state is KYCLoading
+                                    ? "Creating..."
+                                    : "Create KYC Session",
+                                onPressed: state is KYCLoading
+                                    ? null
+                                    : () {
+                                        context
+                                            .read<KYCBloc>()
+                                            .add(const CreateKYCSession());
+                                      },
+                                backgroundColor: Colors.green,
+                                textColor: Colors.white,
+                              ),
+                              const SizedBox(height: 10),
+
+                              // Start KYC Verification Button
+                              RoundedElevatedButton(
+                                text: "Start KYC Verification",
+                                onPressed: state is KYCLoading
+                                    ? null
+                                    : () {
+                                        context
+                                            .read<KYCBloc>()
+                                            .add(const StartKYCVerification());
+                                      },
+                                backgroundColor: Colors.orange,
+                                textColor: Colors.white,
+                              ),
+                              const SizedBox(height: 10),
+
+                              // Clear KYC Session Button
+                              RoundedElevatedButton(
+                                text: "Clear KYC Session",
+                                onPressed: () {
+                                  context
+                                      .read<KYCBloc>()
+                                      .add(const ClearKYCSession());
+                                },
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                              ),
+                              const SizedBox(height: 10),
+
+                              // Status Display
+                              if (state is KYCLoaded)
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Status: ${state.status.name}'),
+                                      Text(
+                                          'Has Active Session: ${state.hasActiveSession}'),
+                                      if (state.session != null) ...[
+                                        Text(
+                                            'Session ID: ${state.session!.sessionId}'),
+                                        Text('URL: ${state.session!.url}'),
+                                      ] else ...[
+                                        const Text('No active session found'),
+                                      ],
+                                    ],
+                                  ),
+                                ),
+
+                              if (state is KYCSessionCreated)
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Session Created!',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                          'Session ID: ${state.session.sessionId}'),
+                                      Text('URL: ${state.session.url}'),
+                                      Text(
+                                          'Status: ${state.session.status.name}'),
+                                    ],
+                                  ),
+                                ),
+
+                              if (state is KYCLoading)
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: const Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 16,
+                                        height: 16,
+                                        child: CircularProgressIndicator(
+                                            strokeWidth: 2),
+                                      ),
+                                      SizedBox(width: 8),
+                                      Text('Loading...'),
+                                    ],
+                                  ),
+                                ),
+
+                              if (state is KYCError)
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Error',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                      Text(state.message),
+                                    ],
+                                  ),
+                                ),
+
+                              if (state is KYCSessionCleared)
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: const Text(
+                                    'Session cleared successfully',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+
+                              if (state is KYCInitial)
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: const Text(
+                                    'Click "Load KYC Status" to start',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
+                                ),
+                            ],
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(height: 40),
               ],

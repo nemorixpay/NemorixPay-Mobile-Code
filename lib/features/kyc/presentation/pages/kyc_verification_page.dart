@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nemorixpay/features/kyc/presentation/bloc/kyc_bloc.dart';
+import 'package:nemorixpay/features/kyc/presentation/bloc/kyc_event.dart';
 import '../widgets/kyc_webview_widget.dart';
 
 /// @file        kyc_verification_page.dart
@@ -30,7 +33,12 @@ class _KYCVerificationPageState extends State<KYCVerificationPage> {
         title: const Text('Verificación de Identidad'),
         leading: IconButton(
           icon: const Icon(Icons.close),
-          onPressed: () => Navigator.of(context).pop(),
+          //onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            debugPrint('LoadKYCStatus because WebView was closed');
+            Navigator.of(context).pop();
+            context.read<KYCBloc>().add(const LoadKYCStatus());
+          },
         ),
         actions: [
           IconButton(

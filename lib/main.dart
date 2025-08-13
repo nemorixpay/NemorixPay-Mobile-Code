@@ -27,6 +27,7 @@ import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_all_available_
 import 'package:nemorixpay/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:nemorixpay/features/settings/presentation/bloc/settings_event.dart';
 import 'package:nemorixpay/features/settings/presentation/bloc/settings_state.dart';
+import 'package:nemorixpay/features/kyc/presentation/bloc/kyc_bloc.dart';
 import 'firebase_options.dart';
 
 /// Global key for accessing the ScaffoldMessenger from anywhere in the app
@@ -71,6 +72,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => GetIt.instance.get<CryptoHomeBloc>()),
         BlocProvider(create: (_) => GetIt.instance.get<OnboardingBloc>()),
         BlocProvider(create: (_) => GetIt.instance.get<SettingsBloc>()),
+        BlocProvider(create: (_) => GetIt.instance.get<KYCBloc>()),
       ],
       child: MultiBlocListener(
         listeners: [
