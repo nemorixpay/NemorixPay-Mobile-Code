@@ -90,4 +90,7 @@ class RouteNames {
 
   /// KYC test page (temporary)
   static const kycPage = "kyc_page";
+
+  /// Transactions history page
+  static const transactionsPage = "transactions_page";
 }

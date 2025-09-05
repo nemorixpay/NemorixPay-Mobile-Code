@@ -1126,10 +1126,10 @@ packages:
     dependency: "direct main"
     description:
       name: stellar_flutter_sdk
-      sha256: afda978bb6f27ab8a48be2141ce2f9ec7e32154a1a0d2e1c86bb9d9e7cf9c166
+      sha256: d5cc48149f5da85fa2f0f9acba54170ff42cb4661a921ba5db1cab267f92c08f
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.2"
   stream_channel:
     dependency: transitive
     description:

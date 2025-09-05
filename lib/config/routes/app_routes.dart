@@ -21,6 +21,7 @@ import 'package:nemorixpay/features/settings/presentation/pages/settings_page.da
 import 'package:nemorixpay/features/splash/presentation/pages/splash_native_page.dart';
 import 'package:nemorixpay/features/splash/presentation/pages/splash_test_page.dart';
 import 'package:nemorixpay/features/terms/presentation/pages/terms_page.dart';
+import 'package:nemorixpay/features/transactions/presentation/pages/transactions_page.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/confirm_seed_phrase_page.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/import_seed_phrase_page.dart';
 import 'package:nemorixpay/features/wallet/presentation/pages/show_seed_phrase_page.dart';
@@ -157,6 +158,12 @@ class AppRoutes {
       name: 'Language',
       screen: const LanguageSelectionPage(),
       icon: Icons.language_outlined,
+    ),
+    RouteModel(
+      route: RouteNames.transactionsPage,
+      name: 'Transactions',
+      screen: const TransactionsPage(),
+      icon: Icons.send,
     ),
     // KYC page is handled in onGenerateRoute to support dynamic URL passing
   ];

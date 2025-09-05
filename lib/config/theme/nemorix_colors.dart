@@ -26,6 +26,9 @@ class NemorixColors {
   /// Primary brand color - Gold
   static const Color primaryColor = Color(0xFFE7C200);
 
+  /// Primary text brand color - Gold
+  static const Color primaryTextGoldColor = Color.fromARGB(255, 211, 177, 5);
+
   /// Secondary color - Light gray
   static const Color secondaryColor = Color(0XFFF6F7F8);
 
@@ -52,6 +55,9 @@ class NemorixColors {
 
   /// Success state color - Bright green
   static const Color successColor = Color(0xFF09ff04);
+
+  /// Success text state color - Bright green
+  static const Color successTextColor = Color(0xFF0DA80B);
 
   /// Warning state color - Orange
   static const Color warningColor = Color(0xFFFFA500);
