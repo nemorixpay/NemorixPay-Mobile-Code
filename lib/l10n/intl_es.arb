@@ -419,5 +419,22 @@
   "googlePayLabel": "Google Pay",
   "applePayLabel": "Apple Pay",
   "mobileBankingLabel": "Banca Móvil",
-  "sendReceiptLabel": "Enviar recibo a tu email"
+  "sendReceiptLabel": "Enviar recibo a tu email",
+  "@_TRANSACTIONS_HISTORY_PAGE": {
+
+  }, 
+  "transactionHistory": "Historial de Transacciones",
+  "searchTransactions": "Buscar transacciones...",
+  "noTransactionsFound": "No se encontraron transacciones",
+  "noTransactionsFoundFor": "No se encontraron transacciones para \"{query}\"",
+  "errorLoadingTransactions": "Error al cargar transacciones",
+  "retry": "Reintentar",
+  "loadingMore": "Cargando más...",
+  "confirmed": "Confirmado",
+  "failed": "Fallido",
+  "send": "Enviado",
+  "receive": "Recibido",
+  "search": "Buscar...",
+  "notAvailable": "N/D",
+  "transactionId": "Transacción: {id}"
 }

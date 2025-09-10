@@ -206,7 +206,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get goToHomePage => 'Ir a la página principal';
 
   @override
-  String get search => 'Buscar';
+  String get search => 'Buscar...';
 
   @override
   String get myAssets => 'Mis Activos';
@@ -227,10 +227,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get withdraw => 'Retirar';
 
   @override
-  String get send => 'Enviar';
+  String get send => 'Enviado';
 
   @override
-  String get receive => 'Recibir';
+  String get receive => 'Recibido';
 
   @override
   String get sell => 'Vender';
@@ -960,4 +960,41 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get sendReceiptLabel => 'Enviar recibo a tu email';
+
+  @override
+  String get transactionHistory => 'Historial de Transacciones';
+
+  @override
+  String get searchTransactions => 'Buscar transacciones...';
+
+  @override
+  String get noTransactionsFound => 'No se encontraron transacciones';
+
+  @override
+  String noTransactionsFoundFor(Object query) {
+    return 'No se encontraron transacciones para \"$query\"';
+  }
+
+  @override
+  String get errorLoadingTransactions => 'Error al cargar transacciones';
+
+  @override
+  String get retry => 'Reintentar';
+
+  @override
+  String get loadingMore => 'Cargando más...';
+
+  @override
+  String get confirmed => 'Confirmado';
+
+  @override
+  String get failed => 'Fallido';
+
+  @override
+  String get notAvailable => 'N/D';
+
+  @override
+  String transactionId(Object id) {
+    return 'Transacción: $id';
+  }
 }

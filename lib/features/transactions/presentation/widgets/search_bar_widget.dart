@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:nemorixpay/l10n/app_localizations.dart';
 
 /// @file        search_bar_widget.dart
 /// @brief       Widget for searching and filtering transactions
@@ -11,7 +12,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 class SearchBarWidget extends StatefulWidget {
   final String? initialValue;
-  final String hintText;
+  final String? hintText;
   final Function(String)? onChanged;
   final Function(String)? onSubmitted;
   final VoidCallback? onClear;
@@ -19,7 +20,7 @@ class SearchBarWidget extends StatefulWidget {
   const SearchBarWidget({
     super.key,
     this.initialValue,
-    this.hintText = 'Search...',
+    this.hintText,
     this.onChanged,
     this.onSubmitted,
     this.onClear,
@@ -65,6 +66,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appLocalizations = AppLocalizations.of(context)!;
 
     return Container(
       height: 48,
@@ -80,7 +82,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
         onChanged: _onChanged,
         onSubmitted: widget.onSubmitted,
         decoration: InputDecoration(
-          hintText: widget.hintText,
+          hintText: widget.hintText ?? appLocalizations.search,
           hintStyle: theme.textTheme.bodyMedium?.copyWith(
             color: theme.colorScheme.onSurface.withOpacity(0.5),
           ),

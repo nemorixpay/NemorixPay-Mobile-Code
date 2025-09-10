@@ -206,7 +206,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get goToHomePage => 'Go to Home Page';
 
   @override
-  String get search => 'Search';
+  String get search => 'Search...';
 
   @override
   String get myAssets => 'My Assets';
@@ -960,4 +960,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sendReceiptLabel => 'Send receipt to your email';
+
+  @override
+  String get transactionHistory => 'Transaction History';
+
+  @override
+  String get searchTransactions => 'Search transactions...';
+
+  @override
+  String get noTransactionsFound => 'No transactions found';
+
+  @override
+  String noTransactionsFoundFor(Object query) {
+    return 'No transactions found for \"$query\"';
+  }
+
+  @override
+  String get errorLoadingTransactions => 'Error loading transactions';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get loadingMore => 'Loading more...';
+
+  @override
+  String get confirmed => 'Confirmed';
+
+  @override
+  String get failed => 'Failed';
+
+  @override
+  String get notAvailable => 'N/A';
+
+  @override
+  String transactionId(Object id) {
+    return 'Transaction: $id';
+  }
 }

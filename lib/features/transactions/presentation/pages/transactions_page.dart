@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
 import 'package:nemorixpay/features/transactions/data/mock/mock_transaction_data.dart';
 import 'package:nemorixpay/features/transactions/presentation/widgets/transaction_list.dart';
@@ -75,11 +76,12 @@ class _TransactionsPageState extends State<TransactionsPage> {
   }
 
   void _onTransactionTap(TransactionListItemData transaction) {
+    final appLocalizations = AppLocalizations.of(context)!;
     widget.onTransactionTap?.call(transaction);
     // TODO: Navigate to transaction detail page
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Transaction: ${transaction.displayId}'),
+        content: Text(appLocalizations.transactionId(transaction.displayId)),
         duration: const Duration(seconds: 2),
       ),
     );
@@ -91,7 +93,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final theme = Theme.of(context);
+    final appLocalizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: SafeArea(
@@ -141,8 +143,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
         // ),
         child: Column(
           children: [
-            const MainHeader(
-              title: 'Transaction History',
+            MainHeader(
+              title: appLocalizations.transactionHistory,
               showBackButton: true,
               showSearchButton: false,
             ),
@@ -150,7 +152,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
             Padding(
               padding: const EdgeInsets.all(16),
               child: SearchBarWidget(
-                hintText: 'Search transactions...',
+                hintText: appLocalizations.searchTransactions,
                 onChanged: _onSearchChanged,
                 onClear: () => _onSearchChanged(''),
               ),
@@ -166,8 +168,10 @@ class _TransactionsPageState extends State<TransactionsPage> {
                       transactions: _filteredTransactions,
                       onTransactionTap: _onTransactionTap,
                       emptyMessage: _searchQuery.isNotEmpty
-                          ? 'No transactions found for "$_searchQuery"'
-                          : 'No transactions found',
+                          ? appLocalizations
+                              .noTransactionsFoundFor(_searchQuery)
+                          : appLocalizations.noTransactionsFound,
+                      // TODO:
                       // This errorMessage behavior needs to be changed
                       errorMessage: null,
                       onRetry: _loadTransactions,

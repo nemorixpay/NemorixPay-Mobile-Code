@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/features/transactions/domain/entities/transaction_list_item_data.dart';
 import 'package:nemorixpay/features/transactions/presentation/widgets/transaction_list_item.dart';
+import 'package:nemorixpay/l10n/app_localizations.dart';
 
 /// @file        transaction_list.dart
 /// @brief       Widget for displaying a list of transactions
@@ -76,6 +77,7 @@ class BuildEmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appLocalizations = AppLocalizations.of(context)!;
 
     return Center(
       child: Column(
@@ -88,7 +90,7 @@ class BuildEmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            emptyMessage ?? 'No transactions found',
+            emptyMessage ?? appLocalizations.noTransactionsFound,
             style: theme.textTheme.bodyLarge?.copyWith(
               color: theme.colorScheme.onSurface.withOpacity(0.7),
             ),
@@ -113,6 +115,7 @@ class BuildErrorState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appLocalizations = AppLocalizations.of(context)!;
 
     return Center(
       child: Column(
@@ -125,7 +128,7 @@ class BuildErrorState extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            errorMessage ?? 'Error loading transactions',
+            errorMessage ?? appLocalizations.errorLoadingTransactions,
             style: theme.textTheme.bodyLarge?.copyWith(
               color: theme.colorScheme.error,
             ),
@@ -135,7 +138,7 @@ class BuildErrorState extends StatelessWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: onRetry,
-              child: const Text('Retry'),
+              child: Text(appLocalizations.retry),
             ),
           ],
         ],
@@ -150,6 +153,7 @@ class BuildLoadMoreIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appLocalizations = AppLocalizations.of(context)!;
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -168,7 +172,7 @@ class BuildLoadMoreIndicator extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Loading more...',
+              appLocalizations.loadingMore,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurface.withOpacity(0.7),
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/features/transactions/domain/entities/transaction_list_item_data.dart';
+import 'package:nemorixpay/l10n/app_localizations.dart';
 
 /// @file        transaction_status_badge.dart
 /// @brief       Widget for displaying transaction status badges
@@ -25,6 +26,7 @@ class TransactionStatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appLocalizations = AppLocalizations.of(context)!;
 
     Color textColor;
     String statusText;
@@ -32,11 +34,11 @@ class TransactionStatusBadge extends StatelessWidget {
     switch (status) {
       case TransactionStatus.confirmed:
         textColor = NemorixColors.successTextColor;
-        statusText = 'Confirmed';
+        statusText = appLocalizations.confirmed;
         break;
       case TransactionStatus.failed:
         textColor = NemorixColors.errorColor;
-        statusText = 'Failed';
+        statusText = appLocalizations.failed;
         break;
     }
 

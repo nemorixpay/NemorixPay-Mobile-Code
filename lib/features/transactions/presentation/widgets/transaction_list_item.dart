@@ -4,6 +4,7 @@ import 'package:nemorixpay/features/transactions/presentation/widgets/crypto_fia
 import 'package:nemorixpay/features/transactions/presentation/widgets/transaction_date_display.dart';
 import 'package:nemorixpay/features/transactions/presentation/widgets/transaction_status_badge.dart';
 import 'package:nemorixpay/features/transactions/presentation/widgets/transaction_type_icon.dart';
+import 'package:nemorixpay/l10n/app_localizations.dart';
 
 /// @file        transaction_list_item.dart
 /// @brief       Main widget for displaying a single transaction item
@@ -28,6 +29,7 @@ class TransactionListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appLocalizations = AppLocalizations.of(context)!;
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -72,8 +74,8 @@ class TransactionListItem extends StatelessWidget {
                       children: [
                         Text(
                           transaction.type == TransactionType.send
-                              ? 'Send'
-                              : 'Receive',
+                              ? appLocalizations.send
+                              : appLocalizations.receive,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w600,
                             color: theme.colorScheme.onSurface,
