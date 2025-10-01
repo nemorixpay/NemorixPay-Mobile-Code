@@ -77,10 +77,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
     );
   }
 
-  void _onRefresh() {
-    context.read<TransactionsBloc>().add(const RefreshTransactions());
-  }
-
   @override
   Widget build(BuildContext context) {
     final appLocalizations = AppLocalizations.of(context)!;
@@ -113,54 +109,69 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
               // Transaction list with BLoC
               Expanded(
-                child: BlocBuilder<TransactionsBloc, TransactionsState>(
-                  builder: (context, state) {
-                    // Determine which transactions to show
-                    List<TransactionListItemData> transactionsToShow = [];
-                    String? emptyMessage;
-                    String? errorMessage;
-                    VoidCallback? onRetry;
-
-                    if (state is TransactionsLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (state is TransactionsRefreshing) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (state is TransactionsLoaded) {
-                      transactionsToShow = _searchQuery.isEmpty
-                          ? state.transactions
-                          : _filteredTransactions;
-                      emptyMessage = _searchQuery.isNotEmpty
-                          ? appLocalizations
-                              .noTransactionsFoundFor(_searchQuery)
-                          : appLocalizations.noTransactionsFound;
-                    } else if (state is TransactionsEmpty) {
-                      transactionsToShow = [];
-                      emptyMessage = state.message;
-                    } else if (state is TransactionsError) {
-                      transactionsToShow = state.currentTransactions ?? [];
-                      errorMessage = state.message;
-                      onRetry = () => context
-                          .read<TransactionsBloc>()
-                          .add(const LoadTransactions());
-                    } else {
-                      // Initial state - show loading
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-
-                    return TransactionList(
-                      transactions: transactionsToShow,
-                      onTransactionTap: _onTransactionTap,
-                      emptyMessage: emptyMessage,
-                      errorMessage: errorMessage,
-                      onRetry: onRetry,
-                    );
+                child: RefreshIndicator(
+                  color: Theme.of(context).primaryColor,
+                  onRefresh: () async {
+                    context
+                        .read<TransactionsBloc>()
+                        .add(const RefreshTransactions());
+                    // Wait for the refresh to complete
+                    await Future.delayed(const Duration(milliseconds: 100));
                   },
+                  child: BlocBuilder<TransactionsBloc, TransactionsState>(
+                    builder: (context, state) {
+                      // Determine which transactions to show
+                      List<TransactionListItemData> transactionsToShow = [];
+                      String? emptyMessage;
+                      String? errorMessage;
+                      VoidCallback? onRetry;
+
+                      if (state is TransactionsLoading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (state is TransactionsRefreshing) {
+                        // Show current transactions with refresh indicator
+                        transactionsToShow = _searchQuery.isEmpty
+                            ? state.currentTransactions
+                            : _filteredTransactions;
+                        emptyMessage = _searchQuery.isNotEmpty
+                            ? appLocalizations
+                                .noTransactionsFoundFor(_searchQuery)
+                            : appLocalizations.noTransactionsFound;
+                      } else if (state is TransactionsLoaded) {
+                        transactionsToShow = _searchQuery.isEmpty
+                            ? state.transactions
+                            : _filteredTransactions;
+                        emptyMessage = _searchQuery.isNotEmpty
+                            ? appLocalizations
+                                .noTransactionsFoundFor(_searchQuery)
+                            : appLocalizations.noTransactionsFound;
+                      } else if (state is TransactionsEmpty) {
+                        transactionsToShow = [];
+                        emptyMessage = state.message;
+                      } else if (state is TransactionsError) {
+                        transactionsToShow = state.currentTransactions ?? [];
+                        errorMessage = state.message;
+                        onRetry = () => context
+                            .read<TransactionsBloc>()
+                            .add(const RefreshTransactions());
+                      } else {
+                        // Initial state - show loading
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+
+                      return TransactionList(
+                        transactions: transactionsToShow,
+                        onTransactionTap: _onTransactionTap,
+                        emptyMessage: emptyMessage,
+                        errorMessage: errorMessage,
+                        onRetry: onRetry,
+                      );
+                    },
+                  ),
                 ),
               ),
             ],

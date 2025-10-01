@@ -42,4 +42,25 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, List<TransactionListItemData>>>
+      refreshTransactions() async {
+    debugPrint('TransactionsRepositoryImpl: refreshTransactions - Starting');
+
+    try {
+      final transactions = await _datasource.refreshTransactions();
+      debugPrint(
+          'TransactionsRepositoryImpl: refreshTransactions - Success: ${transactions.length} fresh transactions');
+      return Right(transactions);
+    } catch (e) {
+      debugPrint('TransactionsRepositoryImpl: refreshTransactions - Error: $e');
+      return Left(
+        TransactionsFailure(
+          transactionMessage: 'Failed to refresh transactions: $e',
+          transactionCode: 'TRANSACTIONS_REFRESH_ERROR',
+        ),
+      );
+    }
+  }
 }

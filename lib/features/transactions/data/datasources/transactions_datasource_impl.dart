@@ -84,4 +84,64 @@ class TransactionsDatasourceImpl implements TransactionsDatasource {
       rethrow;
     }
   }
+
+  @override
+  Future<List<TransactionListItemData>> refreshTransactions() async {
+    debugPrint('TransactionsDatasourceImpl: refreshTransactions - Starting');
+
+    try {
+      // Get current user public key
+      StellarAccountProvider? accountProvider = StellarAccountProvider();
+      final currentAccount = accountProvider.currentAccount;
+      if (currentAccount == null) {
+        debugPrint(
+            'TransactionsDatasourceImpl: refreshTransactions - No account found');
+        throw Exception('No account found. Please log in again.');
+      }
+
+      final currentUserPublicKey = currentAccount.publicKey;
+      debugPrint(
+          'TransactionsDatasourceImpl: refreshTransactions - Public key: $currentUserPublicKey');
+
+      // Get fresh transactions from Stellar repository
+      final result = await _stellarRepository.getTransactions();
+
+      return result.fold(
+        (failure) {
+          debugPrint(
+              'TransactionsDatasourceImpl: refreshTransactions - Error: ${failure.message}');
+          throw Exception('Failed to refresh transactions: ${failure.message}');
+        },
+        (stellarTransactions) {
+          debugPrint(
+              'TransactionsDatasourceImpl: refreshTransactions - Found ${stellarTransactions.length} fresh transactions');
+
+          // Map StellarTransaction to TransactionListItemData
+          final transactionData = stellarTransactions.map((tx) {
+            return TransactionListItemData.fromStellarTransaction(
+              hash: tx.hash,
+              sourceAccount: tx.sourceAccount,
+              destinationAccount: tx.destinationAccount,
+              amount: tx.amount,
+              memo: tx.memo,
+              successful: tx.successful,
+              createdAt: tx.createdAt,
+              currentUserPublicKey: currentUserPublicKey.toString(),
+              assetCode: _hardcodedAssetCode,
+              currentPrice: _hardcodedXlmPrice,
+              fiatSymbol: _hardcodedFiatSymbol,
+            );
+          }).toList();
+
+          debugPrint(
+              'TransactionsDatasourceImpl: refreshTransactions - Mapped ${transactionData.length} fresh transactions');
+          return transactionData;
+        },
+      );
+    } catch (e) {
+      debugPrint(
+          'TransactionsDatasourceImpl: refreshTransactions - Exception: $e');
+      rethrow;
+    }
+  }
 }

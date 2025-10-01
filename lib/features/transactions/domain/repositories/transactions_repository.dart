@@ -13,4 +13,5 @@ import 'package:nemorixpay/features/transactions/domain/entities/transaction_lis
 abstract class TransactionsRepository {
   /// Gets the current account transactions
   Future<Either<Failure, List<TransactionListItemData>>> getTransactions();
+  Future<Either<Failure, List<TransactionListItemData>>> refreshTransactions();
 }

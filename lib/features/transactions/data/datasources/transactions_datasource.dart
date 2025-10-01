@@ -11,4 +11,7 @@ import 'package:nemorixpay/features/transactions/domain/entities/transaction_lis
 abstract class TransactionsDatasource {
   /// Gets the list of account transactions
   Future<List<TransactionListItemData>> getTransactions();
+
+  /// Gets the new list of account transactions
+  Future<List<TransactionListItemData>> refreshTransactions();
 }

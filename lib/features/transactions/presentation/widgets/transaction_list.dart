@@ -5,17 +5,14 @@ import 'package:nemorixpay/l10n/app_localizations.dart';
 
 /// @file        transaction_list.dart
 /// @brief       Widget for displaying a list of transactions
-/// @details     Handles transaction list display with pagination and empty states
+/// @details     Handles transaction list display with empty and error states
 /// @author      Miguel Fagundez
-/// @date        08/29/2025
-/// @version     1.0
+/// @date        09/10/2025
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 
 class TransactionList extends StatelessWidget {
   final List<TransactionListItemData> transactions;
-  final bool isLoading;
-  final bool hasMore;
-  final VoidCallback? onLoadMore;
   final Function(TransactionListItemData)? onTransactionTap;
   final String? emptyMessage;
   final String? errorMessage;
@@ -24,9 +21,6 @@ class TransactionList extends StatelessWidget {
   const TransactionList({
     super.key,
     required this.transactions,
-    this.isLoading = false,
-    this.hasMore = false,
-    this.onLoadMore,
     this.onTransactionTap,
     this.emptyMessage,
     this.errorMessage,
@@ -42,7 +36,7 @@ class TransactionList extends StatelessWidget {
       );
     }
 
-    if (transactions.isEmpty && !isLoading) {
+    if (transactions.isEmpty) {
       return BuildEmptyState(
         emptyMessage: emptyMessage,
       );
@@ -50,13 +44,8 @@ class TransactionList extends StatelessWidget {
 
     return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      itemCount: transactions.length + (hasMore ? 1 : 0),
+      itemCount: transactions.length,
       itemBuilder: (context, index) {
-        if (index == transactions.length) {
-          // Load more indicator
-          return const BuildLoadMoreIndicator();
-        }
-
         final transaction = transactions[index];
         return TransactionListItem(
           transaction: transaction,
@@ -142,43 +131,6 @@ class BuildErrorState extends StatelessWidget {
             ),
           ],
         ],
-      ),
-    );
-  }
-}
-
-class BuildLoadMoreIndicator extends StatelessWidget {
-  const BuildLoadMoreIndicator({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final appLocalizations = AppLocalizations.of(context)!;
-
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Center(
-        child: Column(
-          children: [
-            SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  theme.colorScheme.primary,
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              appLocalizations.loadingMore,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.7),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

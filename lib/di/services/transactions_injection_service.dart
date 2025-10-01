@@ -4,6 +4,7 @@ import 'package:nemorixpay/features/transactions/data/datasources/transactions_d
 import 'package:nemorixpay/features/transactions/data/repositories/transactions_repository_impl.dart';
 import 'package:nemorixpay/features/transactions/domain/repositories/transactions_repository.dart';
 import 'package:nemorixpay/features/transactions/domain/usecases/get_transactions_usecase.dart';
+import 'package:nemorixpay/features/transactions/domain/usecases/refresh_transactions_usecase.dart';
 import 'package:nemorixpay/features/transactions/presentation/bloc/transactions_bloc.dart';
 import 'package:nemorixpay/shared/stellar/data/repositories/stellar_repository_impl.dart';
 import 'package:nemorixpay/shared/stellar/domain/repositories/stellar_repository.dart';
@@ -36,15 +37,21 @@ Future<void> transactionsInjectionServices() async {
     TransactionsRepositoryImpl(datasource: transactionsDatasourceImpl),
   );
 
-  // Defining Stellar UseCases
-  final GetTransactionsUseCase generateMnemonicUseCase = di.registerSingleton(
+  // Defining Transactions UseCases
+  final GetTransactionsUseCase getTransactionsUseCase = di.registerSingleton(
     GetTransactionsUseCase(transactionsRepository),
+  );
+
+  final RefreshTransactionsUseCase refreshTransactionsUseCase =
+      di.registerSingleton(
+    RefreshTransactionsUseCase(transactionsRepository),
   );
 
   // Register BLoC
   di.registerFactory<TransactionsBloc>(
     () => TransactionsBloc(
-      getTransactionsUseCase: generateMnemonicUseCase,
+      getTransactionsUseCase: getTransactionsUseCase,
+      refreshTransactionsUseCase: refreshTransactionsUseCase,
     ),
   );
 }

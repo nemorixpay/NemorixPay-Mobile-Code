@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:nemorixpay/features/transactions/domain/usecases/get_transactions_usecase.dart';
+import 'package:nemorixpay/features/transactions/domain/usecases/refresh_transactions_usecase.dart';
 import 'package:nemorixpay/features/transactions/presentation/bloc/transactions_event.dart';
 import 'package:nemorixpay/features/transactions/presentation/bloc/transactions_state.dart';
 import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
@@ -17,13 +18,17 @@ import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provide
 class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
   // UseCases
   final GetTransactionsUseCase _getTransactionsUseCase;
+  final RefreshTransactionsUseCase _refreshTransactionsUseCase;
 
   TransactionsBloc({
     required GetTransactionsUseCase getTransactionsUseCase,
+    required RefreshTransactionsUseCase refreshTransactionsUseCase,
   })  : _getTransactionsUseCase = getTransactionsUseCase,
+        _refreshTransactionsUseCase = refreshTransactionsUseCase,
         super(const TransactionsInitial()) {
     // Register event handlers
     on<LoadTransactions>(_onLoadTransactions);
+    on<RefreshTransactions>(_onRefreshTransactions);
   }
 
   /// Handles loading transactions
@@ -79,6 +84,69 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
       );
     } catch (e) {
       debugPrint('TransactionsBloc: _onLoadTransactions - Exception: $e');
+      emit(TransactionsError(message: 'Unexpected error: $e'));
+    }
+  }
+
+  /// Handles refreshing transactions
+  Future<void> _onRefreshTransactions(
+    RefreshTransactions event,
+    Emitter<TransactionsState> emit,
+  ) async {
+    debugPrint('TransactionsBloc: _onRefreshTransactions - Starting');
+
+    try {
+      // If we have current transactions, show refreshing state
+      if (state is TransactionsLoaded) {
+        final currentState = state as TransactionsLoaded;
+        emit(TransactionsRefreshing(
+          currentTransactions: currentState.transactions,
+        ));
+      }
+
+      // Check if user is authenticated
+      final StellarAccountProvider accountProvider = StellarAccountProvider();
+      final currentAccount = accountProvider.currentAccount;
+      if (currentAccount == null || currentAccount.publicKey == null) {
+        debugPrint(
+            'TransactionsBloc: _onRefreshTransactions - No authenticated account found');
+        emit(const TransactionsError(
+          message: 'Please log in to refresh your transaction history',
+        ));
+        return;
+      }
+
+      debugPrint(
+          'TransactionsBloc: _onRefreshTransactions - Account found: ${currentAccount.publicKey}');
+
+      // Use the RefreshUseCase to get fresh transactions
+      final result = await _refreshTransactionsUseCase();
+
+      result.fold(
+        (failure) {
+          debugPrint(
+              'TransactionsBloc: _onRefreshTransactions - Error: ${failure.message}');
+          emit(TransactionsError(message: failure.message));
+        },
+        (transactions) {
+          debugPrint(
+              'TransactionsBloc: _onRefreshTransactions - Found ${transactions.length} fresh transactions');
+
+          if (transactions.isEmpty) {
+            emit(const TransactionsEmpty(
+              message: 'No transactions found',
+            ));
+          } else {
+            emit(TransactionsLoaded(
+              transactions: transactions,
+              hasMore: false, // TODO: Implement pagination
+              nextCursor: null,
+            ));
+          }
+        },
+      );
+    } catch (e) {
+      debugPrint('TransactionsBloc: _onRefreshTransactions - Exception: $e');
       emit(TransactionsError(message: 'Unexpected error: $e'));
     }
   }
