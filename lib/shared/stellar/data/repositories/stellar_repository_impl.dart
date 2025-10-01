@@ -250,4 +250,35 @@ class StellarRepositoryImpl implements StellarRepository {
       );
     }
   }
+
+  /// Gets the transaction history for the current account
+  /// @return Either<Failure, List<StellarTransaction>> List of transactions or error
+  @override
+  Future<Either<Failure, List<StellarTransaction>>> getTransactions() async {
+    debugPrint(
+      'StellarRepositoryImpl: getTransactions - Obteniendo historial de transacciones',
+    );
+    try {
+      final transactions = await datasource.getTransactions();
+      debugPrint(
+        'StellarRepositoryImpl: getTransactions - Transacciones obtenidas: ${transactions.length}',
+      );
+      return Right(transactions.map((tx) => tx.toEntity()).toList());
+    } on StellarFailure catch (failure) {
+      debugPrint(
+        'StellarRepositoryImpl: getTransactions - StellarFailure: ${failure.message}',
+      );
+      return Left(failure);
+    } catch (e) {
+      debugPrint(
+        'StellarRepositoryImpl: getTransactions - General Error: $e',
+      );
+      return Left(
+        StellarFailure(
+          stellarCode: StellarErrorCode.unknown.code,
+          stellarMessage: 'Error getting transactions in repository: $e',
+        ),
+      );
+    }
+  }
 }

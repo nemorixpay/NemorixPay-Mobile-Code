@@ -58,4 +58,8 @@ abstract class StellarRepository {
   /// Gets all available assets in the Stellar network
   /// @return Either<Failure, List<AssetEntity>> List of available assets or error
   Future<Either<Failure, List<AssetEntity>>> getAvailableAssets();
+
+  /// Gets the transaction history for the current account
+  /// @return Either<Failure, List<StellarTransaction>> List of transactions or error
+  Future<Either<Failure, List<StellarTransaction>>> getTransactions();
 }

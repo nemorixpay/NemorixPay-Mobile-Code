@@ -4,6 +4,7 @@ import 'package:nemorixpay/di/services/kyc_injection_service.dart';
 import 'package:nemorixpay/di/services/navigation_service.dart';
 import 'package:nemorixpay/di/services/settings_injection_service.dart';
 import 'package:nemorixpay/di/services/stellar_injection_service.dart';
+import 'package:nemorixpay/di/services/transactions_injection_service.dart';
 import 'package:nemorixpay/di/services/wallet_injection_service.dart';
 import 'package:nemorixpay/di/services/onboarding_injection_service.dart';
 import 'package:nemorixpay/di/services/terms_injection_service.dart';
@@ -53,6 +54,8 @@ Future<void> initInjectionDependencies() async {
   await authInjectionServices();
   // Stellar
   await stellarInjectionServices();
+  // Transactions
+  await transactionsInjectionServices();
   // Wallet
   await walletInjectionServices();
   // CryptoMarket

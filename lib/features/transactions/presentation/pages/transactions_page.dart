@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nemorixpay/di/services/transactions_injection_service.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/main_header.dart';
-import 'package:nemorixpay/features/transactions/data/mock/mock_transaction_data.dart';
 import 'package:nemorixpay/features/transactions/presentation/widgets/transaction_list.dart';
 import 'package:nemorixpay/features/transactions/presentation/widgets/search_bar_widget.dart';
 import 'package:nemorixpay/features/transactions/domain/entities/transaction_list_item_data.dart';
+import 'package:nemorixpay/features/transactions/presentation/bloc/transactions_bloc.dart';
+import 'package:nemorixpay/features/transactions/presentation/bloc/transactions_event.dart';
+import 'package:nemorixpay/features/transactions/presentation/bloc/transactions_state.dart';
 
 /// @file        transactions_page.dart
 /// @brief       Main page for displaying transaction history
 /// @details     Shows list of transactions with search and filtering capabilities
 /// @author      Miguel Fagundez
-/// @date        08/29/2025
+/// @date        09/10/2025
 /// @version     1.0
 /// @copyright   Apache 2.0 License
 
 class TransactionsPage extends StatefulWidget {
-  final List<TransactionListItemData>? initialTransactions;
   final Function(TransactionListItemData)? onTransactionTap;
   final VoidCallback? onBackPressed;
 
   const TransactionsPage({
     super.key,
-    this.initialTransactions,
     this.onTransactionTap,
     this.onBackPressed,
   });
@@ -31,46 +33,34 @@ class TransactionsPage extends StatefulWidget {
 }
 
 class _TransactionsPageState extends State<TransactionsPage> {
-  List<TransactionListItemData> _transactions = [];
   List<TransactionListItemData> _filteredTransactions = [];
-  bool _isLoading = false;
   String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
-    _loadTransactions();
-  }
-
-  void _loadTransactions() {
-    setState(() {
-      _isLoading = true;
-    });
-
-    // Simulate loading delay
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      setState(() {
-        _transactions = widget.initialTransactions ??
-            MockTransactionData.getMockTransactions();
-        _filteredTransactions = _transactions;
-        _isLoading = false;
-      });
-    });
+    // Load transactions when the page initializes
+    context.read<TransactionsBloc>().add(const LoadTransactions());
   }
 
   void _onSearchChanged(String query) {
     setState(() {
       _searchQuery = query;
       if (query.isEmpty) {
-        _filteredTransactions = _transactions;
+        _filteredTransactions = [];
       } else {
-        _filteredTransactions = _transactions.where((transaction) {
-          final searchLower = query.toLowerCase();
-          return transaction.assetCode.toLowerCase().contains(searchLower) ||
-              transaction.memo?.toLowerCase().contains(searchLower) == true ||
-              transaction.displayId.toLowerCase().contains(searchLower) ||
-              transaction.type.name.toLowerCase().contains(searchLower);
-        }).toList();
+        // Filter transactions based on search query
+        final currentState = context.read<TransactionsBloc>().state;
+        if (currentState is TransactionsLoaded) {
+          _filteredTransactions =
+              currentState.transactions.where((transaction) {
+            final searchLower = query.toLowerCase();
+            return transaction.assetCode.toLowerCase().contains(searchLower) ||
+                transaction.memo?.toLowerCase().contains(searchLower) == true ||
+                transaction.displayId.toLowerCase().contains(searchLower) ||
+                transaction.type.name.toLowerCase().contains(searchLower);
+          }).toList();
+        }
       }
     });
   }
@@ -88,96 +78,93 @@ class _TransactionsPageState extends State<TransactionsPage> {
   }
 
   void _onRefresh() {
-    _loadTransactions();
+    context.read<TransactionsBloc>().add(const RefreshTransactions());
   }
 
   @override
   Widget build(BuildContext context) {
     final appLocalizations = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      body: SafeArea(
-        // appBar: AppBar(
-        //   backgroundColor: theme.appBarTheme.backgroundColor,
-        //   elevation: 0,
-        //   leading: IconButton(
-        //     icon: Container(
-        //       padding: const EdgeInsets.all(8),
-        //       decoration: BoxDecoration(
-        //         color: theme.colorScheme.surface,
-        //         borderRadius: BorderRadius.circular(12),
-        //       ),
-        //       child: Icon(
-        //         Icons.arrow_back_ios_new,
-        //         color: theme.colorScheme.onSurface,
-        //         size: 20,
-        //       ),
-        //     ),
-        //     onPressed: widget.onBackPressed ?? () => Navigator.of(context).pop(),
-        //   ),
-        //   title: Text(
-        //     'Transaction History',
-        //     style: theme.textTheme.titleLarge?.copyWith(
-        //       fontWeight: FontWeight.w600,
-        //       color: theme.colorScheme.onSurface,
-        //     ),
-        //   ),
-        //   centerTitle: true,
-        //   actions: [
-        //     IconButton(
-        //       icon: Container(
-        //         padding: const EdgeInsets.all(8),
-        //         decoration: BoxDecoration(
-        //           color: theme.colorScheme.surface,
-        //           borderRadius: BorderRadius.circular(12),
-        //         ),
-        //         child: Icon(
-        //           Icons.refresh,
-        //           color: theme.colorScheme.onSurface,
-        //           size: 20,
-        //         ),
-        //       ),
-        //       onPressed: _onRefresh,
-        //     ),
-        //   ],
-        // ),
-        child: Column(
-          children: [
-            MainHeader(
-              title: appLocalizations.transactionHistory,
-              showBackButton: true,
-              showSearchButton: false,
-            ),
-            // Search bar
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: SearchBarWidget(
-                hintText: appLocalizations.searchTransactions,
-                onChanged: _onSearchChanged,
-                onClear: () => _onSearchChanged(''),
+    return BlocProvider(
+      create: (context) {
+        final bloc = di<TransactionsBloc>();
+        // Trigger initial load
+        bloc.add(const LoadTransactions());
+        return bloc;
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: [
+              MainHeader(
+                title: appLocalizations.transactionHistory,
+                showBackButton: true,
+                showSearchButton: false,
               ),
-            ),
+              // Search bar
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: SearchBarWidget(
+                  hintText: appLocalizations.searchTransactions,
+                  onChanged: _onSearchChanged,
+                  onClear: () => _onSearchChanged(''),
+                ),
+              ),
 
-            // Transaction list
-            Expanded(
-              child: _isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : TransactionList(
-                      transactions: _filteredTransactions,
-                      onTransactionTap: _onTransactionTap,
-                      emptyMessage: _searchQuery.isNotEmpty
+              // Transaction list with BLoC
+              Expanded(
+                child: BlocBuilder<TransactionsBloc, TransactionsState>(
+                  builder: (context, state) {
+                    // Determine which transactions to show
+                    List<TransactionListItemData> transactionsToShow = [];
+                    String? emptyMessage;
+                    String? errorMessage;
+                    VoidCallback? onRetry;
+
+                    if (state is TransactionsLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is TransactionsRefreshing) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is TransactionsLoaded) {
+                      transactionsToShow = _searchQuery.isEmpty
+                          ? state.transactions
+                          : _filteredTransactions;
+                      emptyMessage = _searchQuery.isNotEmpty
                           ? appLocalizations
                               .noTransactionsFoundFor(_searchQuery)
-                          : appLocalizations.noTransactionsFound,
-                      // TODO:
-                      // This errorMessage behavior needs to be changed
-                      errorMessage: null,
-                      onRetry: _loadTransactions,
-                    ),
-            ),
-          ],
+                          : appLocalizations.noTransactionsFound;
+                    } else if (state is TransactionsEmpty) {
+                      transactionsToShow = [];
+                      emptyMessage = state.message;
+                    } else if (state is TransactionsError) {
+                      transactionsToShow = state.currentTransactions ?? [];
+                      errorMessage = state.message;
+                      onRetry = () => context
+                          .read<TransactionsBloc>()
+                          .add(const LoadTransactions());
+                    } else {
+                      // Initial state - show loading
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    return TransactionList(
+                      transactions: transactionsToShow,
+                      onTransactionTap: _onTransactionTap,
+                      emptyMessage: emptyMessage,
+                      errorMessage: errorMessage,
+                      onRetry: onRetry,
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

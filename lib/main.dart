@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:nemorixpay/features/transactions/presentation/bloc/transactions_bloc.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/di/injection_container.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
@@ -73,6 +74,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => GetIt.instance.get<OnboardingBloc>()),
         BlocProvider(create: (_) => GetIt.instance.get<SettingsBloc>()),
         BlocProvider(create: (_) => GetIt.instance.get<KYCBloc>()),
+        BlocProvider(create: (_) => GetIt.instance.get<TransactionsBloc>()),
       ],
       child: MultiBlocListener(
         listeners: [

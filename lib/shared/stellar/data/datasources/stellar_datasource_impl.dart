@@ -557,8 +557,14 @@ class StellarDataSourceImpl implements StellarDataSource {
             paymentOp = operations.records.firstWhere(
               (op) => op is PaymentOperationResponse,
             ) as PaymentOperationResponse;
+            debugPrint(
+              'StellarDatasource: getTransactions - paymentOp: $paymentOp',
+            );
           } catch (_) {
             // Si no hay operación de pago, continuamos con valores por defecto
+            debugPrint(
+              'StellarDatasource: getTransactions - paymentOp: try{}catch(){}, Valor por defecto',
+            );
           }
 
           // Si no hay operación de pago, usar valores por defecto
@@ -566,10 +572,10 @@ class StellarDataSourceImpl implements StellarDataSource {
             StellarTransactionModel(
               hash: tx.hash,
               sourceAccount: tx.sourceAccount,
-              destinationAccount: paymentOp?.to ?? 'Desconocido',
+              destinationAccount: paymentOp?.to ?? 'FriendBot',
               amount: paymentOp != null
-                  ? double.tryParse(paymentOp.amount) ?? 0.0
-                  : 0.0,
+                  ? double.tryParse(paymentOp.amount) ?? 10000.0
+                  : 10000.0,
               memo: tx.memo?.toString(),
               successful: tx.successful,
               ledger: tx.ledger,
