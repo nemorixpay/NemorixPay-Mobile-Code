@@ -13,14 +13,19 @@ import 'package:nemorixpay/features/auth/presentation/bloc/auth_event.dart';
 import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nemorixpay/features/auth/data/models/user_model.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:nemorixpay/shared/analytics/data/datasources/users_analytics_datasource_impl.dart';
+import 'package:nemorixpay/shared/analytics/services/users_analytics_service.dart';
 
 /// @file        auth_bloc.dart
 /// @brief       Authentication Bloc for managing auth state and events.
 /// @details     Handles authentication state management and user interactions.
-///              Now integrates NavigationService for post-auth navigation logic.
+///              Now integrates NavigationService for post-auth navigation logic
+///              and user analytics tracking for registration events.
 /// @author      Miguel Fagundez
 /// @date        07/02/2025
-/// @version     1.3
+/// @version     1.4
 /// @copyright   Apache 2.0 License
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignInUseCase _signInUseCase;
@@ -141,6 +146,37 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         (user) async {
           debugPrint('AuthBloc - User registered successfully: ${user.email}');
           emit(AuthAuthenticated(user));
+
+          // Track user registration for analytics
+          try {
+            debugPrint('AuthBloc - Tracking user registration for analytics');
+            final httpClient = http.Client();
+            final datasource =
+                UsersAnalyticsDatasourceImpl(httpClient: httpClient);
+            final analyticsService =
+                UsersAnalyticsService(datasource: datasource);
+
+            final now = DateTime.now();
+            final registrationDate =
+                '${now.year.toString().padLeft(4, '0')}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+            final birthDate =
+                '${event.birthDate.year.toString().padLeft(4, '0')}-${event.birthDate.month.toString().padLeft(2, '0')}-${event.birthDate.day.toString().padLeft(2, '0')}';
+
+            await analyticsService.trackUserRegistration(
+              userId: user.id,
+              name: '${event.firstName} ${event.lastName}',
+              country: 'Unknown', // TODO: Implement country detection
+              platform: Platform.isIOS ? 'ios' : 'android',
+              registrationDate: registrationDate,
+              birthDate: birthDate,
+            );
+
+            debugPrint('AuthBloc - User analytics tracked successfully');
+            httpClient.close();
+          } catch (e) {
+            debugPrint('AuthBloc - Analytics tracking failed: $e');
+            // Don't affect the main flow - analytics is optional
+          }
 
           // Send verification email automatically
           debugPrint('AuthBloc - Sending verification email');

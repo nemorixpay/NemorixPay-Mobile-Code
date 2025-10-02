@@ -76,38 +76,4 @@ class MockTransactionsRepository extends _i1.Mock
           as _i4.Future<
             _i2.Either<_i5.Failure, List<_i6.TransactionListItemData>>
           >);
-
-  @override
-  _i4.Future<_i2.Either<_i5.Failure, _i6.TransactionListItemData>>
-  getTransactionDetails(String? transactionHash) =>
-      (super.noSuchMethod(
-            Invocation.method(#getTransactionDetails, [transactionHash]),
-            returnValue: _i4.Future<
-              _i2.Either<_i5.Failure, _i6.TransactionListItemData>
-            >.value(
-              _FakeEither_0<_i5.Failure, _i6.TransactionListItemData>(
-                this,
-                Invocation.method(#getTransactionDetails, [transactionHash]),
-              ),
-            ),
-          )
-          as _i4.Future<_i2.Either<_i5.Failure, _i6.TransactionListItemData>>);
-
-  @override
-  _i4.Future<_i2.Either<_i5.Failure, List<_i6.TransactionListItemData>>>
-  filterTransactions() =>
-      (super.noSuchMethod(
-            Invocation.method(#filterTransactions, []),
-            returnValue: _i4.Future<
-              _i2.Either<_i5.Failure, List<_i6.TransactionListItemData>>
-            >.value(
-              _FakeEither_0<_i5.Failure, List<_i6.TransactionListItemData>>(
-                this,
-                Invocation.method(#filterTransactions, []),
-              ),
-            ),
-          )
-          as _i4.Future<
-            _i2.Either<_i5.Failure, List<_i6.TransactionListItemData>>
-          >);
 }
