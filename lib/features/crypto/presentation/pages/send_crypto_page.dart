@@ -17,6 +17,9 @@ import 'package:nemorixpay/features/crypto/domain/entities/crypto_asset_with_mar
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_bloc.dart';
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_event.dart';
 import 'package:nemorixpay/features/crypto/presentation/bloc/bloc_account_assets/crypto_account_state.dart';
+import 'package:http/http.dart' as http;
+import 'package:nemorixpay/shared/analytics/data/datasources/transactions_analytics_datasource_impl.dart';
+import 'package:nemorixpay/shared/analytics/services/transactions_analytics_service.dart';
 
 /// @file        send_crypto_page.dart
 /// @brief       Page for sending Stellar Lumens (XLM) to another address.
@@ -153,6 +156,41 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
         ));
   }
 
+  /// Tracks transaction for analytics purposes
+  Future<void> _trackTransactionAnalytics(
+      String transactionHash, double amount, double fee) async {
+    try {
+      debugPrint('SendCryptoPage - Tracking transaction for analytics');
+      final httpClient = http.Client();
+      final datasource =
+          TransactionsAnalyticsDatasourceImpl(httpClient: httpClient);
+      final analyticsService =
+          TransactionsAnalyticsService(datasource: datasource);
+
+      final feeCharged = fee;
+      final fiatAmount = amount * 1.0; // TODO: Get real fiat conversion rate
+      const country =
+          'US'; // TODO: Get from user profile or implement country detection
+
+      await analyticsService.trackTransaction(
+        transactionId: transactionHash,
+        assetAmount: amount,
+        assetCode: widget.crypto.asset.assetCode,
+        feeCharged: feeCharged,
+        fiatAmount: fiatAmount,
+        fiatSymbol: 'US',
+        location: country,
+        type: 'send',
+      );
+
+      debugPrint('SendCryptoPage - Transaction analytics tracked successfully');
+      httpClient.close();
+    } catch (e) {
+      debugPrint('SendCryptoPage - Analytics tracking failed: $e');
+      // Don't affect the main flow - analytics is optional
+    }
+  }
+
   void _onSend(String message) {
     final l10n = AppLocalizations.of(context);
     Navigator.push(
@@ -215,6 +253,11 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
         }
         if (state is CryptoTransactionSent) {
           debugPrint('CryptoTransactionSent: ${state.hash}');
+
+          // Track transaction for analytics (fire and forget)
+          final amount = double.parse(_amountController.text);
+          _trackTransactionAnalytics(state.hash, amount, _fee);
+
           Navigator.of(context).pop(); // Close loader if open
           Navigator.of(context).pop(); // Close send crypto page
           Navigator.pushNamedAndRemoveUntil(
