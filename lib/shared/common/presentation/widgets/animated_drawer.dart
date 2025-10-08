@@ -5,8 +5,10 @@ import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
+import 'package:nemorixpay/shared/cache/core/managers/asset_cache_manager.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/yes_no_dialog.dart';
+import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
 
 /// @file        animated_drawer.dart
 /// @brief       New implementation of an animated drawer using advanced_drawer package.
@@ -99,6 +101,13 @@ class _AnimatedDrawerState extends State<AnimatedDrawer> {
                       message: localizations.confirmSignOut,
                       onYesPressed: () {
                         FirebaseAuth.instance.signOut();
+                        // ****************************************************
+                        // TODO: Temporal - Testing purposes
+                        // TODO: this needs to be moved to data layer
+                        AssetCacheManager assetCacheManager =
+                            AssetCacheManager();
+                        assetCacheManager.clearCacheSync();
+                        // ****************************************************
                         Navigator.pushNamedAndRemoveUntil(
                           context,
                           RouteNames.signIn,
