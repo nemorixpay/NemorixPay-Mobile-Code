@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 ///             including wallet creation, import, and balance retrieval operations.
 /// @author      Miguel Fagundez
 /// @date        2025-05-24
-/// @version     1.0
+/// @version     1.1
 /// @copyright   Apache 2.0 License
 abstract class WalletEvent extends Equatable {
   const WalletEvent();
@@ -22,6 +22,12 @@ class CreateWalletRequested extends WalletEvent {
 
 class GenerateSeedPhraseRequested extends WalletEvent {
   const GenerateSeedPhraseRequested();
+}
+
+/// Event to create wallet directly without showing seed phrase
+/// This event combines seed phrase generation, wallet creation, and public key saving
+class CreateWalletDirectlyRequested extends WalletEvent {
+  const CreateWalletDirectlyRequested();
 }
 
 class ImportWalletRequested extends WalletEvent {

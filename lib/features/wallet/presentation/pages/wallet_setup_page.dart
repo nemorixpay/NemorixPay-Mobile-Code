@@ -9,13 +9,14 @@ import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_event.dart';
 import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_state.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/app_loader.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
+import 'package:nemorixpay/shared/stellar/data/providers/stellar_account_provider.dart';
 
 /// @file        wallet_setup_page.dart
 /// @brief       Wallet Setup screen for NemorixPay.
 /// @details     This file contains the UI for the initial wallet setup, allowing users to import or create a new wallet.
 /// @author      Miguel Fagundez
 /// @date        2025-05-24
-/// @version     1.1
+/// @version     1.2
 /// @copyright   Apache 2.0 License
 
 class WalletSetupPage extends StatelessWidget {
@@ -34,21 +35,32 @@ class WalletSetupPage extends StatelessWidget {
             showDialog(
               context: context,
               barrierDismissible: false,
-              builder: (context) => AppLoader(message: l10n.creatingSeedPhrase),
+              builder: (context) => AppLoader(message: l10n.creatingNewAccount),
             );
           }
         }
-        if (state is SeedPhraseCreated) {
-          // TODO Checking this asyn gap
-          await Future.delayed(const Duration(seconds: 1));
-          debugPrint('WalletBloc: SeedPhraseCreated before pop');
+        if (state is PublicKeySaved) {
           Navigator.of(context).pop(); // Close loader if open
 
-          debugPrint('WalletBloc: SeedPhraseCreated after pop');
-          Navigator.pushNamed(
+          // Update StellarAccountProvider
+          final stellarAccountProvider = StellarAccountProvider();
+          stellarAccountProvider.userId = state.userId;
+          stellarAccountProvider.updatePublicKey(state.publicKey);
+
+          debugPrint(
+            'Public key saved successfully for user: ${state.userId}',
+          );
+
+          // Navigate to success page and then to wallet dashboard
+          Navigator.pushNamedAndRemoveUntil(
             context,
-            RouteNames.showSeedPhrase,
-            arguments: state.seedPhrase,
+            RouteNames.successPage,
+            arguments: {
+              'titleSuccess': l10n.walletSuccessTitle,
+              'firstParagraph': l10n.walletSuccessSecurity,
+              'secondParagraph': l10n.walletSuccessInfo,
+            },
+            (route) => false,
           );
         } else if (state is WalletError) {
           Navigator.of(context).pop(); // Close loader if open
@@ -124,9 +136,8 @@ class WalletSetupPage extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       context.read<WalletBloc>().add(
-                        // const CreateWalletRequested(),
-                        const GenerateSeedPhraseRequested(),
-                      );
+                            const CreateWalletDirectlyRequested(),
+                          );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: NemorixColors.primaryColor,

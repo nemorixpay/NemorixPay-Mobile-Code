@@ -83,10 +83,13 @@ class _SplashNativePageState extends State<SplashNativePage>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Application logo
-                Image.asset(ImageUrl.logoMobileImage, width: 150, height: 150),
-                const SizedBox(height: 24),
+                // Image.asset(ImageUrl.nemorixpayLogo, width: 150, height: 150),
+                // const SizedBox(height: 24),
                 // Loading animation
                 Lottie.asset(AnimationsUrl.loading, width: 150, height: 150),
+                // const CircularProgressIndicator(
+                //   color: Colors.blueAccent,
+                // ),
               ],
             ),
           ),

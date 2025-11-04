@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nemorixpay/features/wallet/domain/usecases/create_wallet.dart';
 import 'package:nemorixpay/features/wallet/domain/usecases/get_wallet_balance.dart';
 import 'package:nemorixpay/features/wallet/domain/usecases/import_wallet.dart';
@@ -14,7 +15,7 @@ import 'package:nemorixpay/features/wallet/presentation/bloc/wallet_state.dart';
 ///             including creation, import, and balance retrieval.
 /// @author      Miguel Fagundez
 /// @date        2025-05-24
-/// @version     1.1
+/// @version     1.2
 /// @copyright   Apache 2.0 License
 class WalletBloc extends Bloc<WalletEvent, WalletState> {
   final CreateSeedPhraseUseCase _createSeedPhraseUseCase;
@@ -37,6 +38,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
         super(const WalletInitial()) {
     on<GenerateSeedPhraseRequested>(_onGenerateSeedPhrase);
     on<CreateWalletRequested>(_onCreateWallet);
+    on<CreateWalletDirectlyRequested>(_onCreateWalletDirectly);
     on<ImportWalletRequested>(_onImportWallet);
     on<GetWalletBalanceRequested>(_onGetWalletBalance);
     on<SavePublicKeyRequested>(_onSavePublicKey);
@@ -148,6 +150,89 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       );
     } catch (e) {
       debugPrint('WalletBloc - Unexpected error: $e');
+      emit(WalletError(e.toString()));
+    }
+  }
+
+  Future<void> _onCreateWalletDirectly(
+    CreateWalletDirectlyRequested event,
+    Emitter<WalletState> emit,
+  ) async {
+    debugPrint('WalletBloc - Begin create wallet directly process');
+    emit(const WalletLoading());
+
+    try {
+      // Step 1: Verify user is authenticated
+      final firebaseUser = FirebaseAuth.instance.currentUser;
+      if (firebaseUser == null) {
+        debugPrint('WalletBloc - User not authenticated');
+        emit(const WalletError('User not authenticated'));
+        return;
+      }
+
+      // Step 2: Generate seed phrase
+      debugPrint('WalletBloc - Generating seed phrase');
+      final seedPhraseResult = await _createSeedPhraseUseCase();
+
+      await seedPhraseResult.fold(
+        (failure) {
+          debugPrint(
+            'WalletBloc - Seed Phrase creation failed: ${failure.message}',
+          );
+          emit(WalletError(failure.message));
+        },
+        (seedPhrase) async {
+          debugPrint('WalletBloc - Seed Phrase created successfully');
+
+          // Step 3: Create wallet with seed phrase
+          debugPrint('WalletBloc - Creating wallet');
+          emit(const WalletLoading(isSecondLoading: true));
+
+          final mnemonic = seedPhrase.join(' ');
+          final walletResult = await _createWalletUseCase(mnemonic);
+
+          await walletResult.fold(
+            (failure) {
+              debugPrint(
+                'WalletBloc - Wallet creation failed: ${failure.message}',
+              );
+              emit(WalletError(failure.message));
+            },
+            (wallet) async {
+              debugPrint('WalletBloc - Wallet created successfully');
+
+              if (wallet.publicKey == null) {
+                debugPrint('WalletBloc - Wallet public key is null');
+                emit(
+                    const WalletError('Wallet creation failed: no public key'));
+                return;
+              }
+
+              // Step 4: Save public key
+              debugPrint(
+                  'WalletBloc - Saving public key for user: ${firebaseUser.uid}');
+              final saved = await _savePublicKeyUseCase(
+                wallet.publicKey!,
+                firebaseUser.uid,
+              );
+
+              if (saved) {
+                debugPrint(
+                    'WalletBloc - Wallet created directly and public key saved successfully');
+                emit(PublicKeySaved(
+                  publicKey: wallet.publicKey!,
+                  userId: firebaseUser.uid,
+                ));
+              } else {
+                debugPrint('WalletBloc - Failed to save public key');
+                emit(const WalletError('Failed to save public key'));
+              }
+            },
+          );
+        },
+      );
+    } catch (e) {
+      debugPrint('WalletBloc - Unexpected error in create wallet directly: $e');
       emit(WalletError(e.toString()));
     }
   }

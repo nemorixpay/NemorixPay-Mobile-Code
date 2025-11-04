@@ -165,7 +165,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     children: [
                       const SizedBox(height: 20),
                       Image.asset(
-                        ImageUrl.nemorixpayLogo02,
+                        ImageUrl.nemorixpayLogo,
                         width: 100,
                         height: 100,
                       ),

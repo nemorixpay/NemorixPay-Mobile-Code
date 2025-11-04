@@ -65,9 +65,9 @@ class _AnimatedDrawerState extends State<AnimatedDrawer> {
                   shape: BoxShape.circle,
                 ),
                 child: Container(
-                  color: Colors.white,
+                  // color: Colors.white,
                   child: Image.asset(
-                    ImageUrl.appleLogo,
+                    ImageUrl.nemorixpayLogo,
                     width: 100,
                     height: 100,
                   ),
