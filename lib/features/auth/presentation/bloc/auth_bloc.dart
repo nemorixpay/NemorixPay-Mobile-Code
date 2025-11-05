@@ -25,7 +25,7 @@ import 'package:nemorixpay/shared/analytics/services/users_analytics_service.dar
 ///              and user analytics tracking for registration events.
 /// @author      Miguel Fagundez
 /// @date        07/02/2025
-/// @version     1.4
+/// @version     1.5
 /// @copyright   Apache 2.0 License
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignInUseCase _signInUseCase;
@@ -165,7 +165,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             await analyticsService.trackUserRegistration(
               userId: user.id,
               name: '${event.firstName} ${event.lastName}',
-              country: 'Unknown', // TODO: Implement country detection
+              country: event.countryCode,
               platform: Platform.isIOS ? 'ios' : 'android',
               registrationDate: registrationDate,
               birthDate: birthDate,

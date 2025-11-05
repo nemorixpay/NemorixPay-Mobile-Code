@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
@@ -10,7 +11,6 @@ import 'package:nemorixpay/features/auth/presentation/bloc/auth_state.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/widgets.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/password_field.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/email_field.dart';
-import 'package:nemorixpay/features/auth/presentation/widgets/social_login_buttons.dart';
 import 'package:nemorixpay/features/auth/presentation/widgets/verification_email_dialog.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
 
@@ -30,7 +30,7 @@ import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.d
 ///             - User-friendly feedback messages
 /// @author      Miguel Fagundez
 /// @date        2024-05-08
-/// @version     1.4
+/// @version     1.5
 /// @copyright   Apache 2.0 License
 
 /// SignUpPage widget that handles the user registration process.
@@ -60,6 +60,7 @@ class _SignUpPageState extends State<SignUpPage> {
       TextEditingController();
   final TextEditingController _securityWordController = TextEditingController();
   DateTime? _birthDate;
+  Country? _selectedCountry;
 
   bool _agreedToTerms = false;
 
@@ -98,6 +99,7 @@ class _SignUpPageState extends State<SignUpPage> {
               lastName: _lastNameController.text.trim(),
               birthDate: _birthDate!,
               securityWord: _securityWordController.text.trim(),
+              countryCode: _selectedCountry?.countryCode ?? 'US',
             ),
           );
       return;
@@ -244,6 +246,18 @@ class _SignUpPageState extends State<SignUpPage> {
                               }
                               return null;
                             },
+                          ),
+                          CountryPickerField(
+                            selectedCountry: _selectedCountry,
+                            onCountrySelected: (country) =>
+                                setState(() => _selectedCountry = country),
+                            validator: (value) {
+                              if (value == null) {
+                                return 'Please select your country of residence';
+                              }
+                              return null;
+                            },
+                            hintText: 'Select your country of residence',
                           ),
                         ],
                       ),
