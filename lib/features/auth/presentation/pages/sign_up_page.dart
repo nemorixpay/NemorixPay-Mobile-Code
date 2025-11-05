@@ -30,7 +30,7 @@ import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.d
 ///             - User-friendly feedback messages
 /// @author      Miguel Fagundez
 /// @date        2024-05-08
-/// @version     1.5
+/// @version     1.6
 /// @copyright   Apache 2.0 License
 
 /// SignUpPage widget that handles the user registration process.
@@ -82,33 +82,60 @@ class _SignUpPageState extends State<SignUpPage> {
   /// 3. Shows appropriate error messages if validation fails
   /// 4. Triggers the registration process through AuthBloc
   void _handleSignUp() {
-    if (_formKey.currentState?.validate() ?? false) {
-      if (!_agreedToTerms) {
-        NemorixSnackBar.show(
-          context,
-          message: AppLocalizations.of(context)!.acceptTermsAndConditions,
-          type: SnackBarType.warning,
-        );
-        return;
-      }
-      context.read<AuthBloc>().add(
-            SignUpRequested(
-              email: _emailController.text.trim(),
-              password: _passwordController.text,
-              firstName: _firstNameController.text.trim(),
-              lastName: _lastNameController.text.trim(),
-              birthDate: _birthDate!,
-              securityWord: _securityWordController.text.trim(),
-              countryCode: _selectedCountry?.countryCode ?? 'US',
-            ),
-          );
+    // Validate form fields (text fields)
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      NemorixSnackBar.show(
+        context,
+        message: AppLocalizations.of(context)!.fillRegistrationData,
+        type: SnackBarType.error,
+      );
       return;
     }
-    NemorixSnackBar.show(
-      context,
-      message: AppLocalizations.of(context)!.fillRegistrationData,
-      type: SnackBarType.error,
-    );
+
+    // Validate birthdate
+    if (_birthDate == null) {
+      setState(() {}); // Trigger rebuild to show error
+      NemorixSnackBar.show(
+        context,
+        message: AppLocalizations.of(context)!.birthdateRequired,
+        type: SnackBarType.error,
+      );
+      return;
+    }
+
+    // Validate country
+    if (_selectedCountry == null) {
+      setState(() {}); // Trigger rebuild to show error
+      NemorixSnackBar.show(
+        context,
+        message: AppLocalizations.of(context)!.countryOfResidenceRequired,
+        type: SnackBarType.error,
+      );
+      return;
+    }
+
+    // Validate terms acceptance
+    if (!_agreedToTerms) {
+      NemorixSnackBar.show(
+        context,
+        message: AppLocalizations.of(context)!.acceptTermsAndConditions,
+        type: SnackBarType.warning,
+      );
+      return;
+    }
+
+    // All validations passed, proceed with registration
+    context.read<AuthBloc>().add(
+          SignUpRequested(
+            email: _emailController.text.trim(),
+            password: _passwordController.text,
+            firstName: _firstNameController.text.trim(),
+            lastName: _lastNameController.text.trim(),
+            birthDate: _birthDate!,
+            securityWord: _securityWordController.text.trim(),
+            countryCode: _selectedCountry!.countryCode,
+          ),
+        );
   }
 
   /// Builds the main UI of the registration page.
@@ -253,11 +280,13 @@ class _SignUpPageState extends State<SignUpPage> {
                                 setState(() => _selectedCountry = country),
                             validator: (value) {
                               if (value == null) {
-                                return 'Please select your country of residence';
+                                return AppLocalizations.of(context)!
+                                    .countryOfResidenceRequired;
                               }
                               return null;
                             },
-                            hintText: 'Select your country of residence',
+                            hintText: AppLocalizations.of(context)!
+                                .countryOfResidence,
                           ),
                         ],
                       ),

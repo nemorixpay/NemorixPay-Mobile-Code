@@ -377,6 +377,30 @@ abstract class AppLocalizations {
   /// **'I agree to the terms and conditions'**
   String get agreeToTerms;
 
+  /// No description provided for @countryOfResidence.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your country of residence'**
+  String get countryOfResidence;
+
+  /// No description provided for @countryOfResidenceRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your country of residence'**
+  String get countryOfResidenceRequired;
+
+  /// No description provided for @searchCountry.
+  ///
+  /// In en, this message translates to:
+  /// **'Search country'**
+  String get searchCountry;
+
+  /// No description provided for @startTypingToSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Start typing to search'**
+  String get startTypingToSearch;
+
   /// No description provided for @verifyEmailTitle.
   ///
   /// In en, this message translates to:

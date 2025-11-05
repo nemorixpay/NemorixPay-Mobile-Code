@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
+import 'package:nemorixpay/l10n/app_localizations.dart';
 
 /// @file        country_picker_field.dart
 /// @brief       Country picker field widget for user registration.
@@ -25,7 +26,7 @@ class CountryPickerField extends StatelessWidget {
     required this.selectedCountry,
     required this.onCountrySelected,
     required this.validator,
-    this.hintText = 'Select your country of residence',
+    required this.hintText,
   });
 
   void _showCountryPicker(BuildContext context) {
@@ -41,8 +42,8 @@ class CountryPickerField extends StatelessWidget {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         textStyle: Theme.of(context).textTheme.bodyLarge,
         inputDecoration: InputDecoration(
-          labelText: 'Search country',
-          hintText: 'Start typing to search',
+          labelText: AppLocalizations.of(context)!.searchCountry,
+          hintText: AppLocalizations.of(context)!.startTypingToSearch,
           prefixIcon: const Icon(Icons.search),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),

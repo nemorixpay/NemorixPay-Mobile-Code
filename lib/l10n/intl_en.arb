@@ -37,6 +37,7 @@
   "forgotPasswordSubtitle": "Enter your email address and we'll send you instructions to reset your password.",
   "sendEmail": "Send Email",
   "@_SIGN_UP_PAGE": {
+
   },
   "signUp": "Sign Up",
   "onlyTakesAminute": "It only takes a minute to create your account",
@@ -55,6 +56,10 @@
   "registrationSuccess": "Your account has been created successfully. You can now sign in with your credentials.",
   "agreeToTerms": "I agree to the terms and conditions",
   "sendEmail": "Send Email",
+  "countryOfResidence": "Select your country of residence",
+  "countryOfResidenceRequired": "Please select your country of residence",
+  "searchCountry": "Search country",
+  "startTypingToSearch": "Start typing to search",
   "@_VERIFICATION_EMAIL_DIALOG": {
   },
   "verifyEmailTitle": "Verify Your Email",

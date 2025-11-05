@@ -13,6 +13,7 @@
   "termsDeleted": "Términos eliminados - Almacenamiento Interno",
   "onboardingReset": "Onboarding reiniciado - Almacenamiento Interno",
   "@_SIGN_IN_PAGE": {
+
   },
   "welcomeBack": "Bienvenido de nuevo",
   "youHaveBeenMissed": "Te hemos extrañado",
@@ -31,12 +32,14 @@
   "appleSignInNotImplemented": "Inicio de sesión con Apple aún no implementado",
   "dontHaveAnAccount": "¿No tienes una cuenta?",
   "@_FORGOT_PASSWORD_DIALOG": {
+
   },  
   "emailWasSent": "Se ha enviado el correo de restablecimiento de contraseña. Por favor, revisa tu bandeja de entrada.",
   "forgotPasswordTitle": "Olvidé mi Contraseña",
   "forgotPasswordSubtitle": "Ingresa tu correo electrónico y te enviaremos instrucciones para restablecer tu contraseña.",
   "sendEmail": "Enviar Correo",
   "@_SIGN_UP_PAGE": {
+
   },
   "signUp": "Registrarse",
   "onlyTakesAminute": "Solo toma un minuto crear tu cuenta",
@@ -55,6 +58,10 @@
   "registrationSuccess": "Tu cuenta ha sido creada exitosamente. Ahora puedes iniciar sesión con tus credenciales.",
   "agreeToTerms": "Acepto los términos y condiciones",
   "sendEmail": "Enviar Correo",
+  "countryOfResidence": "Selecciona tu país de residencia",
+  "countryOfResidenceRequired": "Por favor selecciona tu país de residencia",
+  "searchCountry": "Buscar país",
+  "startTypingToSearch": "Comienza a escribir para buscar",
   "@_VERIFICATION_EMAIL_DIALOG": {
   },
   "verifyEmailTitle": "Verifica tu Correo Electrónico",

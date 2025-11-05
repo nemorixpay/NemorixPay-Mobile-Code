@@ -150,6 +150,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get agreeToTerms => 'I agree to the terms and conditions';
 
   @override
+  String get countryOfResidence => 'Select your country of residence';
+
+  @override
+  String get countryOfResidenceRequired => 'Please select your country of residence';
+
+  @override
+  String get searchCountry => 'Search country';
+
+  @override
+  String get startTypingToSearch => 'Start typing to search';
+
+  @override
   String get verifyEmailTitle => 'Verify Your Email';
 
   @override
