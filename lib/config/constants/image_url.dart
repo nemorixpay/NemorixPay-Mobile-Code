@@ -17,7 +17,7 @@ class ImageUrl {
   static const String nemorixpayLogo = 'assets/logos/logo_t.png';
   // static const String nemorixpayLogo02 = 'assets/images/logo_t.png';
   static const String googleLogo = 'assets/logos/google_logo.png';
-  static const String appleLogo = 'assets/logos/nemorix_pay_logo.png';
+  static const String appleLogo = 'assets/logos/logo_apple.png';
   static const String xlmLogo = 'assets/logos/xlm_white.png';
   static const String temporalCryptoLogo = 'assets/logos/logo_temporal.png';
 
