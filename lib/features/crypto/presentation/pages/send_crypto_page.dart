@@ -58,6 +58,7 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
   bool _isValidAmount = false;
   bool _isOwnAddress = false;
   bool _isValidNote = false;
+  bool _isSendingTransaction = false; // Flag to track if we're sending a transaction
 
   @override
   void initState() {
@@ -148,6 +149,9 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
   }
 
   void sentTransaction() {
+    setState(() {
+      _isSendingTransaction = true; // Mark that we're sending a transaction
+    });
     final double amount = double.parse(_amountController.text);
     context.read<CryptoAccountBloc>().add(SendCryptoTransaction(
           _addressController.text,
@@ -234,6 +238,16 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
     final l10n = AppLocalizations.of(context);
     debugPrint('cryptoName (SEND): ${widget.crypto.asset.assetCode}');
     return BlocListener<CryptoAccountBloc, CryptoAccountState>(
+      listenWhen: (previous, current) {
+        // Only listen to transaction-related states if we're actually sending a transaction
+        // This prevents processing old states when returning from QR scan
+        if (current is CryptoTransactionLoading ||
+            current is CryptoTransactionError ||
+            current is CryptoTransactionSent) {
+          return _isSendingTransaction;
+        }
+        return false;
+      },
       listener: (BuildContext context, CryptoAccountState state) {
         if (state is CryptoTransactionLoading) {
           debugPrint('CryptoTransactionLoading');
@@ -245,6 +259,9 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
         }
         if (state is CryptoTransactionError) {
           debugPrint('CryptoTransactionError: ${state.failure}');
+          setState(() {
+            _isSendingTransaction = false; // Reset flag on error
+          });
           Navigator.of(context).pop(); // Close loader if open
           showNemorixSnackBar(
             message: l10n.transactionFailed,
@@ -253,6 +270,10 @@ class _SendCryptoPageState extends State<SendCryptoPage> {
         }
         if (state is CryptoTransactionSent) {
           debugPrint('CryptoTransactionSent: ${state.hash}');
+
+          setState(() {
+            _isSendingTransaction = false; // Reset flag after successful transaction
+          });
 
           // Track transaction for analytics (fire and forget)
           final amount = double.parse(_amountController.text);

@@ -10,10 +10,17 @@ import 'package:nemorixpay/core/utils/validation_rules.dart';
 ///              previous screen or '-1' if cancelled.
 /// @author      Miguel Fagundez
 /// @date        06/29/2025
-/// @version     1.0
+/// @version     1.1
 /// @copyright   Apache 2.0 License
-class QrScanPage extends StatelessWidget {
+class QrScanPage extends StatefulWidget {
   const QrScanPage({super.key});
+
+  @override
+  State<QrScanPage> createState() => _QrScanPageState();
+}
+
+class _QrScanPageState extends State<QrScanPage> {
+  bool _hasScanned = false; // Flag to prevent multiple scans
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +31,10 @@ class QrScanPage extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pop(context, '-1');
+                if (!_hasScanned) {
+                  _hasScanned = true;
+                  Navigator.of(context).pop('-1');
+                }
               },
               icon: const Icon(Icons.close))
         ],
@@ -35,27 +45,42 @@ class QrScanPage extends StatelessWidget {
           returnImage: false,
         ),
         onDetect: (capture) {
+          // Prevent multiple scans
+          if (_hasScanned) {
+            return;
+          }
+
           final List<Barcode> barcode = capture.barcodes;
-          debugPrint('QrScanPage - QR: ${barcode.first.rawValue}');
+          if (barcode.isEmpty) {
+            return;
+          }
+
+          debugPrint('QrScanPage - QR detected: ${barcode.first.rawValue}');
 
           // Taking first barcode detected (no duplicated or multiple barcode allowed)
           final rawValue = barcode.first.rawValue;
 
+          // Mark as scanned to prevent multiple pops
+          _hasScanned = true;
+
           if (rawValue == null) {
             // Return -1 if null
-            Navigator.pop(context, '-1');
+            debugPrint('QrScanPage - QR value is null, returning -1');
+            Navigator.of(context).pop('-1');
             return;
           }
 
           // Basic stellar address validation
           if (!ValidationRules.isValidStellarAddress(rawValue)) {
             debugPrint('QrScanPage - Invalid Stellar address: $rawValue');
-            Navigator.pop(context, '-1');
+            Navigator.of(context).pop('-1');
             return;
           }
 
           // Return Stellar address
-          Navigator.pop(context, rawValue);
+          debugPrint(
+              'QrScanPage - Valid Stellar address, returning: $rawValue');
+          Navigator.of(context).pop(rawValue);
         },
       ),
     );
