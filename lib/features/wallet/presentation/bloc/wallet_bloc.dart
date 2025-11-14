@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nemorixpay/core/utils/platform_utils.dart';
 import 'package:nemorixpay/features/wallet/domain/usecases/create_wallet.dart';
 import 'package:nemorixpay/features/wallet/domain/usecases/get_wallet_balance.dart';
 import 'package:nemorixpay/features/wallet/domain/usecases/import_wallet.dart';
@@ -162,7 +163,17 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     emit(const WalletLoading());
 
     try {
-      // Step 1: Verify user is authenticated
+      // Step 1: Check Android version compatibility
+      final isAndroidSupported =
+          await PlatformUtils.isAndroidVersionSupported();
+      if (!isAndroidSupported) {
+        debugPrint(
+            'WalletBloc - Android version not supported (requires Android 13+)');
+        emit(const WalletError('ANDROID_VERSION_NOT_SUPPORTED'));
+        return;
+      }
+
+      // Step 2: Verify user is authenticated
       final firebaseUser = FirebaseAuth.instance.currentUser;
       if (firebaseUser == null) {
         debugPrint('WalletBloc - User not authenticated');
@@ -170,7 +181,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
         return;
       }
 
-      // Step 2: Generate seed phrase
+      // Step 3: Generate seed phrase
       debugPrint('WalletBloc - Generating seed phrase');
       final seedPhraseResult = await _createSeedPhraseUseCase();
 
@@ -184,7 +195,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
         (seedPhrase) async {
           debugPrint('WalletBloc - Seed Phrase created successfully');
 
-          // Step 3: Create wallet with seed phrase
+          // Step 4: Create wallet with seed phrase
           debugPrint('WalletBloc - Creating wallet');
           emit(const WalletLoading(isSecondLoading: true));
 

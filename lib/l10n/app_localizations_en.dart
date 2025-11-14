@@ -557,6 +557,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletErrorCreationFailedGeneric => 'Could not create wallet. Please try again.';
 
   @override
+  String get walletErrorAndroidVersionNotSupported => 'Your Android version is not supported. Please update to Android 13 or higher to create a wallet.';
+
+  @override
   String get assetErrorPriceUpdateFailed => 'Failed to update asset price';
 
   @override

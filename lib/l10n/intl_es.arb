@@ -217,6 +217,7 @@
   "walletErrorUnknown": "Ha ocurrido un error desconocido. Por favor, inténtalo de nuevo.",
   "walletErrorUserNotAuthenticated": "Usuario no autenticado. Por favor, inicia sesión nuevamente.",
   "walletErrorCreationFailedGeneric": "No se pudo crear la wallet. Inténtalo de nuevo.",
+  "walletErrorAndroidVersionNotSupported": "Tu versión de Android no es compatible. Por favor, actualiza a Android 13 o superior para crear una wallet.",
   "@_ASSET_ERROR_MESSAGES": {},
   "assetErrorPriceUpdateFailed": "Error al actualizar el precio del activo",
   "assetErrorInvalidPriceData": "Datos de precio inválidos recibidos",

@@ -215,6 +215,7 @@
   "walletErrorUnknown": "An unknown error occurred. Please try again.",
   "walletErrorUserNotAuthenticated": "User not authenticated. Please sign in again.",
   "walletErrorCreationFailedGeneric": "Could not create wallet. Please try again.",
+  "walletErrorAndroidVersionNotSupported": "Your Android version is not supported. Please update to Android 13 or higher to create a wallet.",
   "@_ASSET_ERROR_MESSAGES": {
 
   },

@@ -64,9 +64,16 @@ class WalletSetupPage extends StatelessWidget {
           );
         } else if (state is WalletError) {
           Navigator.of(context).pop(); // Close loader if open
+
+          // Map error messages to localized strings
+          String errorMessage = state.message;
+          if (state.message == 'ANDROID_VERSION_NOT_SUPPORTED') {
+            errorMessage = l10n.walletErrorAndroidVersionNotSupported;
+          }
+
           NemorixSnackBar.show(
             context,
-            message: state.message,
+            message: errorMessage,
             type: SnackBarType.error,
           );
         }

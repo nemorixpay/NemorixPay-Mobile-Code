@@ -1187,6 +1187,12 @@ abstract class AppLocalizations {
   /// **'Could not create wallet. Please try again.'**
   String get walletErrorCreationFailedGeneric;
 
+  /// No description provided for @walletErrorAndroidVersionNotSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Android version is not supported. Please update to Android 13 or higher to create a wallet.'**
+  String get walletErrorAndroidVersionNotSupported;
+
   /// No description provided for @assetErrorPriceUpdateFailed.
   ///
   /// In en, this message translates to:
