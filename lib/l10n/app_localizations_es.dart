@@ -12,7 +12,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appName => 'NemorixPay';
 
   @override
-  String get loading => 'Se esta cargando';
+  String get loading => 'Cargando..';
 
   @override
   String get featureNotImplemented => 'Esta función no se ha implementado completamente';
@@ -42,7 +42,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get onboardingReset => 'Onboarding reiniciado - Almacenamiento Interno';
 
   @override
-  String get welcomeBack => 'Bienvenido de nuevo';
+  String get welcomeBack => 'Bienvenido nuevamente';
 
   @override
   String get youHaveBeenMissed => 'Te hemos extrañado';
@@ -87,7 +87,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appleSignInNotImplemented => 'Inicio de sesión con Apple aún no implementado';
 
   @override
-  String get dontHaveAnAccount => '¿No tienes una cuenta?';
+  String get dontHaveAnAccount => '¿No tienes cuenta?';
 
   @override
   String get emailWasSent => 'Se ha enviado el correo de restablecimiento de contraseña. Por favor, revisa tu bandeja de entrada.';
@@ -102,7 +102,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get sendEmail => 'Enviar Correo';
 
   @override
-  String get signUp => 'Registrarse';
+  String get signUp => 'Registrate';
 
   @override
   String get onlyTakesAminute => 'Solo toma un minuto crear tu cuenta';
@@ -230,7 +230,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get livePrices => 'Precios en Tiempo Real';
 
   @override
-  String get currentWalletBalance => 'Saldo Actual de la Cartera';
+  String get currentWalletBalance => 'Saldo Actual en la Cartera';
 
   @override
   String get deposit => 'Depositar';
@@ -239,10 +239,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get withdraw => 'Retirar';
 
   @override
-  String get send => 'Enviado';
+  String get send => 'Enviar';
 
   @override
-  String get receive => 'Recibido';
+  String get receive => 'Recibir';
 
   @override
   String get sell => 'Vender';

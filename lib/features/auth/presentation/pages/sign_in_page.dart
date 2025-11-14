@@ -239,7 +239,7 @@ class _LoginPageState extends State<LoginPage> {
                                 );
                               },
                               child: Text(
-                                "${AppLocalizations.of(context)!.forgotPassword}?",
+                                AppLocalizations.of(context)!.forgotPassword,
                                 style: const TextStyle(
                                   color: NemorixColors.primaryColor,
                                 ),

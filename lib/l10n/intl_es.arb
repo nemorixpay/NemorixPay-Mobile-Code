@@ -2,7 +2,7 @@
   "@_APP_GENERAL": {
   },
   "appName": "NemorixPay",
-  "loading": "Se esta cargando",
+  "loading": "Cargando..",
   "featureNotImplemented": "Esta función no se ha implementado completamente",
   "testingPurposes": "Propósitos de Prueba",
   "showIndividualScreens": "Mostrar Pantallas Individuales",
@@ -15,7 +15,7 @@
   "@_SIGN_IN_PAGE": {
 
   },
-  "welcomeBack": "Bienvenido de nuevo",
+  "welcomeBack": "Bienvenido nuevamente",
   "youHaveBeenMissed": "Te hemos extrañado",
   "emailAddress": "Correo Electrónico",
   "emailIsRequired": "El correo electrónico es requerido",
@@ -30,7 +30,7 @@
   "continueWithApple": "Continuar con Apple",
   "googleSignInNotImplemented": "Inicio de sesión con Google aún no implementado",
   "appleSignInNotImplemented": "Inicio de sesión con Apple aún no implementado",
-  "dontHaveAnAccount": "¿No tienes una cuenta?",
+  "dontHaveAnAccount": "¿No tienes cuenta?",
   "@_FORGOT_PASSWORD_DIALOG": {
 
   },  
@@ -41,7 +41,7 @@
   "@_SIGN_UP_PAGE": {
 
   },
-  "signUp": "Registrarse",
+  "signUp": "Registrate",
   "onlyTakesAminute": "Solo toma un minuto crear tu cuenta",
   "firstNameRequired":"El nombre es requerido",
   "firstName": "Nombre",
@@ -99,7 +99,7 @@
   "myAssets": "Mis Activos",
   "seeAll": "Ver Todo",
   "livePrices": "Precios en Tiempo Real",
-  "currentWalletBalance": "Saldo Actual de la Cartera",
+  "currentWalletBalance": "Saldo Actual en la Cartera",
   "deposit": "Depositar",
   "withdraw": "Retirar",
   "send": "Enviar",
@@ -439,8 +439,6 @@
   "loadingMore": "Cargando más...",
   "confirmed": "Confirmado",
   "failed": "Fallido",
-  "send": "Enviado",
-  "receive": "Recibido",
   "search": "Buscar...",
   "notAvailable": "N/D",
   "transactionId": "Transacción: {id}"

@@ -490,8 +490,6 @@
   "loadingMore": "Loading more...",
   "confirmed": "Confirmed",
   "failed": "Failed",
-  "send": "Send",
-  "receive": "Receive",
   "search": "Search...",
   "notAvailable": "N/A",
   "transactionId": "Transaction: {id}"
