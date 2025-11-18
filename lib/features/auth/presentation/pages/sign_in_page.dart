@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
@@ -34,9 +33,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 ///             - Error handling with localized messages
 ///             - Loading states
 ///             - Responsive design
+///             - Automatic authentication status check on page load (persisted sessions)
 /// @author      Miguel Fagundez
-/// @date        2024-05-08
-/// @version     1.5
+/// @date        2025-11-18
+/// @version     1.7
 /// @copyright   Apache 2.0 License
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -63,6 +63,10 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     _loadRememberedEmail();
+    // Check if user is already authenticated (persisted session)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AuthBloc>().add(const CheckAuthStatus());
+    });
   }
 
   @override
@@ -102,24 +106,6 @@ class _LoginPageState extends State<LoginPage> {
         message: AppLocalizations.of(context)!.enterYourLoginInfo,
       );
     }
-  }
-
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        debugPrint('User Authenticated: Login');
-        FirebaseAuth.instance.signOut();
-        debugPrint('User was SignOut: Login');
-      } else {
-        debugPrint('User Unauthenticated: Login');
-      }
-    } catch (e) {
-      debugPrint('Error _LoginPageState: $e');
-    }
-    super.didChangeDependencies();
   }
 
   @override

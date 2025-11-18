@@ -29,6 +29,7 @@ import 'package:nemorixpay/features/settings/presentation/bloc/settings_bloc.dar
 import 'package:nemorixpay/features/settings/presentation/bloc/settings_event.dart';
 import 'package:nemorixpay/features/settings/presentation/bloc/settings_state.dart';
 import 'package:nemorixpay/features/kyc/presentation/bloc/kyc_bloc.dart';
+import 'package:nemorixpay/core/services/firebase_auth_persistence_service.dart';
 import 'firebase_options.dart';
 
 /// Global key for accessing the ScaffoldMessenger from anywhere in the app
@@ -40,6 +41,8 @@ Future<void> main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await FirebaseAuthPersistenceService.initializePersistence();
 
   // Remover la splash nativa cuando la app esté lista
   FlutterNativeSplash.remove();

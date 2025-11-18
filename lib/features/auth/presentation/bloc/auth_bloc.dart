@@ -24,9 +24,10 @@ import 'package:nemorixpay/shared/analytics/services/users_analytics_service.dar
 /// @details     Handles authentication state management and user interactions.
 ///              Now integrates NavigationService for post-auth navigation logic
 ///              and user analytics tracking for registration events.
+///              Added CheckAuthStatus handler to verify persisted Firebase sessions.
 /// @author      Miguel Fagundez
 /// @date        07/02/2025
-/// @version     1.5
+/// @version     1.6
 /// @copyright   Apache 2.0 License
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignInUseCase _signInUseCase;
@@ -57,6 +58,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignUpRequested>(_onSignUpRequested);
     on<ForgotPasswordRequested>(_onForgotPasswordRequested);
     on<SendVerificationEmailRequested>(_onSendVerificationEmailRequested);
+    on<CheckAuthStatus>(_onCheckAuthStatus);
     on<CheckEmailVerificationStatus>(_onCheckEmailVerificationStatus);
     on<CheckWalletExists>(_onCheckWalletExists);
     on<DeterminePostAuthNavigation>(_onDeterminePostAuthNavigation);
@@ -317,6 +319,72 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           ).firebaseMessage,
         ),
       );
+    }
+  }
+
+  Future<void> _onCheckAuthStatus(
+    CheckAuthStatus event,
+    Emitter<AuthState> emit,
+  ) async {
+    debugPrint('AuthBloc - Checking authentication status');
+    emit(const AuthLoading());
+
+    try {
+      final isRememberEnabled = await RememberMeHelper.isRememberMeEnabled();
+
+      if (!isRememberEnabled) {
+        debugPrint('AuthBloc - Remember is not enabled');
+        await FirebaseAuth.instance.signOut();
+      }
+
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        debugPrint('AuthBloc - User found, reloading to verify session');
+        await user.reload();
+
+        // Check if user is still valid after reload
+        final currentUser = FirebaseAuth.instance.currentUser;
+        if (currentUser == null) {
+          debugPrint('AuthBloc - User session expired after reload');
+          emit(const AuthUnauthenticated());
+          return;
+        }
+
+        if (!currentUser.emailVerified) {
+          debugPrint('AuthBloc - User authenticated but email not verified');
+          emit(
+            EmailNotVerified(
+              UserModel(
+                id: currentUser.uid,
+                email: currentUser.email ?? '',
+                isEmailVerified: false,
+                createdAt: DateTime.now(),
+              ).toUserEntity(),
+            ),
+          );
+        } else {
+          debugPrint('AuthBloc - User authenticated and email verified');
+          final userEntity = UserModel(
+            id: currentUser.uid,
+            email: currentUser.email ?? '',
+            isEmailVerified: true,
+            createdAt: DateTime.now(),
+          ).toUserEntity();
+
+          // Determine post-auth navigation for verified user
+          add(DeterminePostAuthNavigation(
+            userId: currentUser.uid,
+            user: userEntity,
+          ));
+        }
+      } else {
+        debugPrint('AuthBloc - No authenticated user found');
+        emit(const AuthUnauthenticated());
+      }
+    } catch (e) {
+      debugPrint('AuthBloc - Error checking auth status: $e');
+      emit(const AuthUnauthenticated());
     }
   }
 

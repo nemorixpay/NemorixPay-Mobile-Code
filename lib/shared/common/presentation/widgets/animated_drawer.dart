@@ -4,6 +4,7 @@ import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:nemorixpay/config/constants/image_url.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/config/theme/nemorix_colors.dart';
+import 'package:nemorixpay/core/utils/remember_me_helper.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
 import 'package:nemorixpay/shared/cache/core/managers/asset_cache_manager.dart';
 import 'package:nemorixpay/shared/common/presentation/widgets/nemorix_snackbar.dart';
@@ -99,8 +100,8 @@ class _AnimatedDrawerState extends State<AnimatedDrawer> {
                     builder: (BuildContext context) => YesNoDialog(
                       title: localizations.signOut,
                       message: localizations.confirmSignOut,
-                      onYesPressed: () {
-                        FirebaseAuth.instance.signOut();
+                      onYesPressed: () async {
+                        await FirebaseAuth.instance.signOut();
                         // ****************************************************
                         // TODO: Temporal - Testing purposes
                         // TODO: this needs to be moved to data layer
