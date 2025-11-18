@@ -215,6 +215,18 @@ abstract class AppLocalizations {
   /// **'Forgot Password?'**
   String get forgotPassword;
 
+  /// No description provided for @rememberMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Remember Me'**
+  String get rememberMe;
+
+  /// No description provided for @rememberMeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Save your email for faster login next time'**
+  String get rememberMeDescription;
+
   /// No description provided for @signIn.
   ///
   /// In en, this message translates to:

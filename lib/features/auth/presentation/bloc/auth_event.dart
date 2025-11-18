@@ -52,11 +52,16 @@ class SignUpRequested extends AuthEvent {
 class SignInRequested extends AuthEvent {
   final String email;
   final String password;
+  final bool rememberMe;
 
-  const SignInRequested({required this.email, required this.password});
+  const SignInRequested({
+    required this.email,
+    required this.password,
+    this.rememberMe = false,
+  });
 
   @override
-  List<Object?> get props => [email, password];
+  List<Object?> get props => [email, password, rememberMe];
 }
 
 /// Event to request user sign out

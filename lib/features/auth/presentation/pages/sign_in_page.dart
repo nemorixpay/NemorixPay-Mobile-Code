@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
+import 'package:nemorixpay/core/utils/remember_me_helper.dart';
 import 'package:nemorixpay/features/onboarding/data/datasources/onboarding_local_datasource_impl.dart';
 import 'package:nemorixpay/features/terms/data/datasources/terms_local_datasource_impl.dart';
 import 'package:nemorixpay/l10n/app_localizations.dart';
@@ -56,6 +57,13 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _rememberMe = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRememberedEmail();
+  }
 
   @override
   void dispose() {
@@ -64,12 +72,28 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  /// Loads the remembered email if Remember Me was previously enabled
+  Future<void> _loadRememberedEmail() async {
+    try {
+      final email = await RememberMeHelper.loadRememberedEmail();
+      if (email != null) {
+        setState(() {
+          _emailController.text = email;
+          _rememberMe = true;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error loading remembered email: $e');
+    }
+  }
+
   void _handleSignIn() {
     if (_formKey.currentState?.validate() ?? false) {
       context.read<AuthBloc>().add(
             SignInRequested(
               email: _emailController.text.trim(),
               password: _passwordController.text,
+              rememberMe: _rememberMe,
             ),
           );
     } else {
@@ -227,6 +251,34 @@ class _LoginPageState extends State<LoginPage> {
                           PasswordField(
                             controller: _passwordController,
                             hintText: AppLocalizations.of(context)!.password,
+                          ),
+                          // Remember Me checkbox
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: _rememberMe,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _rememberMe = value ?? false;
+                                  });
+                                },
+                                activeColor: NemorixColors.primaryColor,
+                              ),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _rememberMe = !_rememberMe;
+                                    });
+                                  },
+                                  child: Text(
+                                    AppLocalizations.of(context)!.rememberMe,
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           Align(
                             alignment: Alignment.centerRight,

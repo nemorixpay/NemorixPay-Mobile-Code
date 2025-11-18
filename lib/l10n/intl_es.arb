@@ -24,6 +24,8 @@
   "passwordIsRequired": "La contraseña es requerida",
   "passwordAtLeast6Characters": "La contraseña debe tener al menos 6 caracteres",
   "forgotPassword": "¿Olvidaste tu contraseña?",
+  "rememberMe": "Recordarme",
+  "rememberMeDescription": "Guardar tu email para iniciar sesión más rápido la próxima vez",
   "signIn": "Iniciar Sesión",
   "or":"O",
   "continueWithGoogle": "Continuar con Google",

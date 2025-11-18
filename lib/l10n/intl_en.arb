@@ -23,6 +23,8 @@
   "passwordIsRequired": "Password is required",
   "passwordAtLeast6Characters": "Password must be at least 6 characters",
   "forgotPassword": "Forgot Password?",
+  "rememberMe": "Remember Me",
+  "rememberMeDescription": "Save your email for faster login next time",
   "signIn": "Sign In",
   "or":"OR",
   "continueWithGoogle": "Continue with Google",

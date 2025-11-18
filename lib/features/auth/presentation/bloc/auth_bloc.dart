@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nemorixpay/config/routes/route_names.dart';
 import 'package:nemorixpay/core/errors/auth/firebase_failure.dart';
 import 'package:nemorixpay/core/services/navigation_service.dart';
+import 'package:nemorixpay/core/utils/remember_me_helper.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/sign_up_usecase.dart';
 import 'package:nemorixpay/features/auth/domain/usecases/forgot_password_usecase.dart';
@@ -85,10 +86,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(AuthError(failure));
           emit(const AuthUnauthenticated());
         },
-        (user) {
+        (user) async {
           debugPrint(
             'AuthBloc - User authenticated successfully: ${user.email}',
           );
+
+          // Save email if Remember Me is enabled
+          if (event.rememberMe) {
+            debugPrint('AuthBloc - Remember Me enabled, saving email');
+            await RememberMeHelper.saveRememberedEmail(event.email);
+          } else {
+            debugPrint('AuthBloc - Remember Me disabled, clearing saved email');
+            await RememberMeHelper.clearRememberedEmail();
+          }
+
           // After successful authentication, determine post-auth navigation
           add(DeterminePostAuthNavigation(userId: user.id, user: user));
         },

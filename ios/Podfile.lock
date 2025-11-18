@@ -126,7 +126,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
 SPEC CHECKSUMS:
-  device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
+  device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
   Firebase: 1fe1c0a7d9aaea32efe01fbea5f0ebd8d70e53a2
   firebase_auth: 3f532201cbdc7cd6dfc3bfa89affc0c294111e20
   firebase_core: 432718558359a8c08762151b5f49bb0f093eb6e0
