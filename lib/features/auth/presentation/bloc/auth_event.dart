@@ -24,7 +24,7 @@ class SignUpRequested extends AuthEvent {
   final String lastName;
   final DateTime birthDate;
   final String securityWord;
-  final String countryCode;
+  final String countryName;
 
   const SignUpRequested({
     required this.email,
@@ -33,7 +33,7 @@ class SignUpRequested extends AuthEvent {
     required this.lastName,
     required this.birthDate,
     required this.securityWord,
-    required this.countryCode,
+    required this.countryName,
   });
 
   @override
@@ -44,7 +44,7 @@ class SignUpRequested extends AuthEvent {
         lastName,
         birthDate,
         securityWord,
-        countryCode,
+        countryName,
       ];
 }
 

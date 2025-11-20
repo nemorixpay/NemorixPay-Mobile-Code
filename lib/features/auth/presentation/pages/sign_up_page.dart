@@ -133,7 +133,7 @@ class _SignUpPageState extends State<SignUpPage> {
             lastName: _lastNameController.text.trim(),
             birthDate: _birthDate!,
             securityWord: _securityWordController.text.trim(),
-            countryCode: _selectedCountry!.countryCode,
+            countryName: _selectedCountry!.name,
           ),
         );
   }

@@ -178,7 +178,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             await analyticsService.trackUserRegistration(
               userId: user.id,
               name: '${event.firstName} ${event.lastName}',
-              country: event.countryCode,
+              country: event.countryName,
               platform: Platform.isIOS ? 'ios' : 'android',
               registrationDate: registrationDate,
               birthDate: birthDate,
